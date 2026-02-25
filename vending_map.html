@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_5c57f569e5b257606741695ee8ab8f72 {
+                #map_e892418737e1b430df1402871a2195a3 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -50,18 +50,20 @@
             </script>
 
         
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css"/>
 </head>
 <body>
     
     
-            <div class="folium-map" id="map_5c57f569e5b257606741695ee8ab8f72" ></div>
+            <div class="folium-map" id="map_e892418737e1b430df1402871a2195a3" ></div>
         
 </body>
 <script>
     
     
-            var map_5c57f569e5b257606741695ee8ab8f72 = L.map(
-                "map_5c57f569e5b257606741695ee8ab8f72",
+            var map_e892418737e1b430df1402871a2195a3 = L.map(
+                "map_e892418737e1b430df1402871a2195a3",
                 {
                     center: [33.7602936, 132.703782],
                     crs: L.CRS.EPSG3857,
@@ -78,7 +80,7 @@
 
         
     
-            var tile_layer_fdeb1db23728b9ae9818d812a3b4ca43 = L.tileLayer(
+            var tile_layer_8dfde83eb18359cd9dce7d4e1ab4c1f6 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -95,28 +97,34 @@
             );
         
     
-            tile_layer_fdeb1db23728b9ae9818d812a3b4ca43.addTo(map_5c57f569e5b257606741695ee8ab8f72);
+            tile_layer_8dfde83eb18359cd9dce7d4e1ab4c1f6.addTo(map_e892418737e1b430df1402871a2195a3);
         
     
-            var marker_48334eb5612fd4964c3c91665947d8ea = L.marker(
+            var locate_control_15be7d4e206b7cc40553d9bc99b91d84 = L.control.locate(
+                {}
+            ).addTo(map_e892418737e1b430df1402871a2195a3);
+            
+        
+    
+            var marker_4c0f3b99877bebaf8e31697b762f04dc = L.marker(
                 [33.7602936, 132.703782],
                 {
 }
-            ).addTo(map_5c57f569e5b257606741695ee8ab8f72);
+            ).addTo(map_e892418737e1b430df1402871a2195a3);
         
     
-        var popup_2f5ddc1dcc5b8bf583cd046967fc8c4b = L.popup({
+        var popup_395f113a7738c3ce7d24e080fefa93f7 = L.popup({
   "maxWidth": 300,
 });
 
         
             
-                var html_d368768ba9363bd0b07bbe16d35c081a = $(`<div id="html_d368768ba9363bd0b07bbe16d35c081a" style="width: 100.0%; height: 100.0%;"><a href="https://www.google.com" target="_parent" onclick="window.parent.location.href='https://www.google.com?v='+Date.now();return false;" style="background-color:#1a73e8;color:white;padding:12px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:16px;">Google マップで開く</a></div>`)[0];
-                popup_2f5ddc1dcc5b8bf583cd046967fc8c4b.setContent(html_d368768ba9363bd0b07bbe16d35c081a);
+                var html_3c668ea62eb2ccd519d97b0703a9f04b = $(`<div id="html_3c668ea62eb2ccd519d97b0703a9f04b" style="width: 100.0%; height: 100.0%;"><a href="https://www.google.com" target="_parent" style="background-color:#1a73e8;color:white;padding:12px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:16px;">Google マップで開く</a></div>`)[0];
+                popup_395f113a7738c3ce7d24e080fefa93f7.setContent(html_3c668ea62eb2ccd519d97b0703a9f04b);
             
         
 
-        marker_48334eb5612fd4964c3c91665947d8ea.bindPopup(popup_2f5ddc1dcc5b8bf583cd046967fc8c4b)
+        marker_4c0f3b99877bebaf8e31697b762f04dc.bindPopup(popup_395f113a7738c3ce7d24e080fefa93f7)
         ;
 
         
