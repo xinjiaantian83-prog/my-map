@@ -2,7 +2,7 @@ import folium
 from folium.plugins import LocateControl
 import pandas as pd
 
-# 【座標追加エリア】ここに (緯度, 経度), をドカンと追加！
+# 【座標リスト】
 raw_data = [
     (33.7726943, 132.7420953), (33.7787246, 132.7334036), (33.7860538, 132.7700416),
     (33.8034033, 132.8846008), (33.7910892, 132.8316751), (33.8046770, 132.7797834),
@@ -19,22 +19,31 @@ raw_data = [
     (33.7667957, 132.7024747), (33.7794684, 132.7044167), (33.7818928, 132.7089291),
     (33.7828119, 132.7091038), (33.7875802, 132.7023024), (33.7942018, 132.7017844),
     (33.8027441, 132.7315294), (33.8027296, 132.7295476), (33.7974196, 132.7247317),
-    (33.7934830, 132.7277824), (33.8220002, 132.7275799), (33.8200535, 132.7242814),
-    # 👈 ここに残りの1000件超を貼り付け！
+    (33.7934830, 132.7277824), (33.8220002, 132.7275799), (33.8200535, 132.7242814)
 ]
 
 df = pd.DataFrame(raw_data, columns=['lat', 'lon']).drop_duplicates()
+
+# 松山をど真ん中に設定
 m = folium.Map(location=[33.8391, 132.7655], zoom_start=14)
 LocateControl(auto_start=False, fly_to=True).add_to(m)
 
-icon_url = "https://raw.githubusercontent.com"
+# 【重要：スリム化】URL経由でアイコンを表示（HTMLを肥大化させない）
+icon_url = "https://xinjiaantian83-prog.github.io"
 
 for index, row in df.iterrows():
     lat, lon = row['lat'], row['lon']
     google_maps_link = f"comgooglemaps://?q={lat},{lon}&zoom=15"
     popup_html = f'<a href="{google_maps_link}" target="_parent" style="font-weight:bold; font-size:16px;">Googleマップで開く</a>'
+    
+    # CustomIconにURLを指定
     icon = folium.CustomIcon(icon_image=icon_url, icon_size=(20, 20))
-    folium.Marker(location=[lat, lon], popup=folium.Popup(popup_html, max_width=200), icon=icon).add_to(m)
+    
+    folium.Marker(
+        location=[lat, lon],
+        popup=folium.Popup(popup_html, max_width=200),
+        icon=icon
+    ).add_to(m)
 
 m.save("vending_map.html")
-print(f"Success: {len(df)} points.")
+print(f"Success: {len(df)} points. スリム化ビルド完了！")
