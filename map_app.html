@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_5c84fefe9e2ccbaa4cdcedb48d6a3168 {
+                #map_6cc0193127fc3b4198a53bf53b85c8ac {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -54,14 +54,14 @@
 <body>
     
     
-            <div class="folium-map" id="map_5c84fefe9e2ccbaa4cdcedb48d6a3168" ></div>
+            <div class="folium-map" id="map_6cc0193127fc3b4198a53bf53b85c8ac" ></div>
         
 </body>
 <script>
     
     
-            var map_5c84fefe9e2ccbaa4cdcedb48d6a3168 = L.map(
-                "map_5c84fefe9e2ccbaa4cdcedb48d6a3168",
+            var map_6cc0193127fc3b4198a53bf53b85c8ac = L.map(
+                "map_6cc0193127fc3b4198a53bf53b85c8ac",
                 {
                     center: [33.7602936, 132.703782],
                     crs: L.CRS.EPSG3857,
@@ -78,7 +78,7 @@
 
         
     
-            var tile_layer_4132f83c367fa437f9756961969c369d = L.tileLayer(
+            var tile_layer_411b0d25b098c9862e67aa9383e9cb53 = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -95,23 +95,31 @@
             );
         
     
-            tile_layer_4132f83c367fa437f9756961969c369d.addTo(map_5c84fefe9e2ccbaa4cdcedb48d6a3168);
+            tile_layer_411b0d25b098c9862e67aa9383e9cb53.addTo(map_6cc0193127fc3b4198a53bf53b85c8ac);
         
     
-            var marker_7953d388d55b945910aa6b0eec39f2b2 = L.marker(
+            var marker_9a5ac30236325022ca59fac6cdc69a51 = L.marker(
                 [33.7602936, 132.703782],
                 {
 }
-            ).addTo(map_5c84fefe9e2ccbaa4cdcedb48d6a3168);
+            ).addTo(map_6cc0193127fc3b4198a53bf53b85c8ac);
         
     
-            var div_icon_f5e48f8d0f3c5d3fbf94f5ed5b4ff5bc = L.divIcon({
-  "html": "\n\u003ca href=\"https://www.google.com33.7602936,132.703782\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"text-decoration: none;\"\u003e\n    \u003cdiv style=\"width: 40px; height: 40px; background-color: #EA4335; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;\"\u003e\n        \u003cdiv style=\"width: 15px; height: 15px; background-color: white; border-radius: 50%; transform: rotate(45deg);\"\u003e\u003c/div\u003e\n    \u003c/div\u003e\n\u003c/a\u003e\n",
-  "className": "empty",
+        var popup_256a1bc0492cf6460a05b067be6d9b6a = L.popup({
+  "maxWidth": 300,
 });
+
+        
+            
+                var html_d0a502ca566388e65dceb49b1019e465 = $(`<div id="html_d0a502ca566388e65dceb49b1019e465" style="width: 100.0%; height: 100.0%;"><a href="https://www.google.com" target="_parent" style="background-color:#1a73e8;color:white;padding:12px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:16px;">Google マップで開く</a></div>`)[0];
+                popup_256a1bc0492cf6460a05b067be6d9b6a.setContent(html_d0a502ca566388e65dceb49b1019e465);
+            
+        
+
+        marker_9a5ac30236325022ca59fac6cdc69a51.bindPopup(popup_256a1bc0492cf6460a05b067be6d9b6a)
+        ;
+
         
     
-                marker_7953d388d55b945910aa6b0eec39f2b2.setIcon(div_icon_f5e48f8d0f3c5d3fbf94f5ed5b4ff5bc);
-            
 </script>
 </html>
