@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_f4a0414e8741ab76e7ca49ee3d5b1b17 {
+                #map_0176f8e637aa7754f766cc11c3848753 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -57,39 +57,36 @@
     
     
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var points = [{"lat": 33.8117082, "lon": 132.8199307}, {"lat": 33.8300203, "lon": 132.7251123}, {"lat": 33.7390628, "lon": 132.7932565}, {"lat": 33.8200535, "lon": 132.7242814}, {"lat": 33.8145504, "lon": 132.7039929}, {"lat": 33.7421107, "lon": 132.7921276}, {"lat": 33.8034033, "lon": 132.8846008}, {"lat": 33.7444029, "lon": 132.7923673}, {"lat": 33.821554, "lon": 132.7643684}, {"lat": 33.8155504, "lon": 132.7190531}, {"lat": 33.7535562, "lon": 132.7061742}, {"lat": 33.7860538, "lon": 132.7700416}, {"lat": 33.7910892, "lon": 132.8316751}, {"lat": 33.7974196, "lon": 132.7247317}, {"lat": 33.8156011, "lon": 132.7316444}, {"lat": 33.7505099, "lon": 132.6987807}, {"lat": 33.7912987, "lon": 132.7206806}, {"lat": 33.8220002, "lon": 132.7275799}, {"lat": 33.759965, "lon": 132.7889663}, {"lat": 33.8156763, "lon": 132.7345231}, {"lat": 33.8027441, "lon": 132.7315294}, {"lat": 33.7875802, "lon": 132.7023024}, {"lat": 33.7667957, "lon": 132.7024747}, {"lat": 33.804677, "lon": 132.7797834}, {"lat": 33.8094331, "lon": 132.6991143}, {"lat": 33.8089272, "lon": 132.7013201}, {"lat": 33.815607, "lon": 132.7217994}, {"lat": 33.7577386, "lon": 132.6999608}, {"lat": 33.7711199, "lon": 132.7880211}, {"lat": 33.749615, "lon": 132.6974225}, {"lat": 33.8080507, "lon": 132.8060831}, {"lat": 33.7970574, "lon": 132.75509}, {"lat": 33.7794684, "lon": 132.7044167}, {"lat": 33.7828119, "lon": 132.7091038}, {"lat": 33.7818928, "lon": 132.7089291}, {"lat": 33.8027296, "lon": 132.7295476}, {"lat": 33.7351421, "lon": 132.7927763}, {"lat": 33.7787246, "lon": 132.7334036}, {"lat": 33.8016963, "lon": 132.7655087}, {"lat": 33.7849564, "lon": 132.714203}, {"lat": 33.7667983, "lon": 132.7041464}, {"lat": 33.8105922, "lon": 132.7298708}, {"lat": 33.793483, "lon": 132.7277824}, {"lat": 33.8156332, "lon": 132.7256038}, {"lat": 33.7483915, "lon": 132.6984045}, {"lat": 33.7726943, "lon": 132.7420953}, {"lat": 33.7894327, "lon": 132.7383597}, {"lat": 33.7942018, "lon": 132.7017844}];
-    var iconUrl = "https://xinjiaantian83-prog.github.io";
-    
-    // Leafletのマップオブジェクトを取得（Foliumが生成する変数名に合わせる）
-    var mapElement = document.querySelector('.leaflet-container');
-    if (mapElement) {
-        var mapObject = mapElement._leaflet_map;
-        
-        var customIcon = L.icon({
-            iconUrl: iconUrl,
-            iconSize: [20, 20],
-            iconAnchor: [10, 10],
-            popupAnchor: [0, -10]
-        });
-
-        points.forEach(function(p) {
-            var googleLink = "comgooglemaps://?q=" + p.lat + "," + p.lon + "&zoom=15";
-            var popupHtml = '<a href="' + googleLink + '" target="_parent" style="font-weight:bold; font-size:16px;">Googleマップで開く</a>';
-            L.marker([p.lat, p.lon], {icon: customIcon}).addTo(mapObject).bindPopup(popupHtml);
-        });
-    }
+window.addEventListener('load', function() {
+    var map_containers = document.querySelectorAll('.leaflet-container');
+    map_containers.forEach(function(container) {
+        var map = container._leaflet_map;
+        if (map) {
+            var myIcon = L.icon({
+                iconUrl: 'https://xinjiaantian83-prog.github.io',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+                popupAnchor: [0, -10]
+            });
+            var points = [{"lat": 33.8117082, "lon": 132.8199307}, {"lat": 33.8300203, "lon": 132.7251123}, {"lat": 33.7390628, "lon": 132.7932565}, {"lat": 33.8200535, "lon": 132.7242814}, {"lat": 33.8145504, "lon": 132.7039929}, {"lat": 33.7421107, "lon": 132.7921276}, {"lat": 33.8034033, "lon": 132.8846008}, {"lat": 33.7444029, "lon": 132.7923673}, {"lat": 33.821554, "lon": 132.7643684}, {"lat": 33.8155504, "lon": 132.7190531}, {"lat": 33.7535562, "lon": 132.7061742}, {"lat": 33.7860538, "lon": 132.7700416}, {"lat": 33.7910892, "lon": 132.8316751}, {"lat": 33.7974196, "lon": 132.7247317}, {"lat": 33.8156011, "lon": 132.7316444}, {"lat": 33.7505099, "lon": 132.6987807}, {"lat": 33.7912987, "lon": 132.7206806}, {"lat": 33.8220002, "lon": 132.7275799}, {"lat": 33.759965, "lon": 132.7889663}, {"lat": 33.8156763, "lon": 132.7345231}, {"lat": 33.8027441, "lon": 132.7315294}, {"lat": 33.7875802, "lon": 132.7023024}, {"lat": 33.7667957, "lon": 132.7024747}, {"lat": 33.804677, "lon": 132.7797834}, {"lat": 33.8094331, "lon": 132.6991143}, {"lat": 33.8089272, "lon": 132.7013201}, {"lat": 33.815607, "lon": 132.7217994}, {"lat": 33.7577386, "lon": 132.6999608}, {"lat": 33.7711199, "lon": 132.7880211}, {"lat": 33.749615, "lon": 132.6974225}, {"lat": 33.8080507, "lon": 132.8060831}, {"lat": 33.7970574, "lon": 132.75509}, {"lat": 33.7794684, "lon": 132.7044167}, {"lat": 33.7828119, "lon": 132.7091038}, {"lat": 33.7818928, "lon": 132.7089291}, {"lat": 33.8027296, "lon": 132.7295476}, {"lat": 33.7351421, "lon": 132.7927763}, {"lat": 33.7787246, "lon": 132.7334036}, {"lat": 33.8016963, "lon": 132.7655087}, {"lat": 33.7849564, "lon": 132.714203}, {"lat": 33.7667983, "lon": 132.7041464}, {"lat": 33.8105922, "lon": 132.7298708}, {"lat": 33.793483, "lon": 132.7277824}, {"lat": 33.8156332, "lon": 132.7256038}, {"lat": 33.7483915, "lon": 132.6984045}, {"lat": 33.7726943, "lon": 132.7420953}, {"lat": 33.7894327, "lon": 132.7383597}, {"lat": 33.7942018, "lon": 132.7017844}];
+            points.forEach(function(p) {
+                var link = "comgooglemaps://?q=" + p.lat + "," + p.lon + "&zoom=15";
+                var popupHtml = '<a href="' + link + '" target="_parent" style="font-weight:bold; font-size:16px;">Googleマップで開く</a>';
+                L.marker([p.lat, p.lon], {icon: myIcon}).addTo(map).bindPopup(popupHtml);
+            });
+        }
+    });
 });
 </script>
     
-            <div class="folium-map" id="map_f4a0414e8741ab76e7ca49ee3d5b1b17" ></div>
+            <div class="folium-map" id="map_0176f8e637aa7754f766cc11c3848753" ></div>
         
 </body>
 <script>
     
     
-            var map_f4a0414e8741ab76e7ca49ee3d5b1b17 = L.map(
-                "map_f4a0414e8741ab76e7ca49ee3d5b1b17",
+            var map_0176f8e637aa7754f766cc11c3848753 = L.map(
+                "map_0176f8e637aa7754f766cc11c3848753",
                 {
                     center: [33.8391, 132.7655],
                     crs: L.CRS.EPSG3857,
@@ -106,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         
     
-            var tile_layer_1bd094b788783439d1cd69f72e9c02c7 = L.tileLayer(
+            var tile_layer_2b3a8cee8f0a000fe30c5d18924cc37d = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -123,12 +120,12 @@ document.addEventListener("DOMContentLoaded", function() {
             );
         
     
-            tile_layer_1bd094b788783439d1cd69f72e9c02c7.addTo(map_f4a0414e8741ab76e7ca49ee3d5b1b17);
+            tile_layer_2b3a8cee8f0a000fe30c5d18924cc37d.addTo(map_0176f8e637aa7754f766cc11c3848753);
         
     
-            var locate_control_e99cdd699ff2abefe323c7d750f9b49f = L.control.locate(
-                {"fly_to": true}
-            ).addTo(map_f4a0414e8741ab76e7ca49ee3d5b1b17);
+            var locate_control_0945df1fde4132ecb44498b984646cbe = L.control.locate(
+                {"fly_to": true, "keep_current_zoom_level": true}
+            ).addTo(map_0176f8e637aa7754f766cc11c3848753);
             
         
 </script>

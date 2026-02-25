@@ -8,44 +8,42 @@ raw_data = [(33.7726943, 132.7420953), (33.7787246, 132.7334036), (33.7860538, 1
 # 重複排除
 raw_data = list(set(raw_data))
 
-# マップ初期化
+# マップ基盤作成（松山をど真ん中にロック）
 m = folium.Map(location=[33.8391, 132.7655], zoom_start=15)
-LocateControl(auto_start=False, fly_to=True).add_to(m)
+LocateControl(auto_start=False, fly_to=True, keep_current_zoom_level=True).add_to(m)
 
-# アイコン設定（GitHubの絶対パス）
+# 神のアイコン設定
 icon_url = "https://xinjiaantian83-prog.github.io"
 
-# マーカーデータをJSON化して埋め込み（これが神クラスの軽量化術）
+# 1200件超えでもHTMLを激軽にするためのJSON埋め込み
 points_json = json.dumps([{"lat": p[0], "lon": p[1]} for p in raw_data])
 
-custom_js = f"""
+# 【神のJavaScript注入】Foliumの重いMarkerクラスを使わず、直で描画する
+god_js = f"""
 <script>
-document.addEventListener("DOMContentLoaded", function() {{
-    var points = {points_json};
-    var iconUrl = "{icon_url}";
-    
-    // Leafletのマップオブジェクトを取得（Foliumが生成する変数名に合わせる）
-    var mapElement = document.querySelector('.leaflet-container');
-    if (mapElement) {{
-        var mapObject = mapElement._leaflet_map;
-        
-        var customIcon = L.icon({{
-            iconUrl: iconUrl,
-            iconSize: [20, 20],
-            iconAnchor: [10, 10],
-            popupAnchor: [0, -10]
-        }});
-
-        points.forEach(function(p) {{
-            var googleLink = "comgooglemaps://?q=" + p.lat + "," + p.lon + "&zoom=15";
-            var popupHtml = '<a href="' + googleLink + '" target="_parent" style="font-weight:bold; font-size:16px;">Googleマップで開く</a>';
-            L.marker([p.lat, p.lon], {{icon: customIcon}}).addTo(mapObject).bindPopup(popupHtml);
-        }});
-    }}
+window.addEventListener('load', function() {{
+    var map_containers = document.querySelectorAll('.leaflet-container');
+    map_containers.forEach(function(container) {{
+        var map = container._leaflet_map;
+        if (map) {{
+            var myIcon = L.icon({{
+                iconUrl: '{icon_url}',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+                popupAnchor: [0, -10]
+            }});
+            var points = {points_json};
+            points.forEach(function(p) {{
+                var link = "comgooglemaps://?q=" + p.lat + "," + p.lon + "&zoom=15";
+                var popupHtml = '<a href="' + link + '" target="_parent" style="font-weight:bold; font-size:16px;">Googleマップで開く</a>';
+                L.marker([p.lat, p.lon], {{icon: myIcon}}).addTo(map).bindPopup(popupHtml);
+            }});
+        }}
+    }});
 }});
 </script>
 """
-m.get_root().html.add_child(folium.Element(custom_js))
+m.get_root().html.add_child(folium.Element(god_js))
 
 m.save("vending_map.html")
-print(f"God-Tier Build Success: {len(raw_data)} points. HTML Size: Ultra Light.")
+print(f"God-Tier Optimization Complete: {len(raw_data)} spots.")
