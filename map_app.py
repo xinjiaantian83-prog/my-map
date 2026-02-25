@@ -1,25 +1,30 @@
 import folium
 from folium.plugins import LocateControl
 
-lat, lon = 33.7602936, 132.703782
-url = "https://www.google.com"
+# 東京駅周辺で検証
+m = folium.Map(location=[35.6812, 139.7671], zoom_start=15)
 
-m = folium.Map(location=[lat, lon], zoom_start=15)
+# 現在地表示ボタン (iPhone実機で重要)
+LocateControl(
+    locateOptions={'enableHighAccuracy': True},
+    strings={"title": "今どこ？"}
+).add_to(m)
 
-LocateControl().add_to(m)
-
-# target="_parent" breaks out of folium iframe
-popup_html = (
-    f'<a href="{url}" target="_parent" '
-    f'style="background-color:#1a73e8;color:white;padding:12px;'
-    f'border-radius:8px;font-weight:bold;text-decoration:none;'
-    f'display:inline-block;font-size:16px;">'
-    f'Google マップで開く</a>'
-)
+# 【爆走仕様】target="_parent" と comgooglemaps:// を組み合わせた究極のリンク
+popup_content = """
+<div style="font-size: 16px; width: 180px;">
+    <strong>検証：爆走ナビ</strong><hr>
+    <a href="comgooglemaps://?daddr=35.6812,139.7671&directionsmode=driving"
+       target="_parent"
+       style="display: block; padding: 12px; background: #4285F4; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold;">
+       Googleマップ起動
+    </a>
+</div>
+"""
 
 folium.Marker(
-    location=[lat, lon],
-    popup=folium.Popup(popup_html, max_width=300)
+    location=[35.6812, 139.7671],
+    popup=folium.Popup(popup_content, max_width=250)
 ).add_to(m)
 
 m.save("vending_map.html")

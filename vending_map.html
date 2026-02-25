@@ -17,7 +17,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_e892418737e1b430df1402871a2195a3 {
+                #map_7553a27600d937071cbe3ac9e731492e {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -56,16 +56,16 @@
 <body>
     
     
-            <div class="folium-map" id="map_e892418737e1b430df1402871a2195a3" ></div>
+            <div class="folium-map" id="map_7553a27600d937071cbe3ac9e731492e" ></div>
         
 </body>
 <script>
     
     
-            var map_e892418737e1b430df1402871a2195a3 = L.map(
-                "map_e892418737e1b430df1402871a2195a3",
+            var map_7553a27600d937071cbe3ac9e731492e = L.map(
+                "map_7553a27600d937071cbe3ac9e731492e",
                 {
-                    center: [33.7602936, 132.703782],
+                    center: [35.6812, 139.7671],
                     crs: L.CRS.EPSG3857,
                     ...{
   "zoom": 15,
@@ -80,7 +80,7 @@
 
         
     
-            var tile_layer_8dfde83eb18359cd9dce7d4e1ab4c1f6 = L.tileLayer(
+            var tile_layer_1197bbaa0190d3c856aa64f372fe810a = L.tileLayer(
                 "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {
   "minZoom": 0,
@@ -97,34 +97,34 @@
             );
         
     
-            tile_layer_8dfde83eb18359cd9dce7d4e1ab4c1f6.addTo(map_e892418737e1b430df1402871a2195a3);
+            tile_layer_1197bbaa0190d3c856aa64f372fe810a.addTo(map_7553a27600d937071cbe3ac9e731492e);
         
     
-            var locate_control_15be7d4e206b7cc40553d9bc99b91d84 = L.control.locate(
-                {}
-            ).addTo(map_e892418737e1b430df1402871a2195a3);
+            var locate_control_b37398c5a24af6497d7eace846fd0974 = L.control.locate(
+                {"locateOptions": {"enableHighAccuracy": true}, "strings": {"title": "\u4eca\u3069\u3053\uff1f"}}
+            ).addTo(map_7553a27600d937071cbe3ac9e731492e);
             
         
     
-            var marker_4c0f3b99877bebaf8e31697b762f04dc = L.marker(
-                [33.7602936, 132.703782],
+            var marker_4dbee99cad989e8eb6a93e19e9fcd8a9 = L.marker(
+                [35.6812, 139.7671],
                 {
 }
-            ).addTo(map_e892418737e1b430df1402871a2195a3);
+            ).addTo(map_7553a27600d937071cbe3ac9e731492e);
         
     
-        var popup_395f113a7738c3ce7d24e080fefa93f7 = L.popup({
-  "maxWidth": 300,
+        var popup_c89057259d0c2ce607edf00b5983893a = L.popup({
+  "maxWidth": 250,
 });
 
         
             
-                var html_3c668ea62eb2ccd519d97b0703a9f04b = $(`<div id="html_3c668ea62eb2ccd519d97b0703a9f04b" style="width: 100.0%; height: 100.0%;"><a href="https://www.google.com" target="_parent" style="background-color:#1a73e8;color:white;padding:12px;border-radius:8px;font-weight:bold;text-decoration:none;display:inline-block;font-size:16px;">Google マップで開く</a></div>`)[0];
-                popup_395f113a7738c3ce7d24e080fefa93f7.setContent(html_3c668ea62eb2ccd519d97b0703a9f04b);
+                var html_d583c2f6a5bb09b5eb120fe226325e3d = $(`<div id="html_d583c2f6a5bb09b5eb120fe226325e3d" style="width: 100.0%; height: 100.0%;"> <div style="font-size: 16px; width: 180px;">     <strong>検証：爆走ナビ</strong><hr>     <a href="comgooglemaps://?daddr=35.6812,139.7671&directionsmode=driving"        target="_parent"        style="display: block; padding: 12px; background: #4285F4; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold;">        Googleマップ起動     </a> </div> </div>`)[0];
+                popup_c89057259d0c2ce607edf00b5983893a.setContent(html_d583c2f6a5bb09b5eb120fe226325e3d);
             
         
 
-        marker_4c0f3b99877bebaf8e31697b762f04dc.bindPopup(popup_395f113a7738c3ce7d24e080fefa93f7)
+        marker_4dbee99cad989e8eb6a93e19e9fcd8a9.bindPopup(popup_c89057259d0c2ce607edf00b5983893a)
         ;
 
         
