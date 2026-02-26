@@ -7,10 +7,18 @@ m = folium.Map(location=[33.8391, 132.7655], zoom_start=15)
 LocateControl(auto_start=False, fly_to=True, keep_current_zoom_level=True).add_to(m)
 icon_url = "https://xinjiaantian83-prog.github.io/my-map/icon_v2.png"
 
+# マーカーの背景・枠を消して透過させる
+style_html = '''
+<style>
+    .leaflet-marker-icon { background: none !important; border: none !important; box-shadow: none !important; }
+</style>
+'''
+m.get_root().header.add_child(folium.Element(style_html))
+
 for lat, lon in raw_data:
     link = f"comgooglemaps://?q={lat},{lon}&zoom=15"
     p = f'<a href="{link}" target="_parent" style="font-weight:bold; font-size:18px;">Googleマップで開く</a>'
-    icon = folium.CustomIcon(icon_image=icon_url, icon_size=(18, 18))
+    icon = folium.CustomIcon(icon_image=icon_url, icon_size=(28, 28))
     folium.Marker([lat, lon], popup=folium.Popup(p, max_width=200), icon=icon).add_to(m)
 
 # PWA設定をHTMLに注入
