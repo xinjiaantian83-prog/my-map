@@ -35,7 +35,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
   font-size: 14px;
   min-width: 210px;
 }
-#controls .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+#controls .row { display: flex; gap: 6px; flex-wrap: wrap; }
 #controls button {
   border: 1px solid #ccc;
   background: #fff;
@@ -65,56 +65,6 @@ html, body { margin: 0; padding: 0; height: 100%; }
   cursor: pointer;
 }
 .locate-btn:active{ transform: translateY(1px); }
-
-/* 追加枠UI */
-#adminPanel {
-  position: fixed;
-  left: 12px;
-  top: 102px; /* controls の下あたり */
-  z-index: 1000;
-  width: min(360px, calc(100vw - 24px));
-  background: rgba(255,255,255,0.95);
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
-  font-size: 13px;
-  display: none;
-}
-#adminPanel h3{
-  margin: 0 0 6px;
-  font-size: 13px;
-}
-#adminPanel textarea{
-  width: 100%;
-  height: 84px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 8px;
-  box-sizing: border-box;
-  font-size: 13px;
-}
-#adminPanel .row{
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-#adminPanel .note{
-  margin-top: 6px;
-  font-size: 12px;
-  opacity: 0.85;
-  line-height: 1.25;
-}
-.smallBtn{
-  border: 1px solid #ccc;
-  background: #fff;
-  border-radius: 10px;
-  padding: 8px 10px;
-}
-.smallBtn.danger{
-  border-color: #d55;
-}
 </style>
 </head>
 
@@ -125,140 +75,62 @@ html, body { margin: 0; padding: 0; height: 100%; }
     <button data-radius="1000">1km</button>
     <button data-radius="3000">3km</button>
     <button data-radius="all">全部</button>
-    <button id="toggleAdmin" class="smallBtn" type="button">追加</button>
   </div>
-  <div id="status">現在地を取得中…（許可してね）</div>
-</div>
-
-<!-- 座標追加パネル（端末内保存） -->
-<div id="adminPanel">
-  <h3>座標追加（この端末に保存）</h3>
-  <textarea id="coordInput" placeholder="例：
-(33.7602936, 132.7037820) (33.7590825, 132.7036603)
-33.7568455,132.7012506
-などをまとめて貼ってOK"></textarea>
-  <div class="row">
-    <button id="btnAddCoords" class="smallBtn" type="button">追加して保存</button>
-    <button id="btnClearSaved" class="smallBtn danger" type="button">保存分を全消し</button>
-  </div>
-  <div class="note">
-    ・追加した座標はこのスマホ/PCにだけ保存（投稿ではない）<br>
-    ・重複は自動で除外
-  </div>
+  <div id="status">データ読み込み中…</div>
 </div>
 
 <div id="map"></div>
 
 <script>
 // ============================
-// 1) ベース座標（GitHubに置いてる固定分）
+// 1) spots.json を読み込む
 // ============================
-var baseSpots = [
-  [33.7726943,132.7420953],
-  [33.7787246,132.7334036],
-  [33.7860538,132.7700416],
-  [33.8034033,132.8846008],
-  [33.7910892,132.8316751],
-  [33.8046770,132.7797834],
-  [33.7711199,132.7880211],
-  [33.7599650,132.7889663],
-  [33.7390628,132.7932565],
-  [33.7351421,132.7927763],
-  [33.7421107,132.7921276],
-  [33.7444029,132.7923673],
-  [33.8094331,132.6991143],
-  [33.8089272,132.7013201],
-  [33.8117082,132.8199307],
-  [33.8105922,132.7298708],
-  [33.8156763,132.7345231],
-  [33.7912987,132.7206806],
-  [33.8300203,132.7251123],
-  [33.8215540,132.7643684],
-  [33.8080507,132.8060831],
-  [33.8156011,132.7316444],
-  [33.8156332,132.7256038],
-  [33.8156070,132.7217994],
-  [33.8155504,132.7190531],
-  [33.8145504,132.7039929],
-  [33.8016963,132.7655087],
-  [33.7970574,132.7550900],
-  [33.7894327,132.7383597],
-  [33.7849564,132.7142030],
-  [33.7535562,132.7061742],
-  [33.7505099,132.6987807],
-  [33.7483915,132.6984045],
-  [33.7496150,132.6974225],
-  [33.7577386,132.6999608],
-  [33.7667983,132.7041464],
-  [33.7667957,132.7024747],
-  [33.7794684,132.7044167],
-  [33.7818928,132.7089291],
-  [33.7828119,132.7091038],
-  [33.7875802,132.7023024],
-  [33.7942018,132.7017844],
-  [33.8027441,132.7315294],
-  [33.8027296,132.7295476],
-  [33.7974196,132.7247317],
-  [33.7934830,132.7277824],
-  [33.8220002,132.7275799],
-  [33.8200535,132.7242814]
-];
+var spots = [];          // 実データ（読み込み後に入る）
+var spotsLoaded = false; // 読めたかどうか
 
-// ============================
-// 2) 端末保存（localStorage）分を合体して使う spots を作る
-// ============================
-var LS_KEY = "wanwan_saved_spots_v1";
+function setStatus(text) {
+  document.getElementById('status').textContent = text;
+}
 
 function normalizeKey(lat, lng) {
-  // 小数の揺れ吸収（だいたい1m程度）: 6桁に丸めてキー化
-  var a = Number(lat).toFixed(6);
-  var b = Number(lng).toFixed(6);
-  return a + "," + b;
+  return Number(lat).toFixed(6) + "," + Number(lng).toFixed(6);
 }
 
-function loadSavedSpots() {
-  try {
-    var raw = localStorage.getItem(LS_KEY);
-    if (!raw) return [];
-    var arr = JSON.parse(raw);
-    if (!Array.isArray(arr)) return [];
-    // [ [lat,lng], ... ] だけ許す
-    return arr.filter(function(x){
-      return Array.isArray(x) && x.length === 2 && isFinite(x[0]) && isFinite(x[1]);
-    });
-  } catch(e) {
-    return [];
-  }
-}
-
-function saveSavedSpots(arr) {
-  localStorage.setItem(LS_KEY, JSON.stringify(arr));
-}
-
-function mergeDedup(base, extra) {
+function dedupSpots(list) {
   var seen = {};
   var out = [];
-
-  function pushIfNew(lat, lng) {
+  list.forEach(function(c){
+    if (!Array.isArray(c) || c.length !== 2) return;
+    var lat = Number(c[0]), lng = Number(c[1]);
+    if (!isFinite(lat) || !isFinite(lng)) return;
+    if (lat < -90 || lat > 90) return;
+    if (lng < -180 || lng > 180) return;
     var k = normalizeKey(lat, lng);
     if (seen[k]) return;
     seen[k] = true;
-    out.push([Number(lat), Number(lng)]);
-  }
-
-  base.forEach(function(c){ pushIfNew(c[0], c[1]); });
-  extra.forEach(function(c){ pushIfNew(c[0], c[1]); });
-
+    out.push([lat, lng]);
+  });
   return out;
 }
 
-var savedSpots = loadSavedSpots();
-var spots = mergeDedup(baseSpots, savedSpots);
+function loadSpotsJson() {
+  // GitHub Pagesのキャッシュ対策で軽くクエリ付ける（更新反映が早くなる）
+  var url = "spots.json?v=" + Date.now();
+  return fetch(url, { cache: "no-store" })
+    .then(function(res){
+      if (!res.ok) throw new Error("spots.json load failed: " + res.status);
+      return res.json();
+    })
+    .then(function(data){
+      spots = dedupSpots(data);
+      spotsLoaded = true;
+      return spots;
+    });
+}
 
 // ============================
-// 3) 地図
+// 2) 地図（UI重なり回避のためズームは右上）
 // ============================
-// ★ズーム(＋－)は右上に（controlsと重ならない）
 var map = L.map('map', { zoomControl: false }).setView([33.7864888, 132.7245295], 13);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -410,13 +282,18 @@ map.addControl(new LocateControl());
 function refresh() {
   clearMarkers();
 
+  // データ未読なら何もしない
+  if (!spotsLoaded) {
+    setStatus("データ読み込み中…");
+    return;
+  }
+
+  // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
-    var allNoDist = spots.map(function(c){
+    addMarkers(spots.map(function(c){
       return { lat: c[0], lng: c[1], dist: null };
-    });
-    addMarkers(allNoDist);
-    document.getElementById('status').textContent =
-      "現在地未取得：全件表示中（位置情報を許可してね） / 全" + spots.length + "件";
+    }));
+    setStatus("現在地未取得：全件表示中（位置情報を許可してね） / 全" + spots.length + "件");
     return;
   }
 
@@ -432,8 +309,7 @@ function refresh() {
     });
 
     addMarkers(allWithDist);
-    document.getElementById('status').textContent =
-      "全件表示中（ピンをタップで距離） / 全" + spots.length + "件";
+    setStatus("全件表示中（ピンをタップで距離） / 全" + spots.length + "件");
     return;
   }
 
@@ -450,11 +326,9 @@ function refresh() {
   var rText = (currentRadius >= 1000) ? (currentRadius/1000 + "km") : (currentRadius + "m");
 
   if (filtered.length === 0) {
-    document.getElementById('status').textContent =
-      "半径 " + rText + " にありません。\n距離を広げてみてね。";
+    setStatus("半径 " + rText + " にありません。\n距離を広げてみてね。");
   } else {
-    document.getElementById('status').textContent =
-      "半径 " + rText + "： " + filtered.length + "件（ピンをタップで距離） / 全" + spots.length + "件";
+    setStatus("半径 " + rText + "： " + filtered.length + "件（ピンをタップで距離） / 全" + spots.length + "件");
   }
 }
 
@@ -480,10 +354,10 @@ if (navigator.geolocation) {
   refresh();
 }
 
-// ---- フィルタボタン操作 ----
-document.querySelectorAll('#controls button[data-radius]').forEach(function(btn){
+// ---- ボタン操作 ----
+document.querySelectorAll('#controls button').forEach(function(btn){
   btn.addEventListener('click', function(){
-    document.querySelectorAll('#controls button[data-radius]').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('#controls button').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
 
     var v = btn.getAttribute('data-radius');
@@ -493,57 +367,13 @@ document.querySelectorAll('#controls button[data-radius]').forEach(function(btn)
   });
 });
 
-// ============================
-// 4) 追加枠（貼り付け→追加→保存）
-// ============================
-function parseCoords(text) {
-  // (lat, lng) / lat,lng / 空白区切り なんでも吸収
-  // 数字を全部拾って2個ずつペアにする
-  var nums = (text.match(/-?\d+(?:\.\d+)?/g) || []).map(Number);
-  var out = [];
-  for (var i = 0; i + 1 < nums.length; i += 2) {
-    var lat = nums[i], lng = nums[i+1];
-    if (!isFinite(lat) || !isFinite(lng)) continue;
-    if (lat < -90 || lat > 90) continue;
-    if (lng < -180 || lng > 180) continue;
-    out.push([lat, lng]);
-  }
-  return out;
-}
-
-var adminPanel = document.getElementById("adminPanel");
-document.getElementById("toggleAdmin").addEventListener("click", function(){
-  adminPanel.style.display = (adminPanel.style.display === "none" || adminPanel.style.display === "") ? "block" : "none";
-});
-
-document.getElementById("btnAddCoords").addEventListener("click", function(){
-  var text = document.getElementById("coordInput").value || "";
-  var parsed = parseCoords(text);
-  if (parsed.length === 0) {
-    alert("座標が見つからないよ。例の形式で貼ってね。");
-    return;
-  }
-
-  // saved に足して保存（重複除去）
-  savedSpots = mergeDedup(savedSpots, parsed);
-  saveSavedSpots(savedSpots);
-
-  // 表示用 spots を再生成
-  spots = mergeDedup(baseSpots, savedSpots);
-
-  document.getElementById("coordInput").value = "";
-  alert("追加した！ 保存：" + parsed.length + "件 / 合計：" + spots.length + "件");
-
+// ---- 起動時：spots.json を読み込む ----
+loadSpotsJson().then(function(){
   refresh();
-});
-
-document.getElementById("btnClearSaved").addEventListener("click", function(){
-  if (!confirm("この端末に保存した追加分を全消しする？（ベース分は消えない）")) return;
-  savedSpots = [];
-  saveSavedSpots(savedSpots);
-  spots = mergeDedup(baseSpots, savedSpots);
-  alert("保存分を消した！ 合計：" + spots.length + "件");
-  refresh();
+}).catch(function(err){
+  spotsLoaded = false;
+  setStatus("データ読み込みに失敗…（spots.json を確認してね）");
+  console.error(err);
 });
 </script>
 </body>
