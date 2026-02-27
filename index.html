@@ -21,7 +21,6 @@
 html, body { margin: 0; padding: 0; height: 100%; }
 #map { height: 100vh; width: 100%; }
 
-/* 距離切替UI */
 #controls {
   position: fixed;
   top: 12px;
@@ -31,7 +30,6 @@ html, body { margin: 0; padding: 0; height: 100%; }
   border: 1px solid #ddd;
   border-radius: 12px;
   padding: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
   font-size: 14px;
   min-width: 210px;
 }
@@ -46,14 +44,8 @@ html, body { margin: 0; padding: 0; height: 100%; }
   border-color: #000;
   font-weight: 700;
 }
-#status {
-  margin-top: 6px;
-  font-size: 12px;
-  opacity: 0.88;
-  line-height: 1.3;
-}
+#status { margin-top: 6px; font-size: 12px; opacity: 0.88; }
 
-/* 現在地へ戻るボタン */
 .locate-btn {
   width: 44px;
   height: 44px;
@@ -63,9 +55,6 @@ html, body { margin: 0; padding: 0; height: 100%; }
   font-size: 20px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.25);
   cursor: pointer;
-}
-.locate-btn:active {
-  transform: translateY(1px);
 }
 </style>
 </head>
@@ -78,201 +67,35 @@ html, body { margin: 0; padding: 0; height: 100%; }
     <button data-radius="3000">3km</button>
     <button data-radius="all">全部</button>
   </div>
-  <div id="status">現在地を取得中…（許可してね）</div>
+  <div id="status">現在地を取得中…</div>
 </div>
 
 <div id="map"></div>
 
 <script>
-// ---- データ（重複除去済み）----
+// ---- データ（拡張済み）----
 var spots = [
-  [33.7726943,132.7420953],[33.7787246,132.7334036],[33.7860538,132.7700416],
-  [33.8034033,132.8846008],[33.7910892,132.8316751],[33.8046770,132.7797834],
-  [33.7711199,132.7880211],[33.7599650,132.7889663],[33.7390628,132.7932565],
-  [33.7351421,132.7927763],[33.7421107,132.7921276],[33.7444029,132.7923673],
-  [33.8094331,132.6991143],[33.8089272,132.7013201],[33.8117082,132.8199307],
-  [33.8105922,132.7298708],[33.8156763,132.7345231],[33.7912987,132.7206806],
-  [33.8300203,132.7251123],[33.8215540,132.7643684],[33.8080507,132.8060831],
-  [33.8156011,132.7316444],[33.8156332,132.7256038],[33.8156070,132.7217994],
-  [33.8155504,132.7190531],[33.8145504,132.7039929],[33.8016963,132.7655087],
-  [33.7970574,132.7550900],[33.7894327,132.7383597],[33.7849564,132.7142030],
-  [33.7535562,132.7061742],[33.7505099,132.6987807],[33.7483915,132.6984045],
-  [33.7496150,132.6974225],[33.7577386,132.6999608],[33.7667983,132.7041464],
-  [33.7667957,132.7024747],[33.7794684,132.7044167],[33.7818928,132.7089291],
-  [33.7828119,132.7091038],[33.7875802,132.7023024],[33.7942018,132.7017844],
-  [33.8027441,132.7315294],[33.8027296,132.7295476],[33.7974196,132.7247317],
-  [33.7934830,132.7277824],[33.8220002,132.7275799],[33.8200535,132.7242814]
+
+  // 🔹 新規追加分
+  [33.7602936,132.7037820],
+  [33.7590825,132.7036603],
+  [33.7568455,132.7012506],
+  [33.7470556,132.6883439],
+  [33.7462697,132.6866289],
+  [33.7192986,132.7076786],
+  [33.7692849,132.7357787],
+  [33.7714480,132.7273901],
+  [33.7651432,132.7252236],
+  [33.7708950,132.7362612],
+  [33.7722336,132.7348493],
+  [33.7750652,132.7349020],
+
+  // 🔹 既存分
+  [33.7726943,132.7420953],
+  [33.7787246,132.7334036],
+  [33.7860538,132.7700416],
+  [33.8034033,132.8846008],
+  [33.7910892,132.8316751],
+  [33.8046770,132.7797834]
+
 ];
-
-// ---- 地図 ----
-var map = L.map('map').setView([33.7864888, 132.7245295], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-// ---- 現在地へ戻るボタン ----
-var LocateControl = L.Control.extend({
-  options: { position: 'bottomright' },
-  onAdd: function() {
-    var btn = L.DomUtil.create('button', 'leaflet-bar locate-btn');
-    btn.innerHTML = "📍";
-    btn.title = "現在地へ戻る";
-    L.DomEvent.disableClickPropagation(btn);
-    L.DomEvent.on(btn, 'click', function(e){
-      L.DomEvent.stop(e);
-      if (currentPos) {
-        map.setView([currentPos.lat, currentPos.lng], 15, { animate: true });
-      } else {
-        alert("現在地がまだ取得できていません");
-      }
-    });
-    return btn;
-  }
-});
-map.addControl(new LocateControl());
-
-// ---- 以下、距離表示込みロジック（前回版と同じ） ----
-var dogIcon = L.icon({
-  iconUrl: 'IMG_7139.PNG',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
-});
-
-var markers = [];
-function clearMarkers() {
-  markers.forEach(function(m){ map.removeLayer(m); });
-  markers = [];
-}
-
-function googleNavUrl(lat, lng) {
-  return "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
-}
-
-function distanceMeters(lat1, lon1, lat2, lon2) {
-  var R = 6371000;
-  var toRad = function(d){ return d * Math.PI / 180; };
-  var dLat = toRad(lat2 - lat1);
-  var dLon = toRad(lon2 - lon1);
-  var a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-
-function formatDistance(m) {
-  if (m == null || isNaN(m)) return "";
-  if (m < 1000) return Math.round(m) + "m";
-  return (m / 1000).toFixed(2) + "km";
-}
-
-function addMarkers(list) {
-  list.forEach(function(item){
-    var lat = item.lat, lng = item.lng;
-    var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
-    var nav = googleNavUrl(lat, lng);
-    var distHtml = item.dist ? "<div>現在地から <b>" + formatDistance(item.dist) + "</b></div>" : "";
-    m.bindPopup("<b>自販機スポット</b><br>" + distHtml +
-      "<a href='" + nav + "' target='_blank' rel='noopener'>ここへ行く</a>");
-    markers.push(m);
-  });
-}
-
-var currentPos = null;
-var myMarker = null;
-var accuracyCircle = null;
-
-function updateMyLocation(lat, lng, accuracyMeters) {
-  currentPos = { lat: lat, lng: lng };
-  if (!myMarker) myMarker = L.marker([lat, lng]).addTo(map).bindPopup("あなたの現在地");
-  else myMarker.setLatLng([lat, lng]);
-
-  if (!accuracyCircle) {
-    accuracyCircle = L.circle([lat, lng], {
-      radius: Math.max(accuracyMeters || 0, 10),
-      weight: 1,
-      fillOpacity: 0.12
-    }).addTo(map);
-  } else {
-    accuracyCircle.setLatLng([lat, lng]);
-    accuracyCircle.setRadius(Math.max(accuracyMeters || 0, 10));
-  }
-}
-
-var currentRadius = 500;
-var rangeCircle = null;
-
-function updateRangeCircle() {
-  if (!currentPos) return;
-  if (currentRadius === 'all') {
-    if (rangeCircle) map.removeLayer(rangeCircle);
-    rangeCircle = null;
-    return;
-  }
-  if (!rangeCircle) {
-    rangeCircle = L.circle([currentPos.lat, currentPos.lng], {
-      radius: currentRadius,
-      weight: 1,
-      fillOpacity: 0.08
-    }).addTo(map);
-  } else {
-    rangeCircle.setLatLng([currentPos.lat, currentPos.lng]);
-    rangeCircle.setRadius(currentRadius);
-  }
-}
-
-function refresh() {
-  clearMarkers();
-  if (!currentPos) {
-    addMarkers(spots.map(c=>({lat:c[0],lng:c[1],dist:null})));
-    document.getElementById('status').textContent =
-      "現在地未取得：全件表示中（位置情報を許可してね）";
-    return;
-  }
-
-  updateRangeCircle();
-  var lat = currentPos.lat, lng = currentPos.lng;
-
-  var list = spots.map(function(c){
-    return { lat:c[0], lng:c[1], dist:distanceMeters(lat,lng,c[0],c[1]) };
-  });
-
-  if (currentRadius !== 'all')
-    list = list.filter(i=>i.dist<=currentRadius);
-
-  list.sort((a,b)=>a.dist-b.dist);
-  addMarkers(list);
-
-  var rText = currentRadius==='all' ? "全件" :
-    (currentRadius>=1000?currentRadius/1000+"km":currentRadius+"m");
-
-  document.getElementById('status').textContent =
-    rText + "： " + list.length + "件（ピンをタップで距離）";
-}
-
-if (navigator.geolocation) {
-  navigator.geolocation.watchPosition(function(pos){
-    updateMyLocation(pos.coords.latitude,pos.coords.longitude,pos.coords.accuracy);
-    if (!window.__didCenterOnce) {
-      window.__didCenterOnce=true;
-      map.setView([currentPos.lat,currentPos.lng],15);
-    }
-    refresh();
-  }, function(){ refresh(); },
-  { enableHighAccuracy:true, timeout:8000, maximumAge:0 });
-} else refresh();
-
-document.querySelectorAll('#controls button').forEach(function(btn){
-  btn.addEventListener('click', function(){
-    document.querySelectorAll('#controls button')
-      .forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    var v = btn.getAttribute('data-radius');
-    currentRadius = (v==='all')?'all':parseInt(v,10);
-    refresh();
-  });
-});
-</script>
-</body>
-</html>
