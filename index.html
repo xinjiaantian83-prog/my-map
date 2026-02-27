@@ -48,7 +48,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
 #status {
   margin-top: 6px;
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 </style>
 </head>
@@ -61,7 +61,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
     <button data-radius="3000">3km</button>
     <button data-radius="all">全部</button>
   </div>
-  <div id="status">現在地取得中…（許可してね）</div>
+  <div id="status">現在地を取得中…（許可してね）</div>
 </div>
 
 <div id="map"></div>
@@ -139,7 +139,6 @@ function clearMarkers() {
   markers.forEach(function(m){ map.removeLayer(m); });
   markers = [];
 }
-
 function addMarkers(list) {
   list.forEach(function(coord){
     var m = L.marker(coord, { icon: dogIcon }).addTo(map);
@@ -161,27 +160,51 @@ function distanceMeters(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// ---- 現在地表示（ピン + 精度円）----
 var currentPos = null;
+var myMarker = null;
+var accuracyCircle = null;
+
+function updateMyLocation(lat, lng, accuracyMeters) {
+  currentPos = { lat: lat, lng: lng };
+
+  if (!myMarker) {
+    myMarker = L.marker([lat, lng]).addTo(map).bindPopup("あなたの現在地");
+  } else {
+    myMarker.setLatLng([lat, lng]);
+  }
+
+  if (!accuracyCircle) {
+    accuracyCircle = L.circle([lat, lng], {
+      radius: Math.max(accuracyMeters || 0, 10),
+      weight: 1,
+      fillOpacity: 0.15
+    }).addTo(map);
+  } else {
+    accuracyCircle.setLatLng([lat, lng]);
+    accuracyCircle.setRadius(Math.max(accuracyMeters || 0, 10));
+  }
+}
+
+// ---- 表示更新 ----
 var currentRadius = 500; // default
 
 function refresh() {
   clearMarkers();
 
-  // 現在地が取れてない間は全部表示（ユーザーが迷わない）
+  // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
     addMarkers(spots);
     document.getElementById('status').textContent = "現在地未取得：全件表示中（位置情報を許可してね）";
     return;
   }
 
-  // 全部モード
   if (currentRadius === 'all') {
     addMarkers(spots);
     document.getElementById('status').textContent = "全件表示中";
     return;
   }
 
-  // 半径内フィルタ
   var lat = currentPos.lat, lng = currentPos.lng;
   var filtered = spots.filter(function(c){
     return distanceMeters(lat, lng, c[0], c[1]) <= currentRadius;
@@ -193,19 +216,21 @@ function refresh() {
     "： " + filtered.length + "件";
 }
 
-// 現在地
+// ---- 位置情報（ちゃんと出るように watchPosition）----
 if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(function(pos){
-    currentPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+  navigator.geolocation.watchPosition(function(pos){
+    var lat = pos.coords.latitude;
+    var lng = pos.coords.longitude;
+    var acc = pos.coords.accuracy;
 
-    // 現在地マーカー（青い丸）
-    L.circleMarker([currentPos.lat, currentPos.lng], {
-      radius: 8,
-      weight: 2,
-      fillOpacity: 0.6
-    }).addTo(map);
+    updateMyLocation(lat, lng, acc);
 
-    map.setView([currentPos.lat, currentPos.lng], 15);
+    // 初回だけ現在地へ寄せる（毎回は寄せない）
+    if (!window.__didCenterOnce) {
+      window.__didCenterOnce = true;
+      map.setView([lat, lng], 15);
+    }
+
     refresh();
   }, function(){
     // 取れない場合は全表示
@@ -215,7 +240,7 @@ if (navigator.geolocation) {
   refresh();
 }
 
-// ボタン操作
+// ---- ボタン操作 ----
 document.querySelectorAll('#controls button').forEach(function(btn){
   btn.addEventListener('click', function(){
     document.querySelectorAll('#controls button').forEach(function(b){ b.classList.remove('active'); });
@@ -226,7 +251,6 @@ document.querySelectorAll('#controls button').forEach(function(btn){
     refresh();
   });
 });
-
 </script>
 </body>
 </html>
