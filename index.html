@@ -147,21 +147,6 @@ function googleNavUrl(lat, lng) {
   return "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
 }
 
-function addMarkers(list) {
-  list.forEach(function(coord){
-    var lat = coord[0], lng = coord[1];
-    var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
-
-    var nav = googleNavUrl(lat, lng);
-    m.bindPopup(
-      "<b>自販機スポット</b><br>" +
-      "<a href='" + nav + "' target='_blank'>ここへ行く</a>"
-    );
-
-    markers.push(m);
-  });
-}
-
 // 距離計算（メートル）: haversine
 function distanceMeters(lat1, lon1, lat2, lon2) {
   var R = 6371000;
@@ -174,6 +159,35 @@ function distanceMeters(lat1, lon1, lat2, lon2) {
     Math.sin(dLon/2) * Math.sin(dLon/2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   return R * c;
+}
+
+function formatDistance(m) {
+  if (m == null || isNaN(m)) return "";
+  if (m < 1000) return Math.round(m) + "m";
+  return (m / 1000).toFixed(2) + "km";
+}
+
+function addMarkers(list) {
+  // list: [{lat,lng,dist}] の配列を想定
+  list.forEach(function(item){
+    var lat = item.lat, lng = item.lng;
+    var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
+
+    var nav = googleNavUrl(lat, lng);
+
+    var distHtml = "";
+    if (item.dist != null && !isNaN(item.dist)) {
+      distHtml = "<div>現在地から <b>" + formatDistance(item.dist) + "</b></div>";
+    }
+
+    m.bindPopup(
+      "<b>自販機スポット</b><br>" +
+      distHtml +
+      "<a href='" + nav + "' target='_blank' rel='noopener'>ここへ行く</a>"
+    );
+
+    markers.push(m);
+  });
 }
 
 // ---- 現在地表示（ピン + 精度円）----
@@ -236,22 +250,37 @@ function refresh() {
 
   // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
-    addMarkers(spots);
+    var allNoDist = spots.map(function(c){
+      return { lat: c[0], lng: c[1], dist: null };
+    });
+    addMarkers(allNoDist);
     document.getElementById('status').textContent = "現在地未取得：全件表示中（位置情報を許可してね）";
     return;
   }
 
   updateRangeCircle();
 
+  var lat = currentPos.lat, lng = currentPos.lng;
+
+  // 「全部」でも距離は計算して近い順に
   if (currentRadius === 'all') {
-    addMarkers(spots);
-    document.getElementById('status').textContent = "全件表示中";
+    var allWithDist = spots.map(function(c){
+      return { lat: c[0], lng: c[1], dist: distanceMeters(lat, lng, c[0], c[1]) };
+    }).sort(function(a, b){
+      return a.dist - b.dist;
+    });
+
+    addMarkers(allWithDist);
+    document.getElementById('status').textContent = "全件表示中（ピンをタップで距離）";
     return;
   }
 
-  var lat = currentPos.lat, lng = currentPos.lng;
-  var filtered = spots.filter(function(c){
-    return distanceMeters(lat, lng, c[0], c[1]) <= currentRadius;
+  var filtered = spots.map(function(c){
+    return { lat: c[0], lng: c[1], dist: distanceMeters(lat, lng, c[0], c[1]) };
+  }).filter(function(item){
+    return item.dist <= currentRadius;
+  }).sort(function(a, b){
+    return a.dist - b.dist;
   });
 
   addMarkers(filtered);
@@ -263,7 +292,7 @@ function refresh() {
       "半径 " + rText + " にありません。\n距離を広げてみてね。";
   } else {
     document.getElementById('status').textContent =
-      "半径 " + rText + "： " + filtered.length + "件";
+      "半径 " + rText + "： " + filtered.length + "件（ピンをタップで距離）";
   }
 }
 
