@@ -27,7 +27,7 @@ jobs:
           python-version: "3.11"
 
       - name: Build spots.json
-        run: python my-map/build_spots.py
+        run: python build_sports.py
 
       - name: Commit spots.json if changed
         run: |
