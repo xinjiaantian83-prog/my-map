@@ -1,20 +1,20 @@
 {
-  "short_name": "爆走ナビ",
-  "name": "松山ワンワンコイン・爆走ナビ",
+  "name": "わんわんコインマップ",
+  "short_name": "わんコイン",
+  "start_url": "/my-map/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "start_url": "vending_map.html?v=pwa",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ff4500"
+  ]
 }
