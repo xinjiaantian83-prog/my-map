@@ -141,9 +141,23 @@ function clearMarkers() {
   markers.forEach(function(m){ map.removeLayer(m); });
   markers = [];
 }
+
+// 「ここへ行く」リンク生成（Googleマップ）
+function googleNavUrl(lat, lng) {
+  return "https://www.google.com/maps/dir/?api=1&destination=" + lat + "," + lng;
+}
+
 function addMarkers(list) {
   list.forEach(function(coord){
-    var m = L.marker(coord, { icon: dogIcon }).addTo(map);
+    var lat = coord[0], lng = coord[1];
+    var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
+
+    var nav = googleNavUrl(lat, lng);
+    m.bindPopup(
+      "<b>自販機スポット</b><br>" +
+      "<a href='" + nav + "' target='_blank'>ここへ行く</a>"
+    );
+
     markers.push(m);
   });
 }
@@ -189,7 +203,9 @@ function updateMyLocation(lat, lng, accuracyMeters) {
 }
 
 // ---- 半径円（フィルタ範囲）----
+var currentRadius = 500; // default
 var rangeCircle = null;
+
 function updateRangeCircle() {
   if (!currentPos) return;
 
@@ -215,8 +231,6 @@ function updateRangeCircle() {
 }
 
 // ---- 表示更新 ----
-var currentRadius = 500; // default
-
 function refresh() {
   clearMarkers();
 
@@ -227,7 +241,6 @@ function refresh() {
     return;
   }
 
-  // 半径円更新
   updateRangeCircle();
 
   if (currentRadius === 'all') {
@@ -263,7 +276,6 @@ if (navigator.geolocation) {
 
     updateMyLocation(lat, lng, acc);
 
-    // 初回だけ現在地へ寄せる（毎回は寄せない）
     if (!window.__didCenterOnce) {
       window.__didCenterOnce = true;
       map.setView([lat, lng], 15);
