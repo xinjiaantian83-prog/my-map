@@ -1,0 +1,42 @@
+name: Build spots.json
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "my-map/raw_coords.txt"
+      - "my-map/build_spots.py"
+      - ".github/workflows/build-spots.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # 自動コミットが無限ループしないように bot のときは実行しない
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build spots.json
+        run: python my-map/build_spots.py
+
+      - name: Commit spots.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add my-map/spots.json
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git commit -m "Auto-update spots.json"
+          git push
