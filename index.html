@@ -35,7 +35,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
   font-size: 14px;
   min-width: 210px;
 }
-#controls .row { display: flex; gap: 6px; flex-wrap: wrap; }
+#controls .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 #controls button {
   border: 1px solid #ccc;
   background: #fff;
@@ -65,6 +65,56 @@ html, body { margin: 0; padding: 0; height: 100%; }
   cursor: pointer;
 }
 .locate-btn:active{ transform: translateY(1px); }
+
+/* 追加枠UI */
+#adminPanel {
+  position: fixed;
+  left: 12px;
+  top: 102px; /* controls の下あたり */
+  z-index: 1000;
+  width: min(360px, calc(100vw - 24px));
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-size: 13px;
+  display: none;
+}
+#adminPanel h3{
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+#adminPanel textarea{
+  width: 100%;
+  height: 84px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+#adminPanel .row{
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+#adminPanel .note{
+  margin-top: 6px;
+  font-size: 12px;
+  opacity: 0.85;
+  line-height: 1.25;
+}
+.smallBtn{
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+.smallBtn.danger{
+  border-color: #d55;
+}
 </style>
 </head>
 
@@ -75,15 +125,35 @@ html, body { margin: 0; padding: 0; height: 100%; }
     <button data-radius="1000">1km</button>
     <button data-radius="3000">3km</button>
     <button data-radius="all">全部</button>
+    <button id="toggleAdmin" class="smallBtn" type="button">追加</button>
   </div>
   <div id="status">現在地を取得中…（許可してね）</div>
+</div>
+
+<!-- 座標追加パネル（端末内保存） -->
+<div id="adminPanel">
+  <h3>座標追加（この端末に保存）</h3>
+  <textarea id="coordInput" placeholder="例：
+(33.7602936, 132.7037820) (33.7590825, 132.7036603)
+33.7568455,132.7012506
+などをまとめて貼ってOK"></textarea>
+  <div class="row">
+    <button id="btnAddCoords" class="smallBtn" type="button">追加して保存</button>
+    <button id="btnClearSaved" class="smallBtn danger" type="button">保存分を全消し</button>
+  </div>
+  <div class="note">
+    ・追加した座標はこのスマホ/PCにだけ保存（投稿ではない）<br>
+    ・重複は自動で除外
+  </div>
 </div>
 
 <div id="map"></div>
 
 <script>
-// ---- データ（重複除去済み）----
-var spots = [
+// ============================
+// 1) ベース座標（GitHubに置いてる固定分）
+// ============================
+var baseSpots = [
   [33.7726943,132.7420953],
   [33.7787246,132.7334036],
   [33.7860538,132.7700416],
@@ -134,8 +204,61 @@ var spots = [
   [33.8200535,132.7242814]
 ];
 
-// ---- 地図 ----
-// ★ズーム(＋－)のデフォルトを消して、右上に出す（重なり解消）
+// ============================
+// 2) 端末保存（localStorage）分を合体して使う spots を作る
+// ============================
+var LS_KEY = "wanwan_saved_spots_v1";
+
+function normalizeKey(lat, lng) {
+  // 小数の揺れ吸収（だいたい1m程度）: 6桁に丸めてキー化
+  var a = Number(lat).toFixed(6);
+  var b = Number(lng).toFixed(6);
+  return a + "," + b;
+}
+
+function loadSavedSpots() {
+  try {
+    var raw = localStorage.getItem(LS_KEY);
+    if (!raw) return [];
+    var arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    // [ [lat,lng], ... ] だけ許す
+    return arr.filter(function(x){
+      return Array.isArray(x) && x.length === 2 && isFinite(x[0]) && isFinite(x[1]);
+    });
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveSavedSpots(arr) {
+  localStorage.setItem(LS_KEY, JSON.stringify(arr));
+}
+
+function mergeDedup(base, extra) {
+  var seen = {};
+  var out = [];
+
+  function pushIfNew(lat, lng) {
+    var k = normalizeKey(lat, lng);
+    if (seen[k]) return;
+    seen[k] = true;
+    out.push([Number(lat), Number(lng)]);
+  }
+
+  base.forEach(function(c){ pushIfNew(c[0], c[1]); });
+  extra.forEach(function(c){ pushIfNew(c[0], c[1]); });
+
+  return out;
+}
+
+var savedSpots = loadSavedSpots();
+var spots = mergeDedup(baseSpots, savedSpots);
+
+// ============================
+// 3) 地図
+// ============================
+// ★ズーム(＋－)は右上に（controlsと重ならない）
 var map = L.map('map', { zoomControl: false }).setView([33.7864888, 132.7245295], 13);
 L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -287,13 +410,13 @@ map.addControl(new LocateControl());
 function refresh() {
   clearMarkers();
 
-  // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
     var allNoDist = spots.map(function(c){
       return { lat: c[0], lng: c[1], dist: null };
     });
     addMarkers(allNoDist);
-    document.getElementById('status').textContent = "現在地未取得：全件表示中（位置情報を許可してね）";
+    document.getElementById('status').textContent =
+      "現在地未取得：全件表示中（位置情報を許可してね） / 全" + spots.length + "件";
     return;
   }
 
@@ -309,7 +432,8 @@ function refresh() {
     });
 
     addMarkers(allWithDist);
-    document.getElementById('status').textContent = "全件表示中（ピンをタップで距離）";
+    document.getElementById('status').textContent =
+      "全件表示中（ピンをタップで距離） / 全" + spots.length + "件";
     return;
   }
 
@@ -330,7 +454,7 @@ function refresh() {
       "半径 " + rText + " にありません。\n距離を広げてみてね。";
   } else {
     document.getElementById('status').textContent =
-      "半径 " + rText + "： " + filtered.length + "件（ピンをタップで距離）";
+      "半径 " + rText + "： " + filtered.length + "件（ピンをタップで距離） / 全" + spots.length + "件";
   }
 }
 
@@ -356,10 +480,10 @@ if (navigator.geolocation) {
   refresh();
 }
 
-// ---- ボタン操作 ----
-document.querySelectorAll('#controls button').forEach(function(btn){
+// ---- フィルタボタン操作 ----
+document.querySelectorAll('#controls button[data-radius]').forEach(function(btn){
   btn.addEventListener('click', function(){
-    document.querySelectorAll('#controls button').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('#controls button[data-radius]').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
 
     var v = btn.getAttribute('data-radius');
@@ -367,6 +491,59 @@ document.querySelectorAll('#controls button').forEach(function(btn){
 
     refresh();
   });
+});
+
+// ============================
+// 4) 追加枠（貼り付け→追加→保存）
+// ============================
+function parseCoords(text) {
+  // (lat, lng) / lat,lng / 空白区切り なんでも吸収
+  // 数字を全部拾って2個ずつペアにする
+  var nums = (text.match(/-?\d+(?:\.\d+)?/g) || []).map(Number);
+  var out = [];
+  for (var i = 0; i + 1 < nums.length; i += 2) {
+    var lat = nums[i], lng = nums[i+1];
+    if (!isFinite(lat) || !isFinite(lng)) continue;
+    if (lat < -90 || lat > 90) continue;
+    if (lng < -180 || lng > 180) continue;
+    out.push([lat, lng]);
+  }
+  return out;
+}
+
+var adminPanel = document.getElementById("adminPanel");
+document.getElementById("toggleAdmin").addEventListener("click", function(){
+  adminPanel.style.display = (adminPanel.style.display === "none" || adminPanel.style.display === "") ? "block" : "none";
+});
+
+document.getElementById("btnAddCoords").addEventListener("click", function(){
+  var text = document.getElementById("coordInput").value || "";
+  var parsed = parseCoords(text);
+  if (parsed.length === 0) {
+    alert("座標が見つからないよ。例の形式で貼ってね。");
+    return;
+  }
+
+  // saved に足して保存（重複除去）
+  savedSpots = mergeDedup(savedSpots, parsed);
+  saveSavedSpots(savedSpots);
+
+  // 表示用 spots を再生成
+  spots = mergeDedup(baseSpots, savedSpots);
+
+  document.getElementById("coordInput").value = "";
+  alert("追加した！ 保存：" + parsed.length + "件 / 合計：" + spots.length + "件");
+
+  refresh();
+});
+
+document.getElementById("btnClearSaved").addEventListener("click", function(){
+  if (!confirm("この端末に保存した追加分を全消しする？（ベース分は消えない）")) return;
+  savedSpots = [];
+  saveSavedSpots(savedSpots);
+  spots = mergeDedup(baseSpots, savedSpots);
+  alert("保存分を消した！ 合計：" + spots.length + "件");
+  refresh();
 });
 </script>
 </body>
