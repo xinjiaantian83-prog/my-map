@@ -25,6 +25,7 @@
     <button id="convert">変換</button>
     <button id="copy">出力をコピー</button>
     <button id="clear">クリア</button>
+    <div id="status" style="margin:8px 0; font-size:14px; opacity:0.75;"></div>
   </div> 
   <div style="margin:10px 0;">
   <strong>勢力を選択：</strong><br>
@@ -35,60 +36,84 @@
 
   <h3>出力（raw_coords.txt に貼る用）</h3>
   <textarea id="out" readonly></textarea>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const Sin = document.getElementById('in');
+  const Sout = document.getElementById('out');
+  const status = document.getElementById('status');
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-   alert('tool.html のJSが読み込まれたぞ');
-    const $in = document.getElementById('in');
-    const $out = document.getElementById('out');
+  function setStatus(msg) {
+    if (!status) return;
+    status.textContent = msg;
+    status.style.opacity = 1;
+    clearTimeout(setStatus._t);
+    setStatus._t = setTimeout(() => (status.style.opacity = 0.75), 2000);
+  }
 
-    function normalize(text) {
-      // 1) 改行で分割
-      const lines = text.split(/\r?\n/);
+  function normalize(text) {
+    const lines = text.split(/\r?\n/);
+    const coords = [];
 
-      // 2) 各行から「緯度・経度」を抽出（カッコあり/なし、カンマ+空白など全部許容）
-      const coords = [];
-      for (const line of lines) {
-        const s = line.trim();
-        if (!s) continue;
+    for (const line of lines) {
+      const s = line.trim();
+      if (!s) continue;
 
-        // 数値(±,小数) を2個拾う
-        const nums = s.match(/[+-]?\d+(?:\.\d+)?/g);
-        if (!nums || nums.length < 2) continue;
+      const nums = s.match(/[-+]?\d+(?:\.\d+)?/g);
+      if (!nums || nums.length < 2) continue;
 
-        const lat = nums[0];
-        const lng = nums[1];
-        // 選択中のtype取得
-const selectedType = document.querySelector('input[name="type"]:checked')?.value || "shiba";
-
-// 元行にすでに3列目があればそれを優先
-let type = selectedType;
-const rawParts = s.split(",").map(x => x.trim());
-if (rawParts.length >= 3 && rawParts[2]) {
-  type = rawParts[2];
-}
-
-coords.push(`${lat},${lng},${type}`);
-      }
-      return coords.join('\n');
+      const lat = nums[0];
+      const lng = nums[1];
+      coords.push(`${lat},${lng}`);
     }
 
-    document.getElementById('convert').onclick = () => {
-      alert('変換ボタン押されたぞ');
-      $out.value = normalize($in.value);
-    };
+    return coords.join('\n');
+  }
 
-    document.getElementById('copy').onclick = async () => {
-  Sout.value = normalize(Sin.value);
-  await navigator.clipboard.writeText(Sout.value);
-  alert('raw_coords.txt 用データをコピーしたぞ🔥');
-};
+  function ensureOutput() {
+    const v = (Sin?.value ?? '').trim();
+    Sout.value = normalize(v);
+    return Sout.value;
+  }
 
-    document.getElementById('clear').onclick = () => {
-      $in.value = '';
-      $out.value = '';
-      $in.focus();
-    });
-  </script>
+  document.getElementById('convert')?.addEventListener('click', () => {
+    ensureOutput();
+    setStatus('変換したぞ✅');
+  });
+
+  document.getElementById('copy')?.addEventListener('click', async () => {
+    try {
+      const text = ensureOutput();
+      if (!text.trim()) {
+        setStatus('コピーする内容が空だぞ⚠️');
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        setStatus('raw_coords.txt 用データをコピーしたぞ🔥');
+        return;
+      }
+
+      Sout.focus();
+      Sout.select();
+      const ok = document.execCommand('copy');
+      setStatus(ok ? 'raw_coords.txt 用データをコピーしたぞ🔥（互換）' : 'コピー失敗');
+    } catch {
+      setStatus('コピー失敗：手動でコピーしてくれ');
+    }
+  });
+
+  document.getElementById('clear')?.addEventListener('click', () => {
+    Sin.value = '';
+    Sout.value = '';
+    Sin.focus();
+    setStatus('クリアしたぞ🧹');
+  });
+
+  setStatus('準備OK😎');
+});
+</script>
+  
+
 </body>
 </html>
