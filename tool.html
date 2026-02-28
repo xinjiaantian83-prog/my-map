@@ -76,10 +76,10 @@ coords.push(`${lat},${lng},${type}`);
     };
 
     document.getElementById('copy').onclick = async () => {
-      if (!$out.value) $out.value = normalize($in.value);
-      await navigator.clipboard.writeText($out.value);
-      alert('コピーしました（raw_coords.txt に貼れます）');
-    };
+  Sout.value = normalize(Sin.value);
+  await navigator.clipboard.writeText(Sout.value);
+  alert('raw_coords.txt 用データをコピーしたぞ🔥');
+};
 
     document.getElementById('clear').onclick = () => {
       $in.value = '';
