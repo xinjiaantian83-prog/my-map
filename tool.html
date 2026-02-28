@@ -73,6 +73,7 @@ coords.push(`${lat},${lng},${type}`);
     }
 
     document.getElementById('convert').onclick = () => {
+      alert('変換ボタン押されたぞ');
       $out.value = normalize($in.value);
     };
 
