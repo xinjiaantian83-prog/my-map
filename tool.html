@@ -56,7 +56,17 @@
 
         const lat = nums[0];
         const lng = nums[1];
-        coords.push(`${lat},${lng}`);
+        // 選択中のtype取得
+const selectedType = document.querySelector('input[name="type"]:checked')?.value || "shiba";
+
+// 元行にすでに3列目があればそれを優先
+let type = selectedType;
+const rawParts = s.split(",").map(x => x.trim());
+if (rawParts.length >= 3 && rawParts[2]) {
+  type = rawParts[2];
+}
+
+coords.push(`${lat},${lng},${type}`);
       }
       return coords.join('\n');
     }
