@@ -37,6 +37,7 @@
   <textarea id="out" readonly></textarea>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
    alert('tool.html のJSが読み込まれたぞ');
     const $in = document.getElementById('in');
     const $out = document.getElementById('out');
@@ -87,7 +88,7 @@ coords.push(`${lat},${lng},${type}`);
       $in.value = '';
       $out.value = '';
       $in.focus();
-    };
+    });
   </script>
 </body>
 </html>
