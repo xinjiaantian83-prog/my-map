@@ -78,11 +78,13 @@ fetch('raw_coords.txt')
   .then(text => {
     const lines = text.trim().split('\n');
 
-    var customIcon = L.icon({
-      iconUrl: "coin.png",
-      iconSize: [40, 40],
-      iconAnchor: [20, 40]
-    });
+
+
+var customIcon = L.icon({
+  iconUrl: "gold_coin.png",
+  iconSize: [40, 40],
+  iconAnchor: [20, 40]
+});
 
     lines.forEach(line => {
       const [lat, lng] = line.split(',').map(Number);
