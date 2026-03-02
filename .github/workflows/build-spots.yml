@@ -30,7 +30,7 @@ jobs:
           python-version: "3.11"
 
       - name: Build spots.json
-        run: python build_sports.py
+        run: python build_spots.py
 
       - name: Commit spots.json if changed
         run: |
