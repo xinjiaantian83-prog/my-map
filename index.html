@@ -387,11 +387,8 @@ loadSpotsJson().then(function(){
   refresh();
 }).catch(function(err){
   spotsLoaded = false;
-  setStatus("データ読み込みに失敗…（spots.json を確認してね）");
-  console.error(err);
 });
-    console.error(err);
-  });
+  
 
 /* ← ここに貼る */
 
@@ -413,10 +410,8 @@ function showDogMessage() {
     msgBox.style.opacity = "0";
   }, 2500);
 }
+// window.addEventListener("load", () => setTimeout(showDogMessage, 500));
 
-window.addEventListener("load", () => {
-  setTimeout(showDogMessage, 500);
-});
 </script>
 </body>
 </html>
