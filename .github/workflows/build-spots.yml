@@ -4,8 +4,8 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - "my-map/raw_coords.txt"
-      - "my-map/build_spots.py"
+      - "raw_coords.txt"
+      - "build_spots.py"
       - ".github/workflows/build-spots.yml"
 
 permissions:
