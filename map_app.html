@@ -25,6 +25,20 @@
                     top: 0.0%;
                 }
                 .leaflet-container { font-size: 1rem; }
+                #dogMessage {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.9);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
             </style>
 
             <style>html, body {
@@ -121,6 +135,27 @@ var customIcon = L.icon({
         ;
 
         
-    
+ function showDogMessage() {
+  const messages = [
+    "こまめな水分補給を。ワン。",
+    "喉が渇く前に一口だワン。",
+    "無理せず休憩も大事だワン。",
+    "今日も安全第一だワン。",
+    "特にないワン。"
+  ];
+
+  const msgBox = document.getElementById("dogMessage");
+  const randomIndex = Math.floor(Math.random() * messages.length);
+
+  msgBox.textContent = messages[randomIndex];
+  msgBox.style.opacity = "1";
+
+  setTimeout(() => {
+    msgBox.style.opacity = "0";
+  }, 2500);
+}
+
+window.addEventListener("load", showDogMessage);   
 </script>
+<div id="dogMessage"></div>    
 </html>
