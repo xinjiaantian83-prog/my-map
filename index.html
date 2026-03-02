@@ -69,7 +69,20 @@ html, body { margin: 0; padding: 0; height: 100%; }
 70 </head>
 71 <body>
 
-72 <div style="position:fixed;top:0;left:0;z-index:999999;background:yellow;padding:6px;">TEST</div>
+72 <div id="dogMessage" style="
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,0.9);
+padding:8px 16px;
+border-radius:20px;
+font-weight:bold;
+z-index:9999;
+opacity:0;
+transition:opacity 0.4s;
+">
+</div>
 
 73   <div id="controls">
   <div class="row">
@@ -376,6 +389,33 @@ loadSpotsJson().then(function(){
   spotsLoaded = false;
   setStatus("データ読み込みに失敗…（spots.json を確認してね）");
   console.error(err);
+});
+    console.error(err);
+  });
+
+/* ← ここに貼る */
+
+function showDogMessage() {
+  const messages = [
+    "水分補給するワン🐶",
+    "無理するなワン。",
+    "今日も安全第一だワン。",
+    "焦らずいこうワン。"
+  ];
+
+  const msgBox = document.getElementById("dogMessage");
+  const randomIndex = Math.floor(Math.random() * messages.length);
+
+  msgBox.textContent = messages[randomIndex];
+  msgBox.style.opacity = "1";
+
+  setTimeout(() => {
+    msgBox.style.opacity = "0";
+  }, 2500);
+}
+
+window.addEventListener("load", () => {
+  setTimeout(showDogMessage, 500);
 });
 </script>
 </body>
