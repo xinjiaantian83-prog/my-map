@@ -65,30 +65,26 @@ html, body { margin: 0; padding: 0; height: 100%; }
   cursor: pointer;
 }
 .locate-btn:active{ transform: translateY(1px); }
-
-/* 犬メッセージ */
-#dogMessage{
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255,255,255,0.9);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: bold;
-  z-index: 9999;
-  opacity: 0;
-  transition: opacity 0.4s;
-  pointer-events: none;
-}
 </style>
-</head>
-
+ </head>
 <body>
 
-<div id="dogMessage"></div>
+ <div id="dogMessage" style="
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(255,255,255,0.9);
+padding:8px 16px;
+border-radius:20px;
+font-weight:bold;
+z-index:9999;
+opacity:0;
+transition:opacity 0.4s;
+">
+</div>
 
-<div id="controls">
+  <div id="controls">
   <div class="row">
     <button data-radius="500" class="active">500m</button>
     <button data-radius="1000">1km</button>
@@ -133,6 +129,7 @@ function dedupSpots(list) {
 }
 
 function loadSpotsJson() {
+  // GitHub Pagesのキャッシュ対策で軽くクエリ付ける（更新反映が早くなる）
   var url = "spots.json?v=" + Date.now();
   return fetch(url, { cache: "no-store" })
     .then(function(res){
@@ -196,6 +193,7 @@ function formatDistance(m) {
 }
 
 function addMarkers(list) {
+  // list: {lat,lng,dist} の配列
   list.forEach(function(item){
     var lat = item.lat, lng = item.lng;
     var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
@@ -299,11 +297,13 @@ map.addControl(new LocateControl());
 function refresh() {
   clearMarkers();
 
+  // データ未読なら何もしない
   if (!spotsLoaded) {
     setStatus("データ読み込み中…");
     return;
   }
 
+  // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
     addMarkers(spots.map(function(c){
       return { lat: c[0], lng: c[1], dist: null };
@@ -387,36 +387,31 @@ loadSpotsJson().then(function(){
   refresh();
 }).catch(function(err){
   spotsLoaded = false;
-  setStatus("データ読み込みに失敗…（spots.json を確認してね）");
-  console.error(err);
 });
+  
 
-// ============================
-// 犬メッセージ（起動時に1回）
-// ============================
+/* ← ここに貼る */
+
 function showDogMessage() {
-  var msgBox = document.getElementById("dogMessage");
-  if (!msgBox) return;
-
-  var messages = [
-    "こまめな水分補給を、ワン。",
-    "喉が渇く前に一口だワン。",
-    "無理せず休憩も大事だワン。",
+  const messages = [
+    "水分補給するワン🐶",
+    "無理するなワン。",
     "今日も安全第一だワン。",
-    "特にないワン。"
+    "焦らずいこうワン。"
   ];
 
-  var randomIndex = Math.floor(Math.random() * messages.length);
+  const msgBox = document.getElementById("dogMessage");
+  const randomIndex = Math.floor(Math.random() * messages.length);
+
   msgBox.textContent = messages[randomIndex];
   msgBox.style.opacity = "1";
 
-  setTimeout(function(){
+  setTimeout(() => {
     msgBox.style.opacity = "0";
   }, 2500);
 }
+// window.addEventListener("load", () => setTimeout(showDogMessage, 500));
 
-setTimeout(showDogMessage, 600);
 </script>
-
 </body>
 </html>
