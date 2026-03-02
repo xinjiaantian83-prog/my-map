@@ -51,6 +51,7 @@ html, body { margin: 0; padding: 0; height: 100%; }
   font-size: 12px;
   opacity: 0.88;
   line-height: 1.3;
+  white-space: pre-line;
 }
 
 /* 現在地へ戻るボタン */
@@ -65,26 +66,34 @@ html, body { margin: 0; padding: 0; height: 100%; }
   cursor: pointer;
 }
 .locate-btn:active{ transform: translateY(1px); }
+
+/* 犬メッセージ（ほんのり可愛い） */
+#dogMessage{
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.92);
+  padding: 10px 18px;
+  border-radius: 22px;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: "Hiragino Maru Gothic ProN", "Rounded Mplus 1c", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
 </style>
- </head>
+</head>
+
 <body>
 
- <div id="dogMessage" style="
-position:fixed;
-top:15px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(255,255,255,0.9);
-padding:8px 16px;
-border-radius:20px;
-font-weight:bold;
-z-index:9999;
-opacity:0;
-transition:opacity 0.4s;
-">
-</div>
+<div id="dogMessage"></div>
 
-  <div id="controls">
+<div id="controls">
   <div class="row">
     <button data-radius="500" class="active">500m</button>
     <button data-radius="1000">1km</button>
@@ -100,8 +109,8 @@ transition:opacity 0.4s;
 // ============================
 // 1) spots.json を読み込む
 // ============================
-var spots = [];          // 実データ（読み込み後に入る）
-var spotsLoaded = false; // 読めたかどうか
+var spots = [];
+var spotsLoaded = false;
 
 function setStatus(text) {
   document.getElementById('status').textContent = text;
@@ -129,7 +138,6 @@ function dedupSpots(list) {
 }
 
 function loadSpotsJson() {
-  // GitHub Pagesのキャッシュ対策で軽くクエリ付ける（更新反映が早くなる）
   var url = "spots.json?v=" + Date.now();
   return fetch(url, { cache: "no-store" })
     .then(function(res){
@@ -144,7 +152,7 @@ function loadSpotsJson() {
 }
 
 // ============================
-// 2) 地図（UI重なり回避のためズームは右上）
+// 2) 地図
 // ============================
 var map = L.map('map', { zoomControl: false }).setView([33.7864888, 132.7245295], 13);
 L.control.zoom({ position: 'topright' }).addTo(map);
@@ -193,7 +201,6 @@ function formatDistance(m) {
 }
 
 function addMarkers(list) {
-  // list: {lat,lng,dist} の配列
   list.forEach(function(item){
     var lat = item.lat, lng = item.lng;
     var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
@@ -242,7 +249,7 @@ function updateMyLocation(lat, lng, accuracyMeters) {
 }
 
 // ---- 半径円（フィルタ範囲）----
-var currentRadius = 500; // default
+var currentRadius = 500;
 var rangeCircle = null;
 
 function updateRangeCircle() {
@@ -297,13 +304,11 @@ map.addControl(new LocateControl());
 function refresh() {
   clearMarkers();
 
-  // データ未読なら何もしない
   if (!spotsLoaded) {
     setStatus("データ読み込み中…");
     return;
   }
 
-  // 現在地が取れてない間は全部表示（迷わない）
   if (!currentPos) {
     addMarkers(spots.map(function(c){
       return { lat: c[0], lng: c[1], dist: null };
@@ -387,31 +392,51 @@ loadSpotsJson().then(function(){
   refresh();
 }).catch(function(err){
   spotsLoaded = false;
+  setStatus("データ読み込みに失敗…（spots.json を確認してね）");
+  console.error(err);
 });
-  
 
-/* ← ここに貼る */
+// ============================
+// 犬メッセージ（季節×2 + たまに意味不明）
+// PWAでも毎回出す：pageshow
+// ============================
+var __dogLastShown = 0;
 
 function showDogMessage() {
-  const messages = [
-    "水分補給するワン🐶",
-    "無理するなワン。",
-    "今日も安全第一だワン。",
-    "焦らずいこうワン。"
-  ];
+  var msgBox = document.getElementById("dogMessage");
+  if (!msgBox) return;
 
-  const msgBox = document.getElementById("dogMessage");
-  const randomIndex = Math.floor(Math.random() * messages.length);
+  var month = new Date().getMonth() + 1;
 
-  msgBox.textContent = messages[randomIndex];
+  var spring = ["春風きもちいいワン。","新生活、無理するなワン。"];
+  var summer = ["水分補給するワン🐶","熱中症に気をつけるワン。"];
+  var autumn = ["秋は動きやすいワン。","空気うまいワン。"];
+  var winter = ["手袋忘れるなワン。","寒い日は無理するなワン。"];
+  var joke  = ["ワンワンワン。","特にないワン。"];
+
+  var pool;
+  if (month >= 3 && month <= 5) pool = spring;
+  else if (month >= 6 && month <= 8) pool = summer;
+  else if (month >= 9 && month <= 11) pool = autumn;
+  else pool = winter;
+
+  if (Math.random() < 0.15) pool = joke;
+
+  msgBox.textContent = pool[Math.floor(Math.random() * pool.length)];
   msgBox.style.opacity = "1";
 
-  setTimeout(() => {
+  setTimeout(function(){
     msgBox.style.opacity = "0";
   }, 2500);
 }
-// window.addEventListener("load", () => setTimeout(showDogMessage, 500));
 
+window.addEventListener("pageshow", function(){
+  var now = Date.now();
+  if (now - __dogLastShown < 800) return; // 二重発火ガード
+  __dogLastShown = now;
+  setTimeout(showDogMessage, 600);
+});
 </script>
+
 </body>
 </html>
