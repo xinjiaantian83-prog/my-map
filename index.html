@@ -289,25 +289,43 @@ userMarker = L.marker(userLatLng, {
     });
 
     document.getElementById('btnLocate').addEventListener('click', () => {
-      if (!navigator.geolocation) {
-        show('🔴 位置情報が使えません');
-        return;
-      }
-      show('🟡 現在地取得中…');
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          updateUserMarker(lat, lng);
-          if (currentRadius != null) setRadiusCircle(currentRadius);
-          renderMarkers();
-        },
-        (err) => {
-          show('🔴 現在地取得失敗: ' + err.message);
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-      );
-    });
+  if (!navigator.geolocation) {
+    show('🔴 位置情報が使えません');
+    return;
+  }
+
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+    show('🟡 現在地追跡OFF');
+    return;
+  }
+
+  show('🟡 現在地追跡ON…');
+
+  watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      updateUserMarker(lat, lng);
+
+      if (currentRadius != null) setRadiusCircle(currentRadius);
+
+      renderMarkers();
+
+      checkDiscoveries(pos.coords);
+    },
+    (err) => {
+      show('🔴 現在地取得失敗: ' + err.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+});
 
     // ========= 起動 =========
     (async () => {
