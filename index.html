@@ -116,6 +116,12 @@
 
 function show(msg){
   console.log(msg);
+  const el = document.getElementById('status');
+  if(el) el.textContent = msg;
+}
+
+function append(msg){
+  show(msg);
 }
 // 1) spots.json を読み込む
 // ============================
