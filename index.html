@@ -513,6 +513,7 @@ window.addEventListener("pageshow", function(){
       try {
         const res = await _fetch.apply(this, args);
         if (!res.ok && (url.includes('spots') || url.includes('.json'))) {
+          console.log(url);
           append(`❌ fetch失敗\nURL: ${url}\nHTTP: ${res.status} ${res.statusText}`);
         }
         return res;
