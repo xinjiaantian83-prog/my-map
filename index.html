@@ -546,11 +546,11 @@ window.addEventListener("pageshow", function(){
       xhr.addEventListener('loadend', function () {
         // status 0 は通信失敗/ブロック/ファイル参照ミスで出がち
         if (xhr.status !== 200) {
-          append(`❌ XHR失敗\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}\nレスポンス冒頭: ${(xhr.responseText || '').slice(0,120)}`);
+          show(`❌ XHR失敗\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}\nレスポンス冒頭: ${(xhr.responseText || '').slice(0,120)}`);
         }
       });
       xhr.addEventListener('error', function () {
-        append(`❌ XHR通信エラー\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}`);
+        show(`❌ XHR通信エラー\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}`);
       });
     }
 
@@ -559,7 +559,7 @@ window.addEventListener("pageshow", function(){
 
   // 4) 何も出ない時用の“生存通知”
   setTimeout(() => {
-    append("🟢 診断パネル稼働中：エラー待機");
+    show("🟢 診断パネル稼働中：エラー待機");
   }, 500);
 })();
   console.log("LOAD START");
