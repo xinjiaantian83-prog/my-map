@@ -103,7 +103,15 @@
       if (userMarker) map.removeLayer(userMarker);
       if (userCircle) map.removeLayer(userCircle);
 
-      userMarker = L.marker(userLatLng).addTo(map);
+      const pawIcon = L.icon({
+  iconUrl: 'paw_pin.png',
+  iconSize: [26,38],
+  iconAnchor: [13,38]
+});
+
+userMarker = L.marker(userLatLng, {
+  icon: pawIcon
+}).addTo(map);
       map.setView(userLatLng, 15);
     };
 
