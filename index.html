@@ -117,12 +117,25 @@
 var spots = [];
   function normalizeSpots(raw){
   if(!Array.isArray(raw)) return [];
-  return raw.map(s=>{
+
+  return raw.map(s => {
     if(Array.isArray(s)){
-      return {lat:s[0],lng:s[1],type:"nky"};
+      if(s.length < 2) return null;
+      const lat = Number(s[0]);
+      const lng = Number(s[1]);
+      if(!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+      return [lat, lng];
     }
-    return s;
-  });
+
+    if(s && typeof s === "object"){
+      const lat = Number(s.lat);
+      const lng = Number(s.lng);
+      if(!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+      return [lat, lng];
+    }
+
+    return null;
+  }).filter(Boolean);
 }
 var spotsLoaded = false;
 
