@@ -111,13 +111,15 @@
 <div id="map" style="height:70vh;"></div>
 
 <script>
-  function show(msg){
+  const show = (msg) => {
   console.log(msg);
   const el = document.getElementById('status');
   if(el) el.textContent = msg;
-}
+};
 
-function append(msg){
+const append = (msg) => {
+  show(msg);
+};
  // ===== 固定エラー表示（消えない）=====
 function show(msg){
   console.log(msg);
