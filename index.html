@@ -209,6 +209,7 @@ function formatDistance(m) {
 function addMarkers(list) {
   list.forEach(function(item){
     var lat = item.lat, lng = item.lng;
+    if(!map.getBounds().contains([item.lat, item.lng])) return;
     var m = L.marker([lat, lng], { icon: dogIcon });
 cluster.addLayer(m);
 
