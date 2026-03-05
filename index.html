@@ -177,7 +177,7 @@ var dogIcon = L.icon({
 // マーカー管理
 var markers = [];
 function clearMarkers() {
-  markers.forEach(function(m){ map.removeLayer(m); });
+ markers.forEach(function(m){ cluster.removeLayer(m); });
   markers = [];
 }
 
