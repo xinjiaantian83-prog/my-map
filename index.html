@@ -156,7 +156,12 @@ function loadSpotsJson() {
 // 2) 地図
 // ============================
 var map = L.map('map', { zoomControl: false }).setView([33.7864888, 132.7245295], 13);
-L.control.zoom({ position: 'topright' }).addTo(map);
+var cluster = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  chunkedLoading: true
+});
+map.addLayer(cluster);
+  L.control.zoom({ position: 'topright' }).addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
