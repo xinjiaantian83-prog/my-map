@@ -453,6 +453,91 @@ window.addEventListener("pageshow", function(){
   setTimeout(showDogMessage, 600);
 });
 </script>
+<script>
+/* ===== 診断パネル：マップが出ない原因を画面に表示 ===== */
+(function () {
+  const box = document.createElement('div');
+  box.id = 'diagBox';
+  box.style.cssText = `
+    position:fixed; left:12px; right:12px; bottom:12px; z-index:99999;
+    background:rgba(0,0,0,.78); color:#fff; padding:10px 12px;
+    border-radius:12px; font-size:12px; line-height:1.35;
+    max-height:40vh; overflow:auto; display:none; white-space:pre-wrap;
+  `;
+  document.body.appendChild(box);
 
+  function show(msg) {
+    box.style.display = 'block';
+    box.textContent = msg;
+  }
+  function append(msg) {
+    box.style.display = 'block';
+    box.textContent += (box.textContent ? "\n\n" : "") + msg;
+  }
+
+  // 1) JS の致命エラーを表示
+  window.addEventListener('error', (ev) => {
+    show(`❌ JSエラー\n${ev.message}\n${ev.filename || ''}:${ev.lineno || ''}`);
+  });
+  window.addEventListener('unhandledrejection', (ev) => {
+    show(`❌ Promiseエラー\n${ev.reason && ev.reason.message ? ev.reason.message : ev.reason}`);
+  });
+
+  // 2) fetch を捕まえる（もし使っていれば）
+  if (window.fetch) {
+    const _fetch = window.fetch;
+    window.fetch = async function (...args) {
+      const url = (args && args[0]) ? String(args[0]) : '(unknown)';
+      try {
+        const res = await _fetch.apply(this, args);
+        if (!res.ok && (url.includes('spots') || url.includes('.json'))) {
+          append(`❌ fetch失敗\nURL: ${url}\nHTTP: ${res.status} ${res.statusText}`);
+        }
+        return res;
+      } catch (e) {
+        if (url.includes('spots') || url.includes('.json')) {
+          append(`❌ fetch通信エラー\nURL: ${url}\nError: ${e && e.message ? e.message : e}`);
+        }
+        throw e;
+      }
+    };
+  }
+
+  // 3) XHR を捕まえる（fetchが無くてもこっちで分かる）
+  const _open = XMLHttpRequest.prototype.open;
+  const _send = XMLHttpRequest.prototype.send;
+
+  XMLHttpRequest.prototype.open = function (method, url) {
+    this.__diagUrl = url;
+    this.__diagMethod = method;
+    return _open.apply(this, arguments);
+  };
+
+  XMLHttpRequest.prototype.send = function () {
+    const xhr = this;
+    const url = String(xhr.__diagUrl || '');
+    const watch = (url.includes('spots') || url.includes('.json'));
+
+    if (watch) {
+      xhr.addEventListener('loadend', function () {
+        // status 0 は通信失敗/ブロック/ファイル参照ミスで出がち
+        if (xhr.status !== 200) {
+          append(`❌ XHR失敗\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}\nレスポンス冒頭: ${(xhr.responseText || '').slice(0,120)}`);
+        }
+      });
+      xhr.addEventListener('error', function () {
+        append(`❌ XHR通信エラー\n${xhr.__diagMethod || ''} ${url}\nHTTP: ${xhr.status}`);
+      });
+    }
+
+    return _send.apply(this, arguments);
+  };
+
+  // 4) 何も出ない時用の“生存通知”
+  setTimeout(() => {
+    append("🟢 診断パネル稼働中：エラー待機");
+  }, 500);
+})();
+</script>
 </body>
 </html>
