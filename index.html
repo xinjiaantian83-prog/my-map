@@ -206,7 +206,52 @@ userMarker = L.marker(userLatLng, {
       spotsRaw = normalizeSpots(data);
       renderMarkers();
     };
+    // ========= 発見システム（15m） =========
+    const DISCOVER_RADIUS_M = 15;     // 発見距離
+    const discovered = new Set();     // 発見済み（重複防止）
+    let lastVibeAt = 0;              // 振動クールダウン
 
+    const keyOf = (s) => `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type || ''}`;
+
+    const vibrateOnce = () => {
+      const now = Date.now();
+      if (now - lastVibeAt < 8000) return; // 8秒以内は連続で震えない
+      lastVibeAt = now;
+      if (navigator.vibrate) navigator.vibrate([80]);
+    };
+
+    const checkDiscoveries = (coords) => {
+      if (!userLatLng || !Array.isArray(spotsRaw) || spotsRaw.length === 0) return 0;
+
+      // 速度が取れて「車っぽい」なら振動しない（だいたい時速20km↑）
+      const speed = coords && typeof coords.speed === 'number' ? coords.speed : null;
+      if (speed != null && speed > 6) return 0; // 6m/s ≒ 21.6km/h
+
+      let hit = 0;
+
+      for (const s of spotsRaw) {
+        const k = keyOf(s);
+        if (discovered.has(k)) continue;
+
+        const d = userLatLng.distanceTo([s.lat, s.lng]);
+        if (d <= DISCOVER_RADIUS_M) {
+          discovered.add(k);
+          hit++;
+        }
+      }
+
+      if (hit > 0) {
+        vibrateOnce();
+        show(`🐾 発見 +${hit}（合計 ${discovered.size}）`);
+        // 1.5秒後に通常表示へ戻す（renderMarkersがstatusを書き直す）
+        setTimeout(() => {
+          try { renderMarkers(); } catch(e) {}
+        }, 1500);
+      }
+
+      return hit;
+    };
+    // ========= 発見システムここまで =========
     // ========= ボタン =========
     document.getElementById('btnAll').addEventListener('click', () => {
       currentRadius = null;
