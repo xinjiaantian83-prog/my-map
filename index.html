@@ -1,340 +1,335 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>わんわんコインマップ</title>
+<meta charset="utf-8">
+<title>わんわんコインマップ</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <style>
-    body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Noto Sans JP", sans-serif; }
-    .topbar{
-      position: sticky; top: 0; z-index: 1000;
-      background: #fff;
-      border-bottom: 1px solid #e6e6e6;
-      padding: 10px 10px 8px;
-    }
-    .title{ font-weight: 700; margin-bottom: 8px; }
-    .controls{ display:flex; gap:8px; flex-wrap: wrap; }
-    .btn{
-      border:1px solid #ddd; background:#fafafa; padding:8px 10px; border-radius:10px;
-      font-weight:600; cursor:pointer; user-select:none;
-    }
-    .btn.active{ background:#e9f1ff; border-color:#b7d2ff; }
-    #status{
-      margin-top: 8px; font-size: 13px; color:#333;
-      white-space: pre-wrap;
-    }
-    #map{
-      height: calc(100vh - 110px);
-      width: 100vw;
-    }
-    .small{ font-size: 12px; color:#666; margin-top: 4px; }
-  </style>
+<style>
+body{
+margin:0;
+font-family:sans-serif;
+}
+
+#map{
+height:70vh;
+}
+
+.controls{
+padding:10px;
+}
+
+button{
+padding:8px 12px;
+margin:3px;
+font-size:14px;
+}
+
+#status{
+margin-top:8px;
+font-size:14px;
+}
+</style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="title">わんわんコインマップ</div>
-    <div class="controls">
-      <button class="btn" id="btn500">500m</button>
-      <button class="btn" id="btn1k">1km</button>
-      <button class="btn" id="btn3k">3km</button>
-      <button class="btn active" id="btnAll">全部</button>
-      <button class="btn" id="btnLocate">現在地</button>
-    </div>
-    <div id="status">データ読み込み中…</div>
-    <div class="small">※ピンを押すと「Googleナビ」を開けます</div>
-  </div>
 
-  <div id="map"></div>
+<div class="controls">
 
-  <script>
-    // ========= 共通 =========
-    const show = (msg) => {
-      console.log(msg);
-      const el = document.getElementById('status');
-      if (el) el.textContent = msg;
-    };
+<h2>わんわんコインマップ</h2>
 
-    window.addEventListener('error', (e) => {
-      const file = (e.filename || '').split('/').pop();
-      show(`🔴 JS ERROR: ${e.message} @ ${file}:${e.lineno}:${e.colno}`);
-    });
+<button id="btn500">500m</button>
+<button id="btn1k">1km</button>
+<button id="btn3k">3km</button>
+<button id="btnAll">全部</button>
+<button id="btnLocate">現在地</button>
 
-    window.addEventListener('unhandledrejection', (e) => {
-      const r = e.reason;
-      const msg = (r && r.message) ? r.message : String(r);
-      show(`🔴 PROMISE ERROR: ${msg}`);
-    });
+<div id="status">読み込み中...</div>
 
-    const setActive = (id) => {
-      ['btn500','btn1k','btn3k','btnAll'].forEach(x => {
-        const b = document.getElementById(x);
-        if(!b) return;
-        b.classList.toggle('active', x === id);
-      });
-    };
+</div>
 
-    // ========= 地図 =========
-    const map = L.map('map', { zoomControl: true }).setView([33.84, 132.77], 12);
+<div id="map"></div>
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(map);
+<script>
 
-    // 現在地
-    let userLatLng = null;
-    let userMarker = null;
-    let userCircle = null;
+const map = L.map('map').setView([33.8392,132.7657],13);
 
-    const updateUserMarker = (lat, lng) => {
-      userLatLng = L.latLng(lat, lng);
-      if (userMarker) map.removeLayer(userMarker);
-      if (userCircle) map.removeLayer(userCircle);
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{maxZoom:19}
+).addTo(map);
 
-      const pawIcon = L.icon({
-  iconUrl: 'paw_pin.png',
-  iconSize: [36,44],
-  iconAnchor: [18,44]
+let spotsRaw=[];
+let markers=[];
+
+let userLatLng=null;
+let userMarker=null;
+let userCircle=null;
+
+let currentRadius=null;
+
+let watchId=null;
+
+const statusEl=document.getElementById("status");
+
+function show(t){
+statusEl.textContent=t;
+}
+
+function setRadiusCircle(m){
+
+if(userCircle) map.removeLayer(userCircle);
+
+userCircle=L.circle(userLatLng,{
+radius:m
+}).addTo(map);
+
+}
+
+function normalizeSpots(arr){
+
+return arr.map(s=>({
+lat:Number(s.lat),
+lng:Number(s.lng),
+type:s.type||"nky"
+}));
+
+}
+
+function renderMarkers(){
+
+markers.forEach(m=>map.removeLayer(m));
+markers=[];
+
+let count=0;
+
+spotsRaw.forEach(s=>{
+
+if(currentRadius && userLatLng){
+
+const d=userLatLng.distanceTo([s.lat,s.lng]);
+
+if(d>currentRadius) return;
+
+}
+
+const m=L.marker([s.lat,s.lng],{
+icon:L.icon({
+iconUrl:'shiba_pin.png',
+iconSize:[28,40],
+iconAnchor:[14,40]
+})
+}).addTo(map);
+
+markers.push(m);
+count++;
+
 });
 
-userMarker = L.marker(userLatLng, {
-  icon: pawIcon
-}).addTo(map);
-      map.setView(userLatLng, 15);
-    };
+show(`読み込みOK: ${spotsRaw.length}件中 ${count}件表示`);
 
-    const setRadiusCircle = (meters) => {
-      if (!userLatLng) return;
-      if (userCircle) map.removeLayer(userCircle);
-      userCircle = L.circle(userLatLng, { radius: meters }).addTo(map);
-    };
+}
 
-    // ========= spots =========
-    let spotsRaw = [];          // 正規化後の配列 {lat,lng,type}
-    let spotMarkers = [];       // L.marker配列
-    let currentRadius = null;   // null = 全部
+function updateUserMarker(lat,lng){
 
-    const normalizeSpots = (data) => {
-      if (!Array.isArray(data)) return [];
-      const out = [];
-      for (const s of data) {
-        // 旧形式: [lat,lng] / [lat,lng,type]
-        if (Array.isArray(s)) {
-          const lat = Number(s[0]);
-          const lng = Number(s[1]);
-          const type = (s.length >= 3) ? String(s[2] ?? '') : '';
-          if (Number.isFinite(lat) && Number.isFinite(lng)) out.push({ lat, lng, type });
-          continue;
-        }
-        // 新形式: {lat,lng,type}
-        if (s && typeof s === 'object') {
-          const lat = Number(s.lat);
-          const lng = Number(s.lng);
-          const type = (s.type != null) ? String(s.type) : '';
-          if (Number.isFinite(lat) && Number.isFinite(lng)) out.push({ lat, lng, type });
-          continue;
-        }
-      }
-      return out;
-    };
+userLatLng=L.latLng(lat,lng);
 
-    const clearMarkers = () => {
-      for (const m of spotMarkers) map.removeLayer(m);
-      spotMarkers = [];
-    };
+if(userMarker) map.removeLayer(userMarker);
 
-    const navUrl = (lat, lng) => {
-      // iPhoneでも強い Google Maps URL
-      return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
-    };
-
-    const renderMarkers = () => {
-      clearMarkers();
-
-      let shown = 0;
-      for (const s of spotsRaw) {
-        if (currentRadius != null && userLatLng) {
-          const d = userLatLng.distanceTo([s.lat, s.lng]);
-          if (d > currentRadius) continue;
-        } else if (currentRadius != null && !userLatLng) {
-          // 現在地が無いのに距離指定された場合は何も出さない
-          continue;
-        }
-
-        const m = L.marker([s.lat, s.lng], {
-  icon: L.icon({
-    iconUrl: 'shiba_pin.png',
-    iconSize: [28, 40],
-    iconAnchor: [14, 40]
-  })
-}).addTo(map);
-        m.on('click', () => {
-          // クリックでナビ
-          window.open(navUrl(s.lat, s.lng), '_blank');
-        });
-        spotMarkers.push(m);
-        shown++;
-      }
-
-      const total = spotsRaw.length;
-      if (currentRadius == null) {
-        show(`🟢 読み込みOK: ${total}件（全部表示）`);
-      } else if (!userLatLng) {
-        show(`🟡 現在地が未取得のため表示できません（距離: ${Math.round(currentRadius/1000*10)/10}km）`);
-      } else {
-        show(`🟢 読み込みOK: ${total}件中 ${shown}件表示（距離: ${Math.round(currentRadius/1000*10)/10}km）`);
-      }
-    };
-
-    const loadSpots = async () => {
-      show('データ読み込み中…');
-      const res = await fetch('spots.json', { cache: 'no-store' });
-      if (!res.ok) throw new Error(`spots.json HTTP ${res.status}`);
-      const data = await res.json();
-      spotsRaw = normalizeSpots(data);
-      renderMarkers();
-    };
-    // ========= 発見システム（15m） =========
-    const DISCOVER_RADIUS_M = 15;     // 発見距離
-    const discovered = new Set();     // 発見済み（重複防止）
-    let lastVibeAt = 0;              // 振動クールダウン
-
-    const keyOf = (s) => `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type || ''}`;
-
-    const vibrateOnce = () => {
-      const now = Date.now();
-      if (now - lastVibeAt < 8000) return; // 8秒以内は連続で震えない
-      lastVibeAt = now;
-      if (navigator.vibrate) navigator.vibrate([80]);
-    };
-
-    const checkDiscoveries = (coords) => {
-
-  show("🟣 checkDiscoveries 呼ばれた");
-
-  if (!userLatLng || !Array.isArray(spotsRaw) || spotsRaw.length === 0) return 0;
-
-  // 速度が取れて「車っぽい」なら振動しない（だいたい時速20km↑）
-  const speed = coords && typeof coords.speed === 'number' ? coords.speed : null;
-      if (!userLatLng || !Array.isArray(spotsRaw) || spotsRaw.length === 0) return 0;
-
-      // 速度が取れて「車っぽい」なら振動しない（だいたい時速20km↑）
-      const speed = coords && typeof coords.speed === 'number' ? coords.speed : null;
-      if (speed != null && speed > 6) return 0; // 6m/s ≒ 21.6km/h
-
-      let hit = 0;
-
-      for (const s of spotsRaw) {
-        const k = keyOf(s);
-        if (discovered.has(k)) continue;
-
-        const d = userLatLng.distanceTo([s.lat, s.lng]);
-        if (d <= DISCOVER_RADIUS_M) {
-          discovered.add(k);
-          hit++;
-        }
-      }
-
-      if (hit > 0) {
-        vibrateOnce();
-        show(`🐾 発見 +${hit}（合計 ${discovered.size}）`);
-        // 1.5秒後に通常表示へ戻す（renderMarkersがstatusを書き直す）
-        setTimeout(() => {
-          try { renderMarkers(); } catch(e) {}
-        }, 1500);
-      }
-
-      return hit;
-    };
-    // ========= 発見システムここまで =========
-    // ========= ボタン =========
-    document.getElementById('btnAll').addEventListener('click', () => {
-      currentRadius = null;
-      setActive('btnAll');
-      if (userCircle) { map.removeLayer(userCircle); userCircle = null; }
-      renderMarkers();
-    });
-
-    document.getElementById('btn500').addEventListener('click', () => {
-      currentRadius = 500;
-      setActive('btn500');
-      setRadiusCircle(500);
-      renderMarkers();
-    });
-
-    document.getElementById('btn1k').addEventListener('click', () => {
-      currentRadius = 1000;
-      setActive('btn1k');
-      setRadiusCircle(1000);
-      renderMarkers();
-    });
-
-    document.getElementById('btn3k').addEventListener('click', () => {
-      currentRadius = 3000;
-      setActive('btn3k');
-      setRadiusCircle(3000);
-      renderMarkers();
-    });
-
-    document.getElementById('btnLocate').addEventListener('click', () => {
-  if (!navigator.geolocation) {
-    show('🔴 位置情報が使えません');
-    return;
-  }
-
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId);
-    watchId = null;
-    show('🟡 現在地追跡OFF');
-    return;
-  }
-
-  show('🟡 現在地追跡ON…');
-
-  watchId = navigator.geolocation.watchPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-
-      updateUserMarker(lat, lng);
-
-      if (currentRadius != null) setRadiusCircle(currentRadius);
-
-      renderMarkers();
-
-      checkDiscoveries(pos.coords);
-    },
-    (err) => {
-      show('🔴 現在地取得失敗: ' + err.message);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    }
-  );
+const pawIcon=L.icon({
+iconUrl:'paw_pin.png',
+iconSize:[36,44],
+iconAnchor:[18,44]
 });
 
-    // ========= 起動 =========
-    (async () => {
-      try {
-        await loadSpots();
-      } catch (e) {
-        show('🔴 読み込み失敗: ' + (e && e.message ? e.message : e));
-      }
-    })();
-  </script>
+userMarker=L.marker(userLatLng,{icon:pawIcon}).addTo(map);
+
+map.setView(userLatLng,15);
+
+}
+
+const DISCOVER_RADIUS_M=15;
+const discovered=new Set();
+let lastVibeAt=0;
+
+function keyOf(s){
+
+return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
+
+}
+
+function vibrateOnce(){
+
+const now=Date.now();
+
+if(now-lastVibeAt<8000) return;
+
+lastVibeAt=now;
+
+if(navigator.vibrate) navigator.vibrate([80]);
+
+}
+
+function checkDiscoveries(coords){
+
+if(!userLatLng) return;
+
+let hit=0;
+
+for(const s of spotsRaw){
+
+const k=keyOf(s);
+
+if(discovered.has(k)) continue;
+
+const d=userLatLng.distanceTo([s.lat,s.lng]);
+
+if(d<=DISCOVER_RADIUS_M){
+
+discovered.add(k);
+hit++;
+
+}
+
+}
+
+if(hit>0){
+
+vibrateOnce();
+
+show(`🐾 発見 +${hit}（合計 ${discovered.size}）`);
+
+setTimeout(()=>{
+
+renderMarkers();
+
+},1500);
+
+}
+
+}
+
+async function loadSpots(){
+
+show("データ読み込み中...");
+
+const res=await fetch("spots.json",{cache:"no-store"});
+
+const data=await res.json();
+
+spotsRaw=normalizeSpots(data);
+
+renderMarkers();
+
+}
+
+document.getElementById("btnAll").addEventListener("click",()=>{
+
+currentRadius=null;
+
+if(userCircle){
+map.removeLayer(userCircle);
+userCircle=null;
+}
+
+renderMarkers();
+
+});
+
+document.getElementById("btn500").addEventListener("click",()=>{
+
+currentRadius=500;
+
+if(userLatLng) setRadiusCircle(500);
+
+renderMarkers();
+
+});
+
+document.getElementById("btn1k").addEventListener("click",()=>{
+
+currentRadius=1000;
+
+if(userLatLng) setRadiusCircle(1000);
+
+renderMarkers();
+
+});
+
+document.getElementById("btn3k").addEventListener("click",()=>{
+
+currentRadius=3000;
+
+if(userLatLng) setRadiusCircle(3000);
+
+renderMarkers();
+
+});
+
+document.getElementById("btnLocate").addEventListener("click",()=>{
+
+if(!navigator.geolocation){
+
+show("位置情報が使えません");
+return;
+
+}
+
+if(watchId!==null){
+
+navigator.geolocation.clearWatch(watchId);
+watchId=null;
+
+show("現在地追跡OFF");
+
+return;
+
+}
+
+show("現在地追跡ON");
+
+watchId=navigator.geolocation.watchPosition(
+
+(pos)=>{
+
+const lat=pos.coords.latitude;
+const lng=pos.coords.longitude;
+
+updateUserMarker(lat,lng);
+
+if(currentRadius!=null) setRadiusCircle(currentRadius);
+
+renderMarkers();
+
+checkDiscoveries(pos.coords);
+
+},
+
+(err)=>{
+
+show("現在地取得失敗");
+
+},
+
+{
+enableHighAccuracy:true,
+timeout:10000,
+maximumAge:0
+}
+
+);
+
+});
+
+loadSpots();
+
+</script>
+
 </body>
 </html>
