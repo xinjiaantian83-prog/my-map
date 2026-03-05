@@ -159,7 +159,13 @@
           continue;
         }
 
-        const m = L.marker([s.lat, s.lng]).addTo(map);
+        const m = L.marker([s.lat, s.lng], {
+  icon: L.icon({
+    iconUrl: 'marker.png',
+    iconSize: [40,40],
+    iconAnchor: [20,40]
+  })
+}).addTo(map);
         m.on('click', () => {
           // クリックでナビ
           window.open(navUrl(s.lat, s.lng), '_blank');
