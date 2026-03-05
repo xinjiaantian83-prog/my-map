@@ -597,26 +597,10 @@ window.addEventListener("pageshow", function(){
       });
     }
 
-    return _send.apply(this, arguments);
-  };
-
-  // 4) 何も出ない時用の“生存通知”
-  setTimeout(() => {
-    show("🟢 診断パネル稼働中：エラー待機");
-  }, 500);
-})();
+    
   console.log("LOAD START");
-//loadSpotsJson();
-  try {
-  const map = L.map('map').setView([33.84, 132.77], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-  show("🟢 地図初期化OK");
-} catch (e) {
-  show("🔴 地図初期化NG: " + (e && e.message ? e.message : e));
-}
+loadSpots();
+  
 
 </script>
 </body>
