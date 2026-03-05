@@ -513,14 +513,14 @@ window.addEventListener("pageshow", function(){
       try {
         const res = await _fetch.apply(this, args);
         if (!res.ok && (url.includes('spots') || url.includes('.json'))) {
-          append('URL:' + url);
-          append('TEST');
-          append(`❌ fetch失敗\nURL: ${url}\nHTTP: ${res.status} ${res.statusText}`);
+          show('URL:' + url);
+          show('TEST');
+          show(`❌ fetch失敗\nURL: ${url}\nHTTP: ${res.status} ${res.statusText}`);
         }
         return res;
       } catch (e) {
         if (url.includes('spots') || url.includes('.json')) {
-          append(`❌ fetch通信エラー\nURL: ${url}\nError: ${e && e.message ? e.message : e}`);
+          show(`❌ fetch通信エラー\nURL: ${url}\nError: ${e && e.message ? e.message : e}`);
         }
         throw e;
       }
