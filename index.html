@@ -209,7 +209,8 @@ function formatDistance(m) {
 function addMarkers(list) {
   list.forEach(function(item){
     var lat = item.lat, lng = item.lng;
-    var m = L.marker([lat, lng], { icon: dogIcon }).addTo(map);
+    var m = L.marker([lat, lng], { icon: dogIcon });
+cluster.addLayer(m);
 
     var nav = googleNavUrl(lat, lng);
 
