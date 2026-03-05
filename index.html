@@ -221,6 +221,13 @@ userMarker = L.marker(userLatLng, {
     };
 
     const checkDiscoveries = (coords) => {
+
+  show("🟣 checkDiscoveries 呼ばれた");
+
+  if (!userLatLng || !Array.isArray(spotsRaw) || spotsRaw.length === 0) return 0;
+
+  // 速度が取れて「車っぽい」なら振動しない（だいたい時速20km↑）
+  const speed = coords && typeof coords.speed === 'number' ? coords.speed : null;
       if (!userLatLng || !Array.isArray(spotsRaw) || spotsRaw.length === 0) return 0;
 
       // 速度が取れて「車っぽい」なら振動しない（だいたい時速20km↑）
