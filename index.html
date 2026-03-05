@@ -111,6 +111,24 @@
 <div id="map" style="height:70vh;"></div>
 
 <script>
+  // ===== 固定エラー表示（消えない）=====
+function show(msg){
+  console.log(msg);
+  const el = document.getElementById('status');
+  if(el) el.textContent = msg;
+}
+
+window.addEventListener('error', (e) => {
+  const file = (e.filename || '').split('/').pop();
+  show(`🔴 JS ERROR: ${e.message} @ ${file}:${e.lineno}:${e.colno}`);
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  const r = e.reason;
+  const msg = (r && r.message) ? r.message : String(r);
+  show(`🛑 PROMISE ERROR: ${msg}`);
+});
+// ===== ここまで =====
 // ============================
 
 
