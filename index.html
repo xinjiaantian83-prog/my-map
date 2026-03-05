@@ -115,6 +115,15 @@
 // 1) spots.json を読み込む
 // ============================
 var spots = [];
+  function normalizeSpots(raw){
+  if(!Array.isArray(raw)) return [];
+  return raw.map(s=>{
+    if(Array.isArray(s)){
+      return {lat:s[0],lng:s[1],type:"nky"};
+    }
+    return s;
+  });
+}
 var spotsLoaded = false;
 
 function setStatus(text) {
@@ -150,7 +159,7 @@ function loadSpotsJson() {
       return res.json();
     })
     .then(function(data){
-      spots = dedupSpots(data);
+      spots = dedupSpots(normalizeSpots(data));
       spotsLoaded = true;
       return spots;
     });
