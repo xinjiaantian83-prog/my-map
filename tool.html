@@ -63,7 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const lat = nums[0];
       const lng = nums[1];
-      coords.push(`${lat},${lng}`);
+      const type = document.querySelector('input[name="type"]:checked')?.value;
+
+if(type === "bull") coords.push(`${lat},${lng},bul`);
+else if(type === "pome") coords.push(`${lat},${lng},pom`);
+else coords.push(`${lat},${lng},nky`);
     }
 
     return coords.join('\n');
