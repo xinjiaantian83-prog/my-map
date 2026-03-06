@@ -75,7 +75,23 @@ let userCircle=null;
 let currentRadius=null;
 
 let watchId=null;
+const shibaIcon=L.icon({
+iconUrl:'shiba.png',
+iconSize:[36,44],
+iconAnchor:[18,44]
+});
 
+const bulldogIcon=L.icon({
+iconUrl:'bulldog.png',
+iconSize:[36,44],
+iconAnchor:[18,44]
+});
+
+const pomeIcon=L.icon({
+iconUrl:'pome.png',
+iconSize:[36,44],
+iconAnchor:[18,44]
+});
 const statusEl=document.getElementById("status");
 
 function show(t){
@@ -119,12 +135,13 @@ if(d>currentRadius) return;
 
 }
 
+let icon=shibaIcon;
+
+if(s.type==="bul") icon=bulldogIcon;
+if(s.type==="pom") icon=pomeIcon;
+
 const m=L.marker([s.lat,s.lng],{
-icon:L.icon({
-iconUrl:'shiba_pin.png',
-iconSize:[28,40],
-iconAnchor:[14,40]
-})
+icon:icon
 }).addTo(map);
 
 markers.push(m);
