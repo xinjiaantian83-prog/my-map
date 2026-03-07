@@ -26,13 +26,19 @@ body{
 }
 
 .controls{
-  padding:6px 10px 2px;
+  padding:4px 10px 2px;
   flex:0 0 auto;
 }
 
 h2{
-  margin:4px 0 8px;
-  font-size:24px;
+  margin:2px 0 6px;
+  font-size:20px;
+  line-height:1.2;
+}
+
+#count{
+  font-size:16px;
+  font-weight:700;
 }
 
 button{
@@ -42,24 +48,22 @@ button{
   border-radius:6px;
 }
 
-#status{
-  margin-top:4px;
-  font-size:14px;
-}
-
 #map{
   flex:1 1 auto;
   min-height:0;
   width:100%;
 }
 </style>
+
+
+
 </head>
 
 <body>
 
 <div class="controls">
 
-<h2>わんわんコインマップ</h2>
+<h2>🐕わんわんコイン <span id="count"></span></h2>
 
 <button id="btn500">500m</button>
 <button id="btn1k">1km</button>
@@ -67,7 +71,7 @@ button{
 <button id="btnAll">全部</button>
 <button id="btnLocate">現在地</button>
 
-<div id="status">読み込み中...</div>
+
 
 </div>
 
@@ -109,12 +113,11 @@ iconUrl:'pome.png',
 iconSize:[36,44],
 iconAnchor:[18,44]
 });
-const statusEl=document.getElementById("status");
+
 
 function show(t){
-statusEl.textContent=t;
+  console.log(t);
 }
-
 function setRadiusCircle(m){
 
 if(userCircle) map.removeLayer(userCircle);
@@ -166,7 +169,7 @@ count++;
 
 });
 
-show(`読み込みOK: ${spotsRaw.length}件中 ${count}件表示`);
+document.getElementById("count").textContent = spotsRaw.length + "台";
 
 }
 
