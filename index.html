@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <style>
@@ -70,6 +69,12 @@ button{
   background: transparent !important;
   border: none !important;
 }
+  .marker-cluster,
+.marker-cluster div{
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
 .coin{
   position: relative;
@@ -106,6 +111,12 @@ button{
   text-shadow:
     0 0 3px black,
     0 0 6px black;
+}
+  .marker-cluster,
+.marker-cluster div {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 </style>
 
