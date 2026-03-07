@@ -56,6 +56,33 @@ button{
   min-height:0;
   width:100%;
 }
+  .marker-cluster-shiba-small,
+.marker-cluster-shiba-medium,
+.marker-cluster-shiba-large {
+  background: rgba(255, 59, 48, 0.22) !important;
+}
+
+.marker-cluster-shiba-small div,
+.marker-cluster-shiba-medium div,
+.marker-cluster-shiba-large div {
+  background: rgba(255, 59, 48, 0.88) !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+
+.marker-cluster-bulldog-small,
+.marker-cluster-bulldog-medium,
+.marker-cluster-bulldog-large {
+  background: rgba(0, 122, 255, 0.22) !important;
+}
+
+.marker-cluster-bulldog-small div,
+.marker-cluster-bulldog-medium div,
+.marker-cluster-bulldog-large div {
+  background: rgba(0, 122, 255, 0.88) !important;
+  color: #fff !important;
+  font-weight: 700;
+}
 </style>
 
 
@@ -99,7 +126,20 @@ let shibaCluster = L.markerClusterGroup({
   showCoverageOnHover: false,
   zoomToBoundsOnClick: true,
   removeOutsideVisibleBounds: true,
-  chunkedLoading: true
+  chunkedLoading: true,
+  iconCreateFunction: function(cluster) {
+    const count = cluster.getChildCount();
+    let size = 'small';
+    if (count >= 10) size = 'medium';
+    if (count >= 100) size = 'large';
+
+    return L.divIcon({
+      html: '<div><span>' + count + '</span></div>',
+      className: 'marker-cluster marker-cluster-shiba-' + size,
+      iconSize: L.point(40, 40)
+    });
+  }
+
 });
 let bulldogCluster = L.markerClusterGroup({
   maxClusterRadius: 35,
@@ -108,9 +148,20 @@ let bulldogCluster = L.markerClusterGroup({
   showCoverageOnHover: false,
   zoomToBoundsOnClick: true,
   removeOutsideVisibleBounds: true,
-  chunkedLoading: true
-});
+  chunkedLoading: true,
+  iconCreateFunction: function(cluster) {
+    const count = cluster.getChildCount();
+    let size = 'small';
+    if (count >= 10) size = 'medium';
+    if (count >= 100) size = 'large';
 
+    return L.divIcon({
+      html: '<div><span>' + count + '</span></div>',
+      className: 'marker-cluster marker-cluster-bulldog-' + size,
+      iconSize: L.point(40, 40)
+    });
+  }
+});
 map.addLayer(shibaCluster);
 map.addLayer(bulldogCluster);
 
