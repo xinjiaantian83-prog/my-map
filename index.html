@@ -10,6 +10,9 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
 <style>
 html, body{
@@ -89,6 +92,12 @@ L.tileLayer(
 let spotsRaw=[];
 let markers=[];
 
+let shibaCluster = L.markerClusterGroup();
+let bulldogCluster = L.markerClusterGroup();
+
+map.addLayer(shibaCluster);
+map.addLayer(bulldogCluster);
+
 let userLatLng=null;
 let userMarker=null;
 let userCircle=null;
@@ -143,6 +152,9 @@ function renderMarkers(){
 markers.forEach(m=>map.removeLayer(m));
 markers=[];
 
+shibaCluster.clearLayers();
+bulldogCluster.clearLayers();
+
 let count=0;
 
 spotsRaw.forEach(s=>{
@@ -162,9 +174,19 @@ if(s.type==="pom") icon=pomeIcon;
 
 const m=L.marker([s.lat,s.lng],{
 icon:icon
-}).addTo(map);
+});
 
+if(s.type==="bul"){
+bulldogCluster.addLayer(m);
+}
+else if(s.type==="pom"){
+m.addTo(map);
 markers.push(m);
+}
+else{
+shibaCluster.addLayer(m);
+}
+
 count++;
 
 });
@@ -172,6 +194,8 @@ count++;
 document.getElementById("count").textContent = spotsRaw.length + "台";
 
 }
+
+
 
 function updateUserMarker(lat,lng){
 
