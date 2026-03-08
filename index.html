@@ -171,7 +171,7 @@ let shibaCluster = L.markerClusterGroup({
       </div>
     `,
     className: "coin-cluster",
-    iconSize: L.point(48,48)
+    iconSize: L.point(60,60)
   });
 
 }
@@ -196,7 +196,7 @@ let bulldogCluster = L.markerClusterGroup({
       </div>
     `,
     className: "coin-cluster",
-    iconSize: L.point(48,48)
+    iconSize: L.point(60,60)
   });
 
 }
@@ -221,7 +221,7 @@ let bulldogCluster = L.markerClusterGroup({
         </div>
       `,
       className: "coin-cluster",
-      iconSize: L.point(48,48)
+      iconSize: L.point(60,60)
       });
 
   }
@@ -240,19 +240,19 @@ let watchId=null;
 const shibaIcon=L.icon({
 iconUrl:'shiba.png',
 iconSize:[30,36],
-iconAnchor:[18,44]
+iconAnchor:[15,36]
 });
 
 const bulldogIcon=L.icon({
 iconUrl:'bulldog.png',
 iconSize:[30,36],
-iconAnchor:[18,44]
+iconAnchor:[15,36]
 });
 
 const pomeIcon=L.icon({
 iconUrl:'pome.png',
 iconSize:[30,36],
-iconAnchor:[18,44]
+iconAnchor:[15,36]
 });
 
 
@@ -307,6 +307,10 @@ if(s.type==="pom") icon=pomeIcon;
 
 const m=L.marker([s.lat,s.lng],{
 icon:icon
+});
+m.on("click", () => {
+  const url = `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
+  location.href = url;
 });
 
 if(s.type==="bul"){
