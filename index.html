@@ -197,8 +197,34 @@ let bulldogCluster = L.markerClusterGroup({
 
 }
 });
+  let pomeCluster = L.markerClusterGroup({
+  maxClusterRadius: 35,
+  disableClusteringAtZoom: 15,
+  spiderfyOnMaxZoom: false,
+  showCoverageOnHover: false,
+  zoomToBoundsOnClick: true,
+  removeOutsideVisibleBounds: true,
+  chunkedLoading: true,
+  iconCreateFunction: function(cluster) {
+
+    const count = cluster.getChildCount();
+
+    return L.divIcon({
+      html: `
+        <div class="coin">
+          <img src="pome.png">
+          <span>${count}</span>
+        </div>
+      `,
+      className: "coin-cluster",
+      iconSize: L.point(48,48)
+      });
+
+  }
+});
 map.addLayer(shibaCluster);
 map.addLayer(bulldogCluster);
+map.addLayer(pomeCluster);
 
 let userLatLng=null;
 let userMarker=null;
@@ -256,6 +282,7 @@ markers=[];
 
 shibaCluster.clearLayers();
 bulldogCluster.clearLayers();
+pomeCluster.clearLayers();
 
 let count=0;
 
@@ -282,8 +309,7 @@ if(s.type==="bul"){
 bulldogCluster.addLayer(m);
 }
 else if(s.type==="pom"){
-m.addTo(map);
-markers.push(m);
+pomeCluster.addLayer(m);
 }
 else{
 shibaCluster.addLayer(m);
