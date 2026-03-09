@@ -223,12 +223,12 @@ button.active{
   <span id="count"></span>
 </h2>
 
-<button id="btn500">500m</button>
-<button id="btn1k">1km</button>
-<button id="btn3k">3km</button>
-<button id="btnAll">全部</button>
+<button id="btn500" class="range-btn">500m</button>
+<button id="btn1k" class="range-btn">1km</button>
+<button id="btn3k" class="range-btn">3km</button>
+<button id="btnAll" class="range-btn active">全部</button>
 <button id="btnLocate">位置</button>
-<button id="btnCluster">集約</button>
+<button id="btnCluster" class="active">集約</button>
 </div>
 
 <div id="map"></div>
@@ -236,13 +236,12 @@ button.active{
 <script>
 const ESTIMATED_TOTAL = 1500;
 
-function setActive(btn){
-  document.querySelectorAll(".controls button")
+function setRangeActive(btn){
+  document.querySelectorAll(".range-btn")
     .forEach(b => b.classList.remove("active"));
 
   btn.classList.add("active");
 }
-
 const map = L.map('map').setView([33.8392,132.7657],13);
 
 L.tileLayer(
@@ -588,7 +587,7 @@ async function loadSpots(){
 }
 
 document.getElementById("btnAll").addEventListener("click",(e)=>{
-  setActive(e.target);
+  setRangeActive(e.target);
   currentRadius=null;
 
   if(userCircle){
@@ -599,13 +598,21 @@ document.getElementById("btnAll").addEventListener("click",(e)=>{
   renderMarkers();
 });
 
-document.getElementById("btnCluster").addEventListener("click",(e)=>{
-  setActive(e.target);
+document.getElementById("btnCluster").addEventListener("click",()=>{
+  const btn = document.getElementById("btnCluster");
+
   clusterEnabled = !clusterEnabled;
+
+  if(clusterEnabled){
+    btn.classList.add("active");
+  }else{
+    btn.classList.remove("active");
+  }
+
   renderMarkers();
 });
 document.getElementById("btn500").addEventListener("click",(e)=>{
-  setActive(e.target);
+  setRangeActive(e.target);
   currentRadius=500;
 
   if(userLatLng) setRadiusCircle(500);
@@ -614,24 +621,23 @@ document.getElementById("btn500").addEventListener("click",(e)=>{
 });
 
 document.getElementById("btn1k").addEventListener("click",(e)=>{
-  setActive(e.target);
+  setRangeActive(e.target);
   currentRadius=1000;
 
   if(userLatLng) setRadiusCircle(1000);
 
   renderMarkers();
 });
-
 document.getElementById("btn3k").addEventListener("click",(e)=>{
-  setActive(e.target);
+  setRangeActive(e.target);
   currentRadius=3000;
 
   if(userLatLng) setRadiusCircle(3000);
 
   renderMarkers();
 });
-document.getElementById("btnLocate").addEventListener("click",(e)=>{
-  setActive(e.target);
+document.getElementById("btnLocate").addEventListener("click",()=>{
+  const btn = document.getElementById("btnLocate");
 
   if(!navigator.geolocation){
     show("位置情報が使えません");
@@ -641,10 +647,12 @@ document.getElementById("btnLocate").addEventListener("click",(e)=>{
   if(watchId!==null){
     navigator.geolocation.clearWatch(watchId);
     watchId=null;
+    btn.classList.remove("active");
     show("現在地追跡OFF");
     return;
   }
 
+  btn.classList.add("active");
   show("現在地追跡ON");
 
   watchId=navigator.geolocation.watchPosition(
