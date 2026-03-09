@@ -28,18 +28,18 @@ body{
 }
 
 .controls{
-  padding:4px 10px 2px;
+  padding:2px 8px 0;
   flex:0 0 auto;
 }
 
 h2{
-  margin:2px 0 6px;
-  font-size:20px;
-  line-height:1.2;
+  margin:0 0 4px;
+  font-size:18px;
+  line-height:1.15;
 }
 
 #count{
-  font-size:16px;
+  font-size:15px;
   font-weight:700;
 }
 
@@ -55,7 +55,8 @@ button{
   min-height:0;
   width:100%;
 }
-  /* ===== コインクラスタ（完全版）===== */
+
+/* ===== コインクラスタ（完全版）===== */
 
 .coin-cluster{
   background: transparent !important;
@@ -111,6 +112,7 @@ button{
     0 0 4px rgba(0,0,0,0.75);
   pointer-events: none;
 }
+
 .spot-card{
   position: relative;
   background: #fffdf8;
@@ -191,14 +193,8 @@ button{
   font-size: 12px;
   color: #666;
   line-height: 1.4;
-} 
-  
-
-
+}
 </style>
-
-
-
 </head>
 
 <body>
@@ -207,8 +203,7 @@ button{
 
 <h2>
 🐕 わんわん探索隊<br>
-推定総数 約1500台<br>
-発見数 <span id="count"></span>
+<span id="count"></span>
 </h2>
 
 <button id="btn500">500m</button>
@@ -217,13 +212,12 @@ button{
 <button id="btnAll">全部</button>
 <button id="btnLocate">現在地</button>
 
-
-
 </div>
 
 <div id="map"></div>
 
 <script>
+const ESTIMATED_TOTAL = 1500;
 
 const map = L.map('map').setView([33.8392,132.7657],13);
 
@@ -244,22 +238,21 @@ let shibaCluster = L.markerClusterGroup({
   removeOutsideVisibleBounds: true,
   chunkedLoading: true,
   iconCreateFunction: function(cluster) {
+    const count = cluster.getChildCount();
 
-  const count = cluster.getChildCount();
-
-  return L.divIcon({
-    html: `
-      <div class="coin">
-        <img src="shiba.png">
-        <span>${count}</span>
-      </div>
-    `,
-    className: "coin-cluster",
-    iconSize: L.point(60,60)
-  });
-
-}
+    return L.divIcon({
+      html: `
+        <div class="coin">
+          <img src="shiba.png">
+          <span>${count}</span>
+        </div>
+      `,
+      className: "coin-cluster",
+      iconSize: L.point(60,60)
+    });
+  }
 });
+
 let bulldogCluster = L.markerClusterGroup({
   maxClusterRadius: 35,
   disableClusteringAtZoom: 15,
@@ -269,23 +262,22 @@ let bulldogCluster = L.markerClusterGroup({
   removeOutsideVisibleBounds: true,
   chunkedLoading: true,
   iconCreateFunction: function(cluster) {
+    const count = cluster.getChildCount();
 
-  const count = cluster.getChildCount();
-
-  return L.divIcon({
-    html: `
-      <div class="coin">
-        <img src="bulldog.png">
-        <span>${count}</span>
-      </div>
-    `,
-    className: "coin-cluster",
-    iconSize: L.point(60,60)
-  });
-
-}
+    return L.divIcon({
+      html: `
+        <div class="coin">
+          <img src="bulldog.png">
+          <span>${count}</span>
+        </div>
+      `,
+      className: "coin-cluster",
+      iconSize: L.point(60,60)
+    });
+  }
 });
-  let pomeCluster = L.markerClusterGroup({
+
+let pomeCluster = L.markerClusterGroup({
   maxClusterRadius: 35,
   disableClusteringAtZoom: 15,
   spiderfyOnMaxZoom: false,
@@ -294,7 +286,6 @@ let bulldogCluster = L.markerClusterGroup({
   removeOutsideVisibleBounds: true,
   chunkedLoading: true,
   iconCreateFunction: function(cluster) {
-
     const count = cluster.getChildCount();
 
     return L.divIcon({
@@ -306,10 +297,10 @@ let bulldogCluster = L.markerClusterGroup({
       `,
       className: "coin-cluster",
       iconSize: L.point(60,60)
-      });
-
+    });
   }
 });
+
 map.addLayer(shibaCluster);
 map.addLayer(bulldogCluster);
 map.addLayer(pomeCluster);
@@ -321,23 +312,25 @@ let userCircle=null;
 let currentRadius=null;
 
 let watchId=null;
+
 const shibaIcon=L.icon({
-iconUrl:'shiba.png',
-iconSize:[30,36],
-iconAnchor:[15,36]
+  iconUrl:'shiba.png',
+  iconSize:[30,36],
+  iconAnchor:[15,36]
 });
 
 const bulldogIcon=L.icon({
-iconUrl:'bulldog.png',
-iconSize:[30,36],
-iconAnchor:[15,36]
+  iconUrl:'bulldog.png',
+  iconSize:[30,36],
+  iconAnchor:[15,36]
 });
 
 const pomeIcon=L.icon({
-iconUrl:'pome.png',
-iconSize:[30,36],
-iconAnchor:[15,36]
+  iconUrl:'pome.png',
+  iconSize:[30,36],
+  iconAnchor:[15,36]
 });
+
 function closePopup(){
   map.closePopup();
 }
@@ -345,6 +338,13 @@ function closePopup(){
 function goNav(lat,lng){
   const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
   location.href = url;
+}
+
+function updateCountText(){
+  const found = spotsRaw.length;
+  const percent = Math.round((found / ESTIMATED_TOTAL) * 100);
+  document.getElementById("count").textContent =
+    `発見数 ${found}台 / ${ESTIMATED_TOTAL}台（推定） ${percent}%`;
 }
 
 function recordFind(lat,lng,type){
@@ -375,317 +375,254 @@ function recordFind(lat,lng,type){
   renderMarkers();
 }
 
-
 function show(t){
   console.log(t);
 }
+
 function setRadiusCircle(m){
+  if(userCircle) map.removeLayer(userCircle);
 
-if(userCircle) map.removeLayer(userCircle);
-
-userCircle=L.circle(userLatLng,{
-radius:m
-}).addTo(map);
-
+  userCircle=L.circle(userLatLng,{
+    radius:m
+  }).addTo(map);
 }
 
 function normalizeSpots(arr){
-
-return arr.map(s=>({
-lat:Number(s.lat),
-lng:Number(s.lng),
-type:s.type||"nky"
-}));
-
+  return arr.map(s=>({
+    lat:Number(s.lat),
+    lng:Number(s.lng),
+    type:s.type||"nky"
+  }));
 }
 
 function renderMarkers(){
+  markers.forEach(m=>map.removeLayer(m));
+  markers=[];
 
-markers.forEach(m=>map.removeLayer(m));
-markers=[];
+  shibaCluster.clearLayers();
+  bulldogCluster.clearLayers();
+  pomeCluster.clearLayers();
 
-shibaCluster.clearLayers();
-bulldogCluster.clearLayers();
-pomeCluster.clearLayers();
+  spotsRaw.forEach(s=>{
+    if(currentRadius && userLatLng){
+      const d=userLatLng.distanceTo([s.lat,s.lng]);
+      if(d>currentRadius) return;
+    }
 
-let count=0;
+    let icon=shibaIcon;
 
-spotsRaw.forEach(s=>{
+    if(s.type==="bul") icon=bulldogIcon;
+    if(s.type==="pom") icon=pomeIcon;
 
-if(currentRadius && userLatLng){
+    const m=L.marker([s.lat,s.lng],{
+      icon:icon
+    });
 
-const d=userLatLng.distanceTo([s.lat,s.lng]);
+    const k = keyOf(s);
+    const isFound = discovered.has(k);
+    const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
 
-if(d>currentRadius) return;
+    let title = "🐕 シバ自販機";
+    if(s.type==="bul") title = "🐶 ブル自販機";
+    if(s.type==="pom") title = "🐩 ポメ自販機";
 
-}
+    let recordPart = "";
 
-let icon=shibaIcon;
+    if(isFound){
+      recordPart = `<div class="spot-note">✅ 記録済み</div>`;
+    }else if(canRecord){
+      recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">発見を記録</button>`;
+    }else{
+      recordPart = `<div class="spot-note">近くに行くと記録できます</div>`;
+    }
 
-if(s.type==="bul") icon=bulldogIcon;
-if(s.type==="pom") icon=pomeIcon;
+    m.bindPopup(`
+      <div class="spot-card">
+        <button class="card-close" onclick="closePopup()" aria-label="閉じる">
+          <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
+            <g transform="rotate(45 32 32)">
+              <rect x="20" y="28" width="24" height="8" rx="4"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="18" cy="26" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="18" cy="38" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="46" cy="26" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="46" cy="38" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+            </g>
 
-const m=L.marker([s.lat,s.lng],{
-icon:icon
-});
+            <g transform="rotate(-45 32 32)">
+              <rect x="20" y="28" width="24" height="8" rx="4"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="18" cy="26" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="18" cy="38" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="46" cy="26" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+              <circle cx="46" cy="38" r="6"
+                fill="#f5f1e8"
+                stroke="#7a6a58"
+                stroke-width="3"/>
+            </g>
+          </svg>
+        </button>
 
-  const k = keyOf(s);
-  const isFound = discovered.has(k);
-  const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
+        <div class="spot-title">${title}</div>
 
-  let title = "🐕 シバ自販機";
-  if(s.type==="bul") title = "🐶 ブル自販機";
-  if(s.type==="pom") title = "🐩 ポメ自販機";
-
-  let recordPart = "";
-
-  if(isFound){
-    recordPart = `<div class="spot-note">✅ 記録済み</div>`;
-  }else if(canRecord){
-    recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">発見を記録</button>`;
-  }else{
-    recordPart = `<div class="spot-note">近くに行くと記録できます</div>`;
-  }
-
-  m.bindPopup(`
-    <div class="spot-card">
-      <button class="card-close" onclick="closePopup()" aria-label="閉じる">
-    <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
-  <g transform="rotate(45 32 32)">
-    <rect x="20" y="28" width="24" height="8" rx="4"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="18" cy="26" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="18" cy="38" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="46" cy="26" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="46" cy="38" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-  </g>
-
-  <g transform="rotate(-45 32 32)">
-    <rect x="20" y="28" width="24" height="8" rx="4"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="18" cy="26" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="18" cy="38" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="46" cy="26" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-
-    <circle cx="46" cy="38" r="6"
-      fill="#f5f1e8"
-      stroke="#7a6a58"
-      stroke-width="3"/>
-  </g>
-</svg>    
-      </button>
-
-      <div class="spot-title">${title}</div>
-
-      <div class="spot-actions">
-        <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
-        ${recordPart}
+        <div class="spot-actions">
+          <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
+          ${recordPart}
+        </div>
       </div>
-    </div>
-  `);
+    `);
 
+    if(s.type==="bul"){
+      bulldogCluster.addLayer(m);
+    }else if(s.type==="pom"){
+      pomeCluster.addLayer(m);
+    }else{
+      shibaCluster.addLayer(m);
+    }
+  });
 
-
-if(s.type==="bul"){
-bulldogCluster.addLayer(m);
+  updateCountText();
 }
-else if(s.type==="pom"){
-pomeCluster.addLayer(m);
-}
-else{
-shibaCluster.addLayer(m);
-}
-
-count++;
-
-});
-
-document.getElementById("count").textContent = spotsRaw.length + "台";
-
-}
-
-
 
 function updateUserMarker(lat,lng){
+  userLatLng=L.latLng(lat,lng);
 
-userLatLng=L.latLng(lat,lng);
+  if(userMarker) map.removeLayer(userMarker);
 
-if(userMarker) map.removeLayer(userMarker);
+  const pawIcon=L.icon({
+    iconUrl:'paw_pin.png',
+    iconSize:[36,44],
+    iconAnchor:[18,44]
+  });
 
-const pawIcon=L.icon({
-iconUrl:'paw_pin.png',
-iconSize:[36,44],
-iconAnchor:[18,44]
-});
+  userMarker=L.marker(userLatLng,{icon:pawIcon}).addTo(map);
 
-userMarker=L.marker(userLatLng,{icon:pawIcon}).addTo(map);
-
-map.setView(userLatLng,15);
-
+  map.setView(userLatLng,15);
 }
-
 
 const discovered=new Set();
 let lastVibeAt=0;
 
 function keyOf(s){
-
-return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
-
+  return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
 }
 
 function vibrateOnce(){
+  const now=Date.now();
 
-const now=Date.now();
+  if(now-lastVibeAt<8000) return;
 
-if(now-lastVibeAt<8000) return;
+  lastVibeAt=now;
 
-lastVibeAt=now;
-
-if(navigator.vibrate) navigator.vibrate([80]);
-
+  if(navigator.vibrate) navigator.vibrate([80]);
 }
+
 async function loadSpots(){
+  show("データ読み込み中...");
 
-show("データ読み込み中...");
+  const res=await fetch("spots.json",{cache:"no-store"});
+  const data=await res.json();
 
-const res=await fetch("spots.json",{cache:"no-store"});
+  spotsRaw=normalizeSpots(data);
 
-const data=await res.json();
-
-spotsRaw=normalizeSpots(data);
-
-renderMarkers();
-
+  renderMarkers();
 }
 
 document.getElementById("btnAll").addEventListener("click",()=>{
+  currentRadius=null;
 
-currentRadius=null;
+  if(userCircle){
+    map.removeLayer(userCircle);
+    userCircle=null;
+  }
 
-if(userCircle){
-map.removeLayer(userCircle);
-userCircle=null;
-}
-
-renderMarkers();
-
+  renderMarkers();
 });
 
 document.getElementById("btn500").addEventListener("click",()=>{
+  currentRadius=500;
 
-currentRadius=500;
+  if(userLatLng) setRadiusCircle(500);
 
-if(userLatLng) setRadiusCircle(500);
-
-renderMarkers();
-
+  renderMarkers();
 });
 
 document.getElementById("btn1k").addEventListener("click",()=>{
+  currentRadius=1000;
 
-currentRadius=1000;
+  if(userLatLng) setRadiusCircle(1000);
 
-if(userLatLng) setRadiusCircle(1000);
-
-renderMarkers();
-
+  renderMarkers();
 });
 
 document.getElementById("btn3k").addEventListener("click",()=>{
+  currentRadius=3000;
 
-currentRadius=3000;
+  if(userLatLng) setRadiusCircle(3000);
 
-if(userLatLng) setRadiusCircle(3000);
-
-renderMarkers();
-
+  renderMarkers();
 });
 
 document.getElementById("btnLocate").addEventListener("click",()=>{
+  if(!navigator.geolocation){
+    show("位置情報が使えません");
+    return;
+  }
 
-if(!navigator.geolocation){
+  if(watchId!==null){
+    navigator.geolocation.clearWatch(watchId);
+    watchId=null;
+    show("現在地追跡OFF");
+    return;
+  }
 
-show("位置情報が使えません");
-return;
+  show("現在地追跡ON");
 
-}
+  watchId=navigator.geolocation.watchPosition(
+    (pos)=>{
+      const lat=pos.coords.latitude;
+      const lng=pos.coords.longitude;
 
-if(watchId!==null){
+      updateUserMarker(lat,lng);
 
-navigator.geolocation.clearWatch(watchId);
-watchId=null;
+      if(currentRadius!=null) setRadiusCircle(currentRadius);
 
-show("現在地追跡OFF");
-
-return;
-
-}
-
-show("現在地追跡ON");
-
-watchId=navigator.geolocation.watchPosition(
-
-(pos)=>{
-
-const lat=pos.coords.latitude;
-const lng=pos.coords.longitude;
-
-updateUserMarker(lat,lng);
-
-if(currentRadius!=null) setRadiusCircle(currentRadius);
-
-renderMarkers();
-
-
-},
-
-(err)=>{
-
-show("現在地取得失敗");
-
-},
-
-{
-enableHighAccuracy:true,
-timeout:10000,
-maximumAge:0
-}
-
-);
-
+      renderMarkers();
+    },
+    (err)=>{
+      show("現在地取得失敗");
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:10000,
+      maximumAge:0
+    }
+  );
 });
 
 loadSpots();
@@ -693,7 +630,6 @@ loadSpots();
 setTimeout(() => {
   map.invalidateSize();
 }, 300);
-
 </script>
 
 </body>
