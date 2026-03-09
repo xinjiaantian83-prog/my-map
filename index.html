@@ -38,14 +38,21 @@ body{
 }
 
 h2{
-  margin:0 0 4px;
-  font-size:18px;
-  line-height:1.15;
+  margin:0 0 8px;
+  line-height:1.1;
 }
 
+/* タイトル */
+.title-main{
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-0.02em;
+}
+
+/* 発見数 */
 #count{
-  font-size:15px;
-  font-weight:700;
+  font-size:22px;
+  font-weight:900;
 }
 
 button{
@@ -207,8 +214,8 @@ button{
 <div class="controls">
 
 <h2>
-🐕 わんわん探索隊<br>
-<span id="count"></span>
+  <span class="title-main">🐕 わんわん探索隊</span><br>
+  <span id="count"></span>
 </h2>
 
 <button id="btn500">500m</button>
