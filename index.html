@@ -211,7 +211,7 @@ button{
 <button id="btn3k">3km</button>
 <button id="btnAll">全部</button>
 <button id="btnLocate">現在地</button>
-
+<button id="btnCluster">クラスター</button>
 </div>
 
 <div id="map"></div>
@@ -304,7 +304,7 @@ let pomeCluster = L.markerClusterGroup({
 map.addLayer(shibaCluster);
 map.addLayer(bulldogCluster);
 map.addLayer(pomeCluster);
-
+let clusterEnabled = true;
 let userLatLng=null;
 let userMarker=null;
 let userCircle=null;
@@ -502,13 +502,18 @@ function renderMarkers(){
       </div>
     `);
 
-    if(s.type==="bul"){
-      bulldogCluster.addLayer(m);
-    }else if(s.type==="pom"){
-      pomeCluster.addLayer(m);
-    }else{
-      shibaCluster.addLayer(m);
-    }
+    if(clusterEnabled){
+  if(s.type==="bul"){
+    bulldogCluster.addLayer(m);
+  }else if(s.type==="pom"){
+    pomeCluster.addLayer(m);
+  }else{
+    shibaCluster.addLayer(m);
+  }
+}else{
+  m.addTo(map);
+  markers.push(m);
+}
   });
 
   updateCountText();
@@ -566,6 +571,11 @@ document.getElementById("btnAll").addEventListener("click",()=>{
     userCircle=null;
   }
 
+  renderMarkers();
+});
+
+document.getElementById("btnCluster").addEventListener("click",()=>{
+  clusterEnabled = !clusterEnabled;
   renderMarkers();
 });
 
