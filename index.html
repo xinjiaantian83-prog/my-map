@@ -62,6 +62,11 @@ button{
   border-radius:6px;
 }
 
+button.active{
+  background:#2b7de9;
+  color:#ffffff;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
 #map{
   flex:1 1 auto;
   min-height:0;
@@ -230,6 +235,13 @@ button{
 
 <script>
 const ESTIMATED_TOTAL = 1500;
+
+function setActive(btn){
+  document.querySelectorAll(".controls button")
+    .forEach(b => b.classList.remove("active"));
+
+  btn.classList.add("active");
+}
 
 const map = L.map('map').setView([33.8392,132.7657],13);
 
@@ -575,7 +587,8 @@ async function loadSpots(){
   renderMarkers();
 }
 
-document.getElementById("btnAll").addEventListener("click",()=>{
+document.getElementById("btnAll").addEventListener("click",(e)=>{
+  setActive(e.target);
   currentRadius=null;
 
   if(userCircle){
@@ -586,12 +599,13 @@ document.getElementById("btnAll").addEventListener("click",()=>{
   renderMarkers();
 });
 
-document.getElementById("btnCluster").addEventListener("click",()=>{
+document.getElementById("btnCluster").addEventListener("click",(e)=>{
+  setActive(e.target);
   clusterEnabled = !clusterEnabled;
   renderMarkers();
 });
-
-document.getElementById("btn500").addEventListener("click",()=>{
+document.getElementById("btn500").addEventListener("click",(e)=>{
+  setActive(e.target);
   currentRadius=500;
 
   if(userLatLng) setRadiusCircle(500);
@@ -599,7 +613,8 @@ document.getElementById("btn500").addEventListener("click",()=>{
   renderMarkers();
 });
 
-document.getElementById("btn1k").addEventListener("click",()=>{
+document.getElementById("btn1k").addEventListener("click",(e)=>{
+  setActive(e.target);
   currentRadius=1000;
 
   if(userLatLng) setRadiusCircle(1000);
@@ -607,15 +622,17 @@ document.getElementById("btn1k").addEventListener("click",()=>{
   renderMarkers();
 });
 
-document.getElementById("btn3k").addEventListener("click",()=>{
+document.getElementById("btn3k").addEventListener("click",(e)=>{
+  setActive(e.target);
   currentRadius=3000;
 
   if(userLatLng) setRadiusCircle(3000);
 
   renderMarkers();
 });
+document.getElementById("btnLocate").addEventListener("click",(e)=>{
+  setActive(e.target);
 
-document.getElementById("btnLocate").addEventListener("click",()=>{
   if(!navigator.geolocation){
     show("位置情報が使えません");
     return;
