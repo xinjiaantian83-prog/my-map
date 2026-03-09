@@ -383,8 +383,13 @@ function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
   userCircle=L.circle(userLatLng,{
-    radius:m
-  }).addTo(map);
+radius:m,
+color:"#4da6ff",
+fillColor:"#4da6ff",
+fillOpacity:0.10,
+weight:2,
+dashArray:"6,6"
+}).addTo(map);
 }
 
 function normalizeSpots(arr){
