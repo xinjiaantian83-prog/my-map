@@ -111,6 +111,90 @@ button{
     0 0 4px rgba(0,0,0,0.75);
   pointer-events: none;
 }
+.spot-card{
+  position: relative;
+  background: #fffdf8;
+  border: 2px solid #d8c9ae;
+  border-radius: 14px;
+  padding: 14px 12px 12px;
+  min-width: 180px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.card-close{
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+}
+
+.bone-close{
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  display: block;
+  opacity: 0.95;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.bone-close:hover{
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+.leaflet-popup-content-wrapper{
+  border-radius: 14px;
+  padding: 0;
+}
+
+.leaflet-popup-content{
+  margin: 0;
+}
+
+.spot-title{
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding-right: 30px;
+}
+
+.spot-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spot-btn{
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.spot-btn-go{
+  background: #f3f7ff;
+}
+
+.spot-btn-record{
+  background: #fff4d6;
+}
+
+.spot-note{
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+} 
+  
+
+
 </style>
 
 
@@ -254,6 +338,42 @@ iconUrl:'pome.png',
 iconSize:[30,36],
 iconAnchor:[15,36]
 });
+function closePopup(){
+  map.closePopup();
+}
+
+function goNav(lat,lng){
+  const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  location.href = url;
+}
+
+function recordFind(lat,lng,type){
+  if(!userLatLng){
+    alert("先に現在地をONにしてください");
+    return;
+  }
+
+  const d = userLatLng.distanceTo([lat,lng]);
+
+  if(d > 30){
+    alert("近くに行くと記録できます");
+    return;
+  }
+
+  const k = `${Number(lat).toFixed(6)},${Number(lng).toFixed(6)},${type}`;
+
+  if(discovered.has(k)){
+    alert("この自販機は記録済みです");
+    return;
+  }
+
+  discovered.add(k);
+  vibrateOnce();
+  show(`🐾 発見 +1（合計 ${discovered.size}）`);
+  alert("発見を記録しました！");
+  map.closePopup();
+  renderMarkers();
+}
 
 
 function show(t){
@@ -308,9 +428,59 @@ if(s.type==="pom") icon=pomeIcon;
 const m=L.marker([s.lat,s.lng],{
 icon:icon
 });
+
 m.on("click", () => {
-  const url = `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`;
-  location.href = url;
+
+  const k = keyOf(s);
+  const isFound = discovered.has(k);
+  const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
+
+  let title = "🐕 シバ自販機";
+  if(s.type==="bul") title = "🐶 ブル自販機";
+  if(s.type==="pom") title = "🐩 ポメ自販機";
+
+  let recordPart = "";
+
+  if(isFound){
+    recordPart = `<div class="spot-note">✅ 記録済み</div>`;
+  }else if(canRecord){
+    recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">発見を記録</button>`;
+  }else{
+    recordPart = `<div class="spot-note">近くに行くと記録できます</div>`;
+  }
+
+  m.bindPopup(`
+    <div class="spot-card">
+      <button class="card-close" onclick="closePopup()" aria-label="閉じる">
+        <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
+          <g transform="rotate(45 32 32)">
+            <path d="M18 28 C14 24,14 18,18 14 C22 10,28 10,32 14 L46 28 C50 32,50 38,46 42 C42 46,36 46,32 42 L18 28 Z"
+              fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="16" cy="16" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="24" cy="16" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="40" cy="40" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="48" cy="40" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+          </g>
+          <g transform="rotate(-45 32 32)">
+            <path d="M18 28 C14 24,14 18,18 14 C22 10,28 10,32 14 L46 28 C50 32,50 38,46 42 C42 46,36 46,32 42 L18 28 Z"
+              fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="16" cy="16" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="24" cy="16" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="40" cy="40" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+            <circle cx="48" cy="40" r="5.5" fill="#f5f1e8" stroke="#7a6a58" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </button>
+
+      <div class="spot-title">${title}</div>
+
+      <div class="spot-actions">
+        <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
+        ${recordPart}
+      </div>
+    </div>
+  `).openPopup();
+
 });
 
 if(s.type==="bul"){
@@ -351,7 +521,7 @@ map.setView(userLatLng,15);
 
 }
 
-const DISCOVER_RADIUS_M=15;
+
 const discovered=new Set();
 let lastVibeAt=0;
 
@@ -372,46 +542,6 @@ lastVibeAt=now;
 if(navigator.vibrate) navigator.vibrate([80]);
 
 }
-
-function checkDiscoveries(coords){
-
-if(!userLatLng) return;
-
-let hit=0;
-
-for(const s of spotsRaw){
-
-const k=keyOf(s);
-
-if(discovered.has(k)) continue;
-
-const d=userLatLng.distanceTo([s.lat,s.lng]);
-
-if(d<=DISCOVER_RADIUS_M){
-
-discovered.add(k);
-hit++;
-
-}
-
-}
-
-if(hit>0){
-
-vibrateOnce();
-
-show(`🐾 発見 +${hit}（合計 ${discovered.size}）`);
-
-setTimeout(()=>{
-
-renderMarkers();
-
-},1500);
-
-}
-
-}
-
 async function loadSpots(){
 
 show("データ読み込み中...");
@@ -504,7 +634,6 @@ if(currentRadius!=null) setRadiusCircle(currentRadius);
 
 renderMarkers();
 
-checkDiscoveries(pos.coords);
 
 },
 
