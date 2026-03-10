@@ -430,9 +430,13 @@ function recordFind(lat,lng,type){
     return;
   }
 
-  const d = userLatLng.distanceTo([lat,lng]);
+  let d = 0;
+if(userLatLng){
+  d = userLatLng.distanceTo([lat,lng]);
+}
 
- if(d > 999999){
+if(d > 30){
+  
     alert("近くに行くと記録できます");
     return;
   }
@@ -530,7 +534,7 @@ function renderMarkers(){
     const isFound = discovered.has(k);
    const k = keyOf(s);
     const isFound = discovered.has(k);
-    const canRecord = !!userLatLng ;
+    const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
 
     let title = "🐕 シバ自販機";
     if(s.type==="bul") title = "🐶 ブル自販機";
