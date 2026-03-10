@@ -784,15 +784,11 @@ document.getElementById("btnLocate").addEventListener("click",()=>{
       const lat=pos.coords.latitude;
       const lng=pos.coords.longitude;
 
-      const hadNoUserLatLng = !userLatLng;
-
       updateUserMarker(lat,lng);
 
-      if(currentRadius!=null) setRadiusCircle(currentRadius);
+if(currentRadius!=null) setRadiusCircle(currentRadius);
 
-      if(hadNoUserLatLng){
-        renderMarkers();
-      }
+renderMarkers();
     },
     (err)=>{
       show("現在地取得失敗");
