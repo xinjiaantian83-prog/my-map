@@ -748,17 +748,21 @@ document.getElementById("btnLocate").addEventListener("click",()=>{
   btn.classList.add("active");
   show("現在地追跡ON");
 
-  watchId=navigator.geolocation.watchPosition(
-    (pos)=>{
-      const lat=pos.coords.latitude;
-      const lng=pos.coords.longitude;
+ watchId=navigator.geolocation.watchPosition(
+  (pos)=>{
+    const lat=pos.coords.latitude;
+    const lng=pos.coords.longitude;
 
-      updateUserMarker(lat,lng);
+    const hadNoUserLatLng = !userLatLng;
 
-      if(currentRadius!=null) setRadiusCircle(currentRadius);
+    updateUserMarker(lat,lng);
 
+    if(currentRadius!=null) setRadiusCircle(currentRadius);
+
+    if(hadNoUserLatLng){
       renderMarkers();
-    },
+    }
+  },
     (err)=>{
       show("現在地取得失敗");
     },
