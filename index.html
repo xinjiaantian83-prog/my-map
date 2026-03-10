@@ -608,11 +608,14 @@ function updateUserMarker(lat,lng){
 
   const pawIcon=L.icon({
     iconUrl:'paw_pin.png',
-    iconSize:[36,44],
-    iconAnchor:[18,44]
+    iconSize:[26,32],
+    iconAnchor:[13,32]
   });
 
-  userMarker=L.marker(userLatLng,{icon:pawIcon}).addTo(map);
+  userMarker=L.marker(userLatLng,{
+    icon:pawIcon,
+    opacity:0.65
+  }).addTo(map);
 
   map.setView(userLatLng,15);
 }
