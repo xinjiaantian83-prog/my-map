@@ -241,24 +241,6 @@ button.active{
   display: none;
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
-  .found-flash{
-  animation: foundFlash 0.8s ease;
-}
-
-@keyframes foundFlash{
-  0%{
-    transform: scale(1);
-    filter: brightness(1);
-  }
-  40%{
-    transform: scale(1.4);
-    filter: brightness(2);
-  }
-  100%{
-    transform: scale(1);
-    filter: brightness(1);
-  }
-}
 </style>
 </head>
 
@@ -430,13 +412,9 @@ function recordFind(lat,lng,type){
     return;
   }
 
-  let d = 0;
-if(userLatLng){
-  d = userLatLng.distanceTo([lat,lng]);
-}
+  const d = userLatLng.distanceTo([lat,lng]);
 
-if(d > 30){
-  
+  if(d > 30){
     alert("近くに行くと記録できます");
     return;
   }
@@ -448,38 +426,24 @@ if(d > 30){
     return;
   }
 
-  
-  
   foundSound.play();
 
-/*
-const marker = map._popup && map._popup._source && map._popup._source._icon;
-if(marker){
-  marker.classList.add("found-flash");
+  const popup = document.getElementById("discoverPopup");
+  popup.style.display = "block";
   setTimeout(() => {
-    marker.classList.remove("found-flash");
-  }, 800);
-}
-*/
+    popup.style.display = "none";
+  }, 1500);
 
-const popup = document.getElementById("discoverPopup");
-popup.style.display = "block";
-setTimeout(() => {
-  popup.style.display = "none";
-}, 1500);
+  if (navigator.vibrate) {
+    navigator.vibrate(200);
+  }
 
-if (navigator.vibrate) {
-  navigator.vibrate(200);
-}
-
-discovered.add(k);
-vibrateOnce();
-show(`🐾 発見 +1（合計 ${discovered.size}）`);
-
-setTimeout(() => {
+  discovered.add(k);
+  vibrateOnce();
+  show(`🐾 発見 +1（合計 ${discovered.size}）`);
+  
   map.closePopup();
   renderMarkers();
-}, 850);
 }
 
 function show(t){
@@ -531,10 +495,6 @@ function renderMarkers(){
     });
 
     const k = keyOf(s);
-    const isFound = discovered.has(k);
-    const k = keyOf(s);
-    const isFound = discovered.has(k);
-   const k = keyOf(s);
     const isFound = discovered.has(k);
     const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
 
