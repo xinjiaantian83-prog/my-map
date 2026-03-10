@@ -241,6 +241,24 @@ button.active{
   display: none;
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
+  .found-flash{
+  animation: foundFlash 0.8s ease;
+}
+
+@keyframes foundFlash{
+  0%{
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40%{
+    transform: scale(1.4);
+    filter: brightness(2);
+  }
+  100%{
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
 </style>
 </head>
 
@@ -426,24 +444,36 @@ function recordFind(lat,lng,type){
     return;
   }
 
+  
+  
   foundSound.play();
 
-  const popup = document.getElementById("discoverPopup");
-  popup.style.display = "block";
+const marker = map._popup && map._popup._source && map._popup._source._icon;
+if(marker){
+  marker.classList.add("found-flash");
   setTimeout(() => {
-    popup.style.display = "none";
-  }, 1500);
+    marker.classList.remove("found-flash");
+  }, 800);
+}
 
-  if (navigator.vibrate) {
-    navigator.vibrate(200);
-  }
+const popup = document.getElementById("discoverPopup");
+popup.style.display = "block";
+setTimeout(() => {
+  popup.style.display = "none";
+}, 1500);
 
-  discovered.add(k);
-  vibrateOnce();
-  show(`🐾 発見 +1（合計 ${discovered.size}）`);
-  
+if (navigator.vibrate) {
+  navigator.vibrate(200);
+}
+
+discovered.add(k);
+vibrateOnce();
+show(`🐾 発見 +1（合計 ${discovered.size}）`);
+
+setTimeout(() => {
   map.closePopup();
   renderMarkers();
+}, 850);
 }
 
 function show(t){
