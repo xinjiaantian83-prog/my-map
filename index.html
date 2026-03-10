@@ -675,6 +675,7 @@ const discovered = new Set(
   JSON.parse(localStorage.getItem("wanwan_discovered") || "[]")
 );
 let lastVibeAt=0;
+ let lastRenderAt = 0;
 
 function keyOf(s){
   return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
@@ -776,29 +777,34 @@ document.getElementById("btnLocate").addEventListener("click",()=>{
     return;
   }
 
-  btn.classList.add("active");
-  show("現在地追跡ON");
+  
+    btn.classList.add("active");
+show("現在地追跡ON");
 
-  watchId=navigator.geolocation.watchPosition(
-    (pos)=>{
-      const lat=pos.coords.latitude;
-      const lng=pos.coords.longitude;
+watchId = navigator.geolocation.watchPosition(
+  (pos)=>{
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-      updateUserMarker(lat,lng);
+    updateUserMarker(lat,lng);
 
-if(currentRadius!=null) setRadiusCircle(currentRadius);
+    if(currentRadius!=null) setRadiusCircle(currentRadius);
 
-renderMarkers();
-    },
-    (err)=>{
-      show("現在地取得失敗");
-    },
-    {
-      enableHighAccuracy:true,
-      timeout:10000,
-      maximumAge:0
+    const now = Date.now();
+    if(now - lastRenderAt > 1200){
+      renderMarkers();
+      lastRenderAt = now;
     }
-  );
+  },
+  (err)=>{
+    show("現在地取得失敗");
+  },
+  {
+    enableHighAccuracy:true,
+    timeout:10000,
+    maximumAge:0
+  }
+);
 });
 
 document.getElementById("btnReset").addEventListener("click",()=>{
