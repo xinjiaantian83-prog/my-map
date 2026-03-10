@@ -705,7 +705,23 @@ loadSpots();
 setTimeout(() => {
   map.invalidateSize();
 }, 300);
-</script>
+loadSpots();
 
+setTimeout(() => {
+  map.invalidateSize();
+}, 300);
+
+// 🔊音＆振動テストボタン
+document.body.insertAdjacentHTML(
+  "beforeend",
+  '<button id="testSound" style="position:fixed;bottom:20px;left:20px;z-index:9999;padding:10px;">🔊テスト</button>'
+);
+
+document.getElementById("testSound").onclick = () => {
+  foundSound.play();
+  if (navigator.vibrate) navigator.vibrate(300);
+};
+
+</script>
 </body>
 </html>
