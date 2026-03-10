@@ -225,6 +225,21 @@ button.active{
   color: #666;
   line-height: 1.4;
 }
+  #discoverPopup{
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 18px 28px;
+  border-radius: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 9999;
+  display: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
 </style>
 </head>
 
@@ -393,13 +408,6 @@ function recordFind(lat,lng,type){
     return;
   }
 
-  foundSound.play();
-
-  if (navigator.vibrate) {
-    navigator.vibrate(200);
-  }
-  
-
   const d = userLatLng.distanceTo([lat,lng]);
 
   if(d > 30){
@@ -414,10 +422,22 @@ function recordFind(lat,lng,type){
     return;
   }
 
+  foundSound.play();
+
+  const popup = document.getElementById("discoverPopup");
+  popup.style.display = "block";
+  setTimeout(() => {
+    popup.style.display = "none";
+  }, 1500);
+
+  if (navigator.vibrate) {
+    navigator.vibrate(200);
+  }
+
   discovered.add(k);
   vibrateOnce();
   show(`🐾 発見 +1（合計 ${discovered.size}）`);
-  alert("発見を記録しました！");
+  
   map.closePopup();
   renderMarkers();
 }
@@ -701,11 +721,6 @@ document.getElementById("btnLocate").addEventListener("click",()=>{
   );
 });
 
-loadSpots();
-
-setTimeout(() => {
-  map.invalidateSize();
-}, 300);
 loadSpots();
 
 setTimeout(() => {
