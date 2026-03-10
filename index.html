@@ -386,10 +386,18 @@ function updateCountText(){
 }
 
 function recordFind(lat,lng,type){
+
   if(!userLatLng){
     alert("先に現在地をONにしてください");
     return;
   }
+
+  foundSound.play();
+
+  if (navigator.vibrate) {
+    navigator.vibrate(200);
+  }
+  
 
   const d = userLatLng.distanceTo([lat,lng]);
 
