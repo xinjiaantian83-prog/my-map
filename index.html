@@ -735,8 +735,49 @@ document.getElementById("btn3k").addEventListener("click",(e)=>{
   renderMarkers();
 });
   const btn = document.getElementById("btnLocate");
+
 document.getElementById("btnLocate").addEventListener("click",()=>{
-  ...
+  if(!navigator.geolocation){
+    show("位置情報が使えません");
+    return;
+  }
+
+  if(watchId!==null){
+    navigator.geolocation.clearWatch(watchId);
+    watchId=null;
+    btn.classList.remove("active");
+    hasCentered = false;
+    show("現在地追跡OFF");
+    return;
+  }
+
+  btn.classList.add("active");
+  show("現在地追跡ON");
+
+  watchId=navigator.geolocation.watchPosition(
+    (pos)=>{
+      const lat=pos.coords.latitude;
+      const lng=pos.coords.longitude;
+
+      const hadNoUserLatLng = !userLatLng;
+
+      updateUserMarker(lat,lng);
+
+      if(currentRadius!=null) setRadiusCircle(currentRadius);
+
+      if(hadNoUserLatLng){
+        renderMarkers();
+      }
+    },
+    (err)=>{
+      show("現在地取得失敗");
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:10000,
+      maximumAge:0
+    }
+  );
 });
 
 document.getElementById("btnReset").addEventListener("click",()=>{
@@ -753,48 +794,7 @@ document.getElementById("btnReset").addEventListener("click",()=>{
 
   alert("発見記録をリセットしました");
 });
-  if(!navigator.geolocation){
-    show("位置情報が使えません");
-    return;
-  }
-
-  if(watchId!==null){
-    navigator.geolocation.clearWatch(watchId);
-    watchId=null;
-    btn.classList.remove("active");
-    show("現在地追跡OFF");
-    return;
-  }
-
-  btn.classList.add("active");
-  show("現在地追跡ON");
-
- watchId=navigator.geolocation.watchPosition(
-  (pos)=>{
-    const lat=pos.coords.latitude;
-    const lng=pos.coords.longitude;
-
-    const hadNoUserLatLng = !userLatLng;
-
-    updateUserMarker(lat,lng);
-
-    if(currentRadius!=null) setRadiusCircle(currentRadius);
-
-    if(hadNoUserLatLng){
-      renderMarkers();
-    }
-  },
-    (err)=>{
-      show("現在地取得失敗");
-    },
-    {
-      enableHighAccuracy:true,
-      timeout:10000,
-      maximumAge:0
-    }
-  );
-});
-
+    
 loadSpots();
   updateFoundUI();
 
