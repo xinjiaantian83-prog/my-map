@@ -263,6 +263,7 @@ button.active{
 <button id="btnAll" class="range-btn active">全部</button>
 <button id="btnLocate">位置</button>
 <button id="btnCluster" class="active">集約</button>
+  <button id="btnReset">発見リセット</button>
 </div>
 
 <div id="map"></div>
@@ -733,9 +734,25 @@ document.getElementById("btn3k").addEventListener("click",(e)=>{
 
   renderMarkers();
 });
-document.getElementById("btnLocate").addEventListener("click",()=>{
   const btn = document.getElementById("btnLocate");
+document.getElementById("btnLocate").addEventListener("click",()=>{
+  ...
+});
 
+document.getElementById("btnReset").addEventListener("click",()=>{
+  if(!confirm("発見記録をリセットしますか？")) return;
+
+  localStorage.removeItem("wanwan_found");
+  localStorage.removeItem("wanwan_discovered");
+
+  foundCount = 0;
+  discovered.clear();
+
+  updateFoundUI();
+  renderMarkers();
+
+  alert("発見記録をリセットしました");
+});
   if(!navigator.geolocation){
     show("位置情報が使えません");
     return;
