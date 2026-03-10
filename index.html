@@ -253,6 +253,10 @@ button.active{
   <span id="count"></span>
 </h2>
 
+<div style="font-weight:bold; margin-top:4px;">
+  🐾 発見数 <span id="foundCount">0</span>
+</div>
+
 <button id="btn500" class="range-btn">500m</button>
 <button id="btn1k" class="range-btn">1km</button>
 <button id="btn3k" class="range-btn">3km</button>
@@ -439,8 +443,11 @@ function recordFind(lat,lng,type){
   }
 
   discovered.add(k);
+  foundCount++;
+localStorage.setItem("wanwan_found", foundCount);
+updateFoundUI();
   vibrateOnce();
-  show(`🐾 発見 +1（合計 ${discovered.size}）`);
+  show(`🐾 発見 +1（合計 ${foundCount}）`);
   
   map.closePopup();
   renderMarkers();
@@ -612,6 +619,14 @@ let lastVibeAt=0;
 function keyOf(s){
   return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
 }
+  let foundCount = Number(localStorage.getItem("wanwan_found") || 0);
+
+function updateFoundUI(){
+  const el = document.getElementById("foundCount");
+  if(el){
+    el.textContent = foundCount;
+  }
+}
 
 function vibrateOnce(){
   const now=Date.now();
@@ -726,6 +741,7 @@ document.getElementById("btnLocate").addEventListener("click",()=>{
 });
 
 loadSpots();
+  updateFoundUI();
 
 setTimeout(() => {
   map.invalidateSize();
