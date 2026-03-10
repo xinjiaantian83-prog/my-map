@@ -423,7 +423,7 @@ function recordFind(lat,lng,type){
     return;
   }
 
-  const k = `${Number(lat).toFixed(6)},${Number(lng).toFixed(6)},${type}`;
+  const k = keyOf({lat:lat,lng:lng,type:type});
 
   if(discovered.has(k)){
     alert("この自販機は記録済みです");
@@ -443,6 +443,10 @@ function recordFind(lat,lng,type){
   }
 
   discovered.add(k);
+  localStorage.setItem(
+  "wanwan_discovered",
+  JSON.stringify([...discovered])
+);
   foundCount++;
 localStorage.setItem("wanwan_found", foundCount);
 updateFoundUI();
@@ -613,7 +617,9 @@ function updateUserMarker(lat,lng){
   map.setView(userLatLng,15);
 }
 
-const discovered=new Set();
+const discovered = new Set(
+  JSON.parse(localStorage.getItem("wanwan_discovered") || "[]")
+);
 let lastVibeAt=0;
 
 function keyOf(s){
