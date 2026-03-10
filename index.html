@@ -526,7 +526,11 @@ function renderMarkers(){
 
     const k = keyOf(s);
     const isFound = discovered.has(k);
-    const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
+    const k = keyOf(s);
+    const isFound = discovered.has(k);
+   const k = keyOf(s);
+    const isFound = discovered.has(k);
+    const canRecord = !!userLatLng ;
 
     let title = "🐕 シバ自販機";
     if(s.type==="bul") title = "🐶 ブル自販機";
