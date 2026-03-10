@@ -726,9 +726,20 @@ loadSpots();
 setTimeout(() => {
   map.invalidateSize();
 }, 300);
+document.body.insertAdjacentHTML(
+  "beforeend",
+  '<button id="testDiscover" style="position:fixed;bottom:20px;left:20px;z-index:9999;padding:10px 14px;border:none;border-radius:12px;background:#fff4d6;font-weight:700;">✨発見テスト</button>'
+);
 
+document.getElementById("testDiscover").onclick = () => {
+  foundSound.play();
 
-
+  const popup = document.getElementById("discoverPopup");
+  popup.style.display = "block";
+  setTimeout(() => {
+    popup.style.display = "none";
+  }, 1500);
+};
 </script>
 </body>
 </html>
