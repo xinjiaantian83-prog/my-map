@@ -406,7 +406,7 @@ function updateCountText(){
   const found = spotsRaw.length;
   const percent = Math.round((found / ESTIMATED_TOTAL) * 100);
   document.getElementById("count").textContent =
-    `発見数 ${found}台 / ${ESTIMATED_TOTAL}台（推定） ${percent}%`;
+  `${found} / ${ESTIMATED_TOTAL}（推定） • ${percent}%`;
 }
 
 function recordFind(lat,lng,type){
