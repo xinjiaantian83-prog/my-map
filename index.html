@@ -501,9 +501,30 @@ function renderMarkers(){
     if(s.type==="bul") icon=bulldogIcon;
     if(s.type==="pom") icon=pomeIcon;
 
-    const m=L.marker([s.lat,s.lng],{
-      icon:icon
-    });
+    let displayLat = s.lat;
+let displayLng = s.lng;
+
+const nearby = spotsRaw.filter(other => {
+  if (other === s) return false;
+  const dist = L.latLng(s.lat, s.lng).distanceTo([other.lat, other.lng]);
+  return dist < 12;
+});
+
+if (nearby.length > 0) {
+  const typeOffsetMap = {
+    nky: [0, 0],
+    bul: [0, 0.00006],
+    pom: [0, -0.00006]
+  };
+
+  const offset = typeOffsetMap[s.type] || [0, 0];
+  displayLat += offset[0];
+  displayLng += offset[1];
+}
+
+const m=L.marker([displayLat,displayLng],{
+  icon:icon
+});
 
     const k = keyOf(s);
     const isFound = discovered.has(k);
@@ -617,7 +638,7 @@ function updateUserMarker(lat,lng){
     opacity:0.65
   }).addTo(map);
 
-  map.setView(userLatLng,15);
+  
 }
 
 const discovered = new Set(
