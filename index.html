@@ -298,6 +298,7 @@ const pawIcon = L.divIcon({
   iconSize: [30,30]
 });
   let pawMarkers = [];
+  let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
 
 map.on('contextmenu', function(e){
 
@@ -401,6 +402,12 @@ for(const s of spotsRaw){
 .openPopup();
 
     pawMarkers.push(m);
+    pawData.push({
+  lat: e.latlng.lat,
+  lng: e.latlng.lng
+});
+
+localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 
   }
 
@@ -933,6 +940,10 @@ document.getElementById("btnReset").addEventListener("click",()=>{
 
   localStorage.removeItem("wanwan_found");
   localStorage.removeItem("wanwan_discovered");
+  localStorage.removeItem("wanwan_paws");
+pawData = [];
+pawMarkers.forEach(m => map.removeLayer(m));
+pawMarkers = [];
 
   foundCount = 0;
   discovered.clear();
@@ -949,6 +960,76 @@ loadSpots();
 setTimeout(() => {
   map.invalidateSize();
 }, 300);
+  pawData.forEach(p=>{
+  const m = L.marker([p.lat, p.lng], {
+    icon: pawIcon
+  }).addTo(map)
+  .bindPopup(`
+    <div class="spot-card">
+      <button class="card-close" onclick="closePopup()" aria-label="閉じる">
+        <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
+          <g transform="rotate(45 32 32)">
+            <rect x="20" y="28" width="24" height="8" rx="4"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="18" cy="26" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="18" cy="38" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="46" cy="26" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="46" cy="38" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+          </g>
+          <g transform="rotate(-45 32 32)">
+            <rect x="20" y="28" width="24" height="8" rx="4"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="18" cy="26" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="18" cy="38" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="46" cy="26" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+            <circle cx="46" cy="38" r="6"
+              fill="#f5f1e8"
+              stroke="#7a6a58"
+              stroke-width="3"/>
+          </g>
+        </svg>
+      </button>
+
+      <div class="spot-title">🐾 未確認補給所</div>
+
+      <div class="spot-actions">
+        <button class="spot-btn spot-btn-go" onclick="goNav(${p.lat},${p.lng})">調査に向かう</button>
+      </div>
+
+      <div class="spot-note">
+        探索隊が報告<br>
+        現在調査中
+      </div>
+    </div>
+  `);
+
+  pawMarkers.push(m);
+});
 
 </script>
 </body>
