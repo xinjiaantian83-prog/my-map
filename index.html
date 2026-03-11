@@ -301,12 +301,20 @@ map.on('contextmenu', function(e){
   const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
 
   // 🐾重複チェック
-  for(const p of pawMarkers){
-    if(newLatLng.distanceTo(p.getLatLng()) < 15){
-      alert("この近くに未確認補給所があります");
-      return;
-    }
+for(const p of pawMarkers){
+  if(newLatLng.distanceTo(p.getLatLng()) < 30){
+    alert("この近くに未確認補給所があります");
+    return;
   }
+}
+
+// 👇ここに追加（本ピン近く禁止）
+for(const s of spotsRaw){
+  if(newLatLng.distanceTo([s.lat, s.lng]) < 30){
+    alert("この近くには既に補給所があります");
+    return;
+  }
+}
 
   if(confirm("未確認補給所を報告する？")){
 
