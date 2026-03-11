@@ -299,6 +299,17 @@ const pawIcon = L.divIcon({
 map.on('contextmenu', function(e){
 
   const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
+    // 現在地が必要
+  if(!userLatLng){
+    alert("先に現在地をONにしてください");
+    return;
+  }
+
+  // 現在地から30m以内だけ報告OK
+  if(userLatLng.distanceTo(newLatLng) > 30){
+    alert("近くに行くと報告できます");
+    return;
+  }
 
   // 🐾重複チェック
 for(const p of pawMarkers){
