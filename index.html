@@ -249,6 +249,22 @@ button.active{
   text-align:center;
   line-height:30px;
 }
+  .user-radius-radar{
+  animation: radarPulse 2.2s ease-out infinite;
+  transform-origin: center;
+}
+
+@keyframes radarPulse{
+  0%{
+    opacity: 0.55;
+  }
+  50%{
+    opacity: 0.9;
+  }
+  100%{
+    opacity: 0.55;
+  }
+}
 </style>
 </head>
 
