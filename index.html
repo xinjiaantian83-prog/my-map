@@ -699,11 +699,14 @@ function setRadiusCircle(m){
 
   radarAngle += 3;
 
-  const distance = Math.max(0.0012, (currentRadius || 500) / 250000);
+  const distanceMeters = (currentRadius || 500) * 0.92;
+const angleRad = radarAngle * Math.PI / 180;
 
-  const endLat = lat + Math.cos(radarAngle * Math.PI / 180) * distance;
-  const endLng = lng + Math.sin(radarAngle * Math.PI / 180) * distance;
+const dLat = (distanceMeters * Math.cos(angleRad)) / 111320;
+const dLng = (distanceMeters * Math.sin(angleRad)) / (111320 * Math.cos(lat * Math.PI / 180));
 
+const endLat = lat + dLat;
+const endLng = lng + dLng;
   if(radarLine){
     map.removeLayer(radarLine);
   }
