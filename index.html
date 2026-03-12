@@ -560,6 +560,12 @@ let watchId=null;
   let radarEnabled = true;
   let radarLine = null;
   let radarAngle = 0;
+  setInterval(()=>{
+  if(radarEnabled && userLatLng){
+    radarAngle += 3;
+    updateRadarLine();
+  }
+},40);
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
@@ -1059,7 +1065,7 @@ watchId = navigator.geolocation.watchPosition(
     updateUserMarker(lat,lng);
 
 if(currentRadius!=null) setRadiusCircle(currentRadius);
-updateRadarLine();
+
 
     const now = Date.now();
     if(now - lastRenderAt > 1200 && !popupOpen){
