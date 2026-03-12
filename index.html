@@ -265,6 +265,26 @@ button.active{
     opacity: 0.55;
   }
 }
+  .radar-line{
+  position:absolute;
+  width:2px;
+  height:100%;
+  background:rgba(77,166,255,0.9);
+  left:50%;
+  top:0;
+  transform-origin:bottom center;
+  animation:radarSpin 2.8s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes radarSpin{
+  from{
+    transform:rotate(0deg);
+  }
+  to{
+    transform:rotate(360deg);
+  }
+}
 </style>
 </head>
 
@@ -538,6 +558,7 @@ let watchId=null;
   let hasCentered = false;
   let popupOpen = false;
   let radarEnabled = true;
+  let radarLine = null;
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
@@ -655,6 +676,39 @@ function setRadiusCircle(m){
     dashArray:"6,6",
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
+}
+  function updateRadarLine(){
+
+  if(!radarEnabled || !userLatLng){
+    if(radarLine){
+      map.removeLayer(radarLine);
+      radarLine = null;
+    }
+    return;
+  }
+
+  const lat = userLatLng.lat;
+  const lng = userLatLng.lng;
+
+  const endLat = lat + 0.01;
+  const endLng = lng;
+
+  if(radarLine){
+    map.removeLayer(radarLine);
+  }
+
+  radarLine = L.polyline(
+    [
+      [lat, lng],
+      [endLat, endLng]
+    ],
+    {
+      color:"#4da6ff",
+      weight:2,
+      opacity:0.9
+    }
+  ).addTo(map);
+
 }
 
 function normalizeSpots(arr){
@@ -942,7 +996,10 @@ document.getElementById("btnCluster").addEventListener("click",()=>{
     btn.classList.remove("active");
   }
 
-  renderMarkers();
+  if(currentRadius!=null && userLatLng){
+    setRadiusCircle(currentRadius);
+  }
+  updateRadarLine();
 });
 document.getElementById("btn500").addEventListener("click",(e)=>{
   setRangeActive(e.target);
@@ -997,7 +1054,8 @@ watchId = navigator.geolocation.watchPosition(
 
     updateUserMarker(lat,lng);
 
-    if(currentRadius!=null) setRadiusCircle(currentRadius);
+if(currentRadius!=null) setRadiusCircle(currentRadius);
+updateRadarLine();
 
     const now = Date.now();
     if(now - lastRenderAt > 1200 && !popupOpen){
