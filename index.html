@@ -733,7 +733,7 @@ const m=L.marker([displayLat,displayLng],{
     }else{
       recordPart = `<div class="spot-note">近くに行くと記録できます</div>`;
     }
-
+const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
     m.bindPopup(`
       <div class="spot-card">
         <button class="card-close" onclick="closePopup()" aria-label="閉じる">
