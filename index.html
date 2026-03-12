@@ -537,6 +537,7 @@ let currentRadius=null;
 let watchId=null;
   let hasCentered = false;
   let popupOpen = false;
+  let radarEnabled = true;
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
@@ -645,15 +646,15 @@ function show(t){
 function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
-  userCircle=L.circle(userLatLng,{
-  radius:m,
-  color:"#4da6ff",
-  fillColor:"#4da6ff",
-  fillOpacity:0.10,
-  weight:2,
-  dashArray:"6,6",
-  className:"user-radius-radar"
-}).addTo(map);
+  userCircle = L.circle(userLatLng,{
+    radius:m,
+    color:"#4da6ff",
+    fillColor:"#4da6ff",
+    fillOpacity:0.10,
+    weight:2,
+    dashArray:"6,6",
+    className: radarEnabled ? "user-radius-radar" : ""
+  }).addTo(map);
 }
 
 function normalizeSpots(arr){
@@ -923,6 +924,19 @@ document.getElementById("btnCluster").addEventListener("click",()=>{
   clusterEnabled = !clusterEnabled;
 
   if(clusterEnabled){
+    btn.classList.add("active");
+  }else{
+    btn.classList.remove("active");
+  }
+
+  renderMarkers();
+});
+  document.getElementById("btnRadar").addEventListener("click",()=>{
+  const btn = document.getElementById("btnRadar");
+
+  radarEnabled = !radarEnabled;
+
+  if(radarEnabled){
     btn.classList.add("active");
   }else{
     btn.classList.remove("active");
