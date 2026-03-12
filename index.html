@@ -697,9 +697,9 @@ function setRadiusCircle(m){
   const lat = userLatLng.lat;
   const lng = userLatLng.lng;
 
-  radarAngle += 45;
+  radarAngle += 3;
 
-  const distance = 0.0055;
+  const distance = Math.max(0.0012, (currentRadius || 500) / 250000);
 
   const endLat = lat + Math.cos(radarAngle * Math.PI / 180) * distance;
   const endLng = lng + Math.sin(radarAngle * Math.PI / 180) * distance;
