@@ -424,7 +424,6 @@ const m = L.marker([e.latlng.lat, e.latlng.lng], {
 
 localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 
-  }
 
 });
 L.tileLayer(
@@ -989,14 +988,16 @@ pawMarkers = [];
 
   alert("発見記録をリセットしました");
 });
-await loadSponsors();
-loadSpots();
+loadSponsors().then(async () => {
+  await loadSpots();
   updateFoundUI();
 
-setTimeout(() => {
-  map.invalidateSize();
-}, 300);
-  pawData.forEach(p=>{
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 300);
+
+  pawData.forEach(p => {
+    
   const m = L.marker([p.lat, p.lng], {
     icon: pawIcon
   }).addTo(map)
@@ -1064,7 +1065,8 @@ setTimeout(() => {
     </div>
   `);
 
-  pawMarkers.push(m);
+   pawMarkers.push(m);
+  });
 });
 
 </script>
