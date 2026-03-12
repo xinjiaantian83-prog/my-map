@@ -679,10 +679,10 @@ function setRadiusCircle(m){
 
   userCircle = L.circle(userLatLng,{
     radius:m,
-    color:"#222",
+    color:"#444",
     fillColor:"#000",
-    fillOpacity:0.08,
-    weight:1.5,
+    fillOpacity:0.05,
+    weight:1.2,
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
   updateRadarSector();
@@ -711,7 +711,7 @@ radarSweeps = [];
   ).setStyle({
     color:"#333",
     fillColor:"#000",
-    fillOpacity:0.18,
+    fillOpacity:0.06,
     weight:1
   }).addTo(map);
 }
