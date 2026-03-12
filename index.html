@@ -687,6 +687,8 @@ function setRadiusCircle(m){
 }
 
 function updateRadarSector(){
+  radarSweeps.forEach(s => map.removeLayer(s));
+radarSweeps = [];
   if(!radarEnabled || !userLatLng || !currentRadius){
     if(radarSector){
       map.removeLayer(radarSector);
@@ -712,6 +714,7 @@ function updateRadarSector(){
   }).addTo(map);
 }
 
+/*
 function updateRadarLine(){
   if(!radarEnabled || !userLatLng){
     radarSweeps.forEach(s => map.removeLayer(s));
@@ -763,6 +766,7 @@ function updateRadarLine(){
     radarSweeps.push(sweep);
   });
 }
+*/
 function normalizeSpots(arr){
   return arr.map(s=>({
     lat:Number(s.lat),
