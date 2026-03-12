@@ -677,11 +677,12 @@ function setRadiusCircle(m){
 
   userCircle = L.circle(userLatLng,{
     radius:m,
-    color:"#00ff88",
-fillColor:"#00ff88",
-fillOpacity:0.08,
+    color:"#00c96b",
+fillColor:"#00c96b",
+fillOpacity:0.05,
 weight:3,
-    dashArray:"6,6",
+dashArray:"8,8",
+    
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
 }
@@ -718,7 +719,7 @@ const endLng = lng + dLng;
       [endLat, endLng]
     ],
     {
-      color:"#4da6ff",
+      color:"#00c96b",
       weight:2,
       opacity:0.9
     }
