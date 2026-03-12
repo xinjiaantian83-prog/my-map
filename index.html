@@ -519,6 +519,7 @@ let currentRadius=null;
 
 let watchId=null;
   let hasCentered = false;
+  let popupOpen = false;
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
@@ -556,6 +557,7 @@ const pomeDotIcon=L.icon({
 });
 
 function closePopup(){
+  popupOpen = false;
   map.closePopup();
 }
 
