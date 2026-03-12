@@ -710,12 +710,12 @@ function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
   userCircle = L.circle(userLatLng,{
-    radius:m,
-    color:"#ff4fc3",
-    weight:1,
-    fillColor:"#ff4fc3",
-    fillOpacity:0.06
-  }).addTo(map);
+  radius:m,
+  color:"#2a7fff",
+  weight:1,
+  fillColor:"#2a7fff",
+  fillOpacity:0.06
+}).addTo(map);
 
   updateRadarSector();
 }
@@ -741,9 +741,9 @@ radarSweeps = [];
     24,
     radarAzimuth
   ).setStyle({
-    color:"#333",
-    fillColor:"#000",
-    fillOpacity:0.06,
+    color:"#2a7fff",
+    fillColor:"#2a7fff",
+    fillOpacity:0.08,
     weight:1
   }).addTo(map);
 }
