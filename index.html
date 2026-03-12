@@ -678,12 +678,10 @@ function setRadiusCircle(m){
   userCircle = L.circle(userLatLng,{
     radius:m,
     color:"#00c96b",
-fillColor:"#00c96b",
-fillOpacity:0.05,
-weight:1.5,
-dashArray:"6,6"
-
-    
+    fillColor:"#00c96b",
+    fillOpacity:0.05,
+    weight:1.5,
+    dashArray:"6,6",
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
 }
