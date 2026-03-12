@@ -557,9 +557,9 @@ let currentRadius=null;
 let watchId=null;
   let hasCentered = false;
   let popupOpen = false;
-  let radarEnabled = true;
-  let radarLine = null;
-  let radarAngle = 0;
+let radarEnabled = true;
+let radarSweep = null;
+let radarAngle = 0;
   setInterval(()=>{
   if(radarEnabled && userLatLng){
     radarAngle += 25;
@@ -689,9 +689,9 @@ weight:4,
   function updateRadarLine(){
 
   if(!radarEnabled || !userLatLng){
-    if(radarLine){
-      map.removeLayer(radarLine);
-      radarLine = null;
+    if(radarSweep){
+      map.removeLayer(radarSweep);
+      radarSweep = null;
     }
     return;
   }
@@ -699,31 +699,34 @@ weight:4,
   const lat = userLatLng.lat;
   const lng = userLatLng.lng;
 
-  radarAngle += 3;
+  const sweepWidth = 25; // 扇形の広さ
+  const radius = (currentRadius || 500) * 0.9;
 
-  const distanceMeters = (currentRadius || 500) * 0.92;
-const angleRad = radarAngle * Math.PI / 180;
+  const startAngle = (radarAngle - sweepWidth) * Math.PI / 180;
+  const endAngle = radarAngle * Math.PI / 180;
 
-const dLat = (distanceMeters * Math.cos(angleRad)) / 111320;
-const dLng = (distanceMeters * Math.sin(angleRad)) / (111320 * Math.cos(lat * Math.PI / 180));
+  const points = [[lat,lng]];
 
-const endLat = lat + dLat;
-const endLng = lng + dLng;
-  if(radarLine){
-    map.removeLayer(radarLine);
+  for(let a=startAngle; a<=endAngle; a+=0.1){
+
+    const dLat = (radius * Math.cos(a)) / 111320;
+    const dLng = (radius * Math.sin(a)) / (111320 * Math.cos(lat * Math.PI/180));
+
+    points.push([lat + dLat, lng + dLng]);
   }
 
-  radarLine = L.polyline(
-    [
-      [lat, lng],
-      [endLat, endLng]
-    ],
-    {
-      color:"#00c96b",
-      weight:2,
-      opacity:0.9
-    }
-  ).addTo(map);
+  points.push([lat,lng]);
+
+  if(radarSweep){
+    map.removeLayer(radarSweep);
+  }
+
+  radarSweep = L.polygon(points,{
+    color:"#00c96b",
+    fillColor:"#00c96b",
+    fillOpacity:0.25,
+    weight:0
+  }).addTo(map);
 }
 
 function normalizeSpots(arr){
