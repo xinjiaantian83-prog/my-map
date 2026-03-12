@@ -12,7 +12,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-
+<script src="https://cdn.jsdelivr.net/gh/jjwtay/leaflet.sector/dist/leaflet.sector.js"></script>
 <style>
 html, body{
   margin:0;
@@ -560,14 +560,15 @@ let watchId=null;
 let radarEnabled = true;
 let radarSweeps = [];
 let radarAngle = 0;
+  let radarSector = null;
+let radarAzimuth = 0;
   setInterval(()=>{
-  if(radarEnabled && userLatLng){
-    radarAngle += 25;
-    if(radarAngle >= 360) radarAngle = 0;
-    updateRadarLine();
+  if(radarEnabled && userLatLng && currentRadius){
+    radarAzimuth += 18;
+    if(radarAzimuth >= 360) radarAzimuth = 0;
+    updateRadarSector();
   }
-},300);
-
+},220);
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
   iconSize:[30,36],
@@ -684,8 +685,34 @@ function setRadiusCircle(m){
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
 }
-  function updateRadarLine(){
 
+function updateRadarSector(){
+  if(!radarEnabled || !userLatLng || !currentRadius){
+    if(radarSector){
+      map.removeLayer(radarSector);
+      radarSector = null;
+    }
+    return;
+  }
+
+  if(radarSector){
+    map.removeLayer(radarSector);
+  }
+
+  radarSector = L.sector(
+    [userLatLng.lat, userLatLng.lng],
+    currentRadius * 0.98,
+    24,
+    radarAzimuth
+  ).setStyle({
+    color:"#00ff88",
+    fillColor:"#00ff88",
+    fillOpacity:0.18,
+    weight:0
+  }).addTo(map);
+}
+
+function updateRadarLine(){
   if(!radarEnabled || !userLatLng){
     radarSweeps.forEach(s => map.removeLayer(s));
     radarSweeps = [];
@@ -697,11 +724,11 @@ function setRadiusCircle(m){
 
   const sweepWidth = 16;
   const radius = currentRadius ? currentRadius * 0.98 : null;
-    if(!radius){
-  radarSweeps.forEach(s => map.removeLayer(s));
-  radarSweeps = [];
-  return;
-}
+  if(!radius){
+    radarSweeps.forEach(s => map.removeLayer(s));
+    radarSweeps = [];
+    return;
+  }
 
   radarSweeps.forEach(s => map.removeLayer(s));
   radarSweeps = [];
@@ -728,7 +755,7 @@ function setRadiusCircle(m){
 
     const sweep = L.polygon(points,{
       color:"#00ff88",
-fillColor:"#00ff88",
+      fillColor:"#00ff88",
       fillOpacity:t.opacity,
       weight:0
     }).addTo(map);
@@ -993,7 +1020,7 @@ document.getElementById("btnAll").addEventListener("click",(e)=>{
     map.removeLayer(userCircle);
     userCircle=null;
   }
-
+updateRadarSector();
   renderMarkers();
 });
 
@@ -1024,14 +1051,14 @@ document.getElementById("btnCluster").addEventListener("click",()=>{
   if(currentRadius!=null && userLatLng){
     setRadiusCircle(currentRadius);
   }
-  updateRadarLine();
+  updateRadarSector();
 });
 document.getElementById("btn500").addEventListener("click",(e)=>{
   setRangeActive(e.target);
   currentRadius=500;
 
   if(userLatLng) setRadiusCircle(500);
-
+updateRadarSector();
   renderMarkers();
 });
 
@@ -1040,7 +1067,7 @@ document.getElementById("btn1k").addEventListener("click",(e)=>{
   currentRadius=1000;
 
   if(userLatLng) setRadiusCircle(1000);
-
+updateRadarSector();
   renderMarkers();
 });
 document.getElementById("btn3k").addEventListener("click",(e)=>{
@@ -1049,7 +1076,8 @@ document.getElementById("btn3k").addEventListener("click",(e)=>{
 
   if(userLatLng) setRadiusCircle(3000);
 
-  renderMarkers();
+updateRadarSector();
+renderMarkers();
 });
   const btn = document.getElementById("btnLocate");
 
@@ -1080,6 +1108,7 @@ watchId = navigator.geolocation.watchPosition(
     updateUserMarker(lat,lng);
 
 if(currentRadius!=null) setRadiusCircle(currentRadius);
+    updateRadarSector();
 
 
     const now = Date.now();
