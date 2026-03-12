@@ -699,7 +699,7 @@ weight:4,
   const lat = userLatLng.lat;
   const lng = userLatLng.lng;
 
-  const sweepWidth = 25; // 扇形の広さ
+  const sweepWidth = 16; // 扇形の広さ
   const radius = (currentRadius || 500) * 0.9;
 
   const startAngle = (radarAngle - sweepWidth) * Math.PI / 180;
@@ -724,7 +724,7 @@ weight:4,
   radarSweep = L.polygon(points,{
     color:"#00c96b",
     fillColor:"#00c96b",
-    fillOpacity:0.25,
+    fillOpacity:0.18,
     weight:0
   }).addTo(map);
 }
