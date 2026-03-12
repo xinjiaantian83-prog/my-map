@@ -642,7 +642,8 @@ function recordFind(lat,lng,type){
     return;
   }
 
-  foundSound.play();
+  foundSound.currentTime = 0;
+foundSound.play().catch(() => {});
 
   const popup = document.getElementById("discoverPopup");
   popup.style.display = "block";
@@ -678,9 +679,9 @@ function setRadiusCircle(m){
 
   userCircle = L.circle(userLatLng,{
     radius:m,
-    color:"#00ff88",
-    fillColor:"#00ff88",
-    fillOpacity:0.04,
+    color:"#222",
+    fillColor:"#000",
+    fillOpacity:0.08,
     weight:1.5,
     className: radarEnabled ? "user-radius-radar" : ""
   }).addTo(map);
@@ -708,8 +709,8 @@ radarSweeps = [];
     24,
     radarAzimuth
   ).setStyle({
-    color:"#00ff88",
-    fillColor:"#00ff88",
+    color:"#333",
+    fillColor:"#000",
     fillOpacity:0.18,
     weight:1
   }).addTo(map);
