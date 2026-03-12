@@ -691,7 +691,7 @@ function setRadiusCircle(m){
   const lng = userLatLng.lng;
 
   const endLat = lat + 0.01;
-  const endLng = lng;
+  const endLng = lng + 0.005;
 
   if(radarLine){
     map.removeLayer(radarLine);
@@ -703,12 +703,11 @@ function setRadiusCircle(m){
       [endLat, endLng]
     ],
     {
-      color:"#4da6ff",
-      weight:2,
-      opacity:0.9
+      color:"#ff0000",
+      weight:6,
+      opacity:1
     }
   ).addTo(map);
-
 }
 
 function normalizeSpots(arr){
