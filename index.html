@@ -697,7 +697,7 @@ function setRadiusCircle(m){
   const lng = userLatLng.lng;
 
   const sweepWidth = 16;
-  const radius = currentRadius ? currentRadius * 0.9 : null;
+  const radius = currentRadius ? currentRadius * 0.98 : null;
     if(!radius){
   radarSweeps.forEach(s => map.removeLayer(s));
   radarSweeps = [];
