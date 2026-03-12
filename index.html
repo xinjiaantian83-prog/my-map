@@ -645,12 +645,13 @@ function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
   userCircle=L.circle(userLatLng,{
-radius:m,
-color:"#4da6ff",
-fillColor:"#4da6ff",
-fillOpacity:0.10,
-weight:2,
-dashArray:"6,6"
+  radius:m,
+  color:"#4da6ff",
+  fillColor:"#4da6ff",
+  fillOpacity:0.10,
+  weight:2,
+  dashArray:"6,6",
+  className:"user-radius-radar"
 }).addTo(map);
 }
 
