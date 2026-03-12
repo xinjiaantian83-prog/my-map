@@ -715,9 +715,13 @@ if (nearby.length > 0) {
   displayLng += offset[1];
 }
 
-const m=L.marker([displayLat,displayLng],{
-  icon:icon
+const m = L.marker([displayLat, displayLng], {
+  icon: icon
 });
+
+m.on("popupopen", ()=> popupOpen = true);
+m.on("popupclose", ()=> popupOpen = false);
+    
 
     
     const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
@@ -964,10 +968,10 @@ watchId = navigator.geolocation.watchPosition(
     if(currentRadius!=null) setRadiusCircle(currentRadius);
 
     const now = Date.now();
-    if(now - lastRenderAt > 1200){
-      renderMarkers();
-      lastRenderAt = now;
-    }
+    if(now - lastRenderAt > 1200 && !popupOpen){
+  renderMarkers();
+  lastRenderAt = now;
+}
   },
   (err)=>{
     show("現在地取得失敗");
