@@ -677,9 +677,10 @@ function setRadiusCircle(m){
 
   userCircle = L.circle(userLatLng,{
     radius:m,
-    color:"#00c96b",
-    fillColor:"#00c96b",
-    fillOpacity:0.05,
+    color:"#00ff88",
+fillColor:"#00ff88",
+    fillOpacity:0.14
+      
     weight:1.5,
     
     className: radarEnabled ? "user-radius-radar" : ""
@@ -728,8 +729,8 @@ function setRadiusCircle(m){
     points.push([lat, lng]);
 
     const sweep = L.polygon(points,{
-      color:"#00c96b",
-      fillColor:"#00c96b",
+      color:"#00ff88",
+fillColor:"#00ff88",
       fillOpacity:t.opacity,
       weight:0
     }).addTo(map);
