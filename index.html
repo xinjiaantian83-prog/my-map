@@ -562,10 +562,11 @@ let watchId=null;
   let radarAngle = 0;
   setInterval(()=>{
   if(radarEnabled && userLatLng){
-    radarAngle += 3;
+    radarAngle += 25;
+    if(radarAngle >= 360) radarAngle = 0;
     updateRadarLine();
   }
-},40);
+},300);
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
