@@ -559,6 +559,7 @@ let watchId=null;
   let popupOpen = false;
   let radarEnabled = true;
   let radarLine = null;
+  let radarAngle = 0;
 
 const shibaIcon=L.icon({
   iconUrl:'shiba.png',
@@ -690,8 +691,12 @@ function setRadiusCircle(m){
   const lat = userLatLng.lat;
   const lng = userLatLng.lng;
 
-  const endLat = lat + 0.01;
-  const endLng = lng + 0.005;
+  radarAngle += 10;
+
+  const distance = 0.002;
+
+  const endLat = lat + Math.cos(radarAngle * Math.PI / 180) * distance;
+  const endLng = lng + Math.sin(radarAngle * Math.PI / 180) * distance;
 
   if(radarLine){
     map.removeLayer(radarLine);
@@ -703,9 +708,9 @@ function setRadiusCircle(m){
       [endLat, endLng]
     ],
     {
-      color:"#ff0000",
-      weight:6,
-      opacity:1
+      color:"#4da6ff",
+      weight:2,
+      opacity:0.9
     }
   ).addTo(map);
 }
