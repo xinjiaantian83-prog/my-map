@@ -645,6 +645,10 @@ function normalizeSpots(arr){
     console.log("スポンサー読み込み無し");
   }
 }
+  function getSponsorForSpot(spot){
+  const key = `${Number(spot.lat).toFixed(6)},${Number(spot.lng).toFixed(6)}`;
+  return sponsorsMap[key] || null;
+}
 
 function renderMarkers(){
   markers.forEach(m=>map.removeLayer(m));
