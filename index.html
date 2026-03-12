@@ -315,7 +315,7 @@ map.on('contextmenu', function(e){
     return;
   }
 
-  // 🐾重複チェック
+// 🐾重複チェック
 for(const p of pawMarkers){
   if(newLatLng.distanceTo(p.getLatLng()) < 30){
     alert("この近くに未確認補給所があります");
@@ -323,7 +323,7 @@ for(const p of pawMarkers){
   }
 }
 
-// 👇ここに追加（本ピン近く禁止）
+// 本ピン近く禁止
 for(const s of spotsRaw){
   if(newLatLng.distanceTo([s.lat, s.lng]) < 30){
     alert("この近くには既に補給所があります");
@@ -331,9 +331,17 @@ for(const s of spotsRaw){
   }
 }
 
-  if(confirm("未確認補給所を報告する？")){
+// 最後に確認
+if(!confirm("未確認補給所を報告する？")){
+  return;
+}
 
-    const m = L.marker([e.latlng.lat, e.latlng.lng], {
+  const sponsor = getSponsorForSpot({
+  lat: e.latlng.lat,
+  lng: e.latlng.lng
+});
+
+const m = L.marker([e.latlng.lat, e.latlng.lng], {
   icon: pawIcon
 }).addTo(map)
 .bindPopup(`
@@ -397,6 +405,13 @@ for(const s of spotsRaw){
       探索隊が報告<br>
       現在調査中
     </div>
+    ${sponsor ? `
+<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+──────<br>
+探索隊サポーター<br>
+<a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
+</div>
+` : ``}
   </div>
 `)
 .openPopup();
