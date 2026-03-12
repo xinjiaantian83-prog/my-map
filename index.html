@@ -558,7 +558,7 @@ let watchId=null;
   let hasCentered = false;
   let popupOpen = false;
 let radarEnabled = true;
-let radarSweep = null;
+let radarSweeps = [];
 let radarAngle = 0;
   setInterval(()=>{
   if(radarEnabled && userLatLng){
@@ -689,46 +689,55 @@ weight:4,
   function updateRadarLine(){
 
   if(!radarEnabled || !userLatLng){
-    if(radarSweep){
-      map.removeLayer(radarSweep);
-      radarSweep = null;
-    }
+    radarSweeps.forEach(s => map.removeLayer(s));
+    radarSweeps = [];
     return;
   }
 
   const lat = userLatLng.lat;
   const lng = userLatLng.lng;
 
-  const sweepWidth = 16; // 扇形の広さ
-  const radius = (currentRadius || 500) * 0.9;
-
-  const startAngle = (radarAngle - sweepWidth) * Math.PI / 180;
-  const endAngle = radarAngle * Math.PI / 180;
-
-  const points = [[lat,lng]];
-
-  for(let a=startAngle; a<=endAngle; a+=0.1){
-
-    const dLat = (radius * Math.cos(a)) / 111320;
-    const dLng = (radius * Math.sin(a)) / (111320 * Math.cos(lat * Math.PI/180));
-
-    points.push([lat + dLat, lng + dLng]);
-  }
-
-  points.push([lat,lng]);
-
-  if(radarSweep){
-    map.removeLayer(radarSweep);
-  }
-
-  radarSweep = L.polygon(points,{
-    color:"#00c96b",
-    fillColor:"#00c96b",
-    fillOpacity:0.18,
-    weight:0
-  }).addTo(map);
+  const sweepWidth = 16;
+  const radius = currentRadius ? currentRadius * 0.9 : null;
+    if(!radius){
+  radarSweeps.forEach(s => map.removeLayer(s));
+  radarSweeps = [];
+  return;
 }
 
+  radarSweeps.forEach(s => map.removeLayer(s));
+  radarSweeps = [];
+
+  const trail = [
+    { offset: 0,  opacity: 0.18 },
+    { offset: 10, opacity: 0.10 },
+    { offset: 20, opacity: 0.05 }
+  ];
+
+  trail.forEach(t => {
+    const startAngle = (radarAngle - sweepWidth - t.offset) * Math.PI / 180;
+    const endAngle   = (radarAngle - t.offset) * Math.PI / 180;
+
+    const points = [[lat, lng]];
+
+    for(let a = startAngle; a <= endAngle; a += 0.1){
+      const dLat = (radius * Math.cos(a)) / 111320;
+      const dLng = (radius * Math.sin(a)) / (111320 * Math.cos(lat * Math.PI / 180));
+      points.push([lat + dLat, lng + dLng]);
+    }
+
+    points.push([lat, lng]);
+
+    const sweep = L.polygon(points,{
+      color:"#00c96b",
+      fillColor:"#00c96b",
+      fillOpacity:t.opacity,
+      weight:0
+    }).addTo(map);
+
+    radarSweeps.push(sweep);
+  });
+}
 function normalizeSpots(arr){
   return arr.map(s=>({
     lat:Number(s.lat),
