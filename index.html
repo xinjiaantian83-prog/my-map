@@ -629,6 +629,22 @@ function normalizeSpots(arr){
     type:s.type||"nky"
   }));
 }
+  async function loadSponsors(){
+  try{
+    const res = await fetch("sponsors.json");
+    const data = await res.json();
+
+    sponsorsMap = {};
+
+    data.forEach(s => {
+      const key = `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)}`;
+      sponsorsMap[key] = s;
+    });
+
+  }catch(e){
+    console.log("スポンサー読み込み無し");
+  }
+}
 
 function renderMarkers(){
   markers.forEach(m=>map.removeLayer(m));
