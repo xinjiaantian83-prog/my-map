@@ -789,12 +789,20 @@ const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
         <div class="spot-title">${title}</div>
 
         <div class="spot-actions">
-          <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
-          ${recordPart}
-        </div>
-      </div>
-    `);
+  <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
+  ${recordPart}
+</div>
 
+${sponsor ? `
+<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+──────<br>
+探索隊サポーター<br>
+<a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
+</div>
+` : ``}
+
+</div>
+`);
     if(clusterEnabled){
   if(s.type==="bul"){
     bulldogCluster.addLayer(m);
