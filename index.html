@@ -29,8 +29,6 @@ body{
 .controls{
   padding:2px 6px;
   flex:0 0 auto;
-}
-
   background:#ffffff;
   box-shadow:0 6px 18px rgba(0,0,0,0.18);
   border-radius:16px;
@@ -283,6 +281,64 @@ button.active{
     box-shadow: 0 0 0 0 rgba(42,127,255,0);
   }
 }
+  .record-card{
+  position:fixed;
+  top:56px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(92vw, 340px);
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.18);
+  z-index:3000;
+  padding:14px 14px 12px;
+}
+
+.hidden{
+  display:none;
+}
+
+.record-card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.record-title{
+  font-weight:800;
+  font-size:16px;
+}
+
+.record-close{
+  border:none;
+  background:transparent;
+  font-size:20px;
+  font-weight:700;
+  padding:0 4px;
+  margin:0;
+  line-height:1;
+}
+
+.record-section{
+  padding:10px 0;
+  border-top:1px solid #eee;
+}
+
+.record-section:first-of-type{
+  border-top:none;
+}
+
+.record-label{
+  font-size:12px;
+  color:#666;
+  margin-bottom:4px;
+}
+
+.record-value{
+  font-size:16px;
+  font-weight:700;
+}
 </style>
 </head>
 
@@ -302,7 +358,7 @@ button.active{
   🐾 発見数 <span id="foundCount">0</span>
 </div>
 -->
-
+<button id="btnRecord">記録</button>
 <button id="btn500" class="range-btn">500m</button>
 <button id="btn1k" class="range-btn">1km</button>
 <button id="btn3k" class="range-btn">3km</button>
@@ -312,7 +368,27 @@ button.active{
 
 <button id="btnReset">発見リセット</button>
 </div>
+<div id="recordCard" class="record-card hidden">
+  <div class="record-card-header">
+    <div class="record-title">🐕 わんわんコイン</div>
+    <button id="btnCloseRecord" class="record-close">×</button>
+  </div>
 
+  <div class="record-section">
+    <div class="record-label">🐾 わんわん探索隊</div>
+    <div class="record-value">発見数 <span id="foundCountCard">0</span></div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">ユーザー名</div>
+    <div class="record-value">未設定</div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">問い合わせ</div>
+    <div class="record-value">準備中</div>
+  </div>
+</div>
 <div id="map"></div>
   <div id="discoverPopup">
 ✨ 補給所発見！<br>
@@ -612,10 +688,11 @@ function goNav(lat,lng){
 function updateCountText(){
   const found = spotsRaw.length;
   const percent = Math.round((found / ESTIMATED_TOTAL) * 100);
-  document.getElementById("count").textContent =
-  `${found} / ${ESTIMATED_TOTAL}（推定） • ${percent}%`;
+  const countEl = document.getElementById("count");
+  if(countEl){
+    countEl.textContent = `${found} / ${ESTIMATED_TOTAL}（推定） • ${percent}%`;
+  }
 }
-
 function recordFind(lat,lng,type){
 
   if(!userLatLng){
@@ -911,6 +988,11 @@ function updateFoundUI(){
   if(el){
     el.textContent = foundCount;
   }
+
+  const cardEl = document.getElementById("foundCountCard");
+  if(cardEl){
+    cardEl.textContent = foundCount;
+  }
 }
 
 function vibrateOnce(){
@@ -1133,7 +1215,15 @@ loadSponsors().then(async () => {
    pawMarkers.push(m);
   });
 });
-
+  const btnRecord = document.getElementById("btnRecord");
+const recordCard = document.getElementById("recordCard");
+const btnCloseRecord = document.getElementById("btnCloseRecord");
+btnRecord.addEventListener("click", () => {
+  recordCard.classList.remove("hidden");
+});
+  btnCloseRecord.addEventListener("click", () => {
+  recordCard.classList.add("hidden");
+});
 </script>
 </body>
 </html>
