@@ -27,6 +27,9 @@ body{
 }
 
 .controls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
   padding:2px 6px;
   flex:0 0 auto;
   background:#ffffff;
@@ -34,6 +37,7 @@ body{
   border-radius:16px;
   margin:6px 6px 0;
 }
+  #btnRecord{ margin-left:auto; }
 
 h2{
   margin:0;
@@ -76,6 +80,18 @@ button.active{
   box-shadow:
     0 2px 6px rgba(0,0,0,0.25),
     inset 0 1px 0 rgba(255,255,255,0.25);
+}
+  #btnRecord{
+  margin-left:auto;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#2b7de9;
+  color:#fff;
 }
   button:active{
   transform:scale(0.95);
@@ -358,7 +374,7 @@ button.active{
   🐾 発見数 <span id="foundCount">0</span>
 </div>
 -->
-<button id="btnRecord">記録</button>
+<button id="btnRecord">🐕</button>
 <button id="btn500" class="range-btn">500m</button>
 <button id="btn1k" class="range-btn">1km</button>
 <button id="btn3k" class="range-btn">3km</button>
