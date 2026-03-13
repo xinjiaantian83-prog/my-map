@@ -37,7 +37,6 @@ body{
   border-radius:16px;
   margin:6px 6px 0;
 }
-  #btnRecord{ margin-left:auto; }
 
 h2{
   margin:0;
@@ -394,7 +393,10 @@ button.active{
     <div class="record-label">🐾 わんわん探索隊</div>
     <div class="record-value">発見数 <span id="foundCountCard">0</span></div>
   </div>
-
+<div class="record-section">
+  <div class="record-label">🏆 探索レベル</div>
+  <div class="record-value" id="levelText">Lv0 野良犬</div>
+</div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
     <div class="record-value">未設定</div>
@@ -1009,6 +1011,39 @@ function updateFoundUI(){
   if(cardEl){
     cardEl.textContent = foundCount;
   }
+  document.getElementById("levelText").textContent = getLevel(foundCount);
+}
+  function getLevel(found){
+
+  if(found === 0){
+    return "Lv0 野良犬";
+  }
+  if(found <= 9){
+    return "Lv1 ルーキー探索犬";
+  }
+  if(found <= 29){
+    return "Lv2 見習い探索犬";
+  }
+  if(found <= 59){
+    return "Lv3 ベテラン探索犬";
+  }
+  if(found <= 99){
+    return "Lv4 補給所ハンター";
+  }
+  if(found <= 199){
+    return "Lv5 エース探索犬";
+  }
+  if(found <= 499){
+    return "Lv6 補給所マスター";
+  }
+  if(found <= 999){
+    return "Lv7 松山制覇";
+  }
+  if(found <= 1499){
+    return "Lv8 暫定神";
+  }
+
+  return "Lv9 チーター";
 }
 
 function vibrateOnce(){
