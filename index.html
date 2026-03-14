@@ -887,6 +887,7 @@ foundSound.play().catch(() => {});
   setTimeout(() => {
     popup.style.display = "none";
   }, 1500);
+  showDiscoverToast();
 
   if (navigator.vibrate) {
     navigator.vibrate(200);
@@ -1514,6 +1515,19 @@ btnRecord.addEventListener("click", () => {
   }
 
 });
+  function showDiscoverToast(){
+
+  const toast = document.getElementById("discoverToast");
+
+  toast.classList.remove("hidden");
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.add("hidden");
+    toast.classList.remove("show");
+  },800);
+
+}
 </script>
   <div id="discoverToast" class="discover-toast hidden">
 🐾発見！<br>+1
