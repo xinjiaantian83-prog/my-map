@@ -38,13 +38,25 @@ h1{
   box-shadow:0 2px 6px rgba(0,0,0,0.08);
   font-weight:700;
 }
+  .current-level{
+  text-align:center;
+  font-weight:700;
+  margin:14px 0 20px;
+  padding:10px;
+  background:#f3f4f6;
+  border-radius:12px;
+  font-size:16px;
+}
 </style>
 </head>
 
 <body>
 
 <button class="back-btn" onclick="history.back()">← 戻る</button>
-
+<div class="current-level">
+現在の探索レベル  
+<span id="currentLevel">Lv0 野良犬</span>
+</div>
 <h1>🏆 探索犬の称号</h1>
 
 <div class="title">Lv0 野良犬（0）</div>
