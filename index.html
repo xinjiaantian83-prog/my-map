@@ -899,8 +899,7 @@ foundSound.play().catch(() => {});
   "wanwan_discovered",
   JSON.stringify([...discovered])
 );
-  foundCount++;
-localStorage.setItem("wanwan_found", foundCount);
+  
 
 todayFound++;
 localStorage.setItem(todayKey, todayFound);
@@ -1153,7 +1152,7 @@ let lastVibeAt=0;
 function keyOf(s){
   return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
 }
-  let foundCount = Number(localStorage.getItem("wanwan_found") || 0);
+  let foundCount = discovered.size;
   const todayKey = "wanwan_today_found";
 const todayDateKey = "wanwan_today_date";
 
@@ -1181,6 +1180,7 @@ function loadTodayFound(){
 let todayFound = loadTodayFound();
 
 function updateFoundUI(){
+  foundCount = discovered.size;
   const percent = ((foundCount / ESTIMATED_TOTAL) * 100).toFixed(1);
 
   const el = document.getElementById("foundCount");
