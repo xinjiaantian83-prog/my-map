@@ -391,7 +391,7 @@ button.active{
 
   <div class="stat-line">
     発見数  
-    <span id="foundCount">0</span> / 1000
+    <span id="foundCount">0</span> / 1500
     （<span id="foundPercent">0</span>%）
   </div>
 
@@ -433,7 +433,7 @@ button.active{
   <div class="record-section">
   <div class="record-label">🐾 わんわん探索隊</div>
   <div class="record-value">
-    発見数 <span id="foundCountCard">0</span> / 1000
+    発見数 <span id="foundCountCard">0</span> / 1500
     （<span id="foundPercentCard">0</span>%）
   </div>
 </div>
@@ -800,6 +800,11 @@ foundSound.play().catch(() => {});
 );
   foundCount++;
 localStorage.setItem("wanwan_found", foundCount);
+
+todayFound++;
+localStorage.setItem(todayKey, todayFound);
+localStorage.setItem(todayDateKey, getTodayString());
+
 updateFoundUI();
   vibrateOnce();
   show(`🐾 発見 +1（合計 ${foundCount}）`);
@@ -1048,18 +1053,76 @@ function keyOf(s){
   return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
 }
   let foundCount = Number(localStorage.getItem("wanwan_found") || 0);
+  const todayKey = "wanwan_today_found";
+const todayDateKey = "wanwan_today_date";
+
+function getTodayString(){
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2,"0");
+  const d = String(now.getDate()).padStart(2,"0");
+  return `${y}-${m}-${d}`;
+}
+
+function loadTodayFound(){
+  const today = getTodayString();
+  const savedDate = localStorage.getItem(todayDateKey);
+
+  if(savedDate !== today){
+    localStorage.setItem(todayDateKey, today);
+    localStorage.setItem(todayKey, "0");
+    return 0;
+  }
+
+  return Number(localStorage.getItem(todayKey) || 0);
+}
+
+let todayFound = loadTodayFound();
 
 function updateFoundUI(){
+  const percent = ((foundCount / ESTIMATED_TOTAL) * 100).toFixed(1);
+
   const el = document.getElementById("foundCount");
   if(el){
     el.textContent = foundCount;
+  }
+
+  const percentEl = document.getElementById("foundPercent");
+  if(percentEl){
+    percentEl.textContent = percent;
+  }
+
+  const todayEl = document.getElementById("todayCount");
+  if(todayEl){
+    todayEl.textContent = todayFound;
   }
 
   const cardEl = document.getElementById("foundCountCard");
   if(cardEl){
     cardEl.textContent = foundCount;
   }
-  document.getElementById("levelText").textContent = getLevel(foundCount);
+
+  const percentCardEl = document.getElementById("foundPercentCard");
+  if(percentCardEl){
+    percentCardEl.textContent = percent;
+  }
+
+  const todayCardEl = document.getElementById("todayCountCard");
+  if(todayCardEl){
+    todayCardEl.textContent = todayFound;
+  }
+
+  const level = getLevel(foundCount);
+
+  const levelEl = document.getElementById("levelText");
+  if(levelEl){
+    levelEl.textContent = level;
+  }
+
+  const levelCardEl = document.getElementById("levelTextCard");
+  if(levelCardEl){
+    levelCardEl.textContent = level;
+  }
 }
   function getLevel(found){
 
