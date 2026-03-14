@@ -359,6 +359,23 @@ button.active{
   color:#666;
   margin-top:2px;
 }
+  .explorer-title{
+  margin:8px 0 4px;
+}
+
+.explorer-stats{
+  font-size:14px;
+  line-height:1.6;
+}
+
+.stat-line{
+  margin:2px 0;
+}
+
+.level-link{
+  cursor:pointer;
+  color:#333;
+}
 </style>
 </head>
 
@@ -366,13 +383,29 @@ button.active{
 
 <div class="controls">
 
-<!--
-<h2>
-  <span class="title-main">🐕 わんわん探索隊</span><br>
-  <span id="count"></span>
+<h2 class="explorer-title">
+  🐾 わんわん探索隊
 </h2>
--->
 
+<div class="explorer-stats">
+
+  <div class="stat-line">
+    発見数  
+    <span id="foundCount">0</span> / 1000
+    （<span id="foundPercent">0</span>%）
+  </div>
+
+  <div class="stat-line">
+    今日の発見  
+    <span id="todayCount">0</span>
+  </div>
+
+  <div class="stat-line level-link" id="levelButton">
+    🏆 探索レベル  
+    <span id="levelText">Lv0 野良犬</span> ›
+  </div>
+
+</div>
 <!--
 <div style="font-weight:bold; margin-top:4px;">
   🐾 発見数 <span id="foundCount">0</span>
@@ -398,12 +431,19 @@ button.active{
   </div>
 
   <div class="record-section">
-    <div class="record-label">🐾 わんわん探索隊</div>
-    <div class="record-value">発見数 <span id="foundCountCard">0</span></div>
+  <div class="record-label">🐾 わんわん探索隊</div>
+  <div class="record-value">
+    発見数 <span id="foundCountCard">0</span> / 1000
+    （<span id="foundPercentCard">0</span>%）
   </div>
+</div>
+  <div class="record-section">
+  <div class="record-label">今日の発見</div>
+  <div class="record-value"><span id="todayCountCard">0</span></div>
+</div>
 <div class="record-section">
   <div class="record-label">🏆 探索レベル</div>
-  <div class="record-value" id="levelText">Lv0 野良犬</div>
+  <div class="record-value" id="levelTextCard">Lv0 野良犬</div>
 </div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
