@@ -532,10 +532,7 @@ button.active{
   </div>
 </div>
 <div id="map"></div>
-  <div id="discoverPopup">
-✨ 補給所発見！<br>
-探索ポイント +1
-</div>
+  
 
 <script>
   const foundSound = new Audio("chieuk-coin-257878.mp3");
@@ -882,11 +879,7 @@ function recordFind(lat,lng,type){
   foundSound.currentTime = 0;
 foundSound.play().catch(() => {});
 
-  const popup = document.getElementById("discoverPopup");
-  popup.style.display = "block";
-  setTimeout(() => {
-    popup.style.display = "none";
-  }, 1500);
+  
   showDiscoverToast();
 
   if (navigator.vibrate) {
