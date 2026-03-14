@@ -1432,7 +1432,7 @@ loadSponsors().then(async () => {
 const recordCard = document.getElementById("recordCard");
 const btnCloseRecord = document.getElementById("btnCloseRecord");
 btnRecord.addEventListener("click", () => {
-  recordCard.classList.remove("hidden");
+  recordCard.classList.toggle("hidden");
 });
   btnCloseRecord.addEventListener("click", () => {
   recordCard.classList.add("hidden");
