@@ -376,6 +376,11 @@ button.active{
   cursor:pointer;
   color:#333;
 }
+  #btnRecord img{
+  width:22px;
+  height:22px;
+  pointer-events:none;
+}
 </style>
 </head>
 
@@ -413,7 +418,9 @@ button.active{
   🐾 発見数 <span id="foundCount">0</span>
 </div>
 -->
-<button id="btnRecord">🐕</button>
+<button id="btnRecord">
+  <img src="paw.png" alt="メニュー">
+</button>
 <button id="btn500" class="range-btn">500m</button>
 <button id="btn1k" class="range-btn">1km</button>
 <button id="btn3k" class="range-btn">3km</button>
@@ -1293,6 +1300,9 @@ pawMarkers = [];
 
   foundCount = 0;
   discovered.clear();
+  todayFound = 0;
+localStorage.removeItem(todayKey);
+localStorage.removeItem(todayDateKey);
 
   updateFoundUI();
   renderMarkers();
