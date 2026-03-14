@@ -433,13 +433,23 @@ button.active{
   z-index:99999;
 }
 .discover-toast.show{
-  animation:discoverPop 0.5s ease;
+  animation:discoverFloat 1.2s ease forwards;
 }
 
 @keyframes discoverPop{
   0%{transform:translate(-50%,-50%) scale(0.8);}
   60%{transform:translate(-50%,-50%) scale(1.15);}
   100%{transform:translate(-50%,-50%) scale(1);}
+}
+  @keyframes discoverFloat{
+  0%{
+    transform:translate(-50%,-50%);
+    opacity:1;
+  }
+  100%{
+    transform:translate(-50%,-90%);
+    opacity:0;
+  }
 }
 
 .hidden{
