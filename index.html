@@ -106,6 +106,24 @@ button.active{
   button:active{
   transform:scale(0.95);
 }
+  #btnRecord{
+  position:relative;
+}
+
+.record-text{
+  position:absolute;
+  bottom:2px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:11px;
+  font-weight:bold;
+  color:white;
+  text-shadow:
+    0 0 2px #000,
+    0 0 2px #000,
+    0 0 2px #000;
+  pointer-events:none;
+}
 #map{
   flex:1 1 auto;
   min-height:0;
@@ -387,11 +405,7 @@ button.active{
   cursor:pointer;
   color:#333;
 }
-  #btnRecord img{
-  width:22px;
-  height:22px;
-  pointer-events:none;
-}
+  
 </style>
 </head>
 
@@ -431,6 +445,7 @@ button.active{
 -->
 <button id="btnRecord">
   <img src="paw.png" alt="メニュー">
+  <span class="record-text">記録</span>
 </button>
 <button id="btn500" class="range-btn">500m</button>
 <button id="btn1k" class="range-btn">1km</button>
