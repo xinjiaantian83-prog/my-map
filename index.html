@@ -495,7 +495,7 @@ button.active{
 </div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
-    <div class="record-value">未設定</div>
+    <div class="record-value level-link" id="userNameText">未設定</div>
   </div>
 
   <div class="record-section">
@@ -512,6 +512,29 @@ button.active{
 <script>
   const foundSound = new Audio("chieuk-coin-257878.mp3");
 const ESTIMATED_TOTAL = 1500;
+  function generateInternalUserId(){
+  return "wwc_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+}
+
+function generateDefaultUserName(){
+  const num = Math.floor(1000 + Math.random() * 9000);
+  return "探索隊" + num;
+}
+
+const internalUserIdKey = "wanwan_internal_user_id";
+const userNameKey = "wanwan_user_name";
+
+let internalUserId = localStorage.getItem(internalUserIdKey);
+if(!internalUserId){
+  internalUserId = generateInternalUserId();
+  localStorage.setItem(internalUserIdKey, internalUserId);
+}
+
+let userName = localStorage.getItem(userNameKey);
+if(!userName){
+  userName = generateDefaultUserName();
+  localStorage.setItem(userNameKey, userName);
+}
 
 function setRangeActive(btn){
   document.querySelectorAll(".range-btn")
@@ -1166,7 +1189,10 @@ function updateFoundUI(){
   if(levelEl){
     levelEl.textContent = level;
   }
-
+const userEl = document.getElementById("userNameText");
+if(userEl){
+  userEl.textContent = userName;
+}
   const levelCardEl = document.getElementById("levelTextCard");
 if(levelCardEl){
   levelCardEl.textContent = level + " 〉";
@@ -1445,6 +1471,18 @@ btnRecord.addEventListener("click", () => {
       recordCard.classList.add("hidden");
     }
 
+  }
+
+});
+  document.getElementById("userNameText").addEventListener("click", () => {
+
+  const newName = prompt("ユーザー名を入力");
+
+  if(newName && newName.trim() !== ""){
+    userName = newName.trim();
+    localStorage.setItem("wanwan_user_name", userName);
+
+    document.getElementById("userNameText").textContent = userName;
   }
 
 });
