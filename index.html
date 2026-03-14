@@ -482,7 +482,7 @@ button.active{
 </div>
 <div class="record-section">
   <div class="record-label">🏆 探索レベル</div>
-  <div class="record-value" id="levelTextCard">Lv0 野良犬</div>
+  <div class="record-value"level-link id="levelTextCard">Lv0 野良犬</div>
 </div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
@@ -1427,6 +1427,11 @@ btnRecord.addEventListener("click", () => {
 });
   btnCloseRecord.addEventListener("click", () => {
   recordCard.classList.add("hidden");
+});
+  document.querySelectorAll('.level-link').forEach(el => {
+  el.addEventListener('click', () => {
+    window.location.href = "titles.html";
+  });
 });
 </script>
 </body>
