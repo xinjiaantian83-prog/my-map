@@ -502,6 +502,8 @@ button.active{
 <button id="btnAll" class="range-btn active">全部</button>
 <button id="btnLocate">位置</button>
 <button id="btnCluster" class="active">集約</button>
+<input id="spotSearch" type="text" placeholder="WNWN-0001">
+<button id="btnSearch">🔍</button>
 
 <button id="btnReset">発見リセット</button>
 </div>
@@ -968,7 +970,7 @@ function renderMarkers(){
   bulldogCluster.clearLayers();
   pomeCluster.clearLayers();
 
-  spotsRaw.forEach(s=>{
+  spotsRaw.forEach((s,i)=>{
     if(currentRadius && userLatLng){
       const d=userLatLng.distanceTo([s.lat,s.lng]);
       if(d>currentRadius) return;
@@ -1023,6 +1025,7 @@ m.on("popupclose", ()=> popupOpen = false);
     let title = "🐕 シバ自販機";
     if(s.type==="bul") title = "🐶 ブル自販機";
     if(s.type==="pom") title = "🐩 ポメ自販機";
+    const spotId = s.id || "";
 
     let recordPart = "";
 
@@ -1087,6 +1090,9 @@ const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
         </button>
 
         <div class="spot-title">${title}</div>
+        <div style="font-size:12px;color:#777;margin-bottom:8px;">
+  ${spotId}
+</div>
 
         <div class="spot-actions">
   <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
@@ -1530,8 +1536,23 @@ setTimeout(()=>{
   toast.classList.add("hidden");
   toast.classList.remove("show");
 },1500);
+document.getElementById("btnSearch").addEventListener("click", () => {
 
-}
+  const id = document.getElementById("spotSearch").value.trim().toUpperCase();
+
+  if(!id) return;
+
+  const spot = spotsRaw.find(s => s.id === id);
+
+  if(!spot){
+    alert("見つかりません");
+    return;
+  }
+
+  map.setView([spot.lat, spot.lng], 18);
+
+});
+
 </script>
   <div id="discoverToast" class="discover-toast hidden">
 🐾発見！<br>+1
