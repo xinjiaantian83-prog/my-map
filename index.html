@@ -1437,7 +1437,17 @@ btnRecord.addEventListener("click", () => {
   btnCloseRecord.addEventListener("click", () => {
   recordCard.classList.add("hidden");
 });
-  
+  document.addEventListener("click", function(e){
+
+  if(!recordCard.classList.contains("hidden")){
+
+    if(!recordCard.contains(e.target) && !btnRecord.contains(e.target)){
+      recordCard.classList.add("hidden");
+    }
+
+  }
+
+});
 </script>
 </body>
 </html>
