@@ -1559,7 +1559,22 @@ btnRecord.addEventListener("click", () => {
 }
 function copySpotId(id){
 navigator.clipboard.writeText(id);
-showDiscoverToast();
+
+const toast = document.getElementById("discoverToast");
+toast.textContent = "番号コピー";
+
+toast.classList.remove("hidden");
+
+setTimeout(()=>{
+toast.classList.add("show");
+},10);
+
+setTimeout(()=>{
+toast.classList.add("hidden");
+toast.classList.remove("show");
+toast.textContent = "🐾発見！ +1";
+},1500);
+
 }
 document.getElementById("btnSearch").addEventListener("click", () => {
 
