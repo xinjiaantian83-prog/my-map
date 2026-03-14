@@ -69,6 +69,29 @@ h1{
 <div class="title">Lv7 松山制覇（500）</div>
 <div class="title">Lv8 ？？？</div>
 <div class="title">Lv9 ？？？</div>
+<script>
 
+function getLevel(found){
+
+  if(found >= 1500) return "Lv9 チーター";
+  if(found >= 1000) return "Lv8 暫定神";
+  if(found >= 500) return "Lv7 松山制覇";
+  if(found >= 200) return "Lv6 補給所マスター";
+  if(found >= 100) return "Lv5 エース探索犬";
+  if(found >= 60) return "Lv4 補給所ハンター";
+  if(found >= 30) return "Lv3 ベテラン探索犬";
+  if(found >= 10) return "Lv2 見習い探索犬";
+  if(found >= 1) return "Lv1 ルーキー探索犬";
+
+  return "Lv0 野良犬";
+}
+
+const foundCount = parseInt(localStorage.getItem("wanwan_found_count") || 0);
+
+const level = getLevel(foundCount);
+
+document.getElementById("currentLevel").textContent = level;
+
+</script>
 </body>
 </html>
