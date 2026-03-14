@@ -30,7 +30,8 @@ body{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
-  padding:2px 6px;
+  gap:4px;
+  padding:6px 8px;
   flex:0 0 auto;
   background:#ffffff;
   box-shadow:0 6px 18px rgba(0,0,0,0.18);
@@ -451,7 +452,21 @@ button.active{
     opacity:0;
   }
 }
+#spotSearch{
+  width:140px;
+  max-width:140px;
+  padding:6px 10px;
+  margin:2px 4px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:14px;
+  box-sizing:border-box;
+}
 
+#btnSearch{
+  padding:6px 10px;
+  margin:2px 4px;
+}
 .hidden{
   display:none;
 }
@@ -936,9 +951,10 @@ function setRadiusCircle(m){
 
 function normalizeSpots(arr){
   return arr.map(s=>({
-    lat:Number(s.lat),
-    lng:Number(s.lng),
-    type:s.type||"nky"
+    id: s.id || "",
+    lat: Number(s.lat),
+    lng: Number(s.lng),
+    type: s.type || "nky"
   }));
 }
   async function loadSponsors(){
@@ -1090,11 +1106,13 @@ const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
         </button>
 
         <div class="spot-title">${title}</div>
-        <div style="font-size:12px;color:#777;margin-bottom:8px;">
+<div style="font-size:12px;color:#777;margin-bottom:6px;">
   ${spotId}
 </div>
 
-        <div class="spot-actions">
+</div>
+
+<div class="spot-actions">
   <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
   ${recordPart}
 </div>
