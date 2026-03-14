@@ -419,6 +419,34 @@ button.active{
   font-size:14px;
   font-weight:700;
 }
+  .discover-toast{
+  position:fixed;
+  top:45%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(1);
+  background:rgba(255,255,255,0.9);
+  padding:12px 18px;
+  border-radius:14px;
+  font-weight:700;
+  text-align:center;
+  font-size:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  pointer-events:none;
+}
+
+.discover-toast.show{
+  animation:discoverPop 0.5s ease;
+}
+
+@keyframes discoverPop{
+  0%{transform:translate(-50%,-50%) scale(0.8);}
+  60%{transform:translate(-50%,-50%) scale(1.15);}
+  100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+.hidden{
+  display:none;
+}
 </style>
 </head>
 
@@ -1487,5 +1515,8 @@ btnRecord.addEventListener("click", () => {
 
 });
 </script>
+  <div id="discoverToast" class="discover-toast hidden">
+🐾発見！<br>+1
+</div>
 </body>
 </html>
