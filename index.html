@@ -424,14 +424,16 @@ button.active{
   top:45%;
   left:50%;
   transform:translate(-50%,-50%) scale(1);
-  background:rgba(255,255,255,0.9);
-  padding:12px 18px;
+  background:red;
+  color:#fff;
+  padding:16px 22px;
   border-radius:14px;
   font-weight:700;
   text-align:center;
-  font-size:16px;
+  font-size:22px;
   box-shadow:0 4px 12px rgba(0,0,0,0.15);
   pointer-events:none;
+  z-index:99999;
 }
 
 .discover-toast.show{
@@ -1513,12 +1515,15 @@ btnRecord.addEventListener("click", () => {
   const toast = document.getElementById("discoverToast");
 
   toast.classList.remove("hidden");
-  toast.classList.add("show");
 
-  setTimeout(()=>{
-    toast.classList.add("hidden");
-    toast.classList.remove("show");
-  },1500);
+setTimeout(()=>{
+  toast.classList.add("show");
+},10);
+
+setTimeout(()=>{
+  toast.classList.add("hidden");
+  toast.classList.remove("show");
+},1500);
 
 }
 </script>
