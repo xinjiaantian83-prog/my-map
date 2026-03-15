@@ -1517,9 +1517,10 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
   document.getElementById("btnResetFloating").addEventListener("click",()=>{
   if(!confirm("発見記録をリセットしますか？")) return;
 
-  localStorage.removeItem("wanwan_found");
   localStorage.removeItem("wanwan_discovered");
   localStorage.removeItem("wanwan_paws");
+  localStorage.removeItem("wanwan_today_found");
+  localStorage.removeItem("wanwan_today_date");
 
   pawData = [];
   pawMarkers.forEach(m => map.removeLayer(m));
@@ -1527,8 +1528,6 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
 
   discovered.clear();
   todayFound = 0;
-  localStorage.removeItem(todayKey);
-  localStorage.removeItem(todayDateKey);
 
   updateFoundUI();
   renderMarkers();
