@@ -59,9 +59,9 @@ h2{
 }
 
 button{
-  padding:3px 7px;
+  padding:5px 9px;
   margin:2px 1px;
-  font-size:10px;
+  font-size:11px;
 
   border-radius:18px;
   border:none;
@@ -457,8 +457,8 @@ button.active{
   }
 }
 #spotSearch{
-  width:140px;
-  max-width:140px;
+  width:160px;
+  max-width:160px;
   padding:6px 10px;
   margin:2px 4px;
   border:1px solid #ddd;
@@ -468,8 +468,13 @@ button.active{
 }
 
 #btnSearch{
-  padding:6px 10px;
-  margin:2px 4px;
+  padding:6px 8px;
+  margin:2px 2px;
+}
+
+#btnClearSearch{
+  padding:6px 8px;
+  margin:2px 0;
 }
 .hidden{
   display:none;
@@ -521,10 +526,11 @@ button.active{
 <button id="btnAll" class="range-btn active">全部</button>
 <button id="btnLocate">位置</button>
 <button id="btnCluster" class="active">集約</button>
-<input id="spotSearch" type="text" placeholder="WNWN-0001">
+<input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
+<button id="btnClearSearch">✕</button>
 <button id="btnSearch">🔍</button>
 
-<button id="btnReset">発見リセット</button>
+
 </div>
 <div id="recordCard" class="record-card hidden">
   <div class="record-card-header">
@@ -1013,7 +1019,7 @@ if(s.type==="pom")
 dogIcon=`<img src="pome.png" style="height:26px;vertical-align:-4px;">`;
 recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録</button>`;
     }else{
-      recordPart = `<div class="spot-note" style="font-size:13px;color:#777;margin-top:10px;text-align:center;">近くに行くと記録できます</div>`;
+      recordPart = `<div class="spot-note" style="font-size:13px;color:#777;margin-top:10px;text-align:center;">半径30m以内で記録できます</div>`;
     }
 const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
     m.bindPopup(`
@@ -1319,27 +1325,7 @@ if(currentRadius!=null) setRadiusCircle(currentRadius);
 );
 });
 
-document.getElementById("btnReset").addEventListener("click",()=>{
-  if(!confirm("発見記録をリセットしますか？")) return;
 
-  localStorage.removeItem("wanwan_found");
-  localStorage.removeItem("wanwan_discovered");
-  localStorage.removeItem("wanwan_paws");
-pawData = [];
-pawMarkers.forEach(m => map.removeLayer(m));
-pawMarkers = [];
-
-  foundCount = 0;
-  discovered.clear();
-  todayFound = 0;
-localStorage.removeItem(todayKey);
-localStorage.removeItem(todayDateKey);
-
-  updateFoundUI();
-  renderMarkers();
-
-  alert("発見記録をリセットしました");
-});
 loadSponsors().then(async () => {
   await loadSpots();
   updateFoundUI();
@@ -1488,7 +1474,6 @@ toast.textContent = "🐾発見！ +1";
 
 }
 document.getElementById("btnSearch").addEventListener("click", () => {
-
   const id = document.getElementById("spotSearch").value.trim().toUpperCase();
 
   if(!id) return;
@@ -1501,7 +1486,17 @@ document.getElementById("btnSearch").addEventListener("click", () => {
   }
 
   map.setView([spot.lat, spot.lng], 18);
+});
 
+document.getElementById("btnClearSearch").addEventListener("click", () => {
+  const input = document.getElementById("spotSearch");
+  input.value = "";
+  input.focus();
+});
+  document.getElementById("spotSearch").addEventListener("keypress", (e) => {
+  if(e.key === "Enter"){
+    document.getElementById("btnSearch").click();
+  }
 });
 </script>
   <div id="discoverToast" class="discover-toast hidden">
