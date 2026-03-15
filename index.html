@@ -1011,77 +1011,25 @@ m.on("popupclose", ()=> popupOpen = false);
 const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
     m.bindPopup(`
       <div class="spot-card">
-        <button class="card-close" onclick="closePopup()" aria-label="閉じる">
-          <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
-            <g transform="rotate(45 32 32)">
-              <rect x="20" y="28" width="24" height="8" rx="4"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="18" cy="26" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="18" cy="38" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="46" cy="26" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="46" cy="38" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-            </g>
+  <div class="spot-title">${title}</div>
 
-            <g transform="rotate(-45 32 32)">
-              <rect x="20" y="28" width="24" height="8" rx="4"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="18" cy="26" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="18" cy="38" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="46" cy="26" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-              <circle cx="46" cy="38" r="6"
-                fill="#f5f1e8"
-                stroke="#7a6a58"
-                stroke-width="3"/>
-            </g>
-          </svg>
-        </button>
+  <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">
+    <span>${spotId}</span>
+    <span onclick="copySpotId('${spotId}')" style="cursor:pointer;font-size:14px;">📋</span>
+  </div>
 
-        <div class="spot-title">${title}</div>
-<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">
-  <span>${spotId}</span>
-  <span onclick="copySpotId('${spotId}')" style="cursor:pointer;font-size:14px;">📋</span>
-</div>
+  <div class="spot-actions">
+    <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
+    ${recordPart}
+  </div>
 
-</div>
-
-<div class="spot-actions" style="display:flex;flex-direction:column;gap:8px;">
-  <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
-  ${recordPart}
-</div>
-
-${sponsor ? `
-<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
-──────<br>
-探索隊サポーター<br>
-<a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
-</div>
-` : ``}
-
+  ${sponsor ? `
+  <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+    ──────<br>
+    探索隊サポーター<br>
+    <a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
+  </div>
+  ` : ``}
 </div>
 `);
     if(clusterEnabled){
