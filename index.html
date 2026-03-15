@@ -351,18 +351,20 @@ button.active{
 }
 
 .record-card-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  position:relative;
   margin-bottom:10px;
 }
 
 .record-title{
   font-weight:800;
   font-size:16px;
+  text-align:center;
 }
-
 .record-close{
+  position:absolute;
+  right:12px;
+  top:12px;
+
   border:none;
   background:transparent;
   font-size:20px;
@@ -371,7 +373,6 @@ button.active{
   margin:0;
   line-height:1;
 }
-
 .record-section{
   padding:10px 0;
   border-top:1px solid #eee;
@@ -529,10 +530,11 @@ button.active{
 }
   .title-banner{
   display:block;
-  margin:0 auto 8px auto;
-  width:140px;
-  max-width:60%;
+  margin:10px auto 6px auto;
+  width:200px;
+  max-width:80%;
   height:auto;
+  border-radius:10px;
 }
 </style>
 </head>
