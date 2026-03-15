@@ -83,7 +83,6 @@ button.active{
     inset 0 1px 0 rgba(255,255,255,0.25);
 }
   #btnRecord{
-  margin-left:auto;
   width:56px;
   height:56px;
   border-radius:50%;
@@ -577,11 +576,23 @@ button.active{
   </div>
 
   <div class="record-section">
+
   <div class="record-label">🐾 わんわん探索隊</div>
+
+  <div class="record-label">あなたの発見</div>
   <div class="record-value">
-    発見数 <span id="foundCountCard">0</span> / 1500
+    <span id="foundCountCard">0</span> / 1500
     （<span id="foundPercentCard">0</span>%）
   </div>
+
+  <div class="record-label" style="margin-top:10px;">
+  🌍 全体発見
+</div>
+<div class="record-value">
+  <span id="globalFound">0</span> / 推定1500
+  （<span id="globalPercent">0</span>%）
+</div>
+
 </div>
   <div class="record-section">
   <div class="record-label">今日の発見</div>
@@ -1172,7 +1183,18 @@ function updateFoundUI(){
   if(percentEl){
     percentEl.textContent = percent;
   }
+const total = spotsRaw.length;
+const globalPercent = ((total / ESTIMATED_TOTAL) * 100).toFixed(1);
 
+const globalEl = document.getElementById("globalFound");
+if(globalEl){
+  globalEl.textContent = total;
+}
+
+const globalPercentEl = document.getElementById("globalPercent");
+if(globalPercentEl){
+  globalPercentEl.textContent = globalPercent;
+}
   const todayEl = document.getElementById("todayCount");
   if(todayEl){
     todayEl.textContent = todayFound;
