@@ -637,8 +637,12 @@ button.active{
   </div>
 
   <div class="progress-wrap">
-    <div id="globalProgressBar" class="progress-bar-fill"></div>
-  </div>
+  <div id="globalProgressBar" class="progress-bar-fill"></div>
+</div>
+
+<div id="remainText" class="remain-text">
+松山制覇まであと 0 台 🐾
+</div>
 
 </div>
   <div class="record-section">
@@ -1246,6 +1250,11 @@ if(globalPercentEl){
 if(bar){
   bar.style.width = globalPercent + "%";
 }
+  const remain = Math.max(ESTIMATED_TOTAL - total, 0);
+  const remainEl = document.getElementById("remainText");
+  if(remainEl){
+  remainEl.textContent = "松山制覇まであと " + remain + " 台 🐾";
+    }
   const todayEl = document.getElementById("todayCount");
   if(todayEl){
     todayEl.textContent = todayFound;
