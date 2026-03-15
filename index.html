@@ -495,6 +495,18 @@ button.active{
 
   box-shadow:0 2px 6px rgba(0,0,0,0.3);
 }
+  .controls-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+
+.bottom-row input{
+  flex:1;
+  padding:4px 6px;
+  font-size:12px;
+}
 </style>
 </head>
 
@@ -532,19 +544,25 @@ button.active{
   🐾 発見数 <span id="foundCount">0</span>
 </div>
 -->
-<button id="btnRecord">
-  <img src="paw.png" alt="メニュー">
-  <span class="record-text">記録</span>
-</button>
-<button id="btn500" class="range-btn">500m</button>
-<button id="btn1k" class="range-btn">1km</button>
-<button id="btn3k" class="range-btn">3km</button>
-<button id="btnAll" class="range-btn active">全部</button>
-<button id="btnLocate">位置</button>
-<button id="btnCluster" class="active">集約</button>
-<input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
-<button id="btnClearSearch">✕</button>
-<button id="btnSearch">🔍</button>
+<div class="controls-row top-row">
+  <button id="btn500" class="range-btn">500m</button>
+  <button id="btn1k" class="range-btn">1km</button>
+  <button id="btn3k" class="range-btn">3km</button>
+  <button id="btnAll" class="range-btn active">全部</button>
+  <button id="btnLocate">位置</button>
+  <button id="btnCluster" class="active">集約</button>
+</div>
+
+<div class="controls-row bottom-row">
+  <button id="btnRecord">
+    <img src="paw.png" alt="メニュー">
+    <span class="record-text">記録</span>
+  </button>
+
+  <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
+  <button id="btnClearSearch">✕</button>
+  <button id="btnSearch">🔍</button>
+</div>
 
 
 </div>
