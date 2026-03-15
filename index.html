@@ -584,7 +584,10 @@ button.active{
 </div>
 <div id="map"></div>
   
-
+<div id="discoverToast" class="discover-toast hidden">
+🐾発見！<br>+1
+</div>
+<button id="btnResetFloating">リセット</button>
 <script>
   const foundSound = new Audio("chieuk-coin-257878.mp3");
 const ESTIMATED_TOTAL = 1500;
@@ -1535,9 +1538,5 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
   alert("発見記録をリセットしました");
 });
 </script>
-  <div id="discoverToast" class="discover-toast hidden">
-🐾発見！<br>+1
-</div>
-  <button id="btnResetFloating">リセット</button>
 </body>
 </html>
