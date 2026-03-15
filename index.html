@@ -1050,7 +1050,7 @@ m.on("popupclose", ()=> popupOpen = false);
     }else if(canRecord){
       recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">発見を記録</button>`;
     }else{
-      recordPart = `<div class="spot-note">近くに行くと記録できます</div>`;
+      recordPart = `<div class="spot-note" style="font-size:13px;color:#777;margin-top:10px;text-align:center;">近くに行くと記録できます</div>`;
     }
 const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
     m.bindPopup(`
