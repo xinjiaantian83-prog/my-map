@@ -527,6 +527,11 @@ button.active{
   border-radius:999px;
   transition:width 0.4s ease;
 }
+  .title-banner{
+  display:block;
+  margin:0 auto 6px auto;
+  width:180px;
+}
 </style>
 </head>
 
@@ -587,13 +592,26 @@ button.active{
 
 </div>
 <div id="recordCard" class="record-card hidden">
+
   <div class="record-card-header">
-    <div class="record-title">
-  🐕 わんわんコイン
-  <div class="record-subtitle">松山ワンコイン自販機検索マップ</div>
-</div>
+
     <button id="btnCloseRecord" class="record-close">×</button>
+
+    <div class="record-title">
+
+      <img src="dogs_banner.png" class="title-banner">
+
+      わんわんコイン
+
+      <div class="record-subtitle">
+        松山ワンコイン自販機検索マップ
+      </div>
+
+    </div>
+
   </div>
+
+  <img src="dogs_characters.png" class="title-characters">
 
   <div class="record-section">
 
@@ -605,16 +623,20 @@ button.active{
     （<span id="foundPercentCard">0</span>%）
   </div>
 
-  <div class="record-label" style="margin-top:10px;">
-  🌍 全体発見
 </div>
-<div class="record-value">
-  <span id="globalFound">0</span> / 推定1500
-  （<span id="globalPercent">0</span>%）
-</div>
-<div class="progress-wrap">
-  <div id="globalProgressBar" class="progress-bar-fill"></div>
-</div>
+
+<div class="record-section">
+
+  <div class="record-label">🌍 全体発見</div>
+  <div class="record-value">
+    <span id="globalFound">0</span> / 推定1500
+    （<span id="globalPercent">0</span>%）
+  </div>
+
+  <div class="progress-wrap">
+    <div id="globalProgressBar" class="progress-bar-fill"></div>
+  </div>
+
 </div>
   <div class="record-section">
   <div class="record-label">今日の発見</div>
