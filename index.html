@@ -794,7 +794,10 @@ const m = L.marker([e.latlng.lat, e.latlng.lng], {
 <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
 ──────<br>
 探索隊サポーター<br>
-<a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
+<a href="${sponsor.url}" target="_blank"
+onclick="gtag('event','sponsor_click',{sponsor:'${sponsor.name}'})">
+${sponsor.name}
+</a>
 </div>
 ` : ``}
   </div>
