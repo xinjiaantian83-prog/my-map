@@ -265,9 +265,8 @@ button.active{
 }
 
 .spot-btn-go{
-  background: #f3f7ff;
+  background: #efe3c9;
 }
-
 .spot-btn-record{
   background: #fff4d6;
 }
@@ -656,55 +655,7 @@ const m = L.marker([e.latlng.lat, e.latlng.lng], {
 }).addTo(map)
 .bindPopup(`
   <div class="spot-card">
-    <button class="card-close" onclick="closePopup()" aria-label="閉じる">
-      <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
-        <g transform="rotate(45 32 32)">
-          <rect x="20" y="28" width="24" height="8" rx="4"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="18" cy="26" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="18" cy="38" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="46" cy="26" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="46" cy="38" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-        </g>
-        <g transform="rotate(-45 32 32)">
-          <rect x="20" y="28" width="24" height="8" rx="4"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="18" cy="26" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="18" cy="38" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="46" cy="26" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-          <circle cx="46" cy="38" r="6"
-            fill="#f5f1e8"
-            stroke="#7a6a58"
-            stroke-width="3"/>
-        </g>
-      </svg>
-    </button>
-
+    
     <div class="spot-title">🐾 未確認補給所</div>
 
     <div class="spot-actions">
