@@ -1004,7 +1004,11 @@ m.on("popupclose", ()=> popupOpen = false);
     if(isFound){
       recordPart = `<div class="spot-note">✅ 記録済み</div>`;
     }else if(canRecord){
-      recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">発見を記録</button>`;
+      let dogIcon = "🐕";
+if(s.type==="bul") dogIcon="🐶";
+if(s.type==="pom") dogIcon="🐩";
+
+recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録</button>`;
     }else{
       recordPart = `<div class="spot-note" style="font-size:13px;color:#777;margin-top:10px;text-align:center;">近くに行くと記録できます</div>`;
     }
