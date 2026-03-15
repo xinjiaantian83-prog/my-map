@@ -1555,9 +1555,15 @@ btnRecord.addEventListener("click", () => {
 });
   document.addEventListener("click", function(e){
 
+  const policyPage = document.getElementById("policyPage");
+
   if(!recordCard.classList.contains("hidden")){
 
-    if(!recordCard.contains(e.target) && !btnRecord.contains(e.target)){
+    if(
+      !recordCard.contains(e.target) &&
+      !btnRecord.contains(e.target) &&
+      !policyPage.contains(e.target)
+    ){
       recordCard.classList.add("hidden");
     }
 
