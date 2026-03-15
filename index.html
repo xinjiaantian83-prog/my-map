@@ -676,6 +676,10 @@ button.active{
     <div class="record-label">問い合わせ</div>
     <div class="record-value">準備中</div>
   </div>
+  <div class="record-section">
+  <div class="record-label">運営方針</div>
+  <div class="record-value" onclick="showPolicy()">見る</div>
+</div>
 </div>
 <div id="map"></div>
   
@@ -1652,6 +1656,67 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
 
   alert("発見記録をリセットしました");
 });
+  function showPolicy(){
+  document.getElementById("policyPage").classList.remove("hidden");
+  document.getElementById("recordCard").classList.add("hidden");
+}
+
+function closePolicy(){
+  document.getElementById("policyPage").classList.add("hidden");
+}
 </script>
+  <div id="policyPage" class="hidden" style="
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#fff;
+  z-index:4000;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:20px 16px 28px;
+">
+  <button class="back-btn" onclick="closePolicy()">← 戻る</button>
+
+  <h2 style="margin:0 0 12px;font-size:22px;">🐾 わんわんコイン 運営方針</h2>
+
+  <p style="font-size:14px;line-height:1.8;color:#333;">
+    わんわんコインは、松山市周辺の格安自販機を探索・共有するコミュニティ型マップです。<br>
+    利用者が安全に楽しめる環境を維持するため、以下の方針で運営します。
+  </p>
+
+  <h3 style="margin-top:18px;font-size:16px;">■ 安全について</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">
+    ・歩きスマホ、ながらスマホは危険です。周囲の安全を確認して利用してください。<br>
+    ・交通ルールを守り、安全を最優先に行動してください。<br>
+    ・私有地への無断侵入は禁止です。
+  </p>
+
+  <h3 style="margin-top:18px;font-size:16px;">■ 発見報告について</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">
+    ・道路や公共スペースから確認できる自販機のみ記録してください。<br>
+    ・実際に確認した自販機のみ報告してください。<br>
+    ・重複報告は不要です。
+  </p>
+
+  <h3 style="margin-top:18px;font-size:16px;">■ 仮ピン（ユーザー報告）について</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">
+    ・仮ピンは未確認の自販機情報として扱われます。<br>
+    ・明らかな誤情報や不適切な報告は、運営の判断で削除する場合があります。
+  </p>
+
+  <h3 style="margin-top:18px;font-size:16px;">■ データについて</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">
+    ・本サービスの情報は非公式のユーザー共有データです。<br>
+    ・内容の正確性や完全性を保証するものではありません。
+  </p>
+
+  <h3 style="margin-top:18px;font-size:16px;">■ サービスについて</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">
+    ・本サービスは予告なく仕様変更・更新を行う場合があります。<br>
+    ・探索は自己責任で行ってください。
+  </p>
+</div>
 </body>
 </html>
