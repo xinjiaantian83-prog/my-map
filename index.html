@@ -1632,6 +1632,15 @@ document.getElementById("btnSearch").addEventListener("click", () => {
     return;
   }
 
+  currentRadius = null;
+
+  if(userCircle){
+    map.removeLayer(userCircle);
+    userCircle = null;
+  }
+
+  setRangeActive(document.getElementById("btnAll"));
+  renderMarkers();
   map.setView([spot.lat, spot.lng], 18);
 });
 
