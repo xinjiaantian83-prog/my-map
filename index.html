@@ -686,7 +686,7 @@ button.active{
 <div id="discoverToast" class="discover-toast hidden">
 🐾発見！<br>+1
 </div>
-<button id="btnResetFloating">リセット</button>
+<button id="btnResetFloating" style="display:none;">リセット</button>
 <script>
   const foundSound = new Audio("chieuk-coin-257878.mp3");
 const ESTIMATED_TOTAL = 1500;
@@ -1682,6 +1682,36 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
 
   alert("発見記録をリセットしました");
 });
+
+
+// ===== 管理者モードここから =====
+const btnResetFloating = document.getElementById("btnResetFloating");
+
+// 管理者フラグ
+const isAdmin = localStorage.getItem("wanwan_admin") === "1";
+
+// 初期表示制御
+if(isAdmin){
+  btnResetFloating.style.display = "block";
+} else {
+  btnResetFloating.style.display = "none";
+}
+
+// URLでON/OFF切替
+if(location.hash === "#admin-on"){
+  localStorage.setItem("wanwan_admin", "1");
+  btnResetFloating.style.display = "block";
+  alert("管理者モードON");
+}
+
+if(location.hash === "#admin-off"){
+  localStorage.removeItem("wanwan_admin");
+  btnResetFloating.style.display = "none";
+  alert("管理者モードOFF");
+}
+// ===== 管理者モードここまで =====
+
+  
   function showPolicy(){
   document.getElementById("policyPage").classList.remove("hidden");
 }
