@@ -1710,7 +1710,7 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
 const btnResetFloating = document.getElementById("btnResetFloating");
 
 // 管理者フラグ
-const isAdmin = true;
+const isAdmin = localStorage.getItem("wanwan_admin") === "1";
 
 // 初期表示制御
 if(isAdmin){
