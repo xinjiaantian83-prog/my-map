@@ -555,6 +555,28 @@ button.active{
 
 <body>
 
+<div id="loadingOverlay" style="
+position:fixed;
+top:0;left:0;right:0;bottom:0;
+background:#fff;
+z-index:99999;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+font-family:sans-serif;
+">
+
+<div style="font-size:22px;font-weight:bold;margin-bottom:10px;">
+🐾 読み込み中…
+</div>
+
+<div style="font-size:14px;color:#666;text-align:center;line-height:1.6;">
+松山マップを準備中<br>
+ホーム画面に追加すると便利です
+</div>
+
+</div>
 <div class="controls">
 
 <!--
@@ -1719,6 +1741,18 @@ if(location.hash === "#admin-off"){
 function closePolicy(){
   document.getElementById("policyPage").classList.add("hidden");
   document.getElementById("recordCard").classList.remove("hidden");
+}
+  }
+}
+}
+}
+  }
+}
+}
+}
+}
+}
+}
 }
 </script>
   <div id="policyPage" class="hidden" style="
