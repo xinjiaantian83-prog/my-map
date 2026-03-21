@@ -730,13 +730,15 @@ const pawIcon = L.divIcon({
   className: "paw-icon",
   iconSize: [30,30]
 });
-  let pawMarkers = [];
-  let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
+let pawMarkers = [];
+let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
 
+/*
 map.on('contextmenu', function(e){
 
   const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
-    // 現在地が必要
+
+  // 現在地が必要
   if(!userLatLng){
     alert("先に現在地をONにしてください");
     return;
@@ -748,49 +750,49 @@ map.on('contextmenu', function(e){
     return;
   }
 
-// 🐾重複チェック
-for(const p of pawMarkers){
-  if(newLatLng.distanceTo(p.getLatLng()) < 30){
-    alert("この近くに未確認補給所があります");
+  // 🐾重複チェック
+  for(const p of pawMarkers){
+    if(newLatLng.distanceTo(p.getLatLng()) < 30){
+      alert("この近くに未確認補給所があります");
+      return;
+    }
+  }
+
+  // 本ピン近く禁止
+  for(const s of spotsRaw){
+    if(newLatLng.distanceTo([s.lat, s.lng]) < 30){
+      alert("この近くには既に補給所があります");
+      return;
+    }
+  }
+
+  // 最後に確認
+  if(!confirm("未確認補給所を報告する？")){
     return;
   }
-}
-
-// 本ピン近く禁止
-for(const s of spotsRaw){
-  if(newLatLng.distanceTo([s.lat, s.lng]) < 30){
-    alert("この近くには既に補給所があります");
-    return;
-  }
-}
-
-// 最後に確認
-if(!confirm("未確認補給所を報告する？")){
-  return;
-}
 
   const sponsor = getSponsorForSpot({
-  lat: e.latlng.lat,
-  lng: e.latlng.lng
-});
+    lat: e.latlng.lat,
+    lng: e.latlng.lng
+  });
 
-const m = L.marker([e.latlng.lat, e.latlng.lng], {
-  icon: pawIcon
-}).addTo(map)
-.bindPopup(`
-  <div class="spot-card">
-    
-    <div class="spot-title">🐾 未確認補給所</div>
+  const m = L.marker([e.latlng.lat, e.latlng.lng], {
+    icon: pawIcon
+  }).addTo(map)
+  .bindPopup(`
+    <div class="spot-card">
+      
+      <div class="spot-title">🐾 未確認補給所</div>
 
-    <div class="spot-actions">
-      <button class="spot-btn spot-btn-go" onclick="goNav(${e.latlng.lat},${e.latlng.lng})">調査に向かう</button>
-    </div>
+      <div class="spot-actions">
+        <button class="spot-btn spot-btn-go" onclick="goNav(${e.latlng.lat},${e.latlng.lng})">調査に向かう</button>
+      </div>
 
-    <div class="spot-note">
-      探索隊が報告<br>
-      現在調査中
-    </div>
-    ${sponsor ? `
+      <div class="spot-note">
+        探索隊が報告<br>
+        現在調査中
+      </div>
+      ${sponsor ? `
 <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
 ──────<br>
 探索隊サポーター<br>
@@ -800,20 +802,20 @@ ${sponsor.name}
 </a>
 </div>
 ` : ``}
-  </div>
-`)
-.openPopup();
+    </div>
+  `)
+  .openPopup();
 
-    pawMarkers.push(m);
-    pawData.push({
-  lat: e.latlng.lat,
-  lng: e.latlng.lng
+  pawMarkers.push(m);
+  pawData.push({
+    lat: e.latlng.lat,
+    lng: e.latlng.lng
+  });
+
+  localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
+
 });
-
-localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
-
-
-});
+*/
 L.tileLayer(
 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
 {maxZoom:19}
