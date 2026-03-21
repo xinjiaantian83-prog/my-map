@@ -1,0 +1,350 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>肉球タップゲーム</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #fff;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+
+  #hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 2px solid #f0e6ff;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(180,130,255,0.08);
+  }
+  .hud-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hud-label {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hud-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #7c3aed;
+    line-height: 1.1;
+  }
+  #time-value.urgent { color: #ef4444; animation: pulse 0.5s infinite; }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  #game-area {
+    position: fixed;
+    top: 60px; left: 0; right: 0; bottom: 0;
+  }
+
+  #paw {
+    position: absolute;
+    font-size: 56px;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s;
+    filter: drop-shadow(0 4px 12px rgba(124,58,237,0.25));
+    display: none;
+    line-height: 1;
+  }
+  #paw.tap-anim {
+    animation: tapBounce 0.18s ease-out;
+  }
+  @keyframes tapBounce {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    40%  { transform: translate(-50%, -50%) scale(0.6) rotate(-15deg); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+
+  /* Ripple */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(167,139,250,0.45);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleAnim 0.4s ease-out forwards;
+  }
+  @keyframes rippleAnim {
+    to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+  }
+
+  /* Overlay screens */
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.97);
+    z-index: 20;
+    gap: 20px;
+  }
+  .screen.hidden { display: none; }
+
+  .screen-emoji { font-size: 80px; }
+  .screen-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #7c3aed;
+    letter-spacing: -0.5px;
+  }
+  .screen-sub {
+    font-size: 15px;
+    color: #888;
+    text-align: center;
+    line-height: 1.6;
+    padding: 0 30px;
+  }
+
+  .btn {
+    padding: 16px 48px;
+    font-size: 18px;
+    font-weight: 800;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(124,58,237,0.35);
+    transition: transform 0.1s, box-shadow 0.1s;
+    min-width: 180px;
+    text-align: center;
+  }
+  .btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgba(124,58,237,0.25);
+  }
+
+  #result-score {
+    font-size: 72px;
+    font-weight: 900;
+    color: #7c3aed;
+    line-height: 1;
+  }
+  #result-label {
+    font-size: 18px;
+    color: #aaa;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* Countdown */
+  #countdown-screen .countdown-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: #7c3aed;
+    animation: countPop 0.6s ease-out;
+  }
+  @keyframes countPop {
+    0%   { transform: scale(1.6); opacity: 0.3; }
+    60%  { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-item">
+    <span class="hud-label">スコア</span>
+    <span class="hud-value" id="score-value">0</span>
+  </div>
+  <div class="hud-item">
+    <span class="hud-label">残り時間</span>
+    <span class="hud-value" id="time-value">10</span>
+  </div>
+</div>
+
+<!-- Game area -->
+<div id="game-area">
+  <div id="paw">🐾</div>
+</div>
+
+<!-- Start screen -->
+<div class="screen" id="start-screen">
+  <div class="screen-emoji">🐾</div>
+  <div class="screen-title">肉球タップゲーム</div>
+  <div class="screen-sub">10秒間で肉球をできるだけ<br>たくさんタップしよう！</div>
+  <button class="btn" id="start-btn">スタート</button>
+</div>
+
+<!-- Countdown screen -->
+<div class="screen hidden" id="countdown-screen">
+  <div class="countdown-num" id="countdown-num">3</div>
+</div>
+
+<!-- Result screen -->
+<div class="screen hidden" id="result-screen">
+  <div class="screen-emoji">🎉</div>
+  <div class="screen-title">ゲーム終了！</div>
+  <div id="result-label">スコア</div>
+  <div id="result-score">0</div>
+  <div class="screen-sub" id="result-comment"></div>
+  <button class="btn" id="retry-btn">もう一度遊ぶ</button>
+</div>
+
+<script>
+  const pawEl     = document.getElementById('paw');
+  const gameArea  = document.getElementById('game-area');
+  const scoreEl   = document.getElementById('score-value');
+  const timeEl    = document.getElementById('time-value');
+  const startScr  = document.getElementById('start-screen');
+  const countScr  = document.getElementById('countdown-screen');
+  const resultScr = document.getElementById('result-screen');
+  const countNum  = document.getElementById('countdown-num');
+  const resultScore = document.getElementById('result-score');
+  const resultComment = document.getElementById('result-comment');
+  const startBtn  = document.getElementById('start-btn');
+  const retryBtn  = document.getElementById('retry-btn');
+
+  const GAME_DURATION = 10;
+  let score = 0;
+  let timeLeft = GAME_DURATION;
+  let gameTimer = null;
+  let active = false;
+
+  function getComment(s) {
+    if (s >= 30) return '🏆 すごい！神の肉球さばき！';
+    if (s >= 20) return '🔥 かなり速い！上級者！';
+    if (s >= 12) return '👏 なかなかやるね！';
+    if (s >= 6)  return '😊 もう一回チャレンジ！';
+    return '🐱 練習あるのみ！';
+  }
+
+  function placePaw() {
+    const areaW = gameArea.offsetWidth;
+    const areaH = gameArea.offsetHeight;
+    const margin = 50;
+    const x = margin + Math.random() * (areaW - margin * 2);
+    const y = margin + Math.random() * (areaH - margin * 2);
+    pawEl.style.left = x + 'px';
+    pawEl.style.top  = y + 'px';
+    pawEl.style.display = 'block';
+  }
+
+  function spawnRipple(x, y) {
+    const r = document.createElement('div');
+    r.className = 'ripple';
+    r.style.left   = x + 'px';
+    r.style.top    = y + 'px';
+    r.style.width  = '60px';
+    r.style.height = '60px';
+    gameArea.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+  }
+
+  function onPawTap(e) {
+    if (!active) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    score++;
+    scoreEl.textContent = score;
+
+    // Ripple position relative to game area
+    const rect = gameArea.getBoundingClientRect();
+    const touch = e.touches ? e.touches[0] : e;
+    const rx = (touch.clientX - rect.left);
+    const ry = (touch.clientY - rect.top);
+    spawnRipple(rx, ry);
+
+    // Animate then move
+    pawEl.classList.remove('tap-anim');
+    void pawEl.offsetWidth; // reflow
+    pawEl.classList.add('tap-anim');
+    pawEl.addEventListener('animationend', () => {
+      pawEl.classList.remove('tap-anim');
+      if (active) placePaw();
+    }, { once: true });
+  }
+
+  pawEl.addEventListener('touchstart', onPawTap, { passive: false });
+  pawEl.addEventListener('mousedown',  onPawTap);
+
+  function startGame() {
+    score = 0;
+    timeLeft = GAME_DURATION;
+    scoreEl.textContent = '0';
+    timeEl.textContent  = GAME_DURATION;
+    timeEl.classList.remove('urgent');
+
+    active = true;
+    placePaw();
+
+    gameTimer = setInterval(() => {
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      if (timeLeft <= 3) timeEl.classList.add('urgent');
+      if (timeLeft <= 0) endGame();
+    }, 1000);
+  }
+
+  function endGame() {
+    clearInterval(gameTimer);
+    active = false;
+    pawEl.style.display = 'none';
+    timeEl.classList.remove('urgent');
+
+    resultScore.textContent  = score;
+    resultComment.textContent = getComment(score);
+    resultScr.classList.remove('hidden');
+  }
+
+  function runCountdown(cb) {
+    countScr.classList.remove('hidden');
+    let n = 3;
+    countNum.textContent = n;
+
+    const tick = () => {
+      countNum.classList.remove('countPop');
+      void countNum.offsetWidth;
+      countNum.classList.add('countPop');
+
+      if (n <= 0) {
+        countScr.classList.add('hidden');
+        cb();
+        return;
+      }
+      countNum.textContent = n;
+      n--;
+      setTimeout(tick, 700);
+    };
+    tick();
+  }
+
+  startBtn.addEventListener('click', () => {
+    startScr.classList.add('hidden');
+    runCountdown(startGame);
+  });
+
+  retryBtn.addEventListener('click', () => {
+    resultScr.classList.add('hidden');
+    runCountdown(startGame);
+  });
+</script>
+</body>
+</html>
