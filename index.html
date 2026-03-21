@@ -1130,48 +1130,54 @@ m.on("popupclose", ()=> popupOpen = false);
 
     let recordPart = "";
 
-    if(isFound){
-      recordPart = `<div class="spot-note">✅ 記録済み</div>`;
-    }else if(canRecord){
-      let dogIcon = `<img src="shiba.png" style="height:26px;vertical-align:-4px;">`;
+   if(isFound){
+  recordPart = `<div class="spot-note">✅ 記録済み</div>`;
+}else if(canRecord){
+  let dogIcon = `<img src="shiba.png" style="height:26px;vertical-align:-4px;">`;
 
-if(s.type==="bul")
-dogIcon=`<img src="bulldog.png" style="height:26px;vertical-align:-4px;">`;
+  if(s.type === "bul"){
+    dogIcon = `<img src="bulldog.png" style="height:26px;vertical-align:-4px;">`;
+  }
 
-if(s.type==="pom")
-dogIcon=`<img src="pome.png" style="height:26px;vertical-align:-4px;">`;
-recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録</button>`;
-    }else{
-      recordPart = `<div class="spot-note" style="font-size:13px;color:#777;margin-top:10px;text-align:center;">半径30m以内で記録できます</div>`;
-    }
-const sponsor = sponsorsMap[Object.keys(sponsorsMap)[0]];
-    m.bindPopup(`
-      <div class="spot-card">
-  <div class="spot-title">${title}</div>
+  if(s.type === "pom"){
+    dogIcon = `<img src="pome.png" style="height:26px;vertical-align:-4px;">`;
+  }
 
-  <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">
-    <span>${spotId}</span>
-    <span onclick="copySpotId('${spotId}')" style="cursor:pointer;font-size:14px;">📋</span>
+  recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録</button>`;
+}else{
+  recordPart = ``;
+}
+
+const sponsor = getSponsorForSpot(s);
+
+m.bindPopup(`
+  <div class="spot-card">
+    <div class="spot-title">${title}</div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">
+      <span>${spotId}</span>
+      <span onclick="copySpotId('${spotId}')" style="cursor:pointer;font-size:14px;">📋</span>
+    </div>
+
+    <div class="spot-actions">
+      <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
+      ${recordPart}
+    </div>
+
+    ${sponsor ? `
+    <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
+      ──────<br>
+      探索隊サポーター<br>
+      <a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
+    </div>
+    ` : ``}
   </div>
-
-  <div class="spot-actions">
-    <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
-    ${recordPart}
-  </div>
-
-  ${sponsor ? `
-  <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
-    ──────<br>
-    探索隊サポーター<br>
-    <a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
-  </div>
-  ` : ``}
-</div>
 `);
-    if(clusterEnabled){
-  if(s.type==="bul"){
+
+if(clusterEnabled){
+  if(s.type === "bul"){
     bulldogCluster.addLayer(m);
-  }else if(s.type==="pom"){
+  }else if(s.type === "pom"){
     pomeCluster.addLayer(m);
   }else{
     shibaCluster.addLayer(m);
@@ -1718,12 +1724,6 @@ function closePolicy(){
     ・道路や公共スペースから確認できる自販機のみ記録してください。<br>
     ・実際に確認した自販機のみ報告してください。<br>
     ・重複報告は不要です。
-  </p>
-
-  <h3 style="margin-top:18px;font-size:16px;">■ 仮ピン（ユーザー報告）について</h3>
-  <p style="font-size:14px;line-height:1.9;color:#333;">
-    ・仮ピンは未確認の自販機情報として扱われます。<br>
-    ・明らかな誤情報や不適切な報告は、運営の判断で削除する場合があります。
   </p>
 
   <h3 style="margin-top:18px;font-size:16px;">■ データについて</h3>
