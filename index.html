@@ -1497,6 +1497,13 @@ if(currentRadius!=null) setRadiusCircle(currentRadius);
 });
 
 
+const isFirstLaunch = !localStorage.getItem("wanwan_first_loaded");
+
+if(!isFirstLaunch){
+  const el = document.getElementById("loadingOverlay");
+  if(el) el.style.display = "none";
+}
+
 loadSponsors().then(async () => {
   await loadSpots();
   updateFoundUI();
@@ -1504,6 +1511,12 @@ loadSponsors().then(async () => {
   setTimeout(() => {
     map.invalidateSize();
   }, 300);
+
+  if(isFirstLaunch){
+    const el = document.getElementById("loadingOverlay");
+    if(el) el.style.display = "none";
+    localStorage.setItem("wanwan_first_loaded", "1");
+  }
 
   pawData.forEach(p => {
     
@@ -1741,18 +1754,6 @@ if(location.hash === "#admin-off"){
 function closePolicy(){
   document.getElementById("policyPage").classList.add("hidden");
   document.getElementById("recordCard").classList.remove("hidden");
-}
-
-// 👇これ追加（ローディング消す）
-if(!localStorage.getItem("wanwan_first_loaded")){
-  setTimeout(() => {
-    const el = document.getElementById("loadingOverlay");
-    if(el) el.style.display = "none";
-    localStorage.setItem("wanwan_first_loaded", "1");
-  }, 3000);
-}else{
-  const el = document.getElementById("loadingOverlay");
-  if(el) el.style.display = "none";
 }
 
 </script>
