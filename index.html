@@ -1742,18 +1742,13 @@ function closePolicy(){
   document.getElementById("policyPage").classList.add("hidden");
   document.getElementById("recordCard").classList.remove("hidden");
 }
-  }
-}
-}
-}
-  }
-}
-}
-}
-}
-}
-}
-}
+
+// 👇これ追加（ローディング消す）
+setTimeout(() => {
+  const el = document.getElementById("loadingOverlay");
+  if(el) el.style.display = "none";
+}, 3000);
+
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
