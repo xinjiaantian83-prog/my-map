@@ -488,11 +488,12 @@ lastTapTime = now;
 
   startBtn.addEventListener('click', () => {
 
-  const a = document.getElementById("seStart");
-  if (a) {
-    a.currentTime = 0;
-    a.play().catch(() => {});
-  }
+  const base = document.getElementById("seStart");
+if (base) {
+  const a = base.cloneNode();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
 
   startScr.classList.add('hidden');
   runCountdown(startGame);
