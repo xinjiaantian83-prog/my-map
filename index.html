@@ -1742,32 +1742,6 @@ document.getElementById("btnClearSearch").addEventListener("click", () => {
 });
 
 
-// ===== 管理者モードここから =====
-const btnResetFloating = document.getElementById("btnResetFloating");
-
-// 管理者フラグ
-const isAdmin = localStorage.getItem("wanwan_admin") === "1";
-
-// 初期表示制御
-if(isAdmin){
-  btnResetFloating.style.display = "block";
-} else {
-  btnResetFloating.style.display = "none";
-}
-
-// URLでON/OFF切替
-if(location.hash === "#admin-on"){
-  localStorage.setItem("wanwan_admin", "1");
-  btnResetFloating.style.display = "block";
-  alert("管理者モードON");
-}
-
-if(location.hash === "#admin-off"){
-  localStorage.removeItem("wanwan_admin");
-  btnResetFloating.style.display = "none";
-  alert("管理者モードOFF");
-}
-// ===== 管理者モードここまで =====
 
   
   function showPolicy(){
@@ -1786,7 +1760,10 @@ if (miniBtn) {
     location.href = "game.html";
   });
 }
-
+const resetBtn = document.getElementById("btnResetFloating");
+if (resetBtn) {
+  resetBtn.style.display = "none";
+}
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
