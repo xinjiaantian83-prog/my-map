@@ -479,18 +479,21 @@ if (c) {
 }
 
   function endGame() {
-    clearInterval(gameTimer);
-    active = false;
-    pawEl.style.display = 'none';
-    timeEl.classList.remove('urgent');
-
-    resultScore.textContent = score;
-resultComment.textContent = getComment(score);
-
-setTimeout(() => {
-  resultScr.classList.remove('hidden');
-}, 250);
+  clearInterval(gameTimer);
+  active = false;
+  pawEl.style.display = 'none';
+  if (extraPaw) {
+    extraPaw.style.display = 'none';
   }
+  timeEl.classList.remove('urgent');
+
+  resultScore.textContent = score;
+  resultComment.textContent = getComment(score);
+
+  setTimeout(() => {
+    resultScr.classList.remove('hidden');
+  }, 250);
+}
 
   function runCountdown(cb) {
     countScr.classList.remove('hidden');
