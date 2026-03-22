@@ -1116,6 +1116,25 @@ function setRadiusCircle(m){
     fillOpacity: 0.12,
     interactive: false
   }).addTo(map);
+  if (window.pulseInterval) clearInterval(window.pulseInterval);
+  let pulseRadius = 20;
+
+window.pulseInterval = setInterval(() => {
+  if (!radarPulse) return;
+
+  pulseRadius += 20;
+
+  radarPulse.setRadius(pulseRadius);
+
+  // 透明にしていく
+  const opacity = Math.max(0, 0.12 - pulseRadius / (m * 2));
+  radarPulse.setStyle({ fillOpacity: opacity });
+
+  // 一定距離でリセット
+  if (pulseRadius > m) {
+    pulseRadius = 20;
+  }
+}, 60);
 }
 
 function normalizeSpots(arr){
