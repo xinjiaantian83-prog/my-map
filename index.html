@@ -1084,17 +1084,17 @@ function show(t){
 function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
-  userCircle = L.circle(userLatLng,{
-  radius:m,
-  color:"#2a7fff",
-  weight:1,
-  fillColor:"#2a7fff",
-  fillOpacity:0.02,
-  interactive:false
-}).addTo(map);
-  
-}
+  const circleColor = (location.hash === "#purple-test") ? "#a855f7" : "#2a7fff";
 
+  userCircle = L.circle(userLatLng,{
+    radius:m,
+    color: circleColor,
+    weight:1,
+    fillColor: circleColor,
+    fillOpacity:0.05,
+    interactive:false
+  }).addTo(map);
+}
 
 function normalizeSpots(arr){
   return arr.map(s=>({
