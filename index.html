@@ -353,7 +353,18 @@ button.active{
   z-index:3000;
   padding:14px 14px 12px;
 }
-
+#miniGameBtn {
+  animation: miniBounce 2.4s ease-in-out infinite;
+}
+#miniGameBtn:active {
+  transform: scale(0.9);
+}
+@keyframes miniBounce {
+  0%   { transform: scale(1); }
+  20%  { transform: scale(1.08); }
+  30%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
 .hidden{
   display:none;
 }
