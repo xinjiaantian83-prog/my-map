@@ -879,7 +879,7 @@ const darkLayer = L.tileLayer(
 
 // 初期はライト
 lightLayer.addTo(map);
-if (location.hash === "#dark-test") {
+if (location.hash.includes("dark-test")) {
   map.removeLayer(lightLayer);
   darkLayer.addTo(map);
 }
