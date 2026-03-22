@@ -321,14 +321,29 @@ function playRare() {
     return '🐱 練習あるのみ！';
   }
 
-  function placePaw() {
+ function placePaw() {
   const areaW = gameArea.offsetWidth;
   const areaH = gameArea.offsetHeight;
   const margin = 50;
 
+  // 1個目
   const x = margin + Math.random() * (areaW - margin * 2);
   const y = margin + Math.random() * (areaH - margin * 2);
 
+  pawEl.style.left = x + 'px';
+  pawEl.style.top  = y + 'px';
+  pawEl.style.display = 'block';
+
+  // 2個目🔥
+  createExtraPaw();
+
+  const x2 = margin + Math.random() * (areaW - margin * 2);
+  const y2 = margin + Math.random() * (areaH - margin * 2);
+
+  extraPaw.style.left = x2 + 'px';
+  extraPaw.style.top  = y2 + 'px';
+  extraPaw.style.display = 'block';
+}
   pawEl.style.left = x + 'px';
   pawEl.style.top  = y + 'px';
   pawEl.style.display = 'block';
