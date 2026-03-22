@@ -1092,10 +1092,17 @@ const circleColor = isPurpleTest
   : (isDarkTest ? "#6ea8ff" : "#2a7fff");
   let radarInterval = null;
 
+let radarInterval = null;
+
 function setRadiusCircle(m){
   if (userCircle) {
     map.removeLayer(userCircle);
     userCircle = null;
+  }
+
+  if (radarInterval) {
+    clearInterval(radarInterval);
+    radarInterval = null;
   }
 
   const isDarkTest = location.hash.includes("dark-test");
@@ -1114,10 +1121,6 @@ function setRadiusCircle(m){
     interactive: false
   }).addTo(map);
 
-  if (radarInterval) {
-    clearInterval(radarInterval);
-  }
-
   let grow = true;
 
   radarInterval = setInterval(() => {
@@ -1127,10 +1130,10 @@ function setRadiusCircle(m){
 
     if (grow) {
       userCircle.setRadius(current + 10);
-      if (current > m + 30) grow = false;
+      if (current >= m + 30) grow = false;
     } else {
       userCircle.setRadius(current - 10);
-      if (current < m - 30) grow = true;
+      if (current <= m - 30) grow = true;
     }
   }, 120);
 }
