@@ -1103,38 +1103,8 @@ function setRadiusCircle(m){
     fillOpacity: 0.03,
     interactive: false
   }).addTo(map);
-    if (radarPulse) {
-    map.removeLayer(radarPulse);
-    radarPulse = null;
-  }
-
-  radarPulse = L.circle(userLatLng, {
-    radius: 20,
-    color: "transparent",
-    weight: 1,
-    fillColor: circleColor,
-    fillOpacity: 0.08,
-    interactive: false
-  }).addTo(map);
-  if (window.pulseInterval) clearInterval(window.pulseInterval);
-  let pulseRadius = 60;
-
-window.pulseInterval = setInterval(() => {
-  if (!radarPulse) return;
-
-  pulseRadius += 20;
-
-  radarPulse.setRadius(pulseRadius);
-
-  // 透明にしていく
-  const opacity = Math.max(0, 0.18 - pulseRadius / (m * 1.8));
-  radarPulse.setStyle({ fillOpacity: opacity });
-
-  // 一定距離でリセット
-  if (pulseRadius > m * 1.8) {
-  pulseRadius = 20;
-}
-}, 60);
+    
+  
 }
 
 function normalizeSpots(arr){
