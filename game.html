@@ -503,11 +503,14 @@ lastTapTime = now;
   const a = document.getElementById("seStart");
   if (a) {
     a.currentTime = 0;
-    a.play().catch(() => {});
+    a.play();
   }
 
-  resultScr.classList.add('hidden');
-  runCountdown(startGame);
+  setTimeout(() => {
+    resultScr.classList.add('hidden');
+    runCountdown(startGame);
+  }, 0);
+
 });
 </script>
  <audio id="seTap" src="sounds/tap.mp3" preload="auto"></audio>
