@@ -312,7 +312,8 @@ function playRare() {
   let timeLeft = GAME_DURATION;
   let gameTimer = null;
   let active = false;
-
+let lastTapTime = 0;
+let comboCount = 0;
   function getComment(s) {
     if (s >= 30) return '🏆 すごい！神の肉球さばき！';
     if (s >= 20) return '🔥 かなり速い！上級者！';
@@ -393,6 +394,26 @@ if (tappedPaw.classList.contains("rare")) {
 }
 
 scoreEl.textContent = score;
+   const now = Date.now();
+
+// 連続タップ判定（0.25秒以内）
+if (now - lastTapTime < 250) {
+  comboCount++;
+
+  // 無言コンボ演出🔥
+  pawEl.style.transform = "scale(1.3)";
+  if (extraPaw) extraPaw.style.transform = "scale(1.3)";
+
+  setTimeout(() => {
+    pawEl.style.transform = "translate(-50%, -50%)";
+    if (extraPaw) extraPaw.style.transform = "translate(-50%, -50%)";
+  }, 100);
+
+} else {
+  comboCount = 0;
+}
+
+lastTapTime = now;
     // Ripple position relative to game area
     const rect = gameArea.getBoundingClientRect();
     const touch = e.touches ? e.touches[0] : e;
