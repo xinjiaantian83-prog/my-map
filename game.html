@@ -562,13 +562,12 @@ localStorage.setItem("wanwan_score", totalScore);
 }, { passive: false });
 
   retryBtn.addEventListener('click', () => {
-
-  
-
   setTimeout(() => {
     resultScr.classList.add('hidden');
     runCountdown(startGame);
   }, 0);
+});
+
 const backBtn = document.getElementById("backBtn");
 
 if (backBtn) {
