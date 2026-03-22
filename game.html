@@ -266,15 +266,28 @@ function playTap() {
   }
 
   function placePaw() {
-    const areaW = gameArea.offsetWidth;
-    const areaH = gameArea.offsetHeight;
-    const margin = 50;
-    const x = margin + Math.random() * (areaW - margin * 2);
-    const y = margin + Math.random() * (areaH - margin * 2);
-    pawEl.style.left = x + 'px';
-    pawEl.style.top  = y + 'px';
-    pawEl.style.display = 'block';
+  const areaW = gameArea.offsetWidth;
+  const areaH = gameArea.offsetHeight;
+  const margin = 50;
+
+  const x = margin + Math.random() * (areaW - margin * 2);
+  const y = margin + Math.random() * (areaH - margin * 2);
+
+  pawEl.style.left = x + 'px';
+  pawEl.style.top  = y + 'px';
+  pawEl.style.display = 'block';
+
+  // ↓ここから追加🔥
+  if (Math.random() < 0.15) {  // 15%でレア
+    pawEl.style.transform = "scale(1.3)";
+    pawEl.style.filter = "drop-shadow(0 0 10px gold)";
+
+    playSE("seRare", 1.0);  // ←キラ音✨
+  } else {
+    pawEl.style.transform = "scale(1)";
+    pawEl.style.filter = "none";
   }
+}
 
   function spawnRipple(x, y) {
     const r = document.createElement('div');
@@ -377,5 +390,6 @@ scoreEl.textContent = score;
   });
 </script>
  <audio id="seTap" src="sounds/tap.mp3" preload="auto"></audio>
+ <audio id="seRare" src="sounds/rare.mp3" preload="auto"></audio>
 </body>
 </html>
