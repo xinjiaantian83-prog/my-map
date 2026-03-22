@@ -966,6 +966,7 @@ let clusterEnabled = true;
 let userLatLng=null;
 let userMarker=null;
 let userCircle=null;
+  let radarPulse = null;
 
 let currentRadius=null;
 
@@ -1100,6 +1101,19 @@ function setRadiusCircle(m){
     weight: 1,
     fillColor: circleColor,
     fillOpacity: 0.08,
+    interactive: false
+  }).addTo(map);
+    if (radarPulse) {
+    map.removeLayer(radarPulse);
+    radarPulse = null;
+  }
+
+  radarPulse = L.circle(userLatLng, {
+    radius: 20,
+    color: circleColor,
+    weight: 2,
+    fillColor: circleColor,
+    fillOpacity: 0.12,
     interactive: false
   }).addTo(map);
 }
