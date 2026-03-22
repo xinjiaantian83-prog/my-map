@@ -301,21 +301,13 @@ function playTap() {
   pawEl.style.top  = y + 'px';
   pawEl.style.display = 'block';
 
-  // ↓ここから追加🔥
   if (Math.random() < 0.15) {
-  pawEl.classList.add("rare");
-
-  playRare();
-} else {
-  pawEl.classList.remove("rare");
-}
-    playRare();  // ←キラ音✨
+    pawEl.classList.add("rare");
+    playRare();
   } else {
-    pawEl.style.transform = "scale(1)";
-    pawEl.style.filter = "none";
+    pawEl.classList.remove("rare");
   }
 }
-
   function spawnRipple(x, y) {
     const r = document.createElement('div');
     r.className = 'ripple';
