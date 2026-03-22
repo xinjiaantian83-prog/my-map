@@ -1090,14 +1090,45 @@ const isPurpleTest = location.hash.includes("purple-test");
 const circleColor = isPurpleTest
   ? "#22c55e"
   : (isDarkTest ? "#6ea8ff" : "#2a7fff");
+  let radarInterval = null; // ← これを外に1回だけ置く
+
+function setRadiusCircle(m){
+  if(userCircle) map.removeLayer(userCircle);
+
+  const isDarkTest = location.hash.includes("dark-test");
+  const isPurpleTest = location.hash.includes("purple-test");
+
+  const circleColor = isPurpleTest
+    ? "#22c55e"
+    : (isDarkTest ? "#6ea8ff" : "#2a7fff");
+
   userCircle = L.circle(userLatLng,{
     radius:m,
     color: circleColor,
     weight:1,
     fillColor: circleColor,
-    fillOpacity:0.05,
+    fillOpacity:0.08,
     interactive:false
   }).addTo(map);
+
+  // 🔥 ここ重要
+  if (radarInterval) clearInterval(radarInterval);
+
+  let grow = true;
+
+  radarInterval = setInterval(() => {
+    if (!userCircle) return;
+
+    const current = userCircle.getRadius();
+
+    if (grow) {
+      userCircle.setRadius(current + 10);
+      if (current > m + 30) grow = false;
+    } else {
+      userCircle.setRadius(current - 10);
+      if (current < m - 30) grow = true;
+    }
+  }, 120);
 }
 
 function normalizeSpots(arr){
