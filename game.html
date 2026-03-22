@@ -293,7 +293,7 @@ function playRare() {
   gameArea.appendChild(extraPaw);
 
   extraPaw.addEventListener('touchstart', onPawTap, { passive: false });
-  extraPaw.addEventListener('mousedown', onPawTap);
+  
 }
   const gameArea  = document.getElementById('game-area');
   const scoreEl   = document.getElementById('score-value');
@@ -398,8 +398,7 @@ scoreEl.textContent = score;
   }
 
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
-  pawEl.addEventListener('mousedown',  onPawTap);
-
+  
   function startGame() {
     score = 0;
     timeLeft = GAME_DURATION;
