@@ -502,11 +502,7 @@ lastTapTime = now;
 
   retryBtn.addEventListener('click', () => {
 
-  const a = document.getElementById("seStart");
-  if (a) {
-    a.currentTime = 0;
-    a.play();
-  }
+  
 
   setTimeout(() => {
     resultScr.classList.add('hidden');
@@ -516,7 +512,7 @@ lastTapTime = now;
 });
 </script>
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
- <audio id="seRare" src="rare.mp3" preload="auto"></audio>
- <audio id="seStart" src="start.mp3" preload="auto"></audio>
+ <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
+ 
 </body>
 </html>
