@@ -1087,11 +1087,6 @@ function setRadiusCircle(m){
     userCircle = null;
   }
 
-  if (radarInterval) {
-    clearInterval(radarInterval);
-    radarInterval = null;
-  }
-
   const isDarkTest = location.hash.includes("dark-test");
   const isPurpleTest = location.hash.includes("purple-test");
 
@@ -1107,8 +1102,6 @@ function setRadiusCircle(m){
     fillOpacity: 0.08,
     interactive: false
   }).addTo(map);
-
-  
 }
 
 function normalizeSpots(arr){
