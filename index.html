@@ -687,7 +687,19 @@ font-family:sans-serif;
 </div>
 <div class="record-section">
   <div class="record-label">🏆 探索レベル</div>
-  <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+    <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+    <button id="miniGameBtn" style="
+      border:none;
+      background:#fff4d6;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+      line-height:1;
+    ">🐾</button>
+  </div>
 </div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
@@ -1754,6 +1766,11 @@ if(location.hash === "#admin-off"){
 function closePolicy(){
   document.getElementById("policyPage").classList.add("hidden");
   document.getElementById("recordCard").classList.remove("hidden");
+}
+
+document.getElementById("miniGameBtn").addEventListener("click", () => {
+  location.href = "game.html";
+});
 }
 
 </script>
