@@ -371,7 +371,9 @@ function playRare() {
     e.preventDefault();
     e.stopPropagation();
 
-   if (pawEl.classList.contains("rare")) {
+   const tappedPaw = e.currentTarget;
+
+if (tappedPaw.classList.contains("rare")) {
   score += 3;
   playRare();
 } else {
