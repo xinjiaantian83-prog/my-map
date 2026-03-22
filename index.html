@@ -1084,8 +1084,12 @@ function show(t){
 function setRadiusCircle(m){
   if(userCircle) map.removeLayer(userCircle);
 
-  const circleColor = (location.hash === "#purple-test") ? "#a855f7" : "#2a7fff";
+  const isDarkTest = location.hash.includes("dark-test");
+const isPurpleTest = location.hash.includes("purple-test");
 
+const circleColor = isPurpleTest
+  ? "#a855f7"
+  : (isDarkTest ? "#6ea8ff" : "#2a7fff");
   userCircle = L.circle(userLatLng,{
     radius:m,
     color: circleColor,
