@@ -340,12 +340,12 @@ function playTap() {
     e.preventDefault();
     e.stopPropagation();
 
-    score++;
-
-if (pawEl.classList.contains("rare")) {
-  playRare();  // レア取った音✨
+    if (pawEl.classList.contains("rare")) {
+  score += 3;
+  playRare();
 } else {
-  playTap();   // 通常音
+  score += 1;
+  playTap();
 }
 
 scoreEl.textContent = score;
