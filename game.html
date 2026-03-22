@@ -396,11 +396,13 @@ if (tappedPaw.classList.contains("rare")) {
 scoreEl.textContent = score;
    const now = Date.now();
 
-// 連続タップ判定（0.25秒以内）
 if (now - lastTapTime < 250) {
   comboCount++;
 
-  // 無言コンボ演出🔥
+  if (navigator.vibrate) {
+    navigator.vibrate(40);
+  }
+
   pawEl.style.transform = "scale(1.3)";
   if (extraPaw) extraPaw.style.transform = "scale(1.3)";
 
