@@ -479,21 +479,25 @@ lastTapTime = now;
   }, 1000);
 }
 
-  function endGame() {
+ function endGame() {
   clearInterval(gameTimer);
   active = false;
-  pawEl.style.display = 'none';
-  if (extraPaw) {
-    extraPaw.style.display = 'none';
-  }
   timeEl.classList.remove('urgent');
 
   resultScore.textContent = score;
   resultComment.textContent = getComment(score);
 
   setTimeout(() => {
-    resultScr.classList.remove('hidden');
-  }, 250);
+    pawEl.style.display = 'none';
+    if (extraPaw) {
+      extraPaw.style.display = 'none';
+    }
+
+    setTimeout(() => {
+      resultScr.classList.remove('hidden');
+    }, 250);
+
+  }, 180);
 }
 
   function runCountdown(cb) {
