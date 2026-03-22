@@ -163,6 +163,20 @@
     60%  { transform: scale(0.9); opacity: 1; }
     100% { transform: scale(1); }
   }
+ .rare {
+  transform: scale(1.8) rotate(10deg);
+  filter: drop-shadow(0 0 20px gold) brightness(1.5);
+  animation: rareFlash 0.3s infinite alternate;
+}
+
+@keyframes rareFlash {
+  from {
+    transform: scale(1.6) rotate(-10deg);
+  }
+  to {
+    transform: scale(1.9) rotate(10deg);
+  }
+}
 </style>
 </head>
 <body>
@@ -238,6 +252,16 @@ function playTap() {
   a.currentTime = 0;
   a.play().catch(() => {});
 }
+ function playRare() {
+  if (!soundEnabled) return;
+
+  const a = document.getElementById("seRare");
+  if (!a) return;
+
+  a.pause();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
   const pawEl     = document.getElementById('paw');
   const gameArea  = document.getElementById('game-area');
   const scoreEl   = document.getElementById('score-value');
@@ -278,11 +302,14 @@ function playTap() {
   pawEl.style.display = 'block';
 
   // ↓ここから追加🔥
-  if (Math.random() < 0.15) {  // 15%でレア
-    pawEl.style.transform = "scale(1.3)";
-    pawEl.style.filter = "drop-shadow(0 0 10px gold)";
+  if (Math.random() < 0.15) {
+  pawEl.classList.add("rare");
 
-    playSE("seRare", 1.0);  // ←キラ音✨
+  playRare();
+} else {
+  pawEl.classList.remove("rare");
+}
+    playRare();  // ←キラ音✨
   } else {
     pawEl.style.transform = "scale(1)";
     pawEl.style.filter = "none";
@@ -306,7 +333,13 @@ function playTap() {
     e.stopPropagation();
 
     score++;
-playTap();
+
+if (pawEl.classList.contains("rare")) {
+  playRare();  // レア取った音✨
+} else {
+  playTap();   // 通常音
+}
+
 scoreEl.textContent = score;
     // Ripple position relative to game area
     const rect = gameArea.getBoundingClientRect();
