@@ -450,12 +450,20 @@ lastTapTime = now;
     timeEl.textContent = timeLeft;
 
     if (timeLeft <= 3) {
-      timeEl.style.color = "#ff3b30";
-      timeEl.style.transform = "scale(1.3)";
-    } else {
-      timeEl.style.color = "";
-      timeEl.style.transform = "scale(1)";
-    }
+  timeEl.style.color = "#ff0000";
+  timeEl.style.transform = "scale(1.5)";
+
+  const c = document.getElementById("seCount");
+  if (c) {
+    const a = c.cloneNode();
+    a.currentTime = 0;
+    a.play().catch(() => {});
+  }
+
+} else {
+  timeEl.style.color = "";
+  timeEl.style.transform = "scale(1)";
+}
 
     if (timeLeft <= 0) {
       endGame();
@@ -527,6 +535,6 @@ lastTapTime = now;
 </script>
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
  <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
- 
+ <audio id="seCount" src="count.mp3" preload="auto"></audio>
 </body>
 </html>
