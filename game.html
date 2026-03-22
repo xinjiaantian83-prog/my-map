@@ -334,7 +334,8 @@ function playRare() {
   pawEl.style.top  = y + 'px';
   pawEl.style.display = 'block';
 
-  // 2個目
+  // たまに2個出す🔥
+if (Math.random() < 0.3) {
   createExtraPaw();
 
   const x2 = margin + Math.random() * (areaW - margin * 2);
@@ -343,8 +344,15 @@ function playRare() {
   extraPaw.style.left = x2 + 'px';
   extraPaw.style.top  = y2 + 'px';
   extraPaw.style.display = 'block';
+} else {
+  if (extraPaw) {
+    extraPaw.remove();
+    extraPaw = null;
+  }
+}
 
-  // どっちか1個だけレア
+ // レア付与
+if (extraPaw) {
   const isFirstRare = Math.random() < 0.5;
 
   if (isFirstRare) {
@@ -354,6 +362,9 @@ function playRare() {
     extraPaw.classList.add("rare");
     pawEl.classList.remove("rare");
   }
+} else {
+  pawEl.classList.remove("rare");
+}
 }
   function spawnRipple(x, y) {
     const r = document.createElement('div');
