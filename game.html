@@ -484,9 +484,12 @@ if (c) {
     pawEl.style.display = 'none';
     timeEl.classList.remove('urgent');
 
-    resultScore.textContent  = score;
-    resultComment.textContent = getComment(score);
-    resultScr.classList.remove('hidden');
+    resultScore.textContent = score;
+resultComment.textContent = getComment(score);
+
+setTimeout(() => {
+  resultScr.classList.remove('hidden');
+}, 250);
   }
 
   function runCountdown(cb) {
