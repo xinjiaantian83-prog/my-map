@@ -58,17 +58,17 @@
     top: 60px; left: 0; right: 0; bottom: 0;
   }
 
-  #paw {
-    position: absolute;
-    font-size: 56px;
-    cursor: pointer;
-    transform: translate(-50%, -50%);
-    transition: transform 0.05s;
-    filter: drop-shadow(0 4px 12px rgba(124,58,237,0.25));
-    display: none;
-    line-height: 1;
-  }
-  #paw.tap-anim {
+  .paw {
+  position: absolute;
+  font-size: 56px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s;
+  filter: drop-shadow(0 4px 12px rgba(124,58,237,0.25));
+  display: none;
+  line-height: 1;
+}
+  .paw.tap-anim {
     animation: tapBounce 0.18s ease-out;
   }
   @keyframes tapBounce {
@@ -215,7 +215,7 @@
 
 <!-- Game area -->
 <div id="game-area">
-  <div id="paw">🐾</div>
+  <div id="paw" class="paw">🐾</div>
 </div>
 
 <!-- Start screen -->
