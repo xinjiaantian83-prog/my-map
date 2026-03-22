@@ -239,19 +239,12 @@ function unlockSound() {
   if (soundEnabled) return;
   soundEnabled = true;
 
-  const list = [
-    document.getElementById("seTap"),
-    document.getElementById("seRare")
-  ];
+  const tap = document.getElementById("seTap");
+  const rare = document.getElementById("seRare");
 
-  list.forEach(a => {
+  [tap, rare].forEach(a => {
     if (!a) return;
-    a.volume = 0;
-    a.play().then(() => {
-      a.pause();
-      a.currentTime = 0;
-      a.volume = 1;
-    }).catch(() => {});
+    a.load(); // ←再生しないのがポイント
   });
 }
 
