@@ -457,7 +457,7 @@ lastTapTime = now;
     timeLeft--;
     timeEl.textContent = timeLeft;
 
-    if (timeLeft <= 3) {
+    if (timeLeft === 2 || timeLeft === 1)
   timeEl.style.color = "#ff0000";
   timeEl.style.animation = "dangerShake 0.2s infinite";
   const c = document.getElementById("seCount");
