@@ -264,12 +264,14 @@ function playTap() {
  function playRare() {
   if (!soundEnabled) return;
 
-  const a = document.getElementById("seRare");
-  if (!a) return;
+  const base = document.getElementById("seRare");
+  if (!base) return;
 
-  a.pause();
-  a.currentTime = 0;
-  a.play().catch(() => {});
+  base.currentTime = 0;
+  base.play().catch(() => {
+    const a = new Audio("rare.mp3");
+    a.play().catch(() => {});
+  });
 }
   const pawEl     = document.getElementById('paw');
   const gameArea  = document.getElementById('game-area');
