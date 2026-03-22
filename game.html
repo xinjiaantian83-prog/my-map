@@ -491,9 +491,16 @@ if (a) {
   }
 
   startBtn.addEventListener('click', () => {
-    startScr.classList.add('hidden');
-    runCountdown(startGame);
-  });
+
+  const a = document.getElementById("seStart");
+  if (a) {
+    a.currentTime = 0;
+    a.play().catch(() => {});
+  }
+
+  startScr.classList.add('hidden');
+  runCountdown(startGame);
+});
 
   retryBtn.addEventListener('click', () => {
     resultScr.classList.add('hidden');
