@@ -48,10 +48,18 @@
   }
   #time-value.urgent { color: #ef4444; animation: pulse 0.5s infinite; }
 
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
+ @keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes dangerShake {
+  0% { transform: translate(0,0) scale(1.3); }
+  25% { transform: translate(-2px,2px) scale(1.3); }
+  50% { transform: translate(2px,-2px) scale(1.3); }
+  75% { transform: translate(-2px,1px) scale(1.3); }
+  100% { transform: translate(0,0) scale(1.3); }
+}
 
   #game-area {
     position: fixed;
@@ -440,7 +448,7 @@ lastTapTime = now;
   timeEl.textContent  = GAME_DURATION;
   timeEl.classList.remove('urgent');
   timeEl.style.color = "";
-  timeEl.style.transform = "scale(1)";
+  timeEl.style.animation = "";
 
   active = true;
   placePaw();
@@ -451,8 +459,7 @@ lastTapTime = now;
 
     if (timeLeft <= 3) {
   timeEl.style.color = "#ff0000";
-  timeEl.style.transform = "scale(1.5)";
-
+  timeEl.style.animation = "dangerShake 0.2s infinite";
   const c = document.getElementById("seCount");
 if (c) {
   c.currentTime = 0;
