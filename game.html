@@ -208,7 +208,23 @@
 </style>
 </head>
 <body>
-
+<button id="backBtn" style="
+  position: fixed;
+  top: 70px;
+  left: 12px;
+  z-index: 10000;
+  display: block;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+">
+  ← 戻る
+</button>
 <!-- HUD -->
 <div id="hud">
   <div class="hud-item">
@@ -553,8 +569,13 @@ localStorage.setItem("wanwan_score", totalScore);
     resultScr.classList.add('hidden');
     runCountdown(startGame);
   }, 0);
+const backBtn = document.getElementById("backBtn");
 
-});
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    location.href = "index.html";
+  });
+}
 </script>
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
  <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
