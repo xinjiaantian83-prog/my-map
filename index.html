@@ -696,6 +696,12 @@ font-family:sans-serif;
   <div class="record-label">今日の発見</div>
   <div class="record-value"><span id="todayCountCard">0</span></div>
 </div>
+  <div class="record-section">
+  <div class="record-label">🐾 ミニゲームポイント</div>
+  <div class="record-value">
+    <span id="miniGameScore">0</span>
+  </div>
+</div>
 <div class="record-section">
   <div class="record-label">🏆 探索レベル</div>
   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -1362,6 +1368,11 @@ if(userEl){
   const levelCardEl = document.getElementById("levelTextCard");
 if(levelCardEl){
   levelCardEl.textContent = level + " ▶";
+}
+  const mgScore = Number(localStorage.getItem("wanwan_score") || 0);
+const mgEl = document.getElementById("miniGameScore");
+if (mgEl) {
+  mgEl.textContent = mgScore;
 }
 }
   function getLevel(found){
