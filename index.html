@@ -1090,10 +1090,13 @@ const isPurpleTest = location.hash.includes("purple-test");
 const circleColor = isPurpleTest
   ? "#22c55e"
   : (isDarkTest ? "#6ea8ff" : "#2a7fff");
-  let radarInterval = null; // ← これを外に1回だけ置く
+  let radarInterval = null;
 
 function setRadiusCircle(m){
-  if(userCircle) map.removeLayer(userCircle);
+  if (userCircle) {
+    map.removeLayer(userCircle);
+    userCircle = null;
+  }
 
   const isDarkTest = location.hash.includes("dark-test");
   const isPurpleTest = location.hash.includes("purple-test");
@@ -1102,17 +1105,18 @@ function setRadiusCircle(m){
     ? "#22c55e"
     : (isDarkTest ? "#6ea8ff" : "#2a7fff");
 
-  userCircle = L.circle(userLatLng,{
-    radius:m,
+  userCircle = L.circle(userLatLng, {
+    radius: m,
     color: circleColor,
-    weight:1,
+    weight: 1,
     fillColor: circleColor,
-    fillOpacity:0.08,
-    interactive:false
+    fillOpacity: 0.08,
+    interactive: false
   }).addTo(map);
 
-  // 🔥 ここ重要
-  if (radarInterval) clearInterval(radarInterval);
+  if (radarInterval) {
+    clearInterval(radarInterval);
+  }
 
   let grow = true;
 
