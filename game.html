@@ -454,11 +454,10 @@ lastTapTime = now;
   timeEl.style.transform = "scale(1.5)";
 
   const c = document.getElementById("seCount");
-  if (c) {
-    const a = c.cloneNode();
-    a.currentTime = 0;
-    a.play().catch(() => {});
-  }
+if (c) {
+  c.currentTime = 0;
+  c.play().catch(() => {});
+}
 
 } else {
   timeEl.style.color = "";
