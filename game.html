@@ -445,10 +445,11 @@ lastTapTime = now;
   score = 0;
   timeLeft = GAME_DURATION;
   scoreEl.textContent = '0';
-  timeEl.textContent  = GAME_DURATION;
+  timeEl.textContent = GAME_DURATION;
   timeEl.classList.remove('urgent');
   timeEl.style.color = "";
   timeEl.style.animation = "";
+  timeEl.style.transform = "scale(1)";
 
   active = true;
   placePaw();
@@ -457,24 +458,24 @@ lastTapTime = now;
     timeLeft--;
     timeEl.textContent = timeLeft;
 
-    if (timeLeft === 2 || timeLeft === 1)
-  timeEl.style.color = "#ff0000";
-  timeEl.style.animation = "dangerShake 0.2s infinite";
-  const c = document.getElementById("seCount");
-if (c) {
-  c.currentTime = 0;
-  c.play().catch(() => {});
-}
+    if (timeLeft === 2 || timeLeft === 1) {
+      timeEl.style.color = "#ff0000";
+      timeEl.style.animation = "dangerShake 0.2s infinite";
 
-} else {
-  timeEl.style.color = "";
-  timeEl.style.transform = "scale(1)";
-}
+      const c = document.getElementById("seCount");
+      if (c) {
+        c.currentTime = 0;
+        c.play().catch(() => {});
+      }
+    } else {
+      timeEl.style.color = "";
+      timeEl.style.animation = "";
+      timeEl.style.transform = "scale(1)";
+    }
 
     if (timeLeft <= 0) {
       endGame();
     }
-
   }, 1000);
 }
 
