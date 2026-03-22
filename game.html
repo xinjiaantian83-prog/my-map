@@ -164,17 +164,28 @@
     100% { transform: scale(1); }
   }
  .rare {
-  transform: scale(1.8) rotate(10deg);
-  filter: drop-shadow(0 0 20px gold) brightness(1.5);
-  animation: rareFlash 0.3s infinite alternate;
+  transform: translate(-50%, -50%) scale(2.2) rotate(12deg);
+  filter:
+    drop-shadow(0 0 8px #fff176)
+    drop-shadow(0 0 18px gold)
+    drop-shadow(0 0 28px orange);
+  animation: rareFlash 0.22s infinite alternate;
 }
 
 @keyframes rareFlash {
   from {
-    transform: scale(1.6) rotate(-10deg);
+    transform: translate(-50%, -50%) scale(1.9) rotate(-10deg);
+    filter:
+      drop-shadow(0 0 6px #fff176)
+      drop-shadow(0 0 14px gold)
+      drop-shadow(0 0 20px orange);
   }
   to {
-    transform: scale(1.9) rotate(10deg);
+    transform: translate(-50%, -50%) scale(2.35) rotate(10deg);
+    filter:
+      drop-shadow(0 0 10px #fff)
+      drop-shadow(0 0 22px gold)
+      drop-shadow(0 0 34px orange);
   }
 }
 </style>
