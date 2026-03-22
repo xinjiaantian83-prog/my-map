@@ -1081,8 +1081,6 @@ function show(t){
   console.log(t);
 }
 
-let radarInterval = null;
-
 function setRadiusCircle(m){
   if (userCircle) {
     map.removeLayer(userCircle);
@@ -1110,21 +1108,7 @@ function setRadiusCircle(m){
     interactive: false
   }).addTo(map);
 
-  let grow = true;
-
-  radarInterval = setInterval(() => {
-    if (!userCircle) return;
-
-    const current = userCircle.getRadius();
-
-    if (grow) {
-      userCircle.setRadius(current + 10);
-      if (current >= m + 30) grow = false;
-    } else {
-      userCircle.setRadius(current - 10);
-      if (current <= m - 30) grow = true;
-    }
-  }, 120);
+  
 }
 
 function normalizeSpots(arr){
