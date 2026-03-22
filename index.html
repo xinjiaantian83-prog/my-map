@@ -1110,10 +1110,10 @@ function setRadiusCircle(m){
 
   radarPulse = L.circle(userLatLng, {
     radius: 20,
-    color: circleColor,
-    weight: 2,
+    color: "transparent",
+    weight: 0,
     fillColor: circleColor,
-    fillOpacity: 0.18,
+    fillOpacity: 0.12,
     interactive: false
   }).addTo(map);
   if (window.pulseInterval) clearInterval(window.pulseInterval);
