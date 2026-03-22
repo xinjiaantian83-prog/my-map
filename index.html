@@ -1081,17 +1081,6 @@ function show(t){
   console.log(t);
 }
 
-function setRadiusCircle(m){
-  if(userCircle) map.removeLayer(userCircle);
-
-  const isDarkTest = location.hash.includes("dark-test");
-const isPurpleTest = location.hash.includes("purple-test");
-
-const circleColor = isPurpleTest
-  ? "#22c55e"
-  : (isDarkTest ? "#6ea8ff" : "#2a7fff");
-  let radarInterval = null;
-
 let radarInterval = null;
 
 function setRadiusCircle(m){
