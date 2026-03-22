@@ -867,10 +867,18 @@ ${sponsor.name}
 
 });
 */
-L.tileLayer(
-'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-{maxZoom:19}
-).addTo(map);
+const lightLayer = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+  { maxZoom: 19 }
+);
+
+const darkLayer = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  { maxZoom: 19 }
+);
+
+// 初期はライト
+lightLayer.addTo(map);
 
 let spotsRaw=[];
 let markers=[];
