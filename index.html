@@ -1111,9 +1111,9 @@ function setRadiusCircle(m){
   radarPulse = L.circle(userLatLng, {
     radius: 20,
     color: "transparent",
-    weight: 0,
+    weight: 1,
     fillColor: circleColor,
-    fillOpacity: 0.12,
+    fillOpacity: 0.08,
     interactive: false
   }).addTo(map);
   if (window.pulseInterval) clearInterval(window.pulseInterval);
@@ -1127,7 +1127,7 @@ window.pulseInterval = setInterval(() => {
   radarPulse.setRadius(pulseRadius);
 
   // 透明にしていく
-  const opacity = Math.max(0, 0.18 - pulseRadius / m);
+  const opacity = Math.max(0, 0.08 - pulseRadius / (m * 1.4));
   radarPulse.setStyle({ fillOpacity: opacity });
 
   // 一定距離でリセット
