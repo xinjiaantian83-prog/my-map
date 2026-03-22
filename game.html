@@ -254,24 +254,23 @@ document.addEventListener("click", unlockSound, { once: true });
 function playTap() {
   if (!soundEnabled) return;
 
-  const a = document.getElementById("seTap");
-  if (!a) return;
+  const base = document.getElementById("seTap");
+  if (!base) return;
 
-  a.pause();
+  const a = base.cloneNode();
   a.currentTime = 0;
   a.play().catch(() => {});
 }
- function playRare() {
+
+function playRare() {
   if (!soundEnabled) return;
 
   const base = document.getElementById("seRare");
   if (!base) return;
 
-  base.currentTime = 0;
-  base.play().catch(() => {
-    const a = new Audio("rare.mp3");
-    a.play().catch(() => {});
-  });
+  const a = base.cloneNode();
+  a.currentTime = 0;
+  a.play().catch(() => {});
 }
   const pawEl     = document.getElementById('paw');
   const gameArea  = document.getElementById('game-area');
