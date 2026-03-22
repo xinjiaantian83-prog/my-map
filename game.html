@@ -486,18 +486,19 @@ lastTapTime = now;
     tick();
   }
 
-  startBtn.addEventListener('click', () => {
+  startBtn.addEventListener('touchstart', (e) => {
+  e.preventDefault();
 
   const base = document.getElementById("seStart");
-if (base) {
-  const a = base.cloneNode();
-  a.currentTime = 0;
-  a.play().catch(() => {});
-}
+  if (base) {
+    const a = base.cloneNode();
+    a.currentTime = 0;
+    a.play().catch(() => {});
+  }
 
   startScr.classList.add('hidden');
   runCountdown(startGame);
-});
+}, { passive: false });
 
   retryBtn.addEventListener('click', () => {
 
