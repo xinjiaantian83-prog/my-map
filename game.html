@@ -318,11 +318,10 @@ function playTap() {
   pawEl.style.display = 'block';
 
   if (Math.random() < 0.15) {
-    pawEl.classList.add("rare");
-    playRare();
-  } else {
-    pawEl.classList.remove("rare");
-  }
+  pawEl.classList.add("rare");
+} else {
+  pawEl.classList.remove("rare");
+}
 }
   function spawnRipple(x, y) {
     const r = document.createElement('div');
