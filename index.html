@@ -1127,13 +1127,13 @@ window.pulseInterval = setInterval(() => {
   radarPulse.setRadius(pulseRadius);
 
   // 透明にしていく
-  const opacity = Math.max(0, 0.08 - pulseRadius / (m * 1.4));
+  const opacity = Math.max(0, 0.18 - pulseRadius / (m * 1.8));
   radarPulse.setStyle({ fillOpacity: opacity });
 
   // 一定距離でリセット
-  if (pulseRadius > m) {
-    pulseRadius = 20;
-  }
+  if (pulseRadius > m * 1.8) {
+  pulseRadius = 20;
+}
 }, 60);
 }
 
