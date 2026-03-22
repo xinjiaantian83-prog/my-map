@@ -501,6 +501,9 @@ lastTapTime = now;
     }, 500);
 
   }, 500);
+  let totalScore = Number(localStorage.getItem("wanwan_score") || 0);
+totalScore += score;
+localStorage.setItem("wanwan_score", totalScore);
 }
 
   function runCountdown(cb) {
