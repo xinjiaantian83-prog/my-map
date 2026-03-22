@@ -282,6 +282,19 @@ function playRare() {
   a.play().catch(() => {});
 }
   const pawEl     = document.getElementById('paw');
+ let extraPaw = null;
+ function createExtraPaw() {
+  if (extraPaw) {
+    extraPaw.remove();
+  }
+
+  extraPaw = pawEl.cloneNode(true);
+  extraPaw.id = ""; // ID消す（重要）
+  gameArea.appendChild(extraPaw);
+
+  extraPaw.addEventListener('touchstart', onPawTap, { passive: false });
+  extraPaw.addEventListener('mousedown', onPawTap);
+}
   const gameArea  = document.getElementById('game-area');
   const scoreEl   = document.getElementById('score-value');
   const timeEl    = document.getElementById('time-value');
@@ -380,6 +393,7 @@ scoreEl.textContent = score;
 
     active = true;
     placePaw();
+   createExtraPaw();
 
     gameTimer = setInterval(() => {
       timeLeft--;
