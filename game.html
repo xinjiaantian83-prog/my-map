@@ -208,6 +208,36 @@
 </div>
 
 <script>
+ let soundEnabled = false;
+
+function unlockSound() {
+  if (soundEnabled) return;
+  soundEnabled = true;
+
+  const a = document.getElementById("seTap");
+  if (!a) return;
+
+  a.volume = 0;
+  a.play().then(() => {
+    a.pause();
+    a.currentTime = 0;
+    a.volume = 1;
+  }).catch(() => {});
+}
+
+document.addEventListener("touchstart", unlockSound, { once: true });
+document.addEventListener("click", unlockSound, { once: true });
+
+function playTap() {
+  if (!soundEnabled) return;
+
+  const a = document.getElementById("seTap");
+  if (!a) return;
+
+  a.pause();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
   const pawEl     = document.getElementById('paw');
   const gameArea  = document.getElementById('game-area');
   const scoreEl   = document.getElementById('score-value');
@@ -263,8 +293,8 @@
     e.stopPropagation();
 
     score++;
-    scoreEl.textContent = score;
-
+playTap();
+scoreEl.textContent = score;
     // Ripple position relative to game area
     const rect = gameArea.getBoundingClientRect();
     const touch = e.touches ? e.touches[0] : e;
@@ -346,5 +376,6 @@
     runCountdown(startGame);
   });
 </script>
+ <audio id="seTap" src="sounds/tap.mp3" preload="auto"></audio>
 </body>
 </html>
