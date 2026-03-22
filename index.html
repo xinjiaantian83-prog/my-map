@@ -1768,9 +1768,12 @@ function closePolicy(){
   document.getElementById("recordCard").classList.remove("hidden");
 }
 
-document.getElementById("miniGameBtn").addEventListener("click", () => {
-  location.href = "game.html";
-});
+const miniBtn = document.getElementById("miniGameBtn");
+
+if (miniBtn) {
+  miniBtn.addEventListener("click", () => {
+    location.href = "game.html";
+  });
 }
 
 </script>
