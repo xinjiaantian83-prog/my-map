@@ -515,7 +515,13 @@ lastTapTime = now;
 
   resultScore.textContent = score;
   resultComment.textContent = getComment(score);
-
+const seResult = document.getElementById("seResult");
+if (seResult) {
+  seResult.currentTime = 0;
+  setTimeout(() => {
+    seResult.play().catch(() => {});
+  }, 600);
+}
   const sponsorBox = document.getElementById("sponsorBox");
   if (sponsorBox) {
     sponsorBox.innerHTML = `
@@ -600,5 +606,6 @@ if (backBtn) {
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
  <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
  <audio id="seCount" src="count.mp3" preload="auto"></audio>
+ <audio id="seResult" src="reward.mp3" preload="auto"></audio>
 </body>
 </html>
