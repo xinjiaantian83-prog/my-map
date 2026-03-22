@@ -228,15 +228,20 @@ function unlockSound() {
   if (soundEnabled) return;
   soundEnabled = true;
 
-  const a = document.getElementById("seTap");
-  if (!a) return;
+  const list = [
+    document.getElementById("seTap"),
+    document.getElementById("seRare")
+  ];
 
-  a.volume = 0;
-  a.play().then(() => {
-    a.pause();
-    a.currentTime = 0;
-    a.volume = 1;
-  }).catch(() => {});
+  list.forEach(a => {
+    if (!a) return;
+    a.volume = 0;
+    a.play().then(() => {
+      a.pause();
+      a.currentTime = 0;
+      a.volume = 1;
+    }).catch(() => {});
+  });
 }
 
 document.addEventListener("touchstart", unlockSound, { once: true });
