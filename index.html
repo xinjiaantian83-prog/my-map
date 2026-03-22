@@ -1100,7 +1100,7 @@ function setRadiusCircle(m){
     color: circleColor,
     weight: 1,
     fillColor: circleColor,
-    fillOpacity: 0.08,
+    fillOpacity: 0.03,
     interactive: false
   }).addTo(map);
     if (radarPulse) {
@@ -1113,11 +1113,11 @@ function setRadiusCircle(m){
     color: circleColor,
     weight: 2,
     fillColor: circleColor,
-    fillOpacity: 0.05,
+    fillOpacity: 0.18,
     interactive: false
   }).addTo(map);
   if (window.pulseInterval) clearInterval(window.pulseInterval);
-  let pulseRadius = 20;
+  let pulseRadius = 60;
 
 window.pulseInterval = setInterval(() => {
   if (!radarPulse) return;
@@ -1127,7 +1127,7 @@ window.pulseInterval = setInterval(() => {
   radarPulse.setRadius(pulseRadius);
 
   // 透明にしていく
-  const opacity = Math.max(0, 0.12 - pulseRadius / (m * 2));
+  const opacity = Math.max(0, 0.18 - pulseRadius / m);
   radarPulse.setStyle({ fillOpacity: opacity });
 
   // 一定距離でリセット
