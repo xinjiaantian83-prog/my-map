@@ -487,17 +487,20 @@ lastTapTime = now;
   resultScore.textContent = score;
   resultComment.textContent = getComment(score);
 
+  // ① まず止まる（余韻①）
   setTimeout(() => {
+
     pawEl.style.display = 'none';
     if (extraPaw) {
       extraPaw.style.display = 'none';
     }
 
+    // ② 少し間を空けて結果表示（余韻②）
     setTimeout(() => {
       resultScr.classList.remove('hidden');
-    }, 250);
+    }, 400);
 
-  }, 180);
+  }, 350);
 }
 
   function runCountdown(cb) {
