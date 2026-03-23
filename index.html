@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const isDevMode =
   location.search.includes("dev=1") ||
   localStorage.getItem("dev_mode") === "1";
+  alert("isDevMode=" + isDevMode);
   const devBtn = document.getElementById("devNightToggle");
 
   if (devBtn) {
