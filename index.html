@@ -1810,7 +1810,28 @@ if (resetBtn) {
 }
  document.addEventListener("click", function(e){
   if(e.target && e.target.id === "shopNightMap"){
-    alert("押せてる！");
+
+    const score = Number(localStorage.getItem("wanwan_score") || 0);
+
+    if (score < 500) {
+      alert("ポイントが足りません🐾");
+      return;
+    }
+
+    if (localStorage.getItem("night_unlocked")) {
+      alert("すでに解放済みです🌙");
+      return;
+    }
+
+    if (!confirm("500P使ってナイトマップを解放しますか？")) return;
+
+    const newScore = score - 500;
+    localStorage.setItem("wanwan_score", newScore);
+
+    localStorage.setItem("night_unlocked", "1");
+
+    alert("🌙 ナイトマップ解放！");
+    location.reload();
   }
 });
 </script>
