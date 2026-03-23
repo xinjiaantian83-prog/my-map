@@ -625,6 +625,15 @@ if (seResult) {
   startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
 
+  // 🔥 音解放＋スタート音
+  unlockSound();
+
+  const seStart = document.getElementById("seStart");
+  if (seStart) {
+    seStart.currentTime = 0;
+    seStart.play().catch(() => {});
+  }
+
   // 押した感🔥
   startBtn.style.transform = 'scale(0.94)';
   startBtn.style.opacity = '0.88';
