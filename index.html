@@ -798,6 +798,7 @@ font-family:sans-serif;
 <script>
   const foundSound = new Audio("chieuk-coin-257878.mp3");
 const ESTIMATED_TOTAL = 1500;
+  let reportMode = false;
   function generateInternalUserId(){
   return "wwc_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 }
@@ -843,7 +844,7 @@ let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
 
 /*
 map.on('contextmenu', function(e){
-
+if (!reportMode) return;
   const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
 
   // 現在地が必要
@@ -919,6 +920,7 @@ ${sponsor.name}
     lat: e.latlng.lat,
     lng: e.latlng.lng
   });
+  reportMode = false;
 
   localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 
@@ -1959,6 +1961,7 @@ const reportBtn = document.getElementById("reportModeBtn");
 
 if (reportBtn) {
   reportBtn.addEventListener("click", () => {
+    reportMode = true;
     alert("報告モードON！\n地図を長押しして場所を教えてください");
   });
 }
