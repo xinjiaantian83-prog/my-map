@@ -42,6 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
+
+/* 👇これ追加（一番上でOK） */
+#devNightToggle{
+  display: none !important;
+}
+
 html, body{
   margin:0;
   padding:0;
@@ -581,6 +587,9 @@ button.active{
   width:180px;
   display:block;
   margin:10px auto 6px auto;
+}
+  #devNightToggle{
+  display:none !important;
 }
 </style>
 </head>
@@ -1918,6 +1927,18 @@ if (btnThemeDark) {
     localStorage.setItem("map_theme", "dark");
     location.reload();
   });
+}
+
+const devBtn = document.getElementById("devNightToggle");
+
+if (devBtn) {
+  devBtn.style.display = "none"; // ← まず最初に消す
+
+  const isDev = location.search.includes("dev=1");
+
+  if (isDev) {
+    devBtn.style.display = "block";
+  }
 }
 </script>
   <div id="policyPage" class="hidden" style="
