@@ -634,13 +634,19 @@ if (seResult) {
 
   startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
+  e.stopPropagation();
 
-  unlockSound();
+  // ① まず音を最優先で鳴らす
   playStartSound();
 
+  // ② その後で解放処理
+  unlockSound();
+
+  // ③ 見た目
   startBtn.style.transform = 'scale(0.94)';
   startBtn.style.opacity = '0.88';
 
+  // ④ 少し後で画面遷移
   setTimeout(() => {
     startBtn.style.transform = '';
     startBtn.style.opacity = '';
@@ -676,10 +682,10 @@ if (backBtn) {
   });
 }
  function playStartSound() {
-  const base = document.getElementById("seStart");
-  if (!base) return;
+  const a = document.getElementById("seStart");
+  if (!a) return;
 
-  const a = base.cloneNode();
+  a.pause();
   a.currentTime = 0;
   a.play().catch(() => {});
 }
