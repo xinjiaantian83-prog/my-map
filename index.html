@@ -592,7 +592,17 @@ button.active{
   display:block;
   margin:10px auto 6px auto;
 }
-  
+  #reportModeBtn{
+  border:none;
+  border-radius:999px;
+  padding:10px 14px;
+  background:#ffedd5;
+  color:#9a3412;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+}
 </style>
 </head>
 
@@ -659,6 +669,7 @@ font-family:sans-serif;
   <button id="btnAll" class="range-btn active">全部</button>
   <button id="btnLocate">位置</button>
   <button id="btnCluster" class="active">集約</button>
+  <button id="reportModeBtn">🐾 新発見を報告</button>
 </div>
   <div class="controls-row" id="themeRow" style="display:none;">
   <button id="btnThemeLight">☀️ 昼</button>
@@ -1934,13 +1945,22 @@ if (btnThemeDark) {
 const devBtn = document.getElementById("devNightToggle");
 
 if (devBtn) {
-  devBtn.style.display = "none"; // ← まず最初に消す
+  devBtn.style.display = "none";
 
   const isDev = location.search.includes("dev=1");
 
   if (isDev) {
     devBtn.style.display = "block";
   }
+}
+
+// 👇外に出す！！
+const reportBtn = document.getElementById("reportModeBtn");
+
+if (reportBtn) {
+  reportBtn.addEventListener("click", () => {
+    alert("ここから報告モードをつなげます");
+  });
 }
 </script>
   <div id="policyPage" class="hidden" style="
