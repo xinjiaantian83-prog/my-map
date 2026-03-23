@@ -1839,7 +1839,9 @@ if (resetBtn) {
   }
 });
   // 👇テスト用（まずONにする）
-
+// 👇テスト用（最初に実行）
+localStorage.setItem("wanwan_score", "1000");
+localStorage.setItem("night_unlocked", "1");
 // 👇ナイト解放してたらダークにする（初期）
 if (localStorage.getItem("night_unlocked")) {
   document.body.style.background = "#0f172a";
