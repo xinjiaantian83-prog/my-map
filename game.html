@@ -352,12 +352,20 @@ function playRare() {
 let lastTapTime = 0;
 let comboCount = 0;
   const comments = {
+  zero: [
+    "0点で草ww🤣",
+    "ナイトモードいらんのか？🌙",
+    "どんまい🐾",
+    "逆にすごいなこれ😂"
+  ],
+
   low: [
     "ほやけんよ笑",
     "🐱 まだまだこれからやね",
     "😆 指あったまってないかも？",
     "🍀 もう一回いこうや"
-  ],
+  ]
+};
   mid: [
     "👏 なかなかええ感じやね",
     "🔥 ちょっと調子出てきたな",
@@ -383,6 +391,10 @@ function getRandom(arr){
 }
 
 function getComment(s) {
+
+  // 👇これを追加
+  if (s === 0) return getRandom(comments.zero);
+
   if (s < 10) return getRandom(comments.low);
   if (s < 20) return getRandom(comments.mid);
   if (s < 30) return getRandom(comments.high);
