@@ -628,6 +628,10 @@ font-family:sans-serif;
   <button id="btnLocate">位置</button>
   <button id="btnCluster" class="active">集約</button>
 </div>
+  <div class="controls-row" id="themeRow" style="display:none;">
+  <button id="btnThemeLight">☀️ 昼</button>
+  <button id="btnThemeDark">🌙 夜</button>
+</div>
 
 <div class="controls-row bottom-row">
   <button id="btnRecord">
@@ -1836,7 +1840,7 @@ if (resetBtn) {
 });
   // 👇テスト用（まずONにする）
 
-// 👇表示切り替え
+// 👇ナイト解放してたらダークにする（初期）
 if (localStorage.getItem("night_unlocked")) {
   document.body.style.background = "#0f172a";
 
@@ -1844,6 +1848,14 @@ if (localStorage.getItem("night_unlocked")) {
     map.removeLayer(lightLayer);
     darkLayer.addTo(map);
   }
+}
+
+// 👇ボタン表示は別
+const themeRow = document.getElementById("themeRow");
+
+if (themeRow && localStorage.getItem("night_unlocked")) {
+  themeRow.style.display = "flex";
+}
 }
 </script>
   <div id="policyPage" class="hidden" style="
