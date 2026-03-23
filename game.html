@@ -658,11 +658,25 @@ if (seResult) {
 
 }, { passive: false });
 
-  retryBtn.addEventListener('click', () => {
+  retryBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  retryBtn.style.transform = 'scale(0.94)';
+  retryBtn.style.opacity = '0.88';
+
+  const seStart = document.getElementById("seStart");
+  if (seStart) {
+    seStart.currentTime = 0;
+    seStart.play().catch(() => {});
+  }
+
   setTimeout(() => {
+    retryBtn.style.transform = '';
+    retryBtn.style.opacity = '';
+
     resultScr.classList.add('hidden');
     runCountdown(startGame);
-  }, 0);
+  }, 150);
 });
 
 const backBtn = document.getElementById("backBtn");
