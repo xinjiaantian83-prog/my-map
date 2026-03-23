@@ -1834,6 +1834,16 @@ if (resetBtn) {
     location.reload();
   }
 });
+  if (localStorage.getItem("night_unlocked")) {
+  document.body.style.background = "#0f172a"; // ダーク
+  document.body.style.color = "#fff";
+
+  // マップの見た目も少し暗くする（軽く）
+  const mapEl = document.getElementById("map");
+  if (mapEl) {
+    mapEl.style.filter = "brightness(0.7) contrast(1.1)";
+  }
+}
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
