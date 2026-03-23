@@ -10,16 +10,17 @@ gtag('js', new Date());
 gtag('config', 'G-NNF34M8570');
 
 document.addEventListener("DOMContentLoaded", () => {
-const isDevMode =
-  location.search.includes("dev=1") ||
-  localStorage.getItem("dev_mode") === "1";
-  alert("isDevMode=" + isDevMode);
-  const devBtn = document.getElementById("devNightToggle");
-alert(devBtn);
-  if (devBtn) {
-  devBtn.style.display = isDevMode ? "block" : "none";
 
-  devBtn.addEventListener("click", () => {
+  const isDevMode =
+    location.search.includes("dev=1") ||
+    localStorage.getItem("dev_mode") === "1";
+
+  const devBtn = document.getElementById("devNightToggle");
+
+  if (devBtn) {
+    devBtn.style.display = isDevMode ? "block" : "none";
+
+    devBtn.addEventListener("click", () => {
 
       if (localStorage.getItem("night_unlocked")) {
         localStorage.removeItem("night_unlocked");
