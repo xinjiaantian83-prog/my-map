@@ -1856,7 +1856,22 @@ const themeRow = document.getElementById("themeRow");
 if (themeRow && localStorage.getItem("night_unlocked")) {
   themeRow.style.display = "flex";
 }
+const btnThemeLight = document.getElementById("btnThemeLight");
+const btnThemeDark = document.getElementById("btnThemeDark");
 
+if (btnThemeLight) {
+  btnThemeLight.addEventListener("click", () => {
+    localStorage.setItem("map_theme", "light");
+    location.reload();
+  });
+}
+
+if (btnThemeDark) {
+  btnThemeDark.addEventListener("click", () => {
+    localStorage.setItem("map_theme", "dark");
+    location.reload();
+  });
+}
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
