@@ -636,14 +636,7 @@ if (seResult) {
   e.preventDefault();
 
   unlockSound();
-
-  const seStart = document.getElementById("seStart");
-  if (seStart) {
-    setTimeout(() => {
-      seStart.currentTime = 0;
-      seStart.play().catch(() => {});
-    }, 30);
-  }
+  playStartSound();
 
   startBtn.style.transform = 'scale(0.94)';
   startBtn.style.opacity = '0.88';
@@ -658,17 +651,13 @@ if (seResult) {
 
 }, { passive: false });
 
-  retryBtn.addEventListener('click', (e) => {
+  retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
+
+  playStartSound();
 
   retryBtn.style.transform = 'scale(0.94)';
   retryBtn.style.opacity = '0.88';
-
-  const seStart = document.getElementById("seStart");
-  if (seStart) {
-    seStart.currentTime = 0;
-    seStart.play().catch(() => {});
-  }
 
   setTimeout(() => {
     retryBtn.style.transform = '';
@@ -677,14 +666,22 @@ if (seResult) {
     resultScr.classList.add('hidden');
     runCountdown(startGame);
   }, 150);
-});
 
+}, { passive: false });
 const backBtn = document.getElementById("backBtn");
 
 if (backBtn) {
   backBtn.addEventListener("click", () => {
     location.href = "index.html";
   });
+}
+ function playStartSound() {
+  const base = document.getElementById("seStart");
+  if (!base) return;
+
+  const a = base.cloneNode();
+  a.currentTime = 0;
+  a.play().catch(() => {});
 }
 </script>
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
