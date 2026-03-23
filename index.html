@@ -890,7 +890,17 @@ const darkLayer = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
   { maxZoom: 19 }
 );
+const savedTheme = localStorage.getItem("map_theme") || "light";
 
+if (localStorage.getItem("night_unlocked")) {
+  if (savedTheme === "dark") {
+    darkLayer.addTo(map);
+  } else {
+    lightLayer.addTo(map);
+  }
+} else {
+  lightLayer.addTo(map);
+}
 // 初期はライト
 lightLayer.addTo(map);
 if (location.hash.includes("dark-test")) {
@@ -1863,11 +1873,25 @@ const btnThemeDark = document.getElementById("btnThemeDark");
 
 if (btnThemeLight) {
   btnThemeLight.addEventListener("click", () => {
-    localStorage.setItem("map_theme", "light");
-    location.reload();
+  localStorage.setItem("map_theme", "light");
+
+  map.removeLayer(darkLayer);
+  lightLayer.addTo(map);
+});
+}
+if (btnThemeDark) {
+  btnThemeDark.addEventListener("click", () => {
+    if (!localStorage.getItem("night_unlocked")) {
+      alert("ナイトマップが解放されていません");
+      return;
+    }
+
+    localStorage.setItem("map_theme", "dark");
+
+    map.removeLayer(lightLayer);
+    darkLayer.addTo(map);
   });
 }
-
 if (btnThemeDark) {
   btnThemeDark.addEventListener("click", () => {
     localStorage.setItem("map_theme", "dark");
