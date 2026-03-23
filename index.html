@@ -1835,16 +1835,15 @@ if (resetBtn) {
   }
 });
   // 👇テスト用（まずONにする）
-localStorage.setItem("night_unlocked", "1");
 
 // 👇表示切り替え
 if (localStorage.getItem("night_unlocked")) {
   document.body.style.background = "#0f172a";
   document.body.style.color = "#fff";
 
-  const mapEl = document.getElementById("map");
-  if (mapEl) {
-    mapEl.style.filter = "brightness(0.7) contrast(1.1)";
+  if (typeof lightLayer !== "undefined" && typeof darkLayer !== "undefined") {
+    map.removeLayer(lightLayer);
+    darkLayer.addTo(map);
   }
 }
 </script>
