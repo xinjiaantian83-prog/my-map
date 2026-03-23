@@ -285,12 +285,30 @@ function unlockSound() {
   if (soundEnabled) return;
   soundEnabled = true;
 
-  const tap = document.getElementById("seTap");
-  const rare = document.getElementById("seRare");
+  const sounds = [
+    document.getElementById("seStart"),
+    document.getElementById("seTap"),
+    document.getElementById("seRare"),
+    document.getElementById("seCount"),
+    document.getElementById("seResult")
+  ];
 
-  [tap, rare].forEach(a => {
+  sounds.forEach(a => {
     if (!a) return;
-    a.load(); // ←再生しないのがポイント
+
+    a.load();
+
+    const prevVolume = a.volume;
+    a.volume = 0;
+    a.currentTime = 0;
+
+    a.play().then(() => {
+      a.pause();
+      a.currentTime = 0;
+      a.volume = prevVolume;
+    }).catch(() => {
+      a.volume = prevVolume;
+    });
   });
 }
 
@@ -625,16 +643,16 @@ if (seResult) {
   startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
 
-  // 🔥 音解放＋スタート音
   unlockSound();
 
   const seStart = document.getElementById("seStart");
   if (seStart) {
-    seStart.currentTime = 0;
-    seStart.play().catch(() => {});
+    setTimeout(() => {
+      seStart.currentTime = 0;
+      seStart.play().catch(() => {});
+    }, 30);
   }
 
-  // 押した感🔥
   startBtn.style.transform = 'scale(0.94)';
   startBtn.style.opacity = '0.88';
 
