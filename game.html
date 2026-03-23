@@ -298,22 +298,18 @@ function unlockSound() {
 
     a.load();
 
-    const prevVolume = a.volume;
-    a.volume = 0;
+    a.muted = true;
     a.currentTime = 0;
 
     a.play().then(() => {
       a.pause();
       a.currentTime = 0;
-      a.volume = prevVolume;
+      a.muted = false;
     }).catch(() => {
-      a.volume = prevVolume;
+      a.muted = false;
     });
   });
 }
-
-document.addEventListener("touchstart", unlockSound, { once: true });
-document.addEventListener("click", unlockSound, { once: true });
 
 function playTap() {
   if (!soundEnabled) return;
