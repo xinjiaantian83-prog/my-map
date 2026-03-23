@@ -381,11 +381,18 @@ let comboCount = 0;
   ],
 
   top: [
-    "👑 マジかよ！",
-    "🏆 トップレベルやね",
-    "💥 これはなかなか出んよ",
-    "🐕‍🦺 チート使いましたね？！"
-  ]
+  "👑 マジかよ！",
+  "🏆 トップレベルやね",
+  "💥 これはなかなか出んよ",
+  "🐕‍🦺 チート使いましたね？！"
+], // ←これ重要🔥
+
+legend: [
+  "スクショ禁止📸",
+  "これ外部持ち出しNGな🤫",
+  "ヤッベ！",
+  "自慢すんなよ？笑"
+]
 };
 
 function getRandom(arr){
@@ -394,8 +401,9 @@ function getRandom(arr){
 
 function getComment(s) {
 
-  // 👇これを追加
   if (s === 0) return getRandom(comments.zero);
+
+  if (s >= 40) return getRandom(comments.legend); // ←これ🔥
 
   if (s < 10) return getRandom(comments.low);
   if (s < 20) return getRandom(comments.mid);
