@@ -351,13 +351,43 @@ function playRare() {
   let active = false;
 let lastTapTime = 0;
 let comboCount = 0;
-  function getComment(s) {
-    if (s >= 30) return '🏆 すごい！神の肉球さばき！';
-    if (s >= 20) return '🔥 かなり速い！上級者！';
-    if (s >= 12) return '👏 なかなかやるね！';
-    if (s >= 6)  return '😊 もう一回チャレンジ！';
-    return '🐱 練習あるのみ！';
-  }
+  const comments = {
+  low: [
+    "ほやけんよ笑",
+    "🐱 まだまだこれからやね",
+    "😆 指あったまってないかも？",
+    "🍀 もう一回いこうや"
+  ],
+  mid: [
+    "👏 なかなかええ感じやね",
+    "🔥 ちょっと調子出てきたな",
+    "🐾 そのペースいいね",
+    "😊 もう少しで伸びそう"
+  ],
+  high: [
+    "⚠️ 突き指注意！",
+    "🔥 だいぶ速いね！",
+    "🐕 いい動きしとる",
+    "💪 かなり仕上がってきた"
+  ],
+  top: [
+    "👑 マジかよ！",
+    "🏆 トップレベルやね",
+    "💥 これはなかなか出んよ",
+    "🐕‍🦺 チート使いましたね？！"
+  ]
+};
+
+function getRandom(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getComment(s) {
+  if (s < 10) return getRandom(comments.low);
+  if (s < 20) return getRandom(comments.mid);
+  if (s < 30) return getRandom(comments.high);
+  return getRandom(comments.top);
+}
 
  function placePaw() {
   const areaW = gameArea.offsetWidth;
