@@ -286,7 +286,6 @@ function unlockSound() {
   soundEnabled = true;
 
   const sounds = [
-    document.getElementById("seStart"),
     document.getElementById("seTap"),
     document.getElementById("seRare"),
     document.getElementById("seCount"),
@@ -297,7 +296,6 @@ function unlockSound() {
     if (!a) return;
 
     a.load();
-
     a.muted = true;
     a.currentTime = 0;
 
@@ -310,7 +308,6 @@ function unlockSound() {
     });
   });
 }
-
 function playTap() {
   if (!soundEnabled) return;
 
