@@ -592,12 +592,17 @@ button.active{
   #reportModeBtn{
   position: fixed;
   right: 14px;
-  bottom: 190px; /* 記録ボタンの上に来る位置 */
+  bottom: 190px;
 
-  z-index: 2000;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  padding: 14px;
-  font-size: 16px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
 
   background:#ffedd5;
   box-shadow:0 6px 16px rgba(0,0,0,0.25);
@@ -659,31 +664,9 @@ font-family:sans-serif;
 <!--
 <div style="font-weight:bold; margin-top:4px;">
   🐾 発見数 <span id="foundCount">0</span>
-</div>
--->
-<div class="controls-row top-row">
-  <button id="btn500" class="range-btn">500m</button>
-  <button id="btn1k" class="range-btn">1km</button>
-  <button id="btn3k" class="range-btn">3km</button>
-  <button id="btnAll" class="range-btn active">全部</button>
-  <button id="btnLocate">📍現在地へ</button>
-  <button id="btnCluster" class="active">🧭ピン整理</button>
+
+
   
-</div>
-
-<div class="controls-row" id="themeRow" style="display:none;">
-  <button id="btnThemeLight">☀️ 昼</button>
-  <button id="btnThemeDark">🌙 夜</button>
-</div>
-
-<div class="controls-row bottom-row">
-  <div id="searchBox" style="display:none;">
-    <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
-    <button id="btnClearSearch">✕</button>
-    <button id="btnSearch">🔍</button>
-  </div>
-  <button id="searchToggleBtn">🔍番号検索</button>
-</div>
 
 </div> <!-- ←これで controls 終わり -->
 
