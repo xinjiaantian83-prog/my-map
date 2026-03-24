@@ -662,14 +662,39 @@ font-family:sans-serif;
 </div>
 -->
 <!--
-<div style="font-weight:bold; margin-top:4px;">
-  🐾 発見数 <span id="foundCount">0</span>
+<div class="controls">
 
+  <div class="controls-row top-row">
+    <button id="btn500" class="range-btn">500m</button>
+    <button id="btn1k" class="range-btn">1km</button>
+    <button id="btn3k" class="range-btn">3km</button>
+    <button id="btnAll" class="range-btn active">全部</button>
+    <button id="btnLocate">📍現在地へ</button>
+    <button id="btnCluster" class="active">🧭ピン整理</button>
+  </div>
 
-  
+  <div class="controls-row" id="themeRow" style="display:none;">
+    <button id="btnThemeLight">☀️ 昼</button>
+    <button id="btnThemeDark">🌙 夜</button>
+  </div>
 
-</div> <!-- ←これで controls 終わり -->
+  <div class="controls-row bottom-row">
+    <div id="searchBox" style="display:none;">
+      <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
+      <button id="btnClearSearch">✕</button>
+      <button id="btnSearch">🔍</button>
+    </div>
+    <button id="searchToggleBtn">🔍番号検索</button>
+  </div>
 
+</div>
+
+<button id="btnRecord">
+  <img src="paw.png" alt="メニュー">
+  <span class="record-text">記録</span>
+</button>
+
+<button id="reportModeBtn">🐾</button>
 
 
 <div id="recordCard" class="record-card hidden">
