@@ -819,12 +819,7 @@ setTimeout(() => {
   map.removeLayer(m);
 }, 4000);
 
-pawData.push({
-  lat: e.latlng.lat,
-  lng: e.latlng.lng
-});
   reportMode = false;
-  localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 });
 const lightLayer = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
