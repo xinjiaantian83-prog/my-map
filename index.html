@@ -1947,35 +1947,6 @@ if (btnThemeDark) {
   });
 }
 
-const devBtn = document.getElementById("devNightToggle");
-
-if (devBtn) {
-
-  // 表示制御
-  if (!isDev) {
-    devBtn.style.display = "none";
-  } else {
-    devBtn.style.display = "block";
-  }
-
-  // クリック処理（devの時だけ有効）
-  if (isDev) {
-    devBtn.addEventListener("click", () => {
-
-      if (localStorage.getItem("night_unlocked")) {
-        localStorage.removeItem("night_unlocked");
-        alert("🌙 ナイトOFF（未解放）");
-      } else {
-        localStorage.setItem("night_unlocked", "1");
-        alert("🌙 ナイトON（強制解放）");
-      }
-
-      location.reload();
-    });
-  }
-
-}
-
 // 👇外に出す！！
 const reportBtn = document.getElementById("reportModeBtn");
 
@@ -2037,7 +2008,8 @@ if (reportBtn) {
     ・探索は自己責任で行ってください。
   </p>
 </div>
-  <button id="devNightToggle" style="
+
+<button id="devNightToggle" style="
   position:fixed;
   bottom:20px;
   right:20px;
@@ -2048,8 +2020,37 @@ if (reportBtn) {
   background:#111;
   color:#fff;
   opacity:0.8;
+  display:none;
 ">
   🌙開発ナイト切替
 </button>
+
+<script>
+(function () {
+  const devBtn = document.getElementById("devNightToggle");
+  const isDevPage = location.search.includes("dev=1");
+
+  if (!devBtn) return;
+
+  if (!isDevPage) {
+    devBtn.style.display = "none";
+    return;
+  }
+
+  devBtn.style.display = "block";
+
+  devBtn.addEventListener("click", () => {
+    if (localStorage.getItem("night_unlocked")) {
+      localStorage.removeItem("night_unlocked");
+      alert("🌙 ナイトOFF（未解放）");
+    } else {
+      localStorage.setItem("night_unlocked", "1");
+      alert("🌙 ナイトON（強制解放）");
+    }
+
+    location.reload();
+  });
+})();
+</script>
 </body>
 </html>
