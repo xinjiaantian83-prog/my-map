@@ -1669,11 +1669,11 @@ loadSponsors().then(async () => {
     localStorage.setItem("wanwan_first_loaded", "1");
   }
 
+  if (isDev) {
   pawData.forEach(p => {
-    
-  const m = L.marker([p.lat, p.lng], {
-    icon: pawIcon
-  }).addTo(map)
+    const m = L.marker([p.lat, p.lng], {
+      icon: pawIcon
+    }).addTo(map)
   .bindPopup(`
     <div class="spot-card">
       <button class="card-close" onclick="closePopup()" aria-label="閉じる">
@@ -1740,7 +1740,7 @@ loadSponsors().then(async () => {
 
    pawMarkers.push(m);
   });
-});
+}
   const btnRecord = document.getElementById("btnRecord");
 const recordCard = document.getElementById("recordCard");
 const btnCloseRecord = document.getElementById("btnCloseRecord");
