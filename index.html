@@ -1634,7 +1634,7 @@ if(!isFirstLaunch){
 loadSponsors().then(async () => {
   await loadSpots();
   updateFoundUI();
-
+showFirstGuide();
   setTimeout(() => {
     map.invalidateSize();
   }, 300);
@@ -1959,6 +1959,22 @@ if (reportBtn) {
       alert("報告モードON！\n地図を長押しして場所を教えてください");
     });
   }
+}
+  function showFirstGuide(){
+
+  if(localStorage.getItem("wanwan_guide_shown")) return;
+
+  setTimeout(() => {
+    alert(
+`🐾 使い方
+
+・近くの自販機で「発見を記録」が押せます
+・気になる場所はタップして確認できます`
+    );
+
+    localStorage.setItem("wanwan_guide_shown","1");
+
+  }, 800);
 }
 </script>
   <div id="policyPage" class="hidden" style="
