@@ -1958,14 +1958,12 @@ if (btnThemeDark) {
 const reportBtn = document.getElementById("reportModeBtn");
 
 if (reportBtn) {
-  if (!isDev) {
-    reportBtn.style.display = "none";
-  } else {
-    reportBtn.addEventListener("click", () => {
-      reportMode = true;
-      alert("報告モードON！\n地図を長押しして場所を教えてください");
-    });
-  }
+  reportBtn.style.display = "inline-flex";
+
+  reportBtn.addEventListener("click", () => {
+    reportMode = true;
+    alert("報告モードON！\n地図を長押しして場所を教えてください");
+  });
 }
   function showFirstGuide(){
 
