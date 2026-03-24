@@ -581,6 +581,13 @@ button.active{
   right: 14px;
   bottom: 110px;
   z-index: 2000;
+
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+
+  background: #fff4d6;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 }
 </style>
 </head>
@@ -650,22 +657,24 @@ font-family:sans-serif;
   <button id="btnCluster" class="active">🧭ピン整理</button>
   <button id="reportModeBtn">🐾 新発見を報告</button>
 </div>
-  <div class="controls-row" id="themeRow" style="display:none;">
+
+<div class="controls-row" id="themeRow" style="display:none;">
   <button id="btnThemeLight">☀️ 昼</button>
   <button id="btnThemeDark">🌙 夜</button>
 </div>
 
 <div class="controls-row bottom-row">
-
   <div id="searchBox" style="display:none;">
     <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
     <button id="btnClearSearch">✕</button>
     <button id="btnSearch">🔍</button>
   </div>
-
   <button id="searchToggleBtn">🔍番号検索</button>
 </div>
-</div>
+
+</div> <!-- ←これで controls 終わり -->
+
+
 
 <div id="recordCard" class="record-card hidden">
 
