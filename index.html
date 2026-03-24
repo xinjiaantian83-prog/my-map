@@ -844,7 +844,7 @@ const pawIcon = L.divIcon({
 let pawMarkers = [];
 let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
 
-/*
+if (isDev) {
 map.on('contextmenu', function(e){
 if (!reportMode) return;
   const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
@@ -927,7 +927,7 @@ ${sponsor.name}
   localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 
 });
-*/
+}
 const lightLayer = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
   { maxZoom: 19 }
