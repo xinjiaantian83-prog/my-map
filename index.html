@@ -1635,6 +1635,9 @@ loadSponsors().then(async () => {
   await loadSpots();
   updateFoundUI();
 showFirstGuide();
+  // 👇初期：現在地ON + 1km
+document.getElementById("btnLocate").click();
+document.getElementById("btn1k").click();
   setTimeout(() => {
     map.invalidateSize();
   }, 300);
