@@ -769,6 +769,18 @@ if (!reportMode) return;
   if(!confirm("未確認補給所を報告する？")){
     return;
   }
+  const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScVLaiHOoCP9sg3weumXm9_fhhaCLs-1lwemVqb-RYRAetezw/formResponse";
+
+fetch(formUrl, {
+  method: "POST",
+  mode: "no-cors",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  body:
+    "entry.755147629=" + e.latlng.lat +
+    "&entry.906767353=" + e.latlng.lng
+});
   const sponsor = getSponsorForSpot({
     lat: e.latlng.lat,
     lng: e.latlng.lng
