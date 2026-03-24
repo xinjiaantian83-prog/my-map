@@ -658,12 +658,14 @@ font-family:sans-serif;
     <span class="record-text">記録</span>
   </button>
 
-  <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
-  <button id="btnClearSearch">✕</button>
-  <button id="btnSearch">🔍</button>
-</div>
+  <!-- 🔽ここ元のIDそのまま使う -->
+  <div id="searchBox" style="display:none;">
+    <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
+    <button id="btnClearSearch">✕</button>
+    <button id="btnSearch">🔍</button>
+  </div>
 
-
+  <button id="searchToggleBtn">🔍番号検索</button>
 </div>
 <div id="recordCard" class="record-card hidden">
 
@@ -1988,6 +1990,22 @@ if (reportBtn) {
 
   }, 800);
 }
+
+// 🔍番号検索 開閉（少し遅らせて確実に取得）
+setTimeout(() => {
+  const searchToggleBtn = document.getElementById("searchToggleBtn");
+  const searchBox = document.getElementById("searchBox");
+
+  if (searchToggleBtn && searchBox) {
+    searchToggleBtn.addEventListener("click", () => {
+      if (searchBox.style.display === "none") {
+        searchBox.style.display = "flex";
+      } else {
+        searchBox.style.display = "none";
+      }
+    });
+  }
+}, 300);
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
