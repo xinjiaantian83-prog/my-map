@@ -576,6 +576,12 @@ button.active{
   cursor:pointer;
   box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
+  #btnRecord{
+  position: fixed;
+  right: 14px;
+  bottom: 110px;
+  z-index: 2000;
+}
 </style>
 </head>
 
@@ -650,10 +656,6 @@ font-family:sans-serif;
 </div>
 
 <div class="controls-row bottom-row">
-  <button id="btnRecord">
-    <img src="paw.png" alt="メニュー">
-    <span class="record-text">記録</span>
-  </button>
 
   <div id="searchBox" style="display:none;">
     <input id="spotSearch" type="text" placeholder="番号検索 WNWN-0001">
