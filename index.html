@@ -788,30 +788,7 @@ fetch(formUrl, {
   const m = L.marker([e.latlng.lat, e.latlng.lng], {
     icon: pawIcon
   }).addTo(map)
-  .bindPopup(`
-    <div class="spot-card">
-      
-      <div class="spot-title">🐾 未確認補給所</div>
-      <div class="spot-actions">
-        <button class="spot-btn spot-btn-go" onclick="goNav(${e.latlng.lat},${e.latlng.lng})">調査に向かう</button>
-      </div>
-      <div class="spot-note">
-        探索隊が報告<br>
-        現在調査中
-      </div>
-      ${sponsor ? `
-<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
-──────<br>
-探索隊サポーター<br>
-<a href="${sponsor.url}" target="_blank"
-onclick="gtag('event','sponsor_click',{sponsor:'${sponsor.name}'})">
-${sponsor.name}
-</a>
-</div>
-` : ``}
-    </div>
-  `)
-  .openPopup();
+  
 
 pawMarkers.push(m);
 
