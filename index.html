@@ -1287,7 +1287,7 @@ m.on("popupclose", ()=> popupOpen = false);
     dogIcon = `<img src="pome.png" style="height:26px;vertical-align:-4px;">`;
   }
 
-  recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録</button>`;
+  recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録（+1）</button>`;
 }else{
   recordPart = ``;
 }
