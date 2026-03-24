@@ -812,11 +812,17 @@ ${sponsor.name}
     </div>
   `)
   .openPopup();
-  pawMarkers.push(m);
-  pawData.push({
-    lat: e.latlng.lat,
-    lng: e.latlng.lng
-  });
+
+pawMarkers.push(m);
+
+setTimeout(() => {
+  map.removeLayer(m);
+}, 4000);
+
+pawData.push({
+  lat: e.latlng.lat,
+  lng: e.latlng.lng
+});
   reportMode = false;
   localStorage.setItem("wanwan_paws", JSON.stringify(pawData));
 });
@@ -1474,6 +1480,7 @@ document.getElementById("btn1k").click();
       <div class="spot-note">
         探索隊が報告<br>
         現在調査中
+        
       </div>
     </div>
   `);
