@@ -9,33 +9,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-NNF34M8570');
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const isDevMode =
-    location.search.includes("dev=1") ||
-    localStorage.getItem("dev_mode") === "1";
-
-  const devBtn = document.getElementById("devNightToggle");
-
-  if (devBtn) {
-    devBtn.style.display = isDevMode ? "block" : "none";
-
-    devBtn.addEventListener("click", () => {
-
-      if (localStorage.getItem("night_unlocked")) {
-        localStorage.removeItem("night_unlocked");
-        alert("🌙 ナイトOFF（未解放）");
-      } else {
-        localStorage.setItem("night_unlocked", "1");
-        alert("🌙 ナイトON（強制解放）");
-      }
-
-      location.reload();
-    });
-  }
-
-  createDevBadge(); // ←これ追加
-});
 
 });
 </script>
@@ -1977,13 +1950,30 @@ if (btnThemeDark) {
 const devBtn = document.getElementById("devNightToggle");
 
 if (devBtn) {
-  devBtn.style.display = "none";
 
-  const isDev = location.search.includes("dev=1");
-
-  if (isDev) {
+  // 表示制御
+  if (!isDev) {
+    devBtn.style.display = "none";
+  } else {
     devBtn.style.display = "block";
   }
+
+  // クリック処理（devの時だけ有効）
+  if (isDev) {
+    devBtn.addEventListener("click", () => {
+
+      if (localStorage.getItem("night_unlocked")) {
+        localStorage.removeItem("night_unlocked");
+        alert("🌙 ナイトOFF（未解放）");
+      } else {
+        localStorage.setItem("night_unlocked", "1");
+        alert("🌙 ナイトON（強制解放）");
+      }
+
+      location.reload();
+    });
+  }
+
 }
 
 // 👇外に出す！！
