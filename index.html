@@ -796,6 +796,32 @@ font-family:sans-serif;
 </div>
 <button id="btnResetFloating" style="display:none;">リセット</button>
 <script>
+  const isDev = location.search.includes("dev=1");
+  function createDevBadge(){
+  if (!isDev) return;
+
+  const badge = document.createElement("button");
+  badge.textContent = "DEV";
+  badge.id = "devBadge";
+
+  Object.assign(badge.style, {
+    position: "fixed",
+    right: "12px",
+    bottom: "12px",
+    zIndex: "99999",
+    padding: "8px 10px",
+    border: "none",
+    borderRadius: "999px",
+    background: "#111",
+    color: "#fff",
+    fontSize: "12px",
+    fontWeight: "bold",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+    opacity: "0.9"
+  });
+
+  document.body.appendChild(badge);
+}
   const foundSound = new Audio("chieuk-coin-257878.mp3");
 const ESTIMATED_TOTAL = 1500;
   let reportMode = false;
@@ -1960,10 +1986,14 @@ if (devBtn) {
 const reportBtn = document.getElementById("reportModeBtn");
 
 if (reportBtn) {
-  reportBtn.addEventListener("click", () => {
-    reportMode = true;
-    alert("報告モードON！\n地図を長押しして場所を教えてください");
-  });
+  if (!isDev) {
+    reportBtn.style.display = "none";
+  } else {
+    reportBtn.addEventListener("click", () => {
+      reportMode = true;
+      alert("報告モードON！\n地図を長押しして場所を教えてください");
+    });
+  }
 }
 </script>
   <div id="policyPage" class="hidden" style="
