@@ -1109,7 +1109,7 @@ function recordFind(lat,lng,type){
   const d = userLatLng.distanceTo([lat,lng]);
 
   if(d > 30){
-    alert("近くに行くと記録できます");
+    alert("30m以内に近づくと記録できます");
     return;
   }
 
