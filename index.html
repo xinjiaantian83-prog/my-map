@@ -1913,8 +1913,12 @@ if (localStorage.getItem("night_unlocked")) {
 // 👇ボタン表示は別
 const themeRow = document.getElementById("themeRow");
 
-if (themeRow && localStorage.getItem("night_unlocked")) {
-  themeRow.style.display = "flex";
+if (themeRow) {
+  if (isDev && localStorage.getItem("night_unlocked")) {
+    themeRow.style.display = "flex";
+  } else {
+    themeRow.style.display = "none";
+  }
 }
 const btnThemeLight = document.getElementById("btnThemeLight");
 const btnThemeDark = document.getElementById("btnThemeDark");
