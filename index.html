@@ -791,7 +791,9 @@ fetch(formUrl, {
   
 
 pawMarkers.push(m);
-
+showDiscoverToast();
+const toast = document.getElementById("discoverToast");
+toast.innerHTML = "報告ありがとうございます🐾";
 setTimeout(() => {
   map.removeLayer(m);
 }, 4000);
