@@ -1590,11 +1590,44 @@ if (resetBtn) {
 }
  document.addEventListener("click", function(e){
   if(e.target && e.target.id === "shopNightMap"){
+
     const score = Number(localStorage.getItem("wanwan_score") || 0);
+
     if (score < 500) {
       alert("ポイントが足りません🐾");
       return;
     }
+
+    if (localStorage.getItem("night_unlocked")) {
+      alert("すでに解放済みです🌙");
+      return;
+    }
+
+    if (!confirm("500P使ってナイトマップを解放しますか？")) return;
+
+    const newScore = score - 500;
+    localStorage.setItem("wanwan_score", newScore);
+    localStorage.setItem("night_unlocked", "1");
+
+    // 👇スコア表示更新
+    const mgEl = document.getElementById("miniGameScore");
+    if (mgEl) mgEl.textContent = newScore;
+
+    // 👇ここが今回のバグ修正（即反映）
+    if (typeof lightLayer !== "undefined" && typeof darkLayer !== "undefined") {
+      if (map.hasLayer(lightLayer)) map.removeLayer(lightLayer);
+      if (!map.hasLayer(darkLayer)) darkLayer.addTo(map);
+    }
+
+    // 👇切替ボタン表示
+    const themeRow = document.getElementById("themeRow");
+    if (themeRow) {
+      themeRow.style.display = "flex";
+    }
+
+    alert("🌙 ナイトマップ解放！");
+  }
+});
     if (localStorage.getItem("night_unlocked")) {
       alert("すでに解放済みです🌙");
       return;
