@@ -830,7 +830,7 @@ if (localStorage.getItem("night_unlocked")) {
 } else {
   lightLayer.addTo(map);
 }
-lightLayer.addTo(map);
+
 if (location.hash.includes("dark-test")) {
   map.removeLayer(lightLayer);
   darkLayer.addTo(map);
@@ -1628,18 +1628,7 @@ if (resetBtn) {
     alert("🌙 ナイトマップ解放！");
   }
 });
-    if (localStorage.getItem("night_unlocked")) {
-      alert("すでに解放済みです🌙");
-      return;
-    }
-    if (!confirm("500P使ってナイトマップを解放しますか？")) return;
-    const newScore = score - 500;
-    localStorage.setItem("wanwan_score", newScore);
-   
-    alert("🌙 ナイトマップ解放！");
-    location.reload();
-  }
-});
+    
 if (localStorage.getItem("night_unlocked")) {
   document.body.style.background = "#0f172a";
   if (typeof lightLayer !== "undefined" && typeof darkLayer !== "undefined") {
@@ -1649,7 +1638,7 @@ if (localStorage.getItem("night_unlocked")) {
 }
 const themeRow = document.getElementById("themeRow");
 if (themeRow) {
-  if (isDev && localStorage.getItem("night_unlocked")) {
+  if (localStorage.getItem("night_unlocked")) {
     themeRow.style.display = "flex";
   } else {
     themeRow.style.display = "none";
