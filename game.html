@@ -549,38 +549,43 @@ setTimeout(() => {
   if (tappedPaw.dataset.hit === "1") return;
   tappedPaw.dataset.hit = "1";
   tappedPaw.style.pointerEvents = "none";
-tappedPaw.style.display = 'none';
-if (tappedPaw.classList.contains("triple")) {
-  score += 4;
-  playRare();
-} else if (tappedPaw.classList.contains("rare")) {
-  score += 3;
-  playRare();
-} else {
-  score += 1;
-  playTap();
-}
 
-scoreEl.textContent = score;
-   const now = Date.now();
+  let addScore = 1;
+  if (tappedPaw.classList.contains("triple")) {
+    addScore = 4;
+    playRare();
+  } else if (tappedPaw.classList.contains("rare")) {
+    addScore = 3;
+    playRare();
+  } else {
+    playTap();
+  }
 
-if (now - lastTapTime < 250) {
-  comboCount++;
+  score += addScore;
+  scoreEl.textContent = score;
 
-  playTap();
+  const rect = gameArea.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  const rx = touch.clientX - rect.left;
+  const ry = touch.clientY - rect.top;
+  spawnRipple(rx, ry);
 
-  pawEl.style.transform = "scale(1.3)";
-  if (extraPaw) extraPaw.style.transform = "scale(1.3)";
+  tappedPaw.style.display = "none";
+
+  const now = Date.now();
+  if (now - lastTapTime < 250) {
+    comboCount++;
+  } else {
+    comboCount = 0;
+  }
+  lastTapTime = now;
+
+  if (!active) return;
 
   setTimeout(() => {
-    pawEl.style.transform = "translate(-50%, -50%)";
-    if (extraPaw) extraPaw.style.transform = "translate(-50%, -50%)";
-  }, 100);
-
-} else {
-  comboCount = 0;
+    if (active) placePaw();
+  }, 60);
 }
-
 lastTapTime = now;
     // Ripple position relative to game area
     const rect = gameArea.getBoundingClientRect();
