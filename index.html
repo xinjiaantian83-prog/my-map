@@ -1723,12 +1723,11 @@ setTimeout(() => {
     });
   }
 }, 300);
-  const params = new URLSearchParams(window.location.search);
-
-if (params.get("open") === "record") {
+  if (localStorage.getItem("open_record_on_return") === "1") {
   setTimeout(() => {
     openRecordCard();
-  }, 300);
+    localStorage.removeItem("open_record_on_return");
+  }, 600);
 }
 </script>
   <div id="policyPage" class="hidden" style="
