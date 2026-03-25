@@ -445,32 +445,30 @@ function getComment(s) {
 }
 
  function placePaw() {
-  // 👇前の残りを全部消す（超重要）
-if (extraPaw) {
-  extraPaw.remove();
-  extraPaw = null;
-}
+  if (extraPaw) {
+    extraPaw.remove();
+    extraPaw = null;
+  }
 
-if (thirdPaw) {
-  thirdPaw.remove();
-  thirdPaw = null;
-}
+  if (thirdPaw) {
+    thirdPaw.remove();
+    thirdPaw = null;
+  }
 
   const areaW = gameArea.offsetWidth;
   const areaH = gameArea.offsetHeight;
   const margin = 50;
 
-  // 1個目
   const x = margin + Math.random() * (areaW - margin * 2);
   const y = margin + Math.random() * (areaH - margin * 2);
 
   pawEl.style.left = x + 'px';
-  pawEl.style.top  = y + 'px';
+  pawEl.style.top = y + 'px';
   pawEl.style.display = 'block';
-pawEl.dataset.hit = "";
-pawEl.style.pointerEvents = "auto";
-pawEl.classList.remove("rare", "triple", "tap-anim");
-  // 2個目（時間差）
+  pawEl.dataset.hit = "";
+  pawEl.style.pointerEvents = "auto";
+  pawEl.classList.remove("rare", "triple", "tap-anim");
+
   if (Math.random() < 0.3) {
     setTimeout(() => {
       createExtraPaw();
@@ -479,45 +477,35 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
       const y2 = margin + Math.random() * (areaH - margin * 2);
 
       extraPaw.style.left = x2 + 'px';
-      extraPaw.style.top  = y2 + 'px';
+      extraPaw.style.top = y2 + 'px';
       extraPaw.style.display = 'block';
- 
- // 👇さらに低確率で3個目🔥
- if (Math.random() < 0.35) {
-  forceTripleNext = false;
-   setTimeout(() => {
-     thirdPaw = pawEl.cloneNode(true);
-     thirdPaw.id = "";
-   setTimeout(() => {
-     thirdPaw = pawEl.cloneNode(true);
-     thirdPaw.id = "";
+      extraPaw.dataset.hit = "";
+      extraPaw.style.pointerEvents = "auto";
+      extraPaw.classList.remove("rare", "triple", "tap-anim");
 
-     gameArea.appendChild(thirdPaw);
-   setTimeout(() => {
-     thirdPaw = pawEl.cloneNode(true);
-     thirdPaw.id = "";
+      if (forceTripleNext || Math.random() < 0.35) {
+        forceTripleNext = false;
 
-     gameArea.appendChild(thirdPaw);
+        setTimeout(() => {
+          thirdPaw = pawEl.cloneNode(true);
+          thirdPaw.id = "";
+          gameArea.appendChild(thirdPaw);
 
-     const x3 = margin + Math.random() * (areaW - margin * 2);
-     const y3 = margin + Math.random() * (areaH - margin * 2);
+          const x3 = margin + Math.random() * (areaW - margin * 2);
+          const y3 = margin + Math.random() * (areaH - margin * 2);
 
-     thirdPaw.style.left = x3 + 'px';
-     thirdPaw.style.top  = y3 + 'px';
-     thirdPaw.style.display = 'block';
+          thirdPaw.style.left = x3 + 'px';
+          thirdPaw.style.top = y3 + 'px';
+          thirdPaw.style.display = 'block';
+          thirdPaw.dataset.hit = "";
+          thirdPaw.style.pointerEvents = "auto";
+          thirdPaw.classList.remove("rare", "tap-anim");
+          thirdPaw.classList.add("triple");
 
-     // 👇見た目
-     thirdPaw.classList.add("triple");
+          thirdPaw.addEventListener('touchstart', onPawTap, { passive: false });
+        }, 350);
+      }
 
-     // 👇タップ処理
-     thirdPaw.addEventListener('touchstart', onPawTap, { passive: false });
-
-     // 👇次で消すために保存
-     const currentThirdPaw = thirdPaw;
-
-   }, 350); // ちょい遅らせる
- }
-      // レア付与
       if (Math.random() < 0.5) {
         pawEl.classList.add("rare");
         extraPaw.classList.remove("rare");
@@ -525,14 +513,8 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
         extraPaw.classList.add("rare");
         pawEl.classList.remove("rare");
       }
-
     }, 200);
   } else {
-    if (extraPaw) {
-      extraPaw.remove();
-      extraPaw = null;
-    }
-   
     pawEl.classList.remove("rare");
   }
 }
