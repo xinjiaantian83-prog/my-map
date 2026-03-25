@@ -433,45 +433,35 @@ function getComment(s) {
   pawEl.style.top  = y + 'px';
   pawEl.style.display = 'block';
 
-  // たまに2個出す🔥
-if (Math.random() < 0.3) {
-  setTimeout(() => {
-    createExtraPaw();
+  // 2個目（時間差）
+  if (Math.random() < 0.3) {
+    setTimeout(() => {
+      createExtraPaw();
 
-    const x2 = margin + Math.random() * (areaW - margin * 2);
-    const y2 = margin + Math.random() * (areaH - margin * 2);
+      const x2 = margin + Math.random() * (areaW - margin * 2);
+      const y2 = margin + Math.random() * (areaH - margin * 2);
 
-    extraPaw.style.left = x2 + 'px';
-    extraPaw.style.top  = y2 + 'px';
-    extraPaw.style.display = 'block';
-  }, 200);
-} else {
-  if (extraPaw) {
-    extraPaw.remove();
-    extraPaw = null;
-  }
-}
-} else {
-  if (extraPaw) {
-    extraPaw.remove();
-    extraPaw = null;
-  }
-}
+      extraPaw.style.left = x2 + 'px';
+      extraPaw.style.top  = y2 + 'px';
+      extraPaw.style.display = 'block';
 
- // レア付与
-if (extraPaw) {
-  const isFirstRare = Math.random() < 0.5;
+      // レア付与
+      if (Math.random() < 0.5) {
+        pawEl.classList.add("rare");
+        extraPaw.classList.remove("rare");
+      } else {
+        extraPaw.classList.add("rare");
+        pawEl.classList.remove("rare");
+      }
 
-  if (isFirstRare) {
-    pawEl.classList.add("rare");
-    extraPaw.classList.remove("rare");
+    }, 200);
   } else {
-    extraPaw.classList.add("rare");
+    if (extraPaw) {
+      extraPaw.remove();
+      extraPaw = null;
+    }
     pawEl.classList.remove("rare");
   }
-} else {
-  pawEl.classList.remove("rare");
-}
 }
   function spawnRipple(x, y) {
     const r = document.createElement('div');
