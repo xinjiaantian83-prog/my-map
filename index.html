@@ -1781,16 +1781,28 @@ setTimeout(() => {
     }
     location.reload();
   });
- if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then((registration) => {
-    registration.update();
-  });
+ <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      const reg = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
 
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    location.reload();
-  });
-}
-})();
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      });
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      });
+
+      reg.update();
+    });
+  }
+</script>
 </script>
 </body>
 </html>
