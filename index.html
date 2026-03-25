@@ -1715,7 +1715,7 @@ setTimeout(() => {
   
   if (localStorage.getItem("open_record_on_return") === "1") {
   setTimeout(() => {
-    openRecordCard();
+    recordCard.classList.remove("hidden");
     localStorage.removeItem("open_record_on_return");
   }, 600);
 }
