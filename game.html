@@ -182,7 +182,28 @@
     drop-shadow(0 0 22px orange);
   animation: rareFlash 0.35s infinite alternate;
 }
+.triple {
+  transform: translate(-50%, -50%) scale(0.75);
+  filter:
+    hue-rotate(220deg)
+    saturate(1.8)
+    brightness(1.2)
+    drop-shadow(0 0 6px #60a5fa)
+    drop-shadow(0 0 14px #3b82f6);
 
+  animation: tripleBlink 0.3s infinite alternate;
+}
+
+@keyframes tripleBlink {
+  from {
+    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 1;
+  }
+}
 @keyframes rareFlash {
   from {
     transform: translate(-50%, -50%) rotate(-6deg);
@@ -421,6 +442,13 @@ function getComment(s) {
 }
 
  function placePaw() {
+  // 👇前の残りを全部消す（超重要）
+if (extraPaw) {
+  extraPaw.remove();
+  extraPaw = null;
+}
+
+document.querySelectorAll('.triple').forEach(el => el.remove());
   const areaW = gameArea.offsetWidth;
   const areaH = gameArea.offsetHeight;
   const margin = 50;
@@ -444,7 +472,34 @@ function getComment(s) {
       extraPaw.style.left = x2 + 'px';
       extraPaw.style.top  = y2 + 'px';
       extraPaw.style.display = 'block';
+ // 👇さらに低確率で3個目🔥
+ if (Math.random() < 0.15) {
+   setTimeout(() => {
+     const thirdPaw = pawEl.cloneNode(true);
+     thirdPaw.id = "";
 
+     gameArea.appendChild(thirdPaw);
+
+     const x3 = margin + Math.random() * (areaW - margin * 2);
+     const y3 = margin + Math.random() * (areaH - margin * 2);
+
+     thirdPaw.style.left = x3 + 'px';
+     thirdPaw.style.top  = y3 + 'px';
+     thirdPaw.style.display = 'block';
+
+     // 👇見た目
+     thirdPaw.classList.add("triple");
+
+     // 👇タップ処理
+     thirdPaw.addEventListener('touchstart', onPawTap, { passive: false });
+
+     // 👇次で消すために保存
+     setTimeout(() => {
+       thirdPaw.remove();
+     }, 1500);
+
+   }, 350); // ちょい遅らせる
+ }
       // レア付与
       if (Math.random() < 0.5) {
         pawEl.classList.add("rare");
@@ -475,13 +530,20 @@ function getComment(s) {
   }
 
   function onPawTap(e) {
-    if (!active) return;
-    e.preventDefault();
-    e.stopPropagation();
+  if (!active) return;
+  e.preventDefault();
+  e.stopPropagation();
 
-   const tappedPaw = e.currentTarget;
+  const tappedPaw = e.currentTarget;
 
-if (tappedPaw.classList.contains("rare")) {
+  if (tappedPaw.dataset.hit === "1") return;
+  tappedPaw.dataset.hit = "1";
+  tappedPaw.style.pointerEvents = "none";
+tappedPaw.style.display = 'none';
+if (tappedPaw.classList.contains("triple")) {
+  score += 4;
+  playRare();
+} else if (tappedPaw.classList.contains("rare")) {
   score += 3;
   playRare();
 } else {
