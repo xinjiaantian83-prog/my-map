@@ -1482,25 +1482,14 @@ document.getElementById("btn1k").click();
 const recordCard = document.getElementById("recordCard");
 const btnCloseRecord = document.getElementById("btnCloseRecord");
 
-function openRecordCard() {
-  recordCard.classList.remove("hidden");
-}
-
-function closeRecordCard() {
-  recordCard.classList.add("hidden");
-}
-
 btnRecord.addEventListener("click", () => {
-  if (recordCard.classList.contains("hidden")) {
-    openRecordCard();
-  } else {
-    closeRecordCard();
-  }
+  recordCard.classList.toggle("hidden");
 });
 
 btnCloseRecord.addEventListener("click", () => {
-  closeRecordCard();
+  recordCard.classList.add("hidden");
 });
+
   
   document.addEventListener("click", function(e){
   const policyPage = document.getElementById("policyPage");
@@ -1723,14 +1712,7 @@ setTimeout(() => {
     });
   }
 }, 300);
-  document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("open_record_on_return") === "1") {
-    setTimeout(() => {
-      openRecordCard();
-      localStorage.removeItem("open_record_on_return");
-    }, 800);
-  }
-});
+  
   if (localStorage.getItem("open_record_on_return") === "1") {
   setTimeout(() => {
     openRecordCard();
