@@ -549,8 +549,10 @@ setTimeout(() => {
   if (tappedPaw.dataset.hit === "1") return;
   tappedPaw.dataset.hit = "1";
   tappedPaw.style.pointerEvents = "none";
+  tappedPaw.style.display = "none";
 
   let addScore = 1;
+
   if (tappedPaw.classList.contains("triple")) {
     addScore = 4;
     playRare();
@@ -564,14 +566,6 @@ setTimeout(() => {
   score += addScore;
   scoreEl.textContent = score;
 
-  const rect = gameArea.getBoundingClientRect();
-  const touch = e.touches ? e.touches[0] : e;
-  const rx = touch.clientX - rect.left;
-  const ry = touch.clientY - rect.top;
-  spawnRipple(rx, ry);
-
-  tappedPaw.style.display = "none";
-
   const now = Date.now();
   if (now - lastTapTime < 250) {
     comboCount++;
@@ -580,30 +574,16 @@ setTimeout(() => {
   }
   lastTapTime = now;
 
-  if (!active) return;
+  const rect = gameArea.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  const rx = touch.clientX - rect.left;
+  const ry = touch.clientY - rect.top;
+  spawnRipple(rx, ry);
 
   setTimeout(() => {
     if (active) placePaw();
   }, 60);
 }
-lastTapTime = now;
-    // Ripple position relative to game area
-    const rect = gameArea.getBoundingClientRect();
-    const touch = e.touches ? e.touches[0] : e;
-    const rx = (touch.clientX - rect.left);
-    const ry = (touch.clientY - rect.top);
-    spawnRipple(rx, ry);
-
-    // Animate then move
-    pawEl.classList.remove('tap-anim');
-    void pawEl.offsetWidth; // reflow
-    pawEl.classList.add('tap-anim');
-    pawEl.addEventListener('animationend', () => {
-      pawEl.classList.remove('tap-anim');
-      if (active) placePaw();
-    }, { once: true });
-  }
-
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
   
   function startGame() {
