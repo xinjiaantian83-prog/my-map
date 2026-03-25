@@ -1780,14 +1780,17 @@ if (localStorage.getItem("app_version") !== VERSION) {
   localStorage.setItem("app_version", VERSION);
   location.reload();
 }
+
 (function () {
   const devBtn = document.getElementById("devNightToggle");
   const isDevPage = location.search.includes("dev=1");
   if (!devBtn) return;
+
   if (!isDevPage) {
     devBtn.style.display = "none";
     return;
   }
+
   devBtn.style.display = "block";
   devBtn.addEventListener("click", () => {
     if (localStorage.getItem("night_unlocked")) {
@@ -1799,28 +1802,28 @@ if (localStorage.getItem("app_version") !== VERSION) {
     }
     location.reload();
   });
- <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-      const reg = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
+})();
 
-      reg.addEventListener('updatefound', () => {
-        const newWorker = reg.installing;
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            newWorker.postMessage({ type: 'SKIP_WAITING' });
-          }
-        });
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    const reg = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
+
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          newWorker.postMessage({ type: 'SKIP_WAITING' });
+        }
       });
-
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
-      });
-
-      reg.update();
     });
-  }
-</script>
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload();
+    });
+
+    reg.update();
+  });
+}
 </script>
 </body>
 </html>
