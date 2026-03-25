@@ -353,6 +353,7 @@ function playRare() {
  let extraPaw = null;
  let thirdPaw = null;
  let forceTripleNext = false;
+ let tripleChainUsed = false;
  function createExtraPaw() {
   if (extraPaw) {
     extraPaw.remove();
@@ -480,9 +481,18 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
       extraPaw.style.left = x2 + 'px';
       extraPaw.style.top  = y2 + 'px';
       extraPaw.style.display = 'block';
+ 
  // 👇さらに低確率で3個目🔥
  if (Math.random() < 0.35) {
   forceTripleNext = false;
+   setTimeout(() => {
+     thirdPaw = pawEl.cloneNode(true);
+     thirdPaw.id = "";
+   setTimeout(() => {
+     thirdPaw = pawEl.cloneNode(true);
+     thirdPaw.id = "";
+
+     gameArea.appendChild(thirdPaw);
    setTimeout(() => {
      thirdPaw = pawEl.cloneNode(true);
      thirdPaw.id = "";
@@ -559,6 +569,11 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
     const a = base.cloneNode();
     a.currentTime = 0;
     a.play().catch(() => {});
+  }
+
+  if (!tripleChainUsed) {
+    forceTripleNext = true;
+    tripleChainUsed = true;
   }
 
 } else if (tappedPaw.classList.contains("rare")) {
