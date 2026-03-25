@@ -481,7 +481,7 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
       extraPaw.style.top  = y2 + 'px';
       extraPaw.style.display = 'block';
  // 👇さらに低確率で3個目🔥
- if (forceTripleNext || Math.random() < 0.1) 5
+ if (Math.random() < 0.35) {
   forceTripleNext = false;
    setTimeout(() => {
      thirdPaw = pawEl.cloneNode(true);
@@ -553,7 +553,7 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
 
   if (tappedPaw.classList.contains("triple")) {
   addScore = 4;
-forceTripleNext = true;
+
   const base = document.getElementById("seTriple");
   if (base) {
     const a = base.cloneNode();
