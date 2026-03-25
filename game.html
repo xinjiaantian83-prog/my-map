@@ -465,7 +465,9 @@ if (thirdPaw) {
   pawEl.style.left = x + 'px';
   pawEl.style.top  = y + 'px';
   pawEl.style.display = 'block';
-
+pawEl.dataset.hit = "";
+pawEl.style.pointerEvents = "auto";
+pawEl.classList.remove("rare", "triple", "tap-anim");
   // 2個目（時間差）
   if (Math.random() < 0.3) {
     setTimeout(() => {
