@@ -125,21 +125,30 @@ button:active{
   right: 14px;
   bottom: 100px;
   z-index: 3000;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  padding:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  line-height:1;
-  background:#ffedd5;
-  color:#9a3412;
-  font-weight:bold;
-  border:none;
-  box-shadow:0 4px 14px rgba(0,0,0,0.22);
-  cursor:pointer;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #ffedd5;
+  color: #9a3412;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  cursor: pointer;
+}
+  .report-icon{
+  font-size: 22px;
+  line-height: 1;
+}
+
+.report-text{
+  font-size: 11px;
+  line-height: 1;
 }
 #reportModeBtn:active{
   transform:scale(0.9);
@@ -593,7 +602,10 @@ font-family:sans-serif;
     <button id="searchToggleBtn">🔍番号検索</button>
   </div>
 </div>
-<button id="reportModeBtn">🐾</button>
+<button id="reportModeBtn">
+  <span class="report-icon">🐾</span>
+  <span class="report-text">報告</span>
+</button>
 <button id="btnRecord">
   <img src="paw.png" alt="メニュー">
   <span class="record-text">記録</span>
