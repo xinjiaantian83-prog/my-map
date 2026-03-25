@@ -610,7 +610,7 @@ font-family:sans-serif;
   <span class="report-icon">🐾</span>
   <span class="report-text">報告</span>
 </button>
-<button id="btnRecord">
+<button id="recordBtn">
   <img src="paw.png" alt="メニュー">
   <span class="record-text">記録</span>
 </button>
@@ -1708,6 +1708,14 @@ setTimeout(() => {
     });
   }
 }, 300);
+  const params = new URLSearchParams(window.location.search);
+
+if (params.get("open") === "record") {
+  setTimeout(() => {
+    const recordBtn = document.getElementById("recordBtn");
+    if (recordBtn) recordBtn.click();
+  }, 300);
+}
 </script>
   <div id="policyPage" class="hidden" style="
   position:fixed;
