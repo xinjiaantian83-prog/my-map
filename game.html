@@ -351,6 +351,7 @@ function playRare() {
 }
   const pawEl     = document.getElementById('paw');
  let extraPaw = null;
+ let thirdPaw = null;
  function createExtraPaw() {
   if (extraPaw) {
     extraPaw.remove();
@@ -448,7 +449,11 @@ if (extraPaw) {
   extraPaw = null;
 }
 
-document.querySelectorAll('.triple').forEach(el => el.remove());
+if (thirdPaw) {
+  thirdPaw.remove();
+  thirdPaw = null;
+}
+
   const areaW = gameArea.offsetWidth;
   const areaH = gameArea.offsetHeight;
   const margin = 50;
@@ -475,7 +480,7 @@ document.querySelectorAll('.triple').forEach(el => el.remove());
  // 👇さらに低確率で3個目🔥
  if (Math.random() < 0.15) {
    setTimeout(() => {
-     const thirdPaw = pawEl.cloneNode(true);
+     thirdPaw = pawEl.cloneNode(true);
      thirdPaw.id = "";
 
      gameArea.appendChild(thirdPaw);
@@ -494,9 +499,11 @@ document.querySelectorAll('.triple').forEach(el => el.remove());
      thirdPaw.addEventListener('touchstart', onPawTap, { passive: false });
 
      // 👇次で消すために保存
-     setTimeout(() => {
-       thirdPaw.remove();
-     }, 1500);
+     const currentThirdPaw = thirdPaw;
+
+setTimeout(() => {
+  if (currentThirdPaw) currentThirdPaw.remove();
+}, 1500);
 
    }, 350); // ちょい遅らせる
  }
@@ -515,6 +522,7 @@ document.querySelectorAll('.triple').forEach(el => el.remove());
       extraPaw.remove();
       extraPaw = null;
     }
+   
     pawEl.classList.remove("rare");
   }
 }
