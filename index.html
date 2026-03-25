@@ -1781,8 +1781,10 @@ setTimeout(() => {
     }
     location.reload();
   });
-  if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
+ if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').then((registration) => {
+    registration.update();
+  });
 
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     location.reload();
