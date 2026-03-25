@@ -554,14 +554,22 @@ setTimeout(() => {
   let addScore = 1;
 
   if (tappedPaw.classList.contains("triple")) {
-    addScore = 4;
-    playRare();
-  } else if (tappedPaw.classList.contains("rare")) {
-    addScore = 3;
-    playRare();
-  } else {
-    playTap();
+  addScore = 4;
+
+  const base = document.getElementById("seTriple");
+  if (base) {
+    const a = base.cloneNode();
+    a.currentTime = 0;
+    a.play().catch(() => {});
   }
+
+} else if (tappedPaw.classList.contains("rare")) {
+  addScore = 3;
+  playRare();
+
+} else {
+  playTap();
+}
 
   score += addScore;
   scoreEl.textContent = score;
@@ -752,5 +760,6 @@ if (backBtn) {
  <audio id="seCount" src="count.mp3" preload="auto"></audio>
  <audio id="seResult" src="reward.mp3" preload="auto"></audio>
  <audio id="seStart" src="seTap.mp3" preload="auto"></audio>
+ <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
 </body>
 </html>
