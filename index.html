@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NNF34M8570"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -10,11 +9,10 @@ gtag('js', new Date());
 gtag('config', 'G-NNF34M8570');
 </script>
 <meta charset="utf-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>わんわんコインマップ</title>
-  <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -22,568 +20,86 @@ gtag('config', 'G-NNF34M8570');
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 <style>
-html, body{
-  margin:0;
-  padding:0;
-  font-family:sans-serif;
-}
-body{
-  height:100dvh;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:4px;
-  padding:6px 8px;
-  flex:0 0 auto;
-  background:#ffffff;
-  box-shadow:0 6px 18px rgba(0,0,0,0.18);
-  border-radius:16px;
-  margin:6px 6px 0;
-}
-h2{
-  margin:0;
-  line-height:1;
-  font-size:18px;
-}
-.title-main{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:-0.01em;
-}
-#count{
-  font-size:17px;
-  font-weight:800;
-}
-button{
-  padding:5px 9px;
-  margin:2px 1px;
-  font-size:11px;
-  border-radius:18px;
-  border:none;
-  background:#f3f4f6;
-  color:#333;
-  font-weight:700;
-  transition:all 0.15s ease;
-  white-space:nowrap;
-}
-button.active{
-  background:#2b7de9;
-  color:#fff;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.25);
-}
-#btnRecord{
-  position: fixed;
-  right: 14px;
-  bottom: 24px;
-  z-index: 3000;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  padding:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fff4d6;
-  box-shadow:0 4px 14px rgba(0,0,0,0.22);
-  border:none;
-}
-#btnRecord img{
-  width:36px;
-  height:36px;
-  display:block;
-  pointer-events:none;
-  filter: drop-shadow(0 0 1px #000)
-          drop-shadow(0 0 1px #000)
-          drop-shadow(0 0 1px #000);
-}
-#btnRecord:active{
-  transform:scale(0.9);
-}
-button:active{
-  transform:scale(0.95);
-}
-.record-text{
-  position:absolute;
-  bottom:4px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:10px;
-  font-weight:bold;
-  color:white;
-  text-shadow:
-    0 0 2px #000,
-    0 0 2px #000,
-    0 0 2px #000;
-  pointer-events:none;
-}
-/* 新規発見ボタン（丸・右下固定・記録の上） */
-#reportModeBtn{
-  position: fixed;
-  right: 14px;
-  bottom: 100px;
-  z-index: 3000;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background: #ffedd5;
-  color: #9a3412;
-  font-weight: bold;
-  border: none;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
-  cursor: pointer;
-}
-  .report-icon{
-  font-size: 22px;
-  line-height: 1;
-}
-
-.report-text{
-  font-size: 11px;
-  line-height: 1;
-}
-#reportModeBtn:active{
-  transform:scale(0.9);
-}
-#map{
-  flex:1 1 auto;
-  min-height:0;
-  width:100%;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-.coin-cluster{
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-.coin-cluster > div{
-  width: 60px;
-  height: 60px;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-.coin{
-  position: relative;
-  width: 60px;
-  height: 60px;
-  overflow: hidden;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #f5f5f5, #cfcfcf 70%, #9e9e9e);
-  border: 2px solid #e8e8e8;
-  box-shadow:
-    inset 0 2px 3px rgba(255,255,255,0.8),
-    inset 0 -2px 3px rgba(0,0,0,0.2),
-    0 2px 4px rgba(0,0,0,0.25);
-}
-.coin img{
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  left: 10px;
-  top: 6px;
-  object-fit: contain;
-  opacity: 0.28;
-  pointer-events: none;
-}
-.coin span{
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 3px;
-  text-align: center;
-  font-weight: 800;
-  font-size: 14px;
-  line-height: 1;
-  color: #ffffff;
-  text-shadow:
-    0 1px 2px rgba(0,0,0,0.95),
-    0 0 4px rgba(0,0,0,0.75);
-  pointer-events: none;
-}
-.spot-card{
-  position: relative;
-  background: #fffdf8;
-  border: 2px solid #d8c9ae;
-  border-radius: 14px;
-  padding: 14px 12px 12px;
-  min-width: 180px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-}
-.card-close{
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  line-height: 0;
-}
-.bone-close{
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
-  display: block;
-  opacity: 0.95;
-  transition: transform 0.12s ease, opacity 0.12s ease;
-}
-.bone-close:hover{
-  transform: scale(1.06);
-  opacity: 1;
-}
-.leaflet-popup-content-wrapper{
-  border-radius: 14px;
-  padding: 0;
-}
-.leaflet-popup-content{
-  margin: 0;
-}
-.spot-title{
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 4px;
-  padding-right: 30px;
-}
-.spot-actions{
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  border-top:1px solid #e5dccb;
-  margin-top:10px;
-  padding-top:10px;
-}
-.spot-btn{
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  height:44px;
-}
-.spot-btn-go{
-  background: #efe3c9;
-}
-.spot-btn-record{
-  background: #fff4d6;
-}
-.spot-note{
-  margin-top: 8px;
-  font-size: 12px;
-  color: #666;
-  line-height: 1.4;
-}
-#discoverPopup{
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0,0,0,0.8);
-  color: #fff;
-  padding: 18px 28px;
-  border-radius: 14px;
-  font-size: 20px;
-  font-weight: bold;
-  text-align:center;
-  z-index: 9999;
-  display: none;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}
-.paw-icon{
-  font-size:18px;
-  text-align:center;
-  line-height:30px;
-}
-.user-dot-wrap{
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.user-dot{
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background:#2a7fff;
-  border: 2px solid #2a7fff;
-  box-shadow: 0 0 0 4px rgba(42,127,255,0.18);
-  animation: userPulse 1.6s infinite ease-out;
-}
-@keyframes userPulse{
-  0%{
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(42,127,255,0.30);
-  }
-  70%{
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(42,127,255,0);
-  }
-  100%{
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(42,127,255,0);
-  }
-}
-.record-card{
-  position:fixed;
-  top:56px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(92vw, 340px);
-  max-height:calc(100dvh - 80px);
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  background:#ffffff;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.18);
-  z-index:3000;
-  padding:14px 14px 12px;
-}
-#miniGameBtn {
-  animation: miniBounce 2.4s ease-in-out infinite;
-}
-#miniGameBtn:active {
-  transform: scale(0.9);
-}
-@keyframes miniBounce {
-  0%   { transform: scale(1); }
-  20%  { transform: scale(1.08); }
-  30%  { transform: scale(0.97); }
-  100% { transform: scale(1); }
-}
-.hidden{
-  display:none;
-}
-.record-card-header{
-  position:relative;
-  margin-bottom:10px;
-}
-.record-title{
-  font-weight:800;
-  font-size:16px;
-  text-align:center;
-}
-.record-close{
-  position:absolute;
-  right:12px;
-  top:12px;
-  border:none;
-  background:transparent;
-  font-size:20px;
-  font-weight:700;
-  padding:0 4px;
-  margin:0;
-  line-height:1;
-}
-.record-section{
-  padding:10px 0;
-  border-top:1px solid #eee;
-}
-.record-section:first-of-type{
-  border-top:none;
-}
-.record-label{
-  font-size:12px;
-  color:#666;
-  margin-bottom:4px;
-}
-.record-value{
-  font-size:16px;
-  font-weight:700;
-}
-.record-subtitle{
-  font-size:13px;
-  color:#666;
-  margin-top:2px;
-}
-.explorer-title{
-  margin:8px 0 4px;
-}
-.explorer-stats{
-  font-size:14px;
-  line-height:1.6;
-}
-.stat-line{
-  margin:2px 0;
-}
-.level-link{
-  cursor:pointer;
-  color:#333;
-}
-.leaflet-top.leaflet-left{
-  top:240px;
-}
-.back-btn{
-  margin-bottom:16px;
-  padding:10px 14px;
-  border:none;
-  border-radius:10px;
-  background:#fff;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
-  font-size:14px;
-  font-weight:700;
-}
-.discover-toast{
-  position:fixed;
-  top:45%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  font-weight:900;
-  text-align:center;
-  font-size:28px;
-  color:#222;
-  text-shadow:0 2px 6px rgba(0,0,0,0.3);
-  pointer-events:none;
-  z-index:99999;
-}
-.discover-toast.show{
-  animation:discoverFloat 1.2s ease forwards;
-}
-@keyframes discoverPop{
-  0%{transform:translate(-50%,-50%) scale(0.8);}
-  60%{transform:translate(-50%,-50%) scale(1.15);}
-  100%{transform:translate(-50%,-50%) scale(1);}
-}
-@keyframes discoverFloat{
-  0%{
-    transform:translate(-50%,-50%);
-    opacity:1;
-  }
-  100%{
-    transform:translate(-50%,-90%);
-    opacity:0;
-  }
-}
-#spotSearch{
-  width:160px;
-  max-width:160px;
-  padding:6px 10px;
-  margin:2px 4px;
-  border:1px solid #ddd;
-  border-radius:12px;
-  font-size:14px;
-  box-sizing:border-box;
-}
-#btnSearch{
-  padding:4px 6px;
-  margin:2px 2px;
-  font-size:12px;
-}
-#btnClearSearch{
-  padding:6px 8px;
-  margin:2px 0;
-}
-#btnResetFloating{
-  position:absolute;
-  right:10px;
-  bottom:90px;
-  z-index:1000;
-  padding:6px 10px;
-  font-size:12px;
-  background:#ff5757;
-  color:white;
-  border:none;
-  border-radius:8px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.3);
-}
-.controls-row{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-bottom:4px;
-}
-.bottom-row input{
-  flex:1;
-  padding:4px 6px;
-  font-size:12px;
-}
-.progress-wrap{
-  width:100%;
-  height:14px;
-  background:#e6e6e6;
-  border-radius:999px;
-  margin-top:8px;
-  overflow:hidden;
-  border:1px solid #d2d2d2;
-}
-.progress-bar-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#00d2ff,#3a7bd5);
-  border-radius:999px;
-  transition:width 0.4s ease;
-}
-.title-banner{
-  display:block;
-  margin:10px auto 6px auto;
-  width:200px;
-  max-width:80%;
-  height:auto;
-  border-radius:10px;
-}
-.title-characters{
-  width:180px;
-  display:block;
-  margin:10px auto 6px auto;
-}
+html, body{margin:0;padding:0;font-family:sans-serif;}
+body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:4px;padding:6px 8px;flex:0 0 auto;background:#ffffff;box-shadow:0 6px 18px rgba(0,0,0,0.18);border-radius:16px;margin:6px 6px 0;}
+h2{margin:0;line-height:1;font-size:18px;}
+.title-main{font-size:22px;font-weight:900;letter-spacing:-0.01em;}
+#count{font-size:17px;font-weight:800;}
+button{padding:5px 9px;margin:2px 1px;font-size:11px;border-radius:18px;border:none;background:#f3f4f6;color:#333;font-weight:700;transition:all 0.15s ease;white-space:nowrap;}
+button.active{background:#2b7de9;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.25);}
+#recordBtn{position:fixed;right:14px;bottom:24px;z-index:3000;width:60px;height:60px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center;background:#fff4d6;box-shadow:0 4px 14px rgba(0,0,0,0.22);border:none;}
+#recordBtn img{width:36px;height:36px;display:block;pointer-events:none;filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #000);}
+#recordBtn:active{transform:scale(0.9);}
+button:active{transform:scale(0.95);}
+.record-text{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:bold;color:white;text-shadow:0 0 2px #000,0 0 2px #000,0 0 2px #000;pointer-events:none;}
+#reportModeBtn{position:fixed;right:14px;bottom:100px;z-index:3000;width:58px;height:58px;border-radius:50%;padding:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#ffedd5;color:#9a3412;font-weight:bold;border:none;box-shadow:0 4px 14px rgba(0,0,0,0.22);cursor:pointer;}
+.report-icon{font-size:22px;line-height:1;}
+.report-text{font-size:11px;line-height:1;}
+#reportModeBtn:active{transform:scale(0.9);}
+#map{flex:1 1 auto;min-height:0;width:100%;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
+.coin-cluster{background:transparent !important;border:none !important;box-shadow:none !important;}
+.coin-cluster > div{width:60px;height:60px;background:transparent !important;border:none !important;box-shadow:none !important;}
+.coin{position:relative;width:60px;height:60px;overflow:hidden;border-radius:50%;background:radial-gradient(circle at 30% 30%,#f5f5f5,#cfcfcf 70%,#9e9e9e);border:2px solid #e8e8e8;box-shadow:inset 0 2px 3px rgba(255,255,255,0.8),inset 0 -2px 3px rgba(0,0,0,0.2),0 2px 4px rgba(0,0,0,0.25);}
+.coin img{position:absolute;width:28px;height:28px;left:10px;top:6px;object-fit:contain;opacity:0.28;pointer-events:none;}
+.coin span{position:absolute;left:0;right:0;bottom:3px;text-align:center;font-weight:800;font-size:14px;line-height:1;color:#ffffff;text-shadow:0 1px 2px rgba(0,0,0,0.95),0 0 4px rgba(0,0,0,0.75);pointer-events:none;}
+.spot-card{position:relative;background:#fffdf8;border:2px solid #d8c9ae;border-radius:14px;padding:14px 12px 12px;min-width:180px;box-shadow:0 6px 18px rgba(0,0,0,0.18);}
+.card-close{position:absolute;top:6px;right:6px;border:none;background:transparent;padding:0;margin:0;line-height:0;}
+.bone-close{width:26px;height:26px;cursor:pointer;display:block;opacity:0.95;transition:transform 0.12s ease,opacity 0.12s ease;}
+.bone-close:hover{transform:scale(1.06);opacity:1;}
+.leaflet-popup-content-wrapper{border-radius:14px;padding:0;}
+.leaflet-popup-content{margin:0;}
+.spot-title{font-size:15px;font-weight:700;margin-bottom:4px;padding-right:30px;}
+.spot-actions{display:flex;flex-direction:column;gap:8px;border-top:1px solid #e5dccb;margin-top:10px;padding-top:10px;}
+.spot-btn{width:100%;border:none;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;cursor:pointer;height:44px;}
+.spot-btn-go{background:#efe3c9;}
+.spot-btn-record{background:#fff4d6;}
+.spot-note{margin-top:8px;font-size:12px;color:#666;line-height:1.4;}
+#discoverPopup{position:fixed;top:40%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:#fff;padding:18px 28px;border-radius:14px;font-size:20px;font-weight:bold;text-align:center;z-index:9999;display:none;box-shadow:0 8px 20px rgba(0,0,0,0.4);}
+.paw-icon{font-size:18px;text-align:center;line-height:30px;}
+.user-dot-wrap{width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+.user-dot{width:10px;height:10px;border-radius:50%;background:#2a7fff;border:2px solid #2a7fff;box-shadow:0 0 0 4px rgba(42,127,255,0.18);animation:userPulse 1.6s infinite ease-out;}
+@keyframes userPulse{0%{transform:scale(0.95);box-shadow:0 0 0 0 rgba(42,127,255,0.30);}70%{transform:scale(1);box-shadow:0 0 0 10px rgba(42,127,255,0);}100%{transform:scale(0.95);box-shadow:0 0 0 0 rgba(42,127,255,0);}}
+.record-card{position:fixed;top:56px;left:50%;transform:translateX(-50%);width:min(92vw,340px);max-height:calc(100dvh - 80px);overflow-y:auto;-webkit-overflow-scrolling:touch;background:#ffffff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.18);z-index:3000;padding:14px 14px 12px;}
+#miniGameBtn{animation:miniBounce 2.4s ease-in-out infinite;}
+#miniGameBtn:active{transform:scale(0.9);}
+@keyframes miniBounce{0%{transform:scale(1);}20%{transform:scale(1.08);}30%{transform:scale(0.97);}100%{transform:scale(1);}}
+.hidden{display:none;}
+.record-card-header{position:relative;margin-bottom:10px;}
+.record-title{font-weight:800;font-size:16px;text-align:center;}
+.record-close{position:absolute;right:12px;top:12px;border:none;background:transparent;font-size:20px;font-weight:700;padding:0 4px;margin:0;line-height:1;}
+.record-section{padding:10px 0;border-top:1px solid #eee;}
+.record-section:first-of-type{border-top:none;}
+.record-label{font-size:12px;color:#666;margin-bottom:4px;}
+.record-value{font-size:16px;font-weight:700;}
+.record-subtitle{font-size:13px;color:#666;margin-top:2px;}
+.explorer-title{margin:8px 0 4px;}
+.explorer-stats{font-size:14px;line-height:1.6;}
+.stat-line{margin:2px 0;}
+.level-link{cursor:pointer;color:#333;}
+.leaflet-top.leaflet-left{top:240px;}
+.back-btn{margin-bottom:16px;padding:10px 14px;border:none;border-radius:10px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.1);font-size:14px;font-weight:700;}
+.discover-toast{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);font-weight:900;text-align:center;font-size:28px;color:#222;text-shadow:0 2px 6px rgba(0,0,0,0.3);pointer-events:none;z-index:99999;}
+.discover-toast.show{animation:discoverFloat 1.2s ease forwards;}
+@keyframes discoverFloat{0%{transform:translate(-50%,-50%);opacity:1;}100%{transform:translate(-50%,-90%);opacity:0;}}
+#spotSearch{width:160px;max-width:160px;padding:6px 10px;margin:2px 4px;border:1px solid #ddd;border-radius:12px;font-size:14px;box-sizing:border-box;}
+#btnSearch{padding:4px 6px;margin:2px 2px;font-size:12px;}
+#btnClearSearch{padding:6px 8px;margin:2px 0;}
+.controls-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.bottom-row input{flex:1;padding:4px 6px;font-size:12px;}
+.progress-wrap{width:100%;height:14px;background:#e6e6e6;border-radius:999px;margin-top:8px;overflow:hidden;border:1px solid #d2d2d2;}
+.progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);border-radius:999px;transition:width 0.4s ease;}
+.title-banner{display:block;margin:10px auto 6px auto;width:200px;max-width:80%;height:auto;border-radius:10px;}
+.title-characters{width:180px;display:block;margin:10px auto 6px auto;}
 </style>
 </head>
 <body>
-<div id="loadingOverlay" style="
-position:fixed;
-top:0;left:0;right:0;bottom:0;
-background:#fff;
-z-index:99999;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-font-family:sans-serif;
-">
-<div style="font-size:22px;font-weight:bold;margin-bottom:10px;">
-🐾 読み込み中…
+
+<div id="loadingOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:sans-serif;">
+  <div style="font-size:22px;font-weight:bold;margin-bottom:10px;">🐾 読み込み中…</div>
+  <div style="font-size:14px;color:#666;text-align:center;line-height:1.6;">松山マップを準備中<br>ホーム画面に追加すると便利です</div>
 </div>
-<div style="font-size:14px;color:#666;text-align:center;line-height:1.6;">
-松山マップを準備中<br>
-ホーム画面に追加すると便利です
-</div>
-</div>
-<!--
-<h2 class="explorer-title">
-  🐾 わんわん探索隊
-</h2>
-<div class="explorer-stats">
-  <div class="stat-line">
-    発見数  
-    <span id="foundCount">0</span> / 1500
-    （<span id="foundPercent">0</span>%）
-  </div>
-  <div class="stat-line">
-    今日の発見  
-    <span id="todayCount">0</span>
-  </div>
-  <div class="stat-line level-link" id="levelButton">
-    🏆 探索レベル  
-    <span id="levelText">Lv0 野良犬</span> ›
-  </div>
-</div>
--->
+
 <div class="controls">
   <div class="controls-row top-row">
     <button id="btn500" class="range-btn">500m</button>
@@ -606,227 +122,163 @@ font-family:sans-serif;
     <button id="searchToggleBtn">🔍番号検索</button>
   </div>
 </div>
+
 <button id="reportModeBtn">
   <span class="report-icon">🐾</span>
   <span class="report-text">報告</span>
 </button>
+
 <button id="recordBtn">
   <img src="paw.png" alt="メニュー">
   <span class="record-text">記録</span>
 </button>
+
 <div id="recordCard" class="record-card hidden">
   <div class="record-card-header">
     <button id="btnCloseRecord" class="record-close">×</button>
     <div class="record-title">
       <img src="dogs_banner.png" class="title-banner">
       わんわんコイン
-      <div class="record-subtitle">
-        松山ワンコイン自販機検索マップ
-      </div>
+      <div class="record-subtitle">松山ワンコイン自販機検索マップ</div>
     </div>
   </div>
   <div class="record-section">
-  <div class="record-label">🐾 わんわん探索隊</div>
-  <div class="record-label">あなたの発見</div>
-  <div class="record-value">
-    <span id="foundCountCard">0</span> / 1500
-    （<span id="foundPercentCard">0</span>%）
+    <div class="record-label">🐾 わんわん探索隊</div>
+    <div class="record-label">あなたの発見</div>
+    <div class="record-value"><span id="foundCountCard">0</span> / 1500（<span id="foundPercentCard">0</span>%）</div>
   </div>
-</div>
-<div class="record-section">
-  <div class="record-label">🌍 全体発見</div>
-  <div class="record-value">
-    <span id="globalFound">0</span> / 推定1500
-    （<span id="globalPercent">0</span>%）
+  <div class="record-section">
+    <div class="record-label">🌍 全体発見</div>
+    <div class="record-value"><span id="globalFound">0</span> / 推定1500（<span id="globalPercent">0</span>%）</div>
+    <div class="progress-wrap"><div id="globalProgressBar" class="progress-bar-fill"></div></div>
+    <div id="remainText" class="remain-text">松山制覇まであと 0 台 🐾</div>
   </div>
-  <div class="progress-wrap">
-  <div id="globalProgressBar" class="progress-bar-fill"></div>
-</div>
-<div id="remainText" class="remain-text">
-松山制覇まであと 0 台 🐾
-</div>
-</div>
-<div class="record-section">
-  <div class="record-label">今日の発見</div>
-  <div class="record-value"><span id="todayCountCard">0</span></div>
-</div>
-<div class="record-section">
-  <div class="record-label">🐾 肉球ポイント</div>
-  <div class="record-value">
-    <span id="miniGameScore">0</span>
+  <div class="record-section">
+    <div class="record-label">今日の発見</div>
+    <div class="record-value"><span id="todayCountCard">0</span></div>
   </div>
-</div>
-<div class="record-section">
-  <div class="record-label">🐾 肉球交換所</div>
-  <div class="record-value" id="shopNightMap">
-    ナイトマップ　500P
+  <div class="record-section">
+    <div class="record-label">🐾 肉球ポイント</div>
+    <div class="record-value"><span id="miniGameScore">0</span></div>
   </div>
-</div>
-<div class="record-section">
-  <div class="record-label">🏆 探索レベル</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-    <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
-    <button id="miniGameBtn" style="
-      border:none;
-      background:#fff4d6;
-      border-radius:999px;
-      padding:8px 12px;
-      font-size:18px;
-      font-weight:700;
-      cursor:pointer;
-      line-height:1;
-    ">🐾</button>
+  <div class="record-section">
+    <div class="record-label">🐾 肉球交換所</div>
+    <div class="record-value" id="shopNightMap">ナイトマップ　500P</div>
   </div>
-</div>
+  <div class="record-section">
+    <div class="record-label">🏆 探索レベル</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+      <button id="miniGameBtn" style="border:none;background:#fff4d6;border-radius:999px;padding:8px 12px;font-size:18px;font-weight:700;cursor:pointer;line-height:1;">🐾</button>
+    </div>
+  </div>
   <div class="record-section">
     <div class="record-label">ユーザー名</div>
     <div class="record-value level-link" id="userNameText">未設定</div>
   </div>
   <div class="record-section">
-  <div class="record-label">🐾 情報提供</div>
-  <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
-</div>
+    <div class="record-label">🐾 情報提供</div>
+    <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
+  </div>
   <div class="record-section">
-  <div class="record-label">運営方針</div>
-  <div class="record-value" onclick="showPolicy()">見る</div>
+    <div class="record-label">運営方針</div>
+    <div class="record-value" onclick="showPolicy()">見る</div>
+  </div>
 </div>
-</div>
+
 <div id="map"></div>
-  
-<div id="discoverToast" class="discover-toast hidden">
-🐾発見！<br>+1
+
+<div id="discoverToast" class="discover-toast hidden">🐾発見！<br>+1</div>
+
+<div id="policyPage" class="hidden" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:4000;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 28px;">
+  <button class="back-btn" onclick="closePolicy()">← 戻る</button>
+  <h2 style="margin:0 0 12px;font-size:22px;">🐾 わんわんコイン 運営方針</h2>
+  <p style="font-size:14px;line-height:1.8;color:#333;">わんわんコインは、松山市周辺の格安自販機を探索・共有するコミュニティ型マップです。<br>利用者が安全に楽しめる環境を維持するため、以下の方針で運営します。</p>
+  <h3 style="margin-top:18px;font-size:16px;">■ 安全について</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">・歩きスマホ、ながらスマホは危険です。周囲の安全を確認して利用してください。<br>・交通ルールを守り、安全を最優先に行動してください。<br>・私有地への無断侵入は禁止です。</p>
+  <h3 style="margin-top:18px;font-size:16px;">■ 発見報告について</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">・道路や公共スペースから確認できる自販機のみ記録してください。<br>・実際に確認した自販機のみ報告してください。<br>・重複報告は不要です。</p>
+  <h3 style="margin-top:18px;font-size:16px;">■ データについて</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">・本サービスの情報は非公式のユーザー共有データです。<br>・内容の正確性や完全性を保証するものではありません。</p>
+  <h3 style="margin-top:18px;font-size:16px;">■ サービスについて</h3>
+  <p style="font-size:14px;line-height:1.9;color:#333;">・本サービスは予告なく仕様変更・更新を行う場合があります。<br>・探索は自己責任で行ってください。</p>
 </div>
-<button id="btnResetFloating" style="display:none;">リセット</button>
+
 <script>
-  const isDev = location.search.includes("dev=1");
-  function createDevBadge(){
-  if (!isDev) return;
-  const badge = document.createElement("button");
-  badge.textContent = "DEV";
-  badge.id = "devBadge";
-  Object.assign(badge.style, {
-    position: "fixed",
-    right: "12px",
-    bottom: "12px",
-    zIndex: "99999",
-    padding: "8px 10px",
-    border: "none",
-    borderRadius: "999px",
-    background: "#111",
-    color: "#fff",
-    fontSize: "12px",
-    fontWeight: "bold",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
-    opacity: "0.9"
-  });
-  document.body.appendChild(badge);
-}
-  const foundSound = new Audio("chieuk-coin-257878.mp3");
-const ESTIMATED_TOTAL = 1500;
-  let reportMode = false;
-  function generateInternalUserId(){
-  return "wwc_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+var isDev = location.search.includes("dev=1");
+var ESTIMATED_TOTAL = 1500;
+var reportMode = false;
+var spotsRaw = [];
+var markers = [];
+var sponsorsMap = {};
+var clusterEnabled = true;
+var userLatLng = null;
+var userMarker = null;
+var userCircle = null;
+var hasCentered = false;
+var popupOpen = false;
+var watchId = null;
+var currentRadius = null;
+var lastVibeAt = 0;
+var lastRenderAt = 0;
+var pawMarkers = [];
+
+var foundSound = new Audio("chieuk-coin-257878.mp3");
+
+function generateInternalUserId(){
+  return "wwc_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
 }
 function generateDefaultUserName(){
-  const num = Math.floor(1000 + Math.random() * 9000);
+  var num = Math.floor(1000 + Math.random() * 9000);
   return "探索隊" + num;
 }
-const internalUserIdKey = "wanwan_internal_user_id";
-const userNameKey = "wanwan_user_name";
-let internalUserId = localStorage.getItem(internalUserIdKey);
+
+var internalUserIdKey = "wanwan_internal_user_id";
+var userNameKey = "wanwan_user_name";
+var internalUserId = localStorage.getItem(internalUserIdKey);
 if(!internalUserId){
   internalUserId = generateInternalUserId();
   localStorage.setItem(internalUserIdKey, internalUserId);
 }
-let userName = localStorage.getItem(userNameKey);
+var userName = localStorage.getItem(userNameKey);
 if(!userName){
   userName = generateDefaultUserName();
   localStorage.setItem(userNameKey, userName);
 }
-function setRangeActive(btn){
-  document.querySelectorAll(".range-btn")
-    .forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+
+var discovered = new Set(JSON.parse(localStorage.getItem("wanwan_discovered") || "[]"));
+var foundCount = discovered.size;
+
+var todayKey = "wanwan_today_found";
+var todayDateKey = "wanwan_today_date";
+
+function getTodayString(){
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = String(now.getMonth()+1).padStart(2,"0");
+  var d = String(now.getDate()).padStart(2,"0");
+  return y+"-"+m+"-"+d;
 }
-const map = L.map('map', {
-  tapHold: true,
-  tapTolerance: 25
-}).setView([33.8392,132.7657],13);
-const pawIcon = L.divIcon({
-  html: "🐾",
-  className: "paw-icon",
-  iconSize: [30,30]
-});
-let pawMarkers = [];
-let pawData = JSON.parse(localStorage.getItem("wanwan_paws") || "[]");
-map.on('contextmenu', function(e){
-if (!reportMode) return;
-  const newLatLng = L.latLng(e.latlng.lat, e.latlng.lng);
-  if(!userLatLng){
-    alert("先に現在地をONにしてください");
-    return;
+function loadTodayFound(){
+  var today = getTodayString();
+  var savedDate = localStorage.getItem(todayDateKey);
+  if(savedDate !== today){
+    localStorage.setItem(todayDateKey, today);
+    localStorage.setItem(todayKey, "0");
+    return 0;
   }
-  if(userLatLng.distanceTo(newLatLng) > 30){
-    alert("30m以内に近づくと記録できます");
-    return;
-  }
-  for(const p of pawMarkers){
-    if(newLatLng.distanceTo(p.getLatLng()) < 30){
-      alert("この近くに未確認補給所があります");
-      return;
-    }
-  }
-  for(const s of spotsRaw){
-    if(newLatLng.distanceTo([s.lat, s.lng]) < 30){
-      alert("この近くには既に補給所があります");
-      return;
-    }
-  }
-  if(!confirm("未確認補給所を報告する？")){
-    return;
-  }
-  const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScVLaiHOoCP9sg3weumXm9_fhhaCLs-1lwemVqb-RYRAetezw/formResponse";
+  return Number(localStorage.getItem(todayKey) || 0);
+}
+var todayFound = loadTodayFound();
 
-fetch(formUrl, {
-  method: "POST",
-  mode: "no-cors",
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded"
-  },
-  body:
-    "entry.755147629=" + e.latlng.lat +
-    "&entry.906767353=" + e.latlng.lng
-});
-  const sponsor = getSponsorForSpot({
-    lat: e.latlng.lat,
-    lng: e.latlng.lng
-  });
-  const m = L.marker([e.latlng.lat, e.latlng.lng], {
-    icon: pawIcon
-  }).addTo(map)
-  
+var map = L.map('map',{tapHold:true,tapTolerance:25}).setView([33.8392,132.7657],13);
 
-pawMarkers.push(m);
-showDiscoverToast();
-const toast = document.getElementById("discoverToast");
-toast.innerHTML = "報告ありがとうございます🐾";
-setTimeout(() => {
-  map.removeLayer(m);
-}, 4000);
+var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
+var darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
 
-  reportMode = false;
-});
-const lightLayer = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  { maxZoom: 19 }
-);
-const darkLayer = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  { maxZoom: 19 }
-);
-const savedTheme = localStorage.getItem("map_theme") || "light";
-if (localStorage.getItem("night_unlocked")) {
-  if (savedTheme === "dark") {
+var savedTheme = localStorage.getItem("map_theme") || "light";
+if(localStorage.getItem("night_unlocked")){
+  if(savedTheme === "dark"){
     darkLayer.addTo(map);
   } else {
     lightLayer.addTo(map);
@@ -835,997 +287,439 @@ if (localStorage.getItem("night_unlocked")) {
   lightLayer.addTo(map);
 }
 
-if (location.hash.includes("dark-test")) {
-  map.removeLayer(lightLayer);
-  darkLayer.addTo(map);
-}
-let spotsRaw=[];
-let markers=[];
-let sponsorsMap = {};
-let shibaCluster = L.markerClusterGroup({
-  maxClusterRadius: 28,
-  disableClusteringAtZoom: 17,
-  spiderfyOnMaxZoom: false,
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true,
-  removeOutsideVisibleBounds: true,
-  chunkedLoading: true,
-  iconCreateFunction: function(cluster) {
-    const count = cluster.getChildCount();
-    return L.divIcon({
-      html: `
-        <div class="coin">
-          <img src="shiba.png">
-          <span>${count}</span>
-        </div>
-      `,
-      className: "coin-cluster",
-      iconSize: L.point(60,60)
-    });
+var pawIconLeaflet = L.divIcon({html:"🐾",className:"paw-icon",iconSize:[30,30]});
+
+var shibaCluster = L.markerClusterGroup({
+  maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,
+  showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,
+  iconCreateFunction:function(cluster){
+    var count = cluster.getChildCount();
+    return L.divIcon({html:'<div class="coin"><img src="shiba.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
   }
 });
-let bulldogCluster = L.markerClusterGroup({
-  maxClusterRadius: 28,
-  disableClusteringAtZoom: 17,
-  spiderfyOnMaxZoom: false,
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true,
-  removeOutsideVisibleBounds: true,
-  chunkedLoading: true,
-  iconCreateFunction: function(cluster) {
-    const count = cluster.getChildCount();
-    return L.divIcon({
-      html: `
-        <div class="coin">
-          <img src="bulldog.png">
-          <span>${count}</span>
-        </div>
-      `,
-      className: "coin-cluster",
-      iconSize: L.point(60,60)
-    });
+var bulldogCluster = L.markerClusterGroup({
+  maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,
+  showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,
+  iconCreateFunction:function(cluster){
+    var count = cluster.getChildCount();
+    return L.divIcon({html:'<div class="coin"><img src="bulldog.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
   }
 });
-let pomeCluster = L.markerClusterGroup({
-  maxClusterRadius: 28,
-  disableClusteringAtZoom: 17,
-  spiderfyOnMaxZoom: false,
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true,
-  removeOutsideVisibleBounds: true,
-  chunkedLoading: true,
-  iconCreateFunction: function(cluster) {
-    const count = cluster.getChildCount();
-    return L.divIcon({
-      html: `
-        <div class="coin">
-          <img src="pome.png">
-          <span>${count}</span>
-        </div>
-      `,
-      className: "coin-cluster",
-      iconSize: L.point(60,60)
-    });
+var pomeCluster = L.markerClusterGroup({
+  maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,
+  showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,
+  iconCreateFunction:function(cluster){
+    var count = cluster.getChildCount();
+    return L.divIcon({html:'<div class="coin"><img src="pome.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
   }
 });
 map.addLayer(shibaCluster);
 map.addLayer(bulldogCluster);
 map.addLayer(pomeCluster);
-let clusterEnabled = true;
-let userLatLng=null;
-let userMarker=null;
-let userCircle=null;
-  let radarPulse = null;
-let currentRadius=null;
-let watchId=null;
-  let hasCentered = false;
-  let popupOpen = false;
-  
-const shibaIcon=L.icon({
-  iconUrl:'shiba.png',
-  iconSize:[30,36],
-  iconAnchor:[15,36]
-});
-const bulldogIcon=L.icon({
-  iconUrl:'bulldog.png',
-  iconSize:[30,36],
-  iconAnchor:[15,36]
-});
-const pomeIcon=L.icon({
-  iconUrl:'pome.png',
-  iconSize:[30,36],
-  iconAnchor:[15,36]
-});
-  const shibaDotIcon=L.icon({
-  iconUrl:'shiba_dot.png',
-  iconSize:[22,26],
-  iconAnchor:[11,26]
-});
-const bulldogDotIcon=L.icon({
-  iconUrl:'bulldog_dot.png',
-  iconSize:[22,26],
-  iconAnchor:[11,26]
-});
-const pomeDotIcon=L.icon({
-  iconUrl:'pome_dot.png',
-  iconSize:[22,26],
-  iconAnchor:[11,26]
-});
+
+var shibaIcon = L.icon({iconUrl:'shiba.png',iconSize:[30,36],iconAnchor:[15,36]});
+var bulldogIcon = L.icon({iconUrl:'bulldog.png',iconSize:[30,36],iconAnchor:[15,36]});
+var pomeIcon = L.icon({iconUrl:'pome.png',iconSize:[30,36],iconAnchor:[15,36]});
+var shibaDotIcon = L.icon({iconUrl:'shiba_dot.png',iconSize:[22,26],iconAnchor:[11,26]});
+var bulldogDotIcon = L.icon({iconUrl:'bulldog_dot.png',iconSize:[22,26],iconAnchor:[11,26]});
+var pomeDotIcon = L.icon({iconUrl:'pome_dot.png',iconSize:[22,26],iconAnchor:[11,26]});
+
+function keyOf(s){
+  return Number(s.lat).toFixed(6)+","+Number(s.lng).toFixed(6)+","+s.type;
+}
 function closePopup(){
   popupOpen = false;
   map.closePopup();
 }
 function goNav(lat,lng){
-  const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-  location.href = url;
+  location.href = "https://www.google.com/maps/search/?api=1&query="+lat+","+lng;
+}
+function show(t){ console.log(t); }
+
+function setRangeActive(btn){
+  document.querySelectorAll(".range-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+}
+function setRadiusCircle(m){
+  if(userCircle){map.removeLayer(userCircle);userCircle=null;}
+  userCircle = L.circle(userLatLng,{radius:m,color:"#2a7fff",weight:1,fillColor:"#2a7fff",fillOpacity:0.03,interactive:false}).addTo(map);
+}
+function normalizeSpots(arr){
+  return arr.map(function(s){return{id:s.id||"",lat:Number(s.lat),lng:Number(s.lng),type:s.type||"nky"};});
+}
+function getSponsorForSpot(spot){
+  var key = Number(spot.lat).toFixed(6)+","+Number(spot.lng).toFixed(6);
+  return sponsorsMap[key] || null;
 }
 function updateCountText(){
-  const found = spotsRaw.length;
-  const percent = Math.round((found / ESTIMATED_TOTAL) * 100);
-  const countEl = document.getElementById("count");
-  if(countEl){
-    countEl.textContent = `${found} / ${ESTIMATED_TOTAL}（推定） • ${percent}%`;
-  }
+  var found = spotsRaw.length;
+  var percent = Math.round((found/ESTIMATED_TOTAL)*100);
+  var countEl = document.getElementById("count");
+  if(countEl) countEl.textContent = found+" / "+ESTIMATED_TOTAL+"（推定） • "+percent+"%";
+}
+function showDiscoverToast(){
+  var toast = document.getElementById("discoverToast");
+  toast.classList.remove("hidden");
+  setTimeout(function(){toast.classList.add("show");},10);
+  setTimeout(function(){toast.classList.add("hidden");toast.classList.remove("show");},1500);
+}
+function copySpotId(id){
+  navigator.clipboard.writeText(id);
+  var toast = document.getElementById("discoverToast");
+  toast.textContent = "番号コピー";
+  toast.classList.remove("hidden");
+  setTimeout(function(){toast.classList.add("show");},10);
+  setTimeout(function(){toast.classList.add("hidden");toast.classList.remove("show");toast.textContent="🐾発見！ +1";},1500);
+}
+function vibrateOnce(){
+  var now = Date.now();
+  if(now-lastVibeAt<8000) return;
+  lastVibeAt = now;
+  if(navigator.vibrate) navigator.vibrate([80]);
 }
 function recordFind(lat,lng,type){
-  if(!userLatLng){
-    alert("先に現在地をONにしてください");
-    return;
-  }
-  const d = userLatLng.distanceTo([lat,lng]);
-  if(d > 30){
-    alert("30m以内に近づくと記録できます");
-    return;
-  }
-  const k = keyOf({lat:lat,lng:lng,type:type});
-  if(discovered.has(k)){
-    alert("この自販機は記録済みです");
-    return;
-  }
+  if(!userLatLng){alert("先に現在地をONにしてください");return;}
+  var d = userLatLng.distanceTo([lat,lng]);
+  if(d>30){alert("30m以内に近づくと記録できます");return;}
+  var k = keyOf({lat:lat,lng:lng,type:type});
+  if(discovered.has(k)){alert("この自販機は記録済みです");return;}
   foundSound.currentTime = 0;
-foundSound.play().catch(() => {});
-  
+  foundSound.play().catch(function(){});
   showDiscoverToast();
-  if (navigator.vibrate) {
-    navigator.vibrate(200);
-  }
+  if(navigator.vibrate) navigator.vibrate(200);
   discovered.add(k);
-  localStorage.setItem(
-  "wanwan_discovered",
-  JSON.stringify([...discovered])
-);
-  
-todayFound++;
-localStorage.setItem(todayKey, todayFound);
-localStorage.setItem(todayDateKey, getTodayString());
-updateFoundUI();
+  localStorage.setItem("wanwan_discovered",JSON.stringify([...discovered]));
+  todayFound++;
+  localStorage.setItem(todayKey,todayFound);
+  localStorage.setItem(todayDateKey,getTodayString());
+  updateFoundUI();
   vibrateOnce();
-  show(`🐾 発見 +1（合計 ${foundCount}）`);
-  
   map.closePopup();
   renderMarkers();
 }
-function show(t){
-  console.log(t);
+function getLevel(found){
+  if(found===0) return "Lv0 野良犬";
+  if(found<=9) return "Lv1 ルーキー探索犬";
+  if(found<=29) return "Lv2 見習い探索犬";
+  if(found<=59) return "Lv3 ベテラン探索犬";
+  if(found<=99) return "Lv4 補給所ハンター";
+  if(found<=199) return "Lv5 エース探索犬";
+  if(found<=499) return "Lv6 補給所マスター";
+  if(found<=999) return "Lv7 松山制覇";
+  if(found<=1499) return "Lv8 暫定神";
+  return "Lv9 チーター";
 }
-function setRadiusCircle(m){
-  if (userCircle) {
-    map.removeLayer(userCircle);
-    userCircle = null;
-  }
-  const isDarkTest = location.hash.includes("dark-test");
-  const isPurpleTest = location.hash.includes("purple-test");
-  const circleColor = isPurpleTest
-    ? "#22c55e"
-    : (isDarkTest ? "#6ea8ff" : "#2a7fff");
-  userCircle = L.circle(userLatLng, {
-    radius: m,
-    color: circleColor,
-    weight: 1,
-    fillColor: circleColor,
-    fillOpacity: 0.03,
-    interactive: false
-  }).addTo(map);
-}
-function normalizeSpots(arr){
-  return arr.map(s=>({
-    id: s.id || "",
-    lat: Number(s.lat),
-    lng: Number(s.lng),
-    type: s.type || "nky"
-  }));
-}
-  async function loadSponsors(){
-  try{
-    const res = await fetch("sponsors.json");
-    const data = await res.json();
-    sponsorsMap = {};
-    data.forEach(s => {
-      const key = `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)}`;
-      sponsorsMap[key] = s;
-    });
-  }catch(e){
-    console.log("スポンサー読み込み無し");
-  }
-}
-  function getSponsorForSpot(spot){
-  const key = `${Number(spot.lat).toFixed(6)},${Number(spot.lng).toFixed(6)}`;
-  return sponsorsMap[key] || null;
+function updateFoundUI(){
+  foundCount = discovered.size;
+  var percent = ((foundCount/ESTIMATED_TOTAL)*100).toFixed(1);
+  var total = spotsRaw.length;
+  var globalPercent = ((total/ESTIMATED_TOTAL)*100).toFixed(1);
+  var el;
+  el = document.getElementById("foundCountCard"); if(el) el.textContent = foundCount;
+  el = document.getElementById("foundPercentCard"); if(el) el.textContent = percent;
+  el = document.getElementById("globalFound"); if(el) el.textContent = total;
+  el = document.getElementById("globalPercent"); if(el) el.textContent = globalPercent;
+  el = document.getElementById("globalProgressBar"); if(el) el.style.width = globalPercent+"%";
+  var remain = Math.max(ESTIMATED_TOTAL-total,0);
+  el = document.getElementById("remainText"); if(el) el.textContent = "松山制覇まであと "+remain+" 台 🐾";
+  el = document.getElementById("todayCountCard"); if(el) el.textContent = todayFound;
+  var level = getLevel(foundCount);
+  el = document.getElementById("levelTextCard"); if(el) el.textContent = level+" ▶";
+  el = document.getElementById("userNameText"); if(el) el.textContent = userName+" ✏️";
+  var mgScore = Number(localStorage.getItem("wanwan_score")||0);
+  el = document.getElementById("miniGameScore"); if(el) el.textContent = mgScore;
 }
 function renderMarkers(){
-  markers.forEach(m=>map.removeLayer(m));
-  markers=[];
+  markers.forEach(function(m){map.removeLayer(m);});
+  markers = [];
   shibaCluster.clearLayers();
   bulldogCluster.clearLayers();
   pomeCluster.clearLayers();
-  spotsRaw.forEach((s,i)=>{
+  spotsRaw.forEach(function(s){
     if(currentRadius && userLatLng){
-      const d=userLatLng.distanceTo([s.lat,s.lng]);
-      if(d>currentRadius) return;
+      if(userLatLng.distanceTo([s.lat,s.lng])>currentRadius) return;
     }
-    let icon;
-const k = keyOf(s);
-const isFound = discovered.has(k);
-if(isFound){
-  if(s.type==="bul") icon=bulldogDotIcon;
-  else if(s.type==="pom") icon=pomeDotIcon;
-  else icon=shibaDotIcon;
-}else{
-  if(s.type==="bul") icon=bulldogIcon;
-  else if(s.type==="pom") icon=pomeIcon;
-  else icon=shibaIcon;
-}
-    let displayLat = s.lat;
-let displayLng = s.lng;
-const nearby = spotsRaw.filter(other => {
-  if (other === s) return false;
-  const dist = L.latLng(s.lat, s.lng).distanceTo([other.lat, other.lng]);
-  return dist < 12;
-});
-if (nearby.length > 0) {
-  const typeOffsetMap = {
-    nky: [0, 0],
-    bul: [0, 0.00006],
-    pom: [0, -0.00006]
-  };
-  const offset = typeOffsetMap[s.type] || [0, 0];
-  displayLat += offset[0];
-  displayLng += offset[1];
-}
-const m = L.marker([displayLat, displayLng], {
-  icon: icon
-});
-m.on("popupopen", ()=> popupOpen = true);
-m.on("popupclose", ()=> popupOpen = false);
-    
-    
-    const canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng]) <= 30;
-    let title = "🐕 シバ自販機";
-    if(s.type==="bul") title = "🐶 ブル自販機";
-    if(s.type==="pom") title = "🐩 ポメ自販機";
-    const spotId = s.id || "";
-    let recordPart = "";
-   if(isFound){
-  recordPart = `<div class="spot-note">✅ 記録済み</div>`;
-}else if(canRecord){
-  let dogIcon = `<img src="shiba.png" style="height:26px;vertical-align:-4px;">`;
-  if(s.type === "bul"){
-    dogIcon = `<img src="bulldog.png" style="height:26px;vertical-align:-4px;">`;
-  }
-  if(s.type === "pom"){
-    dogIcon = `<img src="pome.png" style="height:26px;vertical-align:-4px;">`;
-  }
-  recordPart = `<button class="spot-btn spot-btn-record" onclick="recordFind(${s.lat},${s.lng},'${s.type}')">${dogIcon} 発見を記録（+1）</button>`;
-}else{
-  recordPart = ``;
-}
-const sponsor = getSponsorForSpot(s);
-m.bindPopup(`
-  <div class="spot-card">
-    <div class="spot-title">${title}</div>
-    <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">
-      <span>${spotId}</span>
-      <span onclick="copySpotId('${spotId}')" style="cursor:pointer;font-size:14px;">📋</span>
-    </div>
-    <div class="spot-actions">
-      <button class="spot-btn spot-btn-go" onclick="goNav(${s.lat},${s.lng})">ここへ行く</button>
-      ${recordPart}
-    </div>
-    ${sponsor ? `
-    <div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">
-      ──────<br>
-      探索隊サポーター<br>
-      <a href="${sponsor.url}" target="_blank">${sponsor.name}</a>
-    </div>
-    ` : ``}
-  </div>
-`);
-if(clusterEnabled){
-  if(s.type === "bul"){
-    bulldogCluster.addLayer(m);
-  }else if(s.type === "pom"){
-    pomeCluster.addLayer(m);
-  }else{
-    shibaCluster.addLayer(m);
-  }
-}else{
-  m.addTo(map);
-  markers.push(m);
-}
+    var k = keyOf(s);
+    var isFound = discovered.has(k);
+    var icon;
+    if(isFound){
+      if(s.type==="bul") icon=bulldogDotIcon;
+      else if(s.type==="pom") icon=pomeDotIcon;
+      else icon=shibaDotIcon;
+    } else {
+      if(s.type==="bul") icon=bulldogIcon;
+      else if(s.type==="pom") icon=pomeIcon;
+      else icon=shibaIcon;
+    }
+    var displayLat = s.lat, displayLng = s.lng;
+    var nearby = spotsRaw.filter(function(other){
+      if(other===s) return false;
+      return L.latLng(s.lat,s.lng).distanceTo([other.lat,other.lng])<12;
+    });
+    if(nearby.length>0){
+      var offsets = {nky:[0,0],bul:[0,0.00006],pom:[0,-0.00006]};
+      var off = offsets[s.type]||[0,0];
+      displayLat += off[0]; displayLng += off[1];
+    }
+    var m = L.marker([displayLat,displayLng],{icon:icon});
+    m.on("popupopen",function(){popupOpen=true;});
+    m.on("popupclose",function(){popupOpen=false;});
+    var canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng])<=30;
+    var title = "🐕 シバ自販機";
+    if(s.type==="bul") title="🐶 ブル自販機";
+    if(s.type==="pom") title="🐩 ポメ自販機";
+    var spotId = s.id||"";
+    var recordPart = "";
+    if(isFound){
+      recordPart = '<div class="spot-note">✅ 記録済み</div>';
+    } else if(canRecord){
+      var dogImg = 'shiba.png';
+      if(s.type==="bul") dogImg='bulldog.png';
+      if(s.type==="pom") dogImg='pome.png';
+      recordPart = '<button class="spot-btn spot-btn-record" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')"><img src="'+dogImg+'" style="height:26px;vertical-align:-4px;"> 発見を記録（+1）</button>';
+    }
+    var sponsor = getSponsorForSpot(s);
+    var sponsorPart = sponsor ? '<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">──────<br>探索隊サポーター<br><a href="'+sponsor.url+'" target="_blank">'+sponsor.name+'</a></div>' : '';
+    m.bindPopup('<div class="spot-card"><div class="spot-title">'+title+'</div><div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;"><span>'+spotId+'</span><span onclick="copySpotId(\''+spotId+'\')" style="cursor:pointer;font-size:14px;">📋</span></div><div class="spot-actions"><button class="spot-btn spot-btn-go" onclick="goNav('+s.lat+','+s.lng+')">ここへ行く</button>'+recordPart+'</div>'+sponsorPart+'</div>');
+    if(clusterEnabled){
+      if(s.type==="bul") bulldogCluster.addLayer(m);
+      else if(s.type==="pom") pomeCluster.addLayer(m);
+      else shibaCluster.addLayer(m);
+    } else {
+      m.addTo(map);
+      markers.push(m);
+    }
   });
   updateCountText();
 }
 function updateUserMarker(lat,lng){
-  userLatLng=L.latLng(lat,lng);
+  userLatLng = L.latLng(lat,lng);
   if(userMarker) map.removeLayer(userMarker);
-  const pawIcon = L.divIcon({
-  html: '<div class="user-dot-wrap"><div class="user-dot"></div></div>',
-  className: '',
-  iconSize: [28,28],
-  iconAnchor: [14,14]
-});
-  userMarker=L.marker(userLatLng,{
-    icon:pawIcon,
-   
-  }).addTo(map);
-if(!hasCentered){
-  map.setView(userLatLng,15);
-  hasCentered = true;
+  var dotIcon = L.divIcon({html:'<div class="user-dot-wrap"><div class="user-dot"></div></div>',className:'',iconSize:[28,28],iconAnchor:[14,14]});
+  userMarker = L.marker(userLatLng,{icon:dotIcon}).addTo(map);
+  if(!hasCentered){map.setView(userLatLng,15);hasCentered=true;}
 }
-  
-}
-const discovered = new Set(
-  JSON.parse(localStorage.getItem("wanwan_discovered") || "[]")
-);
-let lastVibeAt=0;
- let lastRenderAt = 0;
-function keyOf(s){
-  return `${Number(s.lat).toFixed(6)},${Number(s.lng).toFixed(6)},${s.type}`;
-}
-  let foundCount = discovered.size;
-  const todayKey = "wanwan_today_found";
-const todayDateKey = "wanwan_today_date";
-function getTodayString(){
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2,"0");
-  const d = String(now.getDate()).padStart(2,"0");
-  return `${y}-${m}-${d}`;
-}
-function loadTodayFound(){
-  const today = getTodayString();
-  const savedDate = localStorage.getItem(todayDateKey);
-  if(savedDate !== today){
-    localStorage.setItem(todayDateKey, today);
-    localStorage.setItem(todayKey, "0");
-    return 0;
-  }
-  return Number(localStorage.getItem(todayKey) || 0);
-}
-let todayFound = loadTodayFound();
-function updateFoundUI(){
-  foundCount = discovered.size;
-  const percent = ((foundCount / ESTIMATED_TOTAL) * 100).toFixed(1);
-  const el = document.getElementById("foundCount");
-  if(el){
-    el.textContent = foundCount;
-  }
-  const percentEl = document.getElementById("foundPercent");
-  if(percentEl){
-    percentEl.textContent = percent;
-  }
-const total = spotsRaw.length;
-const globalPercent = ((total / ESTIMATED_TOTAL) * 100).toFixed(1);
-const globalEl = document.getElementById("globalFound");
-if(globalEl){
-  globalEl.textContent = total;
-}
-const globalPercentEl = document.getElementById("globalPercent");
-if(globalPercentEl){
-  globalPercentEl.textContent = globalPercent;
-}
-  const bar = document.getElementById("globalProgressBar");
-if(bar){
-  bar.style.width = globalPercent + "%";
-}
-  const remain = Math.max(ESTIMATED_TOTAL - total, 0);
-  const remainEl = document.getElementById("remainText");
-  if(remainEl){
-  remainEl.textContent = "松山制覇まであと " + remain + " 台 🐾";
-    }
-  const todayEl = document.getElementById("todayCount");
-  if(todayEl){
-    todayEl.textContent = todayFound;
-  }
-  const cardEl = document.getElementById("foundCountCard");
-  if(cardEl){
-    cardEl.textContent = foundCount;
-  }
-  const percentCardEl = document.getElementById("foundPercentCard");
-  if(percentCardEl){
-    percentCardEl.textContent = percent;
-  }
-  const todayCardEl = document.getElementById("todayCountCard");
-  if(todayCardEl){
-    todayCardEl.textContent = todayFound;
-  }
-  const level = getLevel(foundCount);
-  const levelEl = document.getElementById("levelText");
-  if(levelEl){
-    levelEl.textContent = level;
-  }
-const userEl = document.getElementById("userNameText");
-if(userEl){
-  userEl.textContent = userName + " ✏️";
-}
-  const levelCardEl = document.getElementById("levelTextCard");
-if(levelCardEl){
-  levelCardEl.textContent = level + " ▶";
-}
-  const mgScore = Number(localStorage.getItem("wanwan_score") || 0);
-const mgEl = document.getElementById("miniGameScore");
-if (mgEl) {
-  mgEl.textContent = mgScore;
-}
-}
-  function getLevel(found){
-  if(found === 0){
-    return "Lv0 野良犬";
-  }
-  if(found <= 9){
-    return "Lv1 ルーキー探索犬";
-  }
-  if(found <= 29){
-    return "Lv2 見習い探索犬";
-  }
-  if(found <= 59){
-    return "Lv3 ベテラン探索犬";
-  }
-  if(found <= 99){
-    return "Lv4 補給所ハンター";
-  }
-  if(found <= 199){
-    return "Lv5 エース探索犬";
-  }
-  if(found <= 499){
-    return "Lv6 補給所マスター";
-  }
-  if(found <= 999){
-    return "Lv7 松山制覇";
-  }
-  if(found <= 1499){
-    return "Lv8 暫定神";
-  }
-  return "Lv9 チーター";
-}
-function vibrateOnce(){
-  const now=Date.now();
-  if(now-lastVibeAt<8000) return;
-  lastVibeAt=now;
-  if(navigator.vibrate) navigator.vibrate([80]);
+async function loadSponsors(){
+  try{
+    var res = await fetch("sponsors.json");
+    var data = await res.json();
+    sponsorsMap = {};
+    data.forEach(function(s){
+      var key = Number(s.lat).toFixed(6)+","+Number(s.lng).toFixed(6);
+      sponsorsMap[key] = s;
+    });
+  } catch(e){ console.log("スポンサー読み込み無し"); }
 }
 async function loadSpots(){
-  show("データ読み込み中...");
-  const res=await fetch("spots.json",{cache:"no-store"});
-  const data=await res.json();
-  spotsRaw=normalizeSpots(data);
+  var res = await fetch("spots.json",{cache:"no-store"});
+  var data = await res.json();
+  spotsRaw = normalizeSpots(data);
   renderMarkers();
 }
-document.getElementById("btnAll").addEventListener("click",(e)=>{
-  setRangeActive(e.target);
-  currentRadius=null;
-  if(userCircle){
-    map.removeLayer(userCircle);
-    userCircle=null;
-  }
-  renderMarkers();
-});
-document.getElementById("btnCluster").addEventListener("click",()=>{
-  const btn = document.getElementById("btnCluster");
-  clusterEnabled = !clusterEnabled;
-  if(clusterEnabled){
-    btn.classList.add("active");
-  }else{
-    btn.classList.remove("active");
-  }
-  renderMarkers();
-});
-  
-document.getElementById("btn500").addEventListener("click",(e)=>{
-  setRangeActive(e.target);
-  currentRadius=500;
-  if(userLatLng) setRadiusCircle(500);
-  renderMarkers();
-});
-document.getElementById("btn1k").addEventListener("click",(e)=>{
-  setRangeActive(e.target);
-  currentRadius=1000;
-  if(userLatLng) setRadiusCircle(1000);
-  renderMarkers();
-});
-document.getElementById("btn3k").addEventListener("click",(e)=>{
-  setRangeActive(e.target);
-  currentRadius=3000;
-  if(userLatLng) setRadiusCircle(3000);
-renderMarkers();
-});
-  const btn = document.getElementById("btnLocate");
-document.getElementById("btnLocate").addEventListener("click",()=>{
-  if(!navigator.geolocation){
-    show("位置情報が使えません");
-    return;
-  }
-  if(watchId!==null){
-    navigator.geolocation.clearWatch(watchId);
-    watchId=null;
-    btn.classList.remove("active");
-    hasCentered = false;
-    show("現在地追跡OFF");
-    return;
-  }
-  
-    btn.classList.add("active");
-show("現在地追跡ON");
-watchId = navigator.geolocation.watchPosition(
-  (pos)=>{
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-    updateUserMarker(lat,lng);
-if(currentRadius!=null) setRadiusCircle(currentRadius);
-    
-    const now = Date.now();
-    if(now - lastRenderAt > 1200 && !popupOpen){
-  renderMarkers();
-  lastRenderAt = now;
+function showFirstGuide(){
+  if(localStorage.getItem("wanwan_guide_shown")) return;
+  setTimeout(function(){
+    alert("🐾 使い方\n地図にいるわんこ＝『ワンコイン自販機』！\n近づくと\n👉「発見を記録」が押せます\nまだ地図に無いワンコイン自販機は\n👉🐾ボタン → 長押しで教えてください");
+    localStorage.setItem("wanwan_guide_shown","1");
+  },800);
 }
-  },
-  (err)=>{
-    show("現在地取得失敗");
-  },
-  {
-    enableHighAccuracy:true,
-    timeout:10000,
-    maximumAge:0
-  }
-);
-});
-const isFirstLaunch = !localStorage.getItem("wanwan_first_loaded");
-if(!isFirstLaunch){
-  const el = document.getElementById("loadingOverlay");
-  if(el) el.style.display = "none";
-}
-loadSponsors().then(async () => {
-  await loadSpots();
-  updateFoundUI();
-showFirstGuide();
-document.getElementById("btnLocate").click();
-document.getElementById("btn1k").click();
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 300);
-  if(isFirstLaunch){
-    const el = document.getElementById("loadingOverlay");
-    if(el) el.style.display = "none";
-    localStorage.setItem("wanwan_first_loaded", "1");
-  }
-  if (isDev) {
-  pawData.forEach(p => {
-    const m = L.marker([p.lat, p.lng], {
-      icon: pawIcon
-    }).addTo(map)
-  .bindPopup(`
-    <div class="spot-card">
-      <button class="card-close" onclick="closePopup()" aria-label="閉じる">
-        <svg class="bone-close" viewBox="0 0 64 64" aria-hidden="true">
-          <g transform="rotate(45 32 32)">
-            <rect x="20" y="28" width="24" height="8" rx="4"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="18" cy="26" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="18" cy="38" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="46" cy="26" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="46" cy="38" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-          </g>
-          <g transform="rotate(-45 32 32)">
-            <rect x="20" y="28" width="24" height="8" rx="4"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="18" cy="26" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="18" cy="38" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="46" cy="26" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-            <circle cx="46" cy="38" r="6"
-              fill="#f5f1e8"
-              stroke="#7a6a58"
-              stroke-width="3"/>
-          </g>
-        </svg>
-      </button>
-      <div class="spot-title">🐾 未確認補給所</div>
-      <div class="spot-actions">
-        <button class="spot-btn spot-btn-go" onclick="goNav(${p.lat},${p.lng})">調査に向かう</button>
-      </div>
-      <div class="spot-note">
-        探索隊が報告<br>
-        現在調査中
-        
-      </div>
-    </div>
-  `);
-   pawMarkers.push(m);
-  });
-}
-  });
-  const btnRecord = document.getElementById("btnRecord");
-const recordCard = document.getElementById("recordCard");
-const btnCloseRecord = document.getElementById("btnCloseRecord");
-
-btnRecord.addEventListener("click", () => {
-  recordCard.classList.toggle("hidden");
-});
-
-btnCloseRecord.addEventListener("click", () => {
-  recordCard.classList.add("hidden");
-});
-
-  
-  document.addEventListener("click", function(e){
-  const policyPage = document.getElementById("policyPage");
-  if(!recordCard.classList.contains("hidden")){
-    if(
-      !recordCard.contains(e.target) &&
-      !btnRecord.contains(e.target) &&
-      !policyPage.contains(e.target)
-    ){
-      recordCard.classList.add("hidden");
-    }
-  }
-});
-  document.getElementById("userNameText").addEventListener("click", () => {
-  const newName = prompt("ユーザー名を入力");
-  if(newName && newName.trim() !== ""){
-    userName = newName.trim();
-    localStorage.setItem("wanwan_user_name", userName);
-    document.getElementById("userNameText").textContent = userName;
-  }
-});
-  function showDiscoverToast(){
-  const toast = document.getElementById("discoverToast");
-  toast.classList.remove("hidden");
-  setTimeout(()=>{
-    toast.classList.add("show");
-  },10);
-  setTimeout(()=>{
-    toast.classList.add("hidden");
-    toast.classList.remove("show");
-  },1500);
-}
-function copySpotId(id){
-navigator.clipboard.writeText(id);
-const toast = document.getElementById("discoverToast");
-toast.textContent = "番号コピー";
-toast.classList.remove("hidden");
-setTimeout(()=>{
-toast.classList.add("show");
-},10);
-setTimeout(()=>{
-toast.classList.add("hidden");
-toast.classList.remove("show");
-toast.textContent = "🐾発見！ +1";
-},1500);
-}
-document.getElementById("btnSearch").addEventListener("click", () => {
-  const id = document.getElementById("spotSearch").value.trim().toUpperCase();
-  if(!id) return;
-  const spot = spotsRaw.find(s => s.id === id);
-  if(!spot){
-    alert("見つかりません");
-    return;
-  }
-  currentRadius = null;
-  if(userCircle){
-    map.removeLayer(userCircle);
-    userCircle = null;
-  }
-  setRangeActive(document.getElementById("btnAll"));
-  renderMarkers();
-  map.setView([spot.lat, spot.lng], 18);
-});
-document.getElementById("btnClearSearch").addEventListener("click", () => {
-  const input = document.getElementById("spotSearch");
-  input.value = "";
-  input.focus();
-});
-  document.getElementById("spotSearch").addEventListener("keypress", (e) => {
-  if(e.key === "Enter"){
-    document.getElementById("btnSearch").click();
-  }
-});
-  document.getElementById("btnResetFloating").addEventListener("click",()=>{
-  if(!confirm("発見記録をリセットしますか？")) return;
-  localStorage.removeItem("wanwan_discovered");
-  localStorage.removeItem("wanwan_paws");
-  localStorage.removeItem("wanwan_today_found");
-  localStorage.removeItem("wanwan_today_date");
-  pawData = [];
-  pawMarkers.forEach(m => map.removeLayer(m));
-  pawMarkers = [];
-  discovered.clear();
-  todayFound = 0;
-  updateFoundUI();
-  renderMarkers();
-  alert("発見記録をリセットしました");
-});
-  
-  function showPolicy(){
+function showPolicy(){
   document.getElementById("policyPage").classList.remove("hidden");
 }
 function closePolicy(){
   document.getElementById("policyPage").classList.add("hidden");
   document.getElementById("recordCard").classList.remove("hidden");
 }
-const miniBtn = document.getElementById("miniGameBtn");
-if (miniBtn) {
-  miniBtn.addEventListener("click", () => {
-    location.href = "game.html";
-  });
-}
-const resetBtn = document.getElementById("btnResetFloating");
-if (resetBtn) {
-  resetBtn.style.display = "none";
-}
- document.addEventListener("click", function(e){
-  if(e.target && e.target.id === "shopNightMap"){
 
-    const score = Number(localStorage.getItem("wanwan_score") || 0);
+map.on('contextmenu',function(e){
+  if(!reportMode) return;
+  var newLatLng = L.latLng(e.latlng.lat,e.latlng.lng);
+  if(!userLatLng){alert("先に現在地をONにしてください");return;}
+  if(userLatLng.distanceTo(newLatLng)>30){alert("30m以内に近づくと記録できます");return;}
+  for(var i=0;i<pawMarkers.length;i++){
+    if(newLatLng.distanceTo(pawMarkers[i].getLatLng())<30){alert("この近くに未確認補給所があります");return;}
+  }
+  for(var j=0;j<spotsRaw.length;j++){
+    if(newLatLng.distanceTo([spotsRaw[j].lat,spotsRaw[j].lng])<30){alert("この近くには既に補給所があります");return;}
+  }
+  if(!confirm("未確認補給所を報告する？")) return;
+  var formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScVLaiHOoCP9sg3weumXm9_fhhaCLs-1lwemVqb-RYRAetezw/formResponse";
+  fetch(formUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"entry.755147629="+e.latlng.lat+"&entry.906767353="+e.latlng.lng});
+  var pm = L.marker([e.latlng.lat,e.latlng.lng],{icon:pawIconLeaflet}).addTo(map);
+  pawMarkers.push(pm);
+  showDiscoverToast();
+  var toast = document.getElementById("discoverToast");
+  toast.innerHTML = "報告ありがとうございます🐾";
+  setTimeout(function(){map.removeLayer(pm);},4000);
+  reportMode = false;
+});
 
-    if (score < 500) {
-      alert("ポイントが足りません🐾");
-      return;
+document.getElementById("btnAll").addEventListener("click",function(e){
+  setRangeActive(e.target);currentRadius=null;
+  if(userCircle){map.removeLayer(userCircle);userCircle=null;}
+  renderMarkers();
+});
+document.getElementById("btnCluster").addEventListener("click",function(){
+  var btn = document.getElementById("btnCluster");
+  clusterEnabled = !clusterEnabled;
+  if(clusterEnabled) btn.classList.add("active"); else btn.classList.remove("active");
+  renderMarkers();
+});
+document.getElementById("btn500").addEventListener("click",function(e){setRangeActive(e.target);currentRadius=500;if(userLatLng)setRadiusCircle(500);renderMarkers();});
+document.getElementById("btn1k").addEventListener("click",function(e){setRangeActive(e.target);currentRadius=1000;if(userLatLng)setRadiusCircle(1000);renderMarkers();});
+document.getElementById("btn3k").addEventListener("click",function(e){setRangeActive(e.target);currentRadius=3000;if(userLatLng)setRadiusCircle(3000);renderMarkers();});
+
+var btnLocate = document.getElementById("btnLocate");
+btnLocate.addEventListener("click",function(){
+  if(!navigator.geolocation){show("位置情報が使えません");return;}
+  if(watchId!==null){
+    navigator.geolocation.clearWatch(watchId);watchId=null;
+    btnLocate.classList.remove("active");hasCentered=false;show("現在地追跡OFF");return;
+  }
+  btnLocate.classList.add("active");show("現在地追跡ON");
+  watchId = navigator.geolocation.watchPosition(
+    function(pos){
+      updateUserMarker(pos.coords.latitude,pos.coords.longitude);
+      if(currentRadius!=null) setRadiusCircle(currentRadius);
+      var now = Date.now();
+      if(now-lastRenderAt>1200 && !popupOpen){renderMarkers();lastRenderAt=now;}
+    },
+    function(){show("現在地取得失敗");},
+    {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+  );
+});
+
+var btnRecord = document.getElementById("recordBtn");
+var recordCard = document.getElementById("recordCard");
+var btnCloseRecord = document.getElementById("btnCloseRecord");
+btnRecord.addEventListener("click",function(){recordCard.classList.toggle("hidden");});
+btnCloseRecord.addEventListener("click",function(){recordCard.classList.add("hidden");});
+
+document.addEventListener("click",function(e){
+  var policyPage = document.getElementById("policyPage");
+  if(!recordCard.classList.contains("hidden")){
+    if(!recordCard.contains(e.target)&&!btnRecord.contains(e.target)&&!policyPage.contains(e.target)){
+      recordCard.classList.add("hidden");
     }
+  }
+});
 
-    if (localStorage.getItem("night_unlocked")) {
-      alert("すでに解放済みです🌙");
-      return;
-    }
+document.getElementById("userNameText").addEventListener("click",function(){
+  var newName = prompt("ユーザー名を入力");
+  if(newName&&newName.trim()!==""){
+    userName = newName.trim();
+    localStorage.setItem("wanwan_user_name",userName);
+    document.getElementById("userNameText").textContent = userName;
+  }
+});
 
-    if (!confirm("500P使ってナイトマップを解放しますか？")) return;
+document.getElementById("btnSearch").addEventListener("click",function(){
+  var id = document.getElementById("spotSearch").value.trim().toUpperCase();
+  if(!id) return;
+  var spot = spotsRaw.find(function(s){return s.id===id;});
+  if(!spot){alert("見つかりません");return;}
+  currentRadius=null;
+  if(userCircle){map.removeLayer(userCircle);userCircle=null;}
+  setRangeActive(document.getElementById("btnAll"));
+  renderMarkers();
+  map.setView([spot.lat,spot.lng],18);
+});
+document.getElementById("btnClearSearch").addEventListener("click",function(){
+  var input = document.getElementById("spotSearch");
+  input.value="";input.focus();
+});
+document.getElementById("spotSearch").addEventListener("keypress",function(e){
+  if(e.key==="Enter") document.getElementById("btnSearch").click();
+});
 
-    const newScore = score - 500;
-    localStorage.setItem("wanwan_score", newScore);
-    localStorage.setItem("night_unlocked", "1");
+var miniBtn = document.getElementById("miniGameBtn");
+if(miniBtn) miniBtn.addEventListener("click",function(){location.href="game.html";});
 
-    // 👇スコア表示更新
-    const mgEl = document.getElementById("miniGameScore");
-    if (mgEl) mgEl.textContent = newScore;
-
-    // 👇ここが今回のバグ修正（即反映）
-    if (typeof lightLayer !== "undefined" && typeof darkLayer !== "undefined") {
-      if (map.hasLayer(lightLayer)) map.removeLayer(lightLayer);
-      if (!map.hasLayer(darkLayer)) darkLayer.addTo(map);
-    }
-
-    // 👇切替ボタン表示
-    const themeRow = document.getElementById("themeRow");
-    if (themeRow) {
-      themeRow.style.display = "flex";
-    }
-
+document.addEventListener("click",function(e){
+  if(e.target&&e.target.id==="shopNightMap"){
+    var score = Number(localStorage.getItem("wanwan_score")||0);
+    if(score<500){alert("ポイントが足りません🐾");return;}
+    if(localStorage.getItem("night_unlocked")){alert("すでに解放済みです🌙");return;}
+    if(!confirm("500P使ってナイトマップを解放しますか？")) return;
+    var newScore = score-500;
+    localStorage.setItem("wanwan_score",newScore);
+    localStorage.setItem("night_unlocked","1");
+    var mgEl = document.getElementById("miniGameScore");
+    if(mgEl) mgEl.textContent = newScore;
+    if(map.hasLayer(lightLayer)) map.removeLayer(lightLayer);
+    if(!map.hasLayer(darkLayer)) darkLayer.addTo(map);
+    var themeRow = document.getElementById("themeRow");
+    if(themeRow) themeRow.style.display="flex";
     alert("🌙 ナイトマップ解放！");
   }
 });
-    
-if (localStorage.getItem("night_unlocked")) {
-  document.body.style.background = "#0f172a";
-  if (typeof lightLayer !== "undefined" && typeof darkLayer !== "undefined") {
-    map.removeLayer(lightLayer);
-    darkLayer.addTo(map);
-  }
+
+if(localStorage.getItem("night_unlocked")){
+  var themeRow = document.getElementById("themeRow");
+  if(themeRow) themeRow.style.display="flex";
 }
-const themeRow = document.getElementById("themeRow");
-if (themeRow) {
-  if (localStorage.getItem("night_unlocked")) {
-    themeRow.style.display = "flex";
-  } else {
-    themeRow.style.display = "none";
-  }
-}
-const btnThemeLight = document.getElementById("btnThemeLight");
-const btnThemeDark = document.getElementById("btnThemeDark");
-if (btnThemeLight) {
-  btnThemeLight.addEventListener("click", () => {
-  localStorage.setItem("map_theme", "light");
-  map.removeLayer(darkLayer);
-  lightLayer.addTo(map);
-});
-}
-if (btnThemeDark) {
-  btnThemeDark.addEventListener("click", () => {
-    if (!localStorage.getItem("night_unlocked")) {
-      alert("ナイトマップが解放されていません");
-      return;
-    }
-    localStorage.setItem("map_theme", "dark");
-    map.removeLayer(lightLayer);
-    darkLayer.addTo(map);
+
+var btnThemeLight = document.getElementById("btnThemeLight");
+var btnThemeDark = document.getElementById("btnThemeDark");
+if(btnThemeLight){
+  btnThemeLight.addEventListener("click",function(){
+    localStorage.setItem("map_theme","light");
+    if(map.hasLayer(darkLayer)) map.removeLayer(darkLayer);
+    if(!map.hasLayer(lightLayer)) lightLayer.addTo(map);
   });
 }
-if (btnThemeDark) {
-  btnThemeDark.addEventListener("click", () => {
-    localStorage.setItem("map_theme", "dark");
-    location.reload();
+if(btnThemeDark){
+  btnThemeDark.addEventListener("click",function(){
+    if(!localStorage.getItem("night_unlocked")){alert("ナイトマップが解放されていません");return;}
+    localStorage.setItem("map_theme","dark");
+    if(map.hasLayer(lightLayer)) map.removeLayer(lightLayer);
+    if(!map.hasLayer(darkLayer)) darkLayer.addTo(map);
   });
 }
-const reportBtn = document.getElementById("reportModeBtn");
-if (reportBtn) {
-  reportBtn.addEventListener("click", () => {
-    reportMode = true;
+
+var reportBtn = document.getElementById("reportModeBtn");
+if(reportBtn){
+  reportBtn.addEventListener("click",function(){
+    reportMode=true;
     alert("報告モードON！\n地図を長押しして場所を教えてください");
   });
 }
-  function showFirstGuide(){
-  if(localStorage.getItem("wanwan_guide_shown")) return;
-  setTimeout(() => {
-    alert(
-`🐾 使い方
-地図にいるわんこ＝『ワンコイン自販機』！
-近づくと
-👉「発見を記録」が押せます
-まだ地図に無いワンコイン自販機は
-👉🐾ボタン → 長押しで教えてください`
-);
-    localStorage.setItem("wanwan_guide_shown","1");
-  }, 800);
-}
-setTimeout(() => {
-  const searchToggleBtn = document.getElementById("searchToggleBtn");
-  const searchBox = document.getElementById("searchBox");
-  if (searchToggleBtn && searchBox) {
-    searchToggleBtn.addEventListener("click", () => {
-      if (searchBox.style.display === "none") {
-        searchBox.style.display = "flex";
-      } else {
-        searchBox.style.display = "none";
-      }
+
+setTimeout(function(){
+  var searchToggleBtn = document.getElementById("searchToggleBtn");
+  var searchBox = document.getElementById("searchBox");
+  if(searchToggleBtn&&searchBox){
+    searchToggleBtn.addEventListener("click",function(){
+      searchBox.style.display = (searchBox.style.display==="none")?"flex":"none";
     });
   }
-}, 300);
-  
-  if (localStorage.getItem("open_record_on_return") === "1") {
-  setTimeout(() => {
+},300);
+
+var isFirstLaunch = !localStorage.getItem("wanwan_first_loaded");
+if(!isFirstLaunch){
+  var ol = document.getElementById("loadingOverlay");
+  if(ol) ol.style.display="none";
+}
+
+loadSponsors().then(async function(){
+  await loadSpots();
+  updateFoundUI();
+  showFirstGuide();
+  document.getElementById("btnLocate").click();
+  document.getElementById("btn1k").click();
+  setTimeout(function(){map.invalidateSize();},300);
+  if(isFirstLaunch){
+    var ol2 = document.getElementById("loadingOverlay");
+    if(ol2) ol2.style.display="none";
+    localStorage.setItem("wanwan_first_loaded","1");
+  }
+});
+
+if(localStorage.getItem("open_record_on_return")==="1"){
+  setTimeout(function(){
     recordCard.classList.remove("hidden");
     localStorage.removeItem("open_record_on_return");
-  }, 600);
-}
-</script>
-  <div id="policyPage" class="hidden" style="
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  background:#fff;
-  z-index:4000;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:20px 16px 28px;
-">
-  <button class="back-btn" onclick="closePolicy()">← 戻る</button>
-  <h2 style="margin:0 0 12px;font-size:22px;">🐾 わんわんコイン 運営方針</h2>
-  <p style="font-size:14px;line-height:1.8;color:#333;">
-    わんわんコインは、松山市周辺の格安自販機を探索・共有するコミュニティ型マップです。<br>
-    利用者が安全に楽しめる環境を維持するため、以下の方針で運営します。
-  </p>
-  <h3 style="margin-top:18px;font-size:16px;">■ 安全について</h3>
-  <p style="font-size:14px;line-height:1.9;color:#333;">
-    ・歩きスマホ、ながらスマホは危険です。周囲の安全を確認して利用してください。<br>
-    ・交通ルールを守り、安全を最優先に行動してください。<br>
-    ・私有地への無断侵入は禁止です。
-  </p>
-  <h3 style="margin-top:18px;font-size:16px;">■ 発見報告について</h3>
-  <p style="font-size:14px;line-height:1.9;color:#333;">
-    ・道路や公共スペースから確認できる自販機のみ記録してください。<br>
-    ・実際に確認した自販機のみ報告してください。<br>
-    ・重複報告は不要です。
-  </p>
-  <h3 style="margin-top:18px;font-size:16px;">■ データについて</h3>
-  <p style="font-size:14px;line-height:1.9;color:#333;">
-    ・本サービスの情報は非公式のユーザー共有データです。<br>
-    ・内容の正確性や完全性を保証するものではありません。
-  </p>
-  <h3 style="margin-top:18px;font-size:16px;">■ サービスについて</h3>
-  <p style="font-size:14px;line-height:1.9;color:#333;">
-    ・本サービスは予告なく仕様変更・更新を行う場合があります。<br>
-    ・探索は自己責任で行ってください。
-  </p>
-</div>
-<button id="devNightToggle" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:9999;
-  padding:10px 14px;
-  font-size:12px;
-  border-radius:10px;
-  background:#111;
-  color:#fff;
-  opacity:0.8;
-  display:none;
-">
-  🌙開発ナイト切替
-</button>
-<script>
-const VERSION = "v2";
-
-if (localStorage.getItem("app_version") !== VERSION) {
-  localStorage.setItem("app_version", VERSION);
-  location.reload();
-}
-
-(function () {
-  const devBtn = document.getElementById("devNightToggle");
-  const isDevPage = location.search.includes("dev=1");
-  if (!devBtn) return;
-
-  if (!isDevPage) {
-    devBtn.style.display = "none";
-    return;
-  }
-
-  devBtn.style.display = "block";
-  devBtn.addEventListener("click", () => {
-    if (localStorage.getItem("night_unlocked")) {
-      localStorage.removeItem("night_unlocked");
-      alert("🌙 ナイトOFF（未解放）");
-    } else {
-      localStorage.setItem("night_unlocked", "1");
-      alert("🌙 ナイトON（強制解放）");
-    }
-    location.reload();
-  });
-})();
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    const reg = await navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' });
-
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          newWorker.postMessage({ type: 'SKIP_WAITING' });
-        }
-      });
-    });
-
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      window.location.reload();
-    });
-
-    reg.update();
-  });
+  },600);
 }
 </script>
 </body>
