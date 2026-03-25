@@ -1723,6 +1723,14 @@ setTimeout(() => {
     });
   }
 }, 300);
+  document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("open_record_on_return") === "1") {
+    setTimeout(() => {
+      openRecordCard();
+      localStorage.removeItem("open_record_on_return");
+    }, 800);
+  }
+});
   if (localStorage.getItem("open_record_on_return") === "1") {
   setTimeout(() => {
     openRecordCard();
