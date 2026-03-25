@@ -435,14 +435,22 @@ function getComment(s) {
 
   // たまに2個出す🔥
 if (Math.random() < 0.3) {
-  createExtraPaw();
+  setTimeout(() => {
+    createExtraPaw();
 
-  const x2 = margin + Math.random() * (areaW - margin * 2);
-  const y2 = margin + Math.random() * (areaH - margin * 2);
+    const x2 = margin + Math.random() * (areaW - margin * 2);
+    const y2 = margin + Math.random() * (areaH - margin * 2);
 
-  extraPaw.style.left = x2 + 'px';
-  extraPaw.style.top  = y2 + 'px';
-  extraPaw.style.display = 'block';
+    extraPaw.style.left = x2 + 'px';
+    extraPaw.style.top  = y2 + 'px';
+    extraPaw.style.display = 'block';
+  }, 200);
+} else {
+  if (extraPaw) {
+    extraPaw.remove();
+    extraPaw = null;
+  }
+}
 } else {
   if (extraPaw) {
     extraPaw.remove();
