@@ -10,6 +10,9 @@ gtag('js', new Date());
 gtag('config', 'G-NNF34M8570');
 </script>
 <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>わんわんコインマップ</title>
   <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1763,11 +1766,11 @@ setTimeout(() => {
   🌙開発ナイト切替
 </button>
 <script>
-  const VERSION = "v3";
+const VERSION = "v1";
 
 if (localStorage.getItem("app_version") !== VERSION) {
   localStorage.setItem("app_version", VERSION);
-  location.reload(true);
+  location.reload();
 }
 (function () {
   const devBtn = document.getElementById("devNightToggle");
