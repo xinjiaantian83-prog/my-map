@@ -481,7 +481,7 @@ pawEl.classList.remove("rare", "triple", "tap-anim");
       extraPaw.style.top  = y2 + 'px';
       extraPaw.style.display = 'block';
  // 👇さらに低確率で3個目🔥
- if (forceTripleNext || Math.random() < 0.35) {
+ if (forceTripleNext || Math.random() < 0.1) 5
   forceTripleNext = false;
    setTimeout(() => {
      thirdPaw = pawEl.cloneNode(true);
