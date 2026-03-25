@@ -1481,12 +1481,27 @@ document.getElementById("btn1k").click();
   const btnRecord = document.getElementById("btnRecord");
 const recordCard = document.getElementById("recordCard");
 const btnCloseRecord = document.getElementById("btnCloseRecord");
-btnRecord.addEventListener("click", () => {
-  recordCard.classList.toggle("hidden");
-});
-  btnCloseRecord.addEventListener("click", () => {
+
+function openRecordCard() {
+  recordCard.classList.remove("hidden");
+}
+
+function closeRecordCard() {
   recordCard.classList.add("hidden");
+}
+
+btnRecord.addEventListener("click", () => {
+  if (recordCard.classList.contains("hidden")) {
+    openRecordCard();
+  } else {
+    closeRecordCard();
+  }
 });
+
+btnCloseRecord.addEventListener("click", () => {
+  closeRecordCard();
+});
+  
   document.addEventListener("click", function(e){
   const policyPage = document.getElementById("policyPage");
   if(!recordCard.classList.contains("hidden")){
@@ -1712,8 +1727,7 @@ setTimeout(() => {
 
 if (params.get("open") === "record") {
   setTimeout(() => {
-    const recordBtn = document.getElementById("recordBtn");
-    if (recordBtn) recordBtn.click();
+    openRecordCard();
   }, 300);
 }
 </script>
