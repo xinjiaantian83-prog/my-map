@@ -428,7 +428,8 @@ let active = false;
 let lastTapTime = 0;
 let comboCount = 0;
 let isDogRun = false;
-let isDev = true;
+const params = new URLSearchParams(location.search);
+let isDev = params.get("dev") === "1";
 const comments = {
   zero: [
     "0点で草ww🤣",
