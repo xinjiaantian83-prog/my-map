@@ -103,8 +103,8 @@ if (localStorage.getItem("game_version") !== VERSION) {
   background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  color: transparent; ←これ追加
-  font-size: 34px; ←デカく
+  color: transparent;
+  font-size: 34px;
   font-weight: 900;
   text-shadow: 0 0 6px #000, 0 0 12px #000;
 }
@@ -769,21 +769,19 @@ function showScorePopup(score, x, y) {
   const el = document.createElement("div");
   el.textContent = "+" + score;
 
-  // 👇ここだけでOK
   if (score === 3) {
     el.classList.add("gold");
   }
 
   if (score === 4) {
     el.classList.add("rainbow");
-    el.style.fontSize = "36px";
   }
 
   el.style.position = "absolute";
   el.style.left = x + "px";
   el.style.top = y + "px";
   el.style.transform = "translate(-50%, -50%)";
-  el.style.fontSize = "28px";
+  el.style.fontSize = score === 4 ? "36px" : "28px";
   el.style.fontWeight = "900";
   el.style.textShadow = "0 0 6px #000, 0 0 10px #000";
   el.style.pointerEvents = "none";
