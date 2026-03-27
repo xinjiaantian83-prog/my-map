@@ -790,7 +790,11 @@ if (score === 4) {
   el.style.transform = "translate(-50%, -50%)";
   el.style.fontSize = score === 4 ? "36px" : "28px";
   el.style.fontWeight = "900";
+  if (score === 4) {
+  el.style.textShadow = "0 0 8px #fff, 0 0 16px #fff";
+} else {
   el.style.textShadow = "0 0 6px #000, 0 0 10px #000";
+}
   el.style.pointerEvents = "none";
   el.style.zIndex = "9999";
   el.style.transition = "all 0.6s ease";
