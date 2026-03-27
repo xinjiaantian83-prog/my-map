@@ -420,15 +420,16 @@ function playRare() {
   const resultComment = document.getElementById('result-comment');
   const startBtn  = document.getElementById('start-btn');
   const retryBtn  = document.getElementById('retry-btn');
-
-  const GAME_DURATION = 10;
-  let score = 0;
-  let timeLeft = GAME_DURATION;
-  let gameTimer = null;
-  let active = false;
+const GAME_DURATION = 10;
+let score = 0;
+let timeLeft = GAME_DURATION;
+let gameTimer = null;
+let active = false;
 let lastTapTime = 0;
 let comboCount = 0;
-  const comments = {
+let isDogRun = false;
+
+const comments = {
   zero: [
     "0点で草ww🤣",
     "ナイトモードいらんのか？🌙",
@@ -488,6 +489,10 @@ function getComment(s) {
 }
 
  function placePaw() {
+  if (isDogRun) {
+  placeDogRunPaws();
+  return;
+}
   if (extraPaw) {
     extraPaw.remove();
     extraPaw = null;
@@ -559,6 +564,36 @@ function getComment(s) {
     }, 200);
   } else {
     pawEl.classList.remove("rare");
+  }
+}
+ function placeDogRunPaws() {
+  const areaW = gameArea.offsetWidth;
+  const areaH = gameArea.offsetHeight;
+  const margin = 50;
+
+  const pawCount = 8;
+
+  for (let i = 0; i < pawCount; i++) {
+    const paw = pawEl.cloneNode(true);
+    paw.id = "";
+
+    const x = margin + Math.random() * (areaW - margin * 2);
+    const y = margin + Math.random() * (areaH - margin * 2);
+
+    paw.style.left = x + 'px';
+    paw.style.top = y + 'px';
+    paw.style.display = 'block';
+    paw.dataset.hit = "";
+    paw.style.pointerEvents = "auto";
+    paw.classList.remove("rare", "triple", "tap-anim");
+
+    paw.addEventListener('touchstart', onPawTap, { passive: false });
+
+    gameArea.appendChild(paw);
+
+    setTimeout(() => {
+      if (paw.parentNode) paw.remove();
+    }, 1200);
   }
 }
   function spawnRipple(x, y) {
@@ -633,7 +668,16 @@ showScorePopup(addScore, rx, 180);
 }
 
 setTimeout(() => {
-  if (active) placePaw();
+  if (!active) return;
+
+  if (isDogRun) {
+   const remain = gameArea.querySelectorAll('.paw:not([style*="display: none"])').length;
+    if (remain < 6) {
+      placeDogRunPaws();
+    }
+  } else {
+    placePaw();
+  }
 }, 60);
   }
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
@@ -641,6 +685,12 @@ setTimeout(() => {
   function startGame() {
   score = 0;
   timeLeft = GAME_DURATION;
+
+  if (Math.random() < 0.06) {
+    isDogRun = true;
+    startDogRun();
+  }
+
   scoreEl.textContent = '0';
   timeEl.textContent = GAME_DURATION;
   timeEl.classList.remove('urgent');
@@ -674,6 +724,15 @@ setTimeout(() => {
       endGame();
     }
   }, 1000);
+}
+function startDogRun() {
+  isDogRun = true;
+  document.body.classList.add("dogrun");
+
+  setTimeout(() => {
+    isDogRun = false;
+    document.body.classList.remove("dogrun");
+  }, 5000);
 }
 
  function endGame() {
