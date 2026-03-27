@@ -258,6 +258,17 @@ if (localStorage.getItem("game_version") !== VERSION) {
       drop-shadow(0 0 24px orange);
   }
 }
+ @keyframes screenShake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-4px, 3px); }
+  50% { transform: translate(4px, -3px); }
+  75% { transform: translate(-3px, 2px); }
+  100% { transform: translate(0,0); }
+}
+
+.shake {
+  animation: screenShake 0.2s;
+}
 </style>
 </head>
 <body>
@@ -792,8 +803,12 @@ function showScorePopup(score, x, y) {
 
 if (score === 4) {
   el.classList.add("score-popup", "rainbow", "super");
-}
 
+  document.body.classList.add("shake");
+  setTimeout(() => {
+    document.body.classList.remove("shake");
+  }, 200);
+}
 el.style.position = "absolute";
 el.style.left = x + "px";
 el.style.top = y + "px";
