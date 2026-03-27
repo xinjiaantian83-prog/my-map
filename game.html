@@ -503,8 +503,8 @@ function getComment(s) {
   const margin = 50;
 
   const x = margin + Math.random() * (areaW - margin * 2);
-  const y = margin + Math.random() * (areaH - margin * 2);
-
+ const minY = 120; // ←ここが境界（調整OK）
+const y = minY + Math.random() * (areaH - minY - margin);
   pawEl.style.left = x + 'px';
   pawEl.style.top = y + 'px';
   pawEl.style.display = 'block';
@@ -635,8 +635,9 @@ if (absoluteY <= 500) {
 setTimeout(() => {
   if (active) placePaw();
 }, 60);
-  pawEl.addEventListener('touchstart', onPawTap, { passive: false });
-  
+}
+
+pawEl.addEventListener('touchstart', onPawTap, { passive: false });
   function startGame() {
   score = 0;
   timeLeft = GAME_DURATION;
