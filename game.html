@@ -738,9 +738,9 @@ const backBtn = document.getElementById("backBtn");
 
 if (backBtn) {
   backBtn.addEventListener("click", () => {
-    localStorage.setItem("open_record_on_return", "1");
-    location.href = "index.html";
-  });
+  backBtn.addEventListener("click", () => {
+  location.href = "index.html";
+});
 }
  function playStartSound() {
   const a = document.getElementById("seStart");
