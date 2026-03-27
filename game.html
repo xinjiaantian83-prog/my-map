@@ -810,10 +810,7 @@ function showScorePopup(score, x, y) {
 if (score === 4) {
   el.classList.add("score-popup", "rainbow", "super");
 
-  document.body.classList.add("shake");
-  setTimeout(() => {
-    document.body.classList.remove("shake");
-  }, 200);
+  
 }
 el.style.position = "absolute";
 el.style.left = x + "px";
