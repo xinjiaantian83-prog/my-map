@@ -490,7 +490,7 @@ function getComment(s) {
 }
 
  function placePaw() {
-  if (isDogRun) {
+if (isDev && isDogRun) {
   placeDogRunPaws();
   return;
 }
@@ -587,14 +587,13 @@ function getComment(s) {
     paw.dataset.hit = "";
     paw.style.pointerEvents = "auto";
     paw.classList.remove("rare", "triple", "tap-anim");
-
+if (Math.random() < 0.85) {
+  paw.classList.add("rare");
+}
     paw.addEventListener('touchstart', onPawTap, { passive: false });
 
     gameArea.appendChild(paw);
 
-    setTimeout(() => {
-      if (paw.parentNode) paw.remove();
-    }, 1200);
   }
 }
   function spawnRipple(x, y) {
@@ -733,6 +732,12 @@ function startDogRun() {
   setTimeout(() => {
     isDogRun = false;
     document.body.classList.remove("dogrun");
+
+    const paws = gameArea.querySelectorAll('.paw');
+    paws.forEach(p => {
+      if (p !== pawEl) p.remove();
+    });
+
   }, 5000);
 }
 
