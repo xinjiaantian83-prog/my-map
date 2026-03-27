@@ -799,20 +799,7 @@ function showScorePopup(score, x, y) {
     el.remove();
   }, 600);
 }
-if (score === 4) {
-  el.classList.add("rainbow");
-}
-  gameArea.appendChild(el);
 
-  setTimeout(() => {
-    el.style.top = (y - 40) + "px";
-    el.style.opacity = "0";
-  }, 10);
-
-  setTimeout(() => {
-    el.remove();
-  }, 600);
-}
 </script>
  <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
  <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
