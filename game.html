@@ -813,6 +813,7 @@ el.style.position = "absolute";
 el.style.left = x + "px";
 el.style.top = y + "px";
 el.style.transform = "translate(-50%, -50%)";
+ if (y > 80) return;
 
 if (score === 4) {
   el.style.transform = "translate(-50%, -50%) scale(1.4)";
