@@ -108,6 +108,15 @@ if (localStorage.getItem("game_version") !== VERSION) {
   font-weight: 900;
   text-shadow: 0 0 8px #fff, 0 0 16px #fff;
 }
+ @keyframes popFlash {
+  0%   { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
+  50%  { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.score-popup.super {
+  animation: popFlash 0.25s ease-out;
+}
   /* Ripple */
   .ripple {
     position: absolute;
@@ -782,7 +791,7 @@ function showScorePopup(score, x, y) {
 }
 
 if (score === 4) {
-  el.classList.add("score-popup", "rainbow");
+  el.classList.add("score-popup", "rainbow", "super");
 }
 
 el.style.position = "absolute";
