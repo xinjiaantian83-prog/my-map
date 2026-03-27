@@ -254,7 +254,7 @@ if (localStorage.getItem("game_version") !== VERSION) {
 <body>
 <button id="backBtn" style="
   position: fixed;
-  top: 20px;
+bottom: 20px;
   left: 12px;
   z-index: 10000;
   display: block;
@@ -757,6 +757,14 @@ if (thirdPaw) {
   }, 150);
 
 }, { passive: false });
+ function playStartSound() {
+  const a = document.getElementById("seStart");
+  if (!a) return;
+
+  a.pause();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
 const backBtn = document.getElementById("backBtn");
 
 if (backBtn) {
