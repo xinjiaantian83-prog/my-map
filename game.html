@@ -77,6 +77,12 @@ body {
 }
 .paw.triple {
   animation: tripleBlink 0.3s infinite alternate;
+  filter:
+    hue-rotate(220deg)
+    saturate(1.8)
+    brightness(1.2)
+    drop-shadow(0 0 6px #60a5fa)
+    drop-shadow(0 0 14px #3b82f6);
 }
 
 .score-popup {
@@ -344,7 +350,13 @@ function playStartSound() {
   a.currentTime = 0;
   a.play().catch(() => {});
 }
-
+function playDirect(id) {
+  const a = document.getElementById(id);
+  if (!a) return;
+  a.pause();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
 function safeX() {
   return MARGIN_X + Math.random() * (gameArea.offsetWidth - MARGIN_X * 2);
 }
@@ -528,7 +540,7 @@ function endGame() {
 
   setTimeout(() => {
     resultScr.classList.remove('hidden');
-    setTimeout(() => playSound('seResult'), 300);
+   setTimeout(() => playDirect('seResult'), 300);
   }, 600);
 
   const total = Number(localStorage.getItem('wanwan_score') || 0) + score;
@@ -557,8 +569,9 @@ function runCountdown(cb) {
 startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  playStartSound();
-  unlockSound();
+ unlockSound();
+playDirect('seStart');
+  
   startBtn.style.transform = 'scale(0.94)';
   startBtn.style.opacity   = '0.88';
   setTimeout(() => {
@@ -572,7 +585,7 @@ startBtn.addEventListener('touchstart', (e) => {
 retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  playStartSound();
+  playDirect('seStart');
   retryBtn.style.transform = 'scale(0.94)';
   retryBtn.style.opacity   = '0.88';
   setTimeout(() => {
