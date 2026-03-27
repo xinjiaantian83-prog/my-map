@@ -93,6 +93,18 @@ if (localStorage.getItem("game_version") !== VERSION) {
   color: #f59e0b !important;
   text-shadow: 0 0 6px rgba(245,158,11,0.35);
 }
+
+.score-popup.gold {
+  color: gold !important;
+  text-shadow: 0 0 6px #000, 0 0 12px orange;
+}
+
+.score-popup.rainbow {
+  background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 6px #000;
+}
   @keyframes tapBounce {
     0%   { transform: translate(-50%, -50%) scale(1); }
     40%  { transform: translate(-50%, -50%) scale(0.6) rotate(-15deg); }
@@ -778,7 +790,13 @@ el.style.textShadow = "0 0 6px #000, 0 0 10px #000";
   el.style.pointerEvents = "none";
   el.style.zIndex = "9999";
   el.style.transition = "all 0.6s ease";
+if (score === 3) {
+  el.classList.add("score-popup", "gold");
+}
 
+if (score === 4) {
+  el.classList.add("score-popup", "rainbow");
+}
   gameArea.appendChild(el);
 
   setTimeout(() => {
