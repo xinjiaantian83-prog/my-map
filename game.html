@@ -1,137 +1,165 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<script>
-const VERSION = "v7";
+ <script>
+const VERSION = "v6";
+
 if (localStorage.getItem("game_version") !== VERSION) {
   localStorage.setItem("game_version", VERSION);
   location.reload(true);
 }
 </script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>肉球タップゲーム</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #fff;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
 
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: #fff;
-  height: 100vh;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  #hud {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 2px solid #f0e6ff;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(180,130,255,0.08);
+  }
+  .hud-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hud-label {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .hud-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #7c3aed;
+    line-height: 1.1;
+  }
+  #time-value.urgent { color: #ef4444; animation: pulse 0.5s infinite; }
+
+ @keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
-#hud {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 60px;
-  background: #fff;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-bottom: 2px solid #f0e6ff;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(180,130,255,0.08);
-}
-.hud-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.hud-label {
-  font-size: 11px;
-  color: #aaa;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-.hud-value {
-  font-size: 26px;
-  font-weight: 800;
-  color: #7c3aed;
-  line-height: 1.1;
+@keyframes dangerShake {
+  0% { transform: translate(0,0) scale(1.3); }
+  25% { transform: translate(-2px,2px) scale(1.3); }
+  50% { transform: translate(2px,-2px) scale(1.3); }
+  75% { transform: translate(-2px,1px) scale(1.3); }
+  100% { transform: translate(0,0) scale(1.3); }
 }
 
-#game-area {
-  position: fixed;
-  top: 60px; left: 0; right: 0; bottom: 0;
-  overflow: hidden;
-}
+  #game-area {
+    position: fixed;
+    top: 60px; left: 0; right: 0; bottom: 0;
+  }
 
-.paw {
+  .paw {
   position: absolute;
   font-size: 56px;
   cursor: pointer;
   transform: translate(-50%, -50%);
+  transition: transform 0.05s;
   filter: drop-shadow(0 4px 12px rgba(124,58,237,0.25));
   display: none;
   line-height: 1;
-  touch-action: manipulation;
 }
-.paw.rare {
-  animation: rareFlash 0.35s infinite alternate;
-}
-.paw.triple {
-  animation: tripleBlink 0.3s infinite alternate;
-  filter:
-    hue-rotate(220deg)
-    saturate(1.8)
-    brightness(1.2)
-    drop-shadow(0 0 6px #60a5fa)
-    drop-shadow(0 0 14px #3b82f6);
+  .paw.tap-anim {
+  animation: tapBounce 0.18s ease-out;
 }
 
-.score-popup {
-  position: absolute;
-  font-weight: 900;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: top 0.55s ease, opacity 0.55s ease;
+.score-popup.high {
+  font-size: 28px !important;
+  color: #f59e0b !important;
+  text-shadow: 0 0 6px rgba(245,158,11,0.35);
 }
+
 .score-popup.gold {
-  color: gold;
+  color: gold !important;
   text-shadow: 0 0 6px #000, 0 0 12px orange;
 }
+
 .score-popup.rainbow {
   background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+  font-size: 34px;
+  font-weight: 900;
+  text-shadow: 0 0 8px #fff, 0 0 16px #fff;
+}
+ @keyframes popFlash {
+  0%   { transform: translate(-50%, -50%) scale(1.6); opacity: 1; }
+  50%  { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  background: rgba(167,139,250,0.45);
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  animation: rippleAnim 0.4s ease-out forwards;
+.score-popup.super {
+  animation: popFlash 0.25s ease-out;
 }
+  /* Ripple */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(167,139,250,0.45);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleAnim 0.4s ease-out forwards;
+  }
+  @keyframes rippleAnim {
+    to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+  }
 
-.screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: rgba(255,255,255,0.97);
-  z-index: 20;
-  gap: 20px;
-}
-.screen.hidden { display: none; }
-.screen-emoji  { font-size: 80px; }
-.screen-title  { font-size: 28px; font-weight: 900; color: #7c3aed; letter-spacing: -0.5px; }
-.screen-sub    { font-size: 15px; color: #888; text-align: center; line-height: 1.6; padding: 0 30px; }
+  /* Overlay screens */
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255,255,255,0.97);
+    z-index: 20;
+    gap: 20px;
+  }
+  .screen.hidden { display: none; }
 
-.btn {
+  .screen-emoji { font-size: 80px; }
+  .screen-title {
+    font-size: 28px;
+    font-weight: 900;
+    color: #7c3aed;
+    letter-spacing: -0.5px;
+  }
+  .screen-sub {
+    font-size: 15px;
+    color: #888;
+    text-align: center;
+    line-height: 1.6;
+    padding: 0 30px;
+  }
+
+  .btn {
   padding: 16px 48px;
   font-size: 18px;
   font-weight: 800;
@@ -145,35 +173,111 @@ body {
   min-width: 180px;
   text-align: center;
 }
-.btn:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 10px rgba(124,58,237,0.25);
+  .btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 10px rgba(124,58,237,0.25);
+  }
+
+  #result-score {
+    font-size: 72px;
+    font-weight: 900;
+    color: #7c3aed;
+    line-height: 1;
+  }
+  #result-label {
+    font-size: 18px;
+    color: #aaa;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* Countdown */
+  #countdown-screen .countdown-num {
+    font-size: 120px;
+    font-weight: 900;
+    color: #7c3aed;
+    animation: countPop 0.6s ease-out;
+  }
+  @keyframes countPop {
+    0%   { transform: scale(1.6); opacity: 0.3; }
+    60%  { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+ .rare {
+  transform: translate(-50%, -50%) rotate(0deg);
+  filter:
+    hue-rotate(35deg)
+    saturate(1.8)
+    brightness(1.15)
+    drop-shadow(0 0 6px #fff7a8)
+    drop-shadow(0 0 14px gold)
+    drop-shadow(0 0 22px orange);
+  animation: rareFlash 0.35s infinite alternate;
+}
+.triple {
+  transform: translate(-50%, -50%) scale(0.75);
+  filter:
+    hue-rotate(220deg)
+    saturate(1.8)
+    brightness(1.2)
+    drop-shadow(0 0 6px #60a5fa)
+    drop-shadow(0 0 14px #3b82f6);
+
+  animation: tripleBlink 0.3s infinite alternate;
 }
 
-#result-score {
-  font-size: 72px;
-  font-weight: 900;
-  color: #7c3aed;
-  line-height: 1;
+@keyframes tripleBlink {
+  from {
+    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 1;
+  }
 }
-#result-label {
-  font-size: 18px;
-  color: #aaa;
-  font-weight: 600;
-  letter-spacing: 1px;
+@keyframes rareFlash {
+  from {
+    transform: translate(-50%, -50%) rotate(-6deg);
+    filter:
+      hue-rotate(20deg)
+      saturate(1.5)
+      brightness(1.05)
+      drop-shadow(0 0 4px #fff7a8)
+      drop-shadow(0 0 10px gold)
+      drop-shadow(0 0 16px orange);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(6deg);
+    filter:
+      hue-rotate(45deg)
+      saturate(2)
+      brightness(1.2)
+      drop-shadow(0 0 8px #fff)
+      drop-shadow(0 0 16px gold)
+      drop-shadow(0 0 24px orange);
+  }
+}
+ @keyframes screenShake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-4px, 3px); }
+  50% { transform: translate(4px, -3px); }
+  75% { transform: translate(-3px, 2px); }
+  100% { transform: translate(0,0); }
 }
 
-#countdown-screen .countdown-num {
-  font-size: 120px;
-  font-weight: 900;
-  color: #7c3aed;
+.shake {
+  animation: screenShake 0.2s;
 }
-
-#backBtn {
+</style>
+</head>
+<body>
+<button id="backBtn" style="
   position: fixed;
-  bottom: 20px;
+bottom: 20px;
   left: 12px;
   z-index: 10000;
+  display: block;
   padding: 10px 14px;
   font-size: 14px;
   font-weight: 700;
@@ -182,54 +286,10 @@ body {
   border-radius: 10px;
   background: rgba(255,255,255,0.95);
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-}
-
-@keyframes rareFlash {
-  from {
-    transform: translate(-50%, -50%) rotate(-6deg);
-    filter: hue-rotate(20deg) saturate(1.5) brightness(1.05)
-            drop-shadow(0 0 4px #fff7a8) drop-shadow(0 0 10px gold) drop-shadow(0 0 16px orange);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(6deg);
-    filter: hue-rotate(45deg) saturate(2) brightness(1.2)
-            drop-shadow(0 0 8px #fff) drop-shadow(0 0 16px gold) drop-shadow(0 0 24px orange);
-  }
-}
-@keyframes tripleBlink {
-  from { transform: translate(-50%, -50%) scale(0.75); opacity: 0.7; }
-  to   { transform: translate(-50%, -50%) scale(0.85); opacity: 1; }
-}
-@keyframes rippleAnim {
-  to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
-}
-@keyframes countPop {
-  0%   { transform: scale(1.6); opacity: 0.3; }
-  60%  { transform: scale(0.9); opacity: 1; }
-  100% { transform: scale(1); }
-}
-@keyframes dangerShake {
-  0%   { transform: translate(0,0)       scale(1.3); }
-  25%  { transform: translate(-2px, 2px) scale(1.3); }
-  50%  { transform: translate(2px, -2px) scale(1.3); }
-  75%  { transform: translate(-2px, 1px) scale(1.3); }
-  100% { transform: translate(0,0)       scale(1.3); }
-}
-@keyframes screenShake {
-  0%   { transform: translate(0,0); }
-  25%  { transform: translate(-4px, 3px); }
-  50%  { transform: translate(4px, -3px); }
-  75%  { transform: translate(-3px, 2px); }
-  100% { transform: translate(0,0); }
-}
-.shake { animation: screenShake 0.2s; }
-</style>
-</head>
-<body>
-
-<button id="backBtn">← 戻る</button>
-
+">
+  ← 戻る
+</button>
+<!-- HUD -->
 <div id="hud">
   <div class="hud-item">
     <span class="hud-label">スコア</span>
@@ -241,10 +301,12 @@ body {
   </div>
 </div>
 
+<!-- Game area -->
 <div id="game-area">
   <div id="paw" class="paw">🐾</div>
 </div>
 
+<!-- Start screen -->
 <div class="screen" id="start-screen">
   <div class="screen-emoji">🐾</div>
   <div class="screen-title">肉球タップゲーム</div>
@@ -252,353 +314,550 @@ body {
   <button class="btn" id="start-btn">スタート</button>
 </div>
 
+<!-- Countdown screen -->
 <div class="screen hidden" id="countdown-screen">
   <div class="countdown-num" id="countdown-num">3</div>
 </div>
 
+<!-- Result screen -->
 <div class="screen hidden" id="result-screen">
   <div class="screen-emoji">🎉</div>
   <div class="screen-title">ゲーム終了！</div>
   <div id="result-label">スコア</div>
   <div id="result-score">0</div>
   <div class="screen-sub" id="result-comment"></div>
-  <div id="sponsorBox" style="
-    margin-top:16px; padding:14px; border-radius:14px;
-    background:#f5f1ff; font-size:14px; text-align:center;
-    line-height:1.6; box-shadow:0 4px 12px rgba(124,58,237,0.15);
-  ">🐾 今日の補給所<br>（準備中）</div>
+ <div id="sponsorBox" style="
+  margin-top:16px;
+  padding:14px;
+  border-radius:14px;
+  background:#f5f1ff;
+  font-size:14px;
+  text-align:center;
+  line-height:1.6;
+  box-shadow:0 4px 12px rgba(124,58,237,0.15);
+">
+  🐾 今日の補給所<br>
+  （準備中）
+</div>
   <button class="btn" id="retry-btn">もう一度遊ぶ</button>
 </div>
 
-<audio id="seTap"    src="start_ui.mp3"  preload="auto"></audio>
-<audio id="seRare"   src="rare_bonus.mp3" preload="auto"></audio>
-<audio id="seCount"  src="count.mp3"     preload="auto"></audio>
-<audio id="seResult" src="reward.mp3"    preload="auto"></audio>
-<audio id="seStart"  src="seTap.mp3"     preload="auto"></audio>
-<audio id="seTriple" src="triple.mp3"    preload="auto"></audio>
-
 <script>
-const GAME_DURATION = 10;
-const SAFE_TOP    = 30;
-const SAFE_BOTTOM = 160;
-const MARGIN_X    = 50;
+ let soundEnabled = false;
 
-const gameArea      = document.getElementById('game-area');
-const pawEl         = document.getElementById('paw');
-const scoreEl       = document.getElementById('score-value');
-const timeEl        = document.getElementById('time-value');
-const startScr      = document.getElementById('start-screen');
-const countScr      = document.getElementById('countdown-screen');
-const resultScr     = document.getElementById('result-screen');
-const countNum      = document.getElementById('countdown-num');
-const resultScore   = document.getElementById('result-score');
-const resultComment = document.getElementById('result-comment');
-const startBtn      = document.getElementById('start-btn');
-const retryBtn      = document.getElementById('retry-btn');
-const backBtn       = document.getElementById('backBtn');
-
-let score           = 0;
-let timeLeft        = GAME_DURATION;
-let gameTimer       = null;
-let active          = false;
-let extraPaw        = null;
-let thirdPaw        = null;
-let forceTripleNext = false;
-let tripleChainUsed = false;
-
-const comments = {
-  zero:   ["0点で草ww🤣","ナイトモードいらんのか？🌙","どんまい🐾","逆にすごいなこれ😂"],
-  low:    ["ほやけんよ笑","🐱 まだまだこれからやね","😆 指あったまってないかも？","🍀 もう一回いこうや"],
-  mid:    ["👏 なかなかええ感じやね","🔥 ちょっと調子出てきたな","🐾 そのペースいいね","😊 もう少しで伸びそう"],
-  high:   ["⚠️ 突き指注意！","🔥 だいぶ速いね！","🐕 いい動きしとる","💪 かなり仕上がってきた"],
-  top:    ["👑 マジかよ！","🏆 トップレベルやね","💥 これはなかなか出んよ","🐕‍🦺 チート使いましたね？！"],
-  legend: ["スクショ禁止📸","これ外部持ち出しNGな🤫","ヤッベ！","自慢すんなよ？笑"]
-};
-function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function getComment(s) {
-  if (s === 0)  return getRandom(comments.zero);
-  if (s >= 30)  return getRandom(comments.legend);
-  if (s < 10)   return getRandom(comments.low);
-  if (s < 20)   return getRandom(comments.mid);
-  return getRandom(comments.high);
-}
-
-let soundEnabled = false;
 function unlockSound() {
   if (soundEnabled) return;
   soundEnabled = true;
-  ['seTap','seRare','seCount','seResult','seStart','seTriple'].forEach(id => {
-    const a = document.getElementById(id);
+
+  const sounds = [
+  document.getElementById("seTap"),
+  document.getElementById("seRare"),
+  document.getElementById("seCount")
+];
+
+  sounds.forEach(a => {
     if (!a) return;
+
     a.load();
     a.muted = true;
-    a.play().then(() => { a.pause(); a.currentTime = 0; a.muted = false; }).catch(() => { a.muted = false; });
+    a.currentTime = 0;
+
+    a.play().then(() => {
+      a.pause();
+      a.currentTime = 0;
+      a.muted = false;
+    }).catch(() => {
+      a.muted = false;
+    });
   });
 }
-function playSound(id) {
+function playTap() {
   if (!soundEnabled) return;
-  const base = document.getElementById(id);
+
+  const base = document.getElementById("seTap");
   if (!base) return;
+
   const a = base.cloneNode();
   a.currentTime = 0;
   a.play().catch(() => {});
 }
-function playStartSound() {
-  const a = document.getElementById('seStart');
-  if (!a) return;
-  a.pause();
+
+function playRare() {
+  if (!soundEnabled) return;
+
+  const base = document.getElementById("seRare");
+  if (!base) return;
+
+  const a = base.cloneNode();
   a.currentTime = 0;
   a.play().catch(() => {});
 }
-function playDirect(id) {
-  const a = document.getElementById(id);
-  if (!a) return;
-  a.pause();
-  a.currentTime = 0;
-  a.play().catch(() => {});
-}
-function safeX() {
-  return MARGIN_X + Math.random() * (gameArea.offsetWidth - MARGIN_X * 2);
-}
-function safeY() {
-  return SAFE_TOP + Math.random() * (gameArea.offsetHeight - SAFE_TOP - SAFE_BOTTOM);
-}
-
-function clearExtraPaws() {
-  if (extraPaw) { extraPaw.remove(); extraPaw = null; }
-  if (thirdPaw) { thirdPaw.remove(); thirdPaw = null; }
-}
-
-function makePaw(isRare, isTriple) {
-  const el = document.createElement('div');
-  el.className = 'paw';
-  el.textContent = '🐾';
-  el.dataset.hit = '';
-  el.style.display = 'block';
-  el.style.left = safeX() + 'px';
-  el.style.top  = safeY() + 'px';
-  el.style.pointerEvents = 'auto';
-  if (isTriple)    el.classList.add('triple');
-  else if (isRare) el.classList.add('rare');
-  el.addEventListener('touchstart', onPawTap, { passive: false });
-  gameArea.appendChild(el);
-  return el;
-}
-
-function placePaw() {
-  clearExtraPaws();
-
-  pawEl.classList.remove('rare', 'triple');
-  pawEl.dataset.hit = '';
-  pawEl.style.pointerEvents = 'auto';
-  pawEl.style.left    = safeX() + 'px';
-  pawEl.style.top     = safeY() + 'px';
-  pawEl.style.display = 'block';
-
-  if (Math.random() >= 0.3) return;
-
-  setTimeout(() => {
-    if (!active) return;
-    const mainRare = Math.random() < 0.5;
-    if (mainRare) pawEl.classList.add('rare');
-    extraPaw = makePaw(!mainRare, false);
-
-    const doTriple = forceTripleNext || Math.random() < 0.35;
-    forceTripleNext = false;
-    if (doTriple) {
-      setTimeout(() => {
-        if (!active) return;
-        thirdPaw = makePaw(false, true);
-      }, 350);
-    }
-  }, 200);
-}
-
-function spawnRipple(x, y) {
-  const r = document.createElement('div');
-  r.className = 'ripple';
-  r.style.left = x + 'px';
-  r.style.top  = y + 'px';
-  gameArea.appendChild(r);
-  r.addEventListener('animationend', () => r.remove());
-}
-
-function showScorePopup(pts, x, y) {
-  const el = document.createElement('div');
-  el.className = 'score-popup';
-  el.textContent = '+' + pts;
-  el.style.left = x + 'px';
-  el.style.top  = y + 'px';
-
-  if (pts === 4) {
-    el.classList.add('rainbow');
-    el.style.fontSize = '46px';
-    document.body.classList.add('shake');
-    setTimeout(() => document.body.classList.remove('shake'), 200);
-  } else if (pts === 3) {
-    el.classList.add('gold');
-    el.style.fontSize = '34px';
-  } else {
-    el.style.fontSize = '28px';
-    el.style.color = '#fff';
-    el.style.textShadow = '0 0 6px #000, 0 0 10px #000';
+  const pawEl     = document.getElementById('paw');
+ let extraPaw = null;
+ let thirdPaw = null;
+ let forceTripleNext = false;
+ let tripleChainUsed = false;
+ function createExtraPaw() {
+  if (extraPaw) {
+    extraPaw.remove();
   }
 
-  gameArea.appendChild(el);
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      el.style.top     = (y - 60) + 'px';
-      el.style.opacity = '0';
-    });
-  });
-  setTimeout(() => el.remove(), 600);
+  extraPaw = pawEl.cloneNode(true);
+  extraPaw.id = ""; // ID消す（重要）
+  gameArea.appendChild(extraPaw);
+
+  extraPaw.addEventListener('touchstart', onPawTap, { passive: false });
+  
+}
+  const gameArea  = document.getElementById('game-area');
+  const scoreEl   = document.getElementById('score-value');
+  const timeEl    = document.getElementById('time-value');
+  const startScr  = document.getElementById('start-screen');
+  const countScr  = document.getElementById('countdown-screen');
+  const resultScr = document.getElementById('result-screen');
+  const countNum  = document.getElementById('countdown-num');
+  const resultScore = document.getElementById('result-score');
+  const resultComment = document.getElementById('result-comment');
+  const startBtn  = document.getElementById('start-btn');
+  const retryBtn  = document.getElementById('retry-btn');
+
+  const GAME_DURATION = 10;
+  let score = 0;
+  let timeLeft = GAME_DURATION;
+  let gameTimer = null;
+  let active = false;
+let lastTapTime = 0;
+let comboCount = 0;
+  const comments = {
+  zero: [
+    "0点で草ww🤣",
+    "ナイトモードいらんのか？🌙",
+    "どんまい🐾",
+    "逆にすごいなこれ😂"
+  ],
+
+  low: [
+    "ほやけんよ笑",
+    "🐱 まだまだこれからやね",
+    "😆 指あったまってないかも？",
+    "🍀 もう一回いこうや"
+  ],
+
+  mid: [
+    "👏 なかなかええ感じやね",
+    "🔥 ちょっと調子出てきたな",
+    "🐾 そのペースいいね",
+    "😊 もう少しで伸びそう"
+  ],
+
+  high: [
+    "⚠️ 突き指注意！",
+    "🔥 だいぶ速いね！",
+    "🐕 いい動きしとる",
+    "💪 かなり仕上がってきた"
+  ],
+
+  top: [
+  "👑 マジかよ！",
+  "🏆 トップレベルやね",
+  "💥 これはなかなか出んよ",
+  "🐕‍🦺 チート使いましたね？！"
+], // ←これ重要🔥
+
+legend: [
+  "スクショ禁止📸",
+  "これ外部持ち出しNGな🤫",
+  "ヤッベ！",
+  "自慢すんなよ？笑"
+]
+};
+
+function getRandom(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function onPawTap(e) {
+function getComment(s) {
+
+  if (s === 0) return getRandom(comments.zero);
+
+  if (s >= 30) return getRandom(comments.legend);
+
+  if (s < 10) return getRandom(comments.low);
+  if (s < 20) return getRandom(comments.mid);
+  return getRandom(comments.high);
+}
+
+ function placePaw() {
+  if (extraPaw) {
+    extraPaw.remove();
+    extraPaw = null;
+  }
+
+  if (thirdPaw) {
+    thirdPaw.remove();
+    thirdPaw = null;
+  }
+
+  const areaW = gameArea.offsetWidth;
+  const areaH = gameArea.offsetHeight;
+  const margin = 50;
+
+  const x = margin + Math.random() * (areaW - margin * 2);
+  const y = margin + Math.random() * (areaH - margin * 2);
+
+  pawEl.style.left = x + 'px';
+  pawEl.style.top = y + 'px';
+  pawEl.style.display = 'block';
+  pawEl.dataset.hit = "";
+  pawEl.style.pointerEvents = "auto";
+  pawEl.classList.remove("rare", "triple", "tap-anim");
+
+  if (Math.random() < 0.3) {
+    setTimeout(() => {
+      createExtraPaw();
+
+      const x2 = margin + Math.random() * (areaW - margin * 2);
+      const y2 = margin + Math.random() * (areaH - margin * 2);
+
+      extraPaw.style.left = x2 + 'px';
+      extraPaw.style.top = y2 + 'px';
+      extraPaw.style.display = 'block';
+      extraPaw.dataset.hit = "";
+      extraPaw.style.pointerEvents = "auto";
+      extraPaw.classList.remove("rare", "triple", "tap-anim");
+
+      if (forceTripleNext || Math.random() < 0.35) {
+        forceTripleNext = false;
+
+        setTimeout(() => {
+          thirdPaw = pawEl.cloneNode(true);
+          thirdPaw.id = "";
+          gameArea.appendChild(thirdPaw);
+
+          const x3 = margin + Math.random() * (areaW - margin * 2);
+          const y3 = margin + Math.random() * (areaH - margin * 2);
+
+          thirdPaw.style.left = x3 + 'px';
+          thirdPaw.style.top = y3 + 'px';
+          thirdPaw.style.display = 'block';
+          thirdPaw.dataset.hit = "";
+          thirdPaw.style.pointerEvents = "auto";
+          thirdPaw.classList.remove("rare", "tap-anim");
+          thirdPaw.classList.add("triple");
+
+          thirdPaw.addEventListener('touchstart', onPawTap, { passive: false });
+        }, 350);
+      }
+
+      if (Math.random() < 0.5) {
+        pawEl.classList.add("rare");
+        extraPaw.classList.remove("rare");
+      } else {
+        extraPaw.classList.add("rare");
+        pawEl.classList.remove("rare");
+      }
+    }, 200);
+  } else {
+    pawEl.classList.remove("rare");
+  }
+}
+  function spawnRipple(x, y) {
+    const r = document.createElement('div');
+    r.className = 'ripple';
+    r.style.left   = x + 'px';
+    r.style.top    = y + 'px';
+    r.style.width  = '60px';
+    r.style.height = '60px';
+    gameArea.appendChild(r);
+    r.addEventListener('animationend', () => r.remove());
+  }
+
+  function onPawTap(e) {
   if (!active) return;
   e.preventDefault();
   e.stopPropagation();
 
   const tappedPaw = e.currentTarget;
-  if (tappedPaw.dataset.hit === '1') return;
-  tappedPaw.dataset.hit = '1';
-  tappedPaw.style.pointerEvents = 'none';
-  tappedPaw.style.display = 'none';
 
-  let pts = 1;
-  if (tappedPaw.classList.contains('triple')) {
-    pts = 4;
-    playSound('seTriple');
-    if (!tripleChainUsed) { forceTripleNext = true; tripleChainUsed = true; }
-  } else if (tappedPaw.classList.contains('rare')) {
-    pts = 3;
-    playSound('seRare');
-  } else {
-    playSound('seTap');
+  if (tappedPaw.dataset.hit === "1") return;
+  tappedPaw.dataset.hit = "1";
+  tappedPaw.style.pointerEvents = "none";
+  tappedPaw.style.display = "none";
+
+  let addScore = 1;
+
+  if (tappedPaw.classList.contains("triple")) {
+  addScore = 4;
+
+  const base = document.getElementById("seTriple");
+  if (base) {
+    const a = base.cloneNode();
+    a.currentTime = 0;
+    a.play().catch(() => {});
   }
 
-  score += pts;
-  scoreEl.textContent = score;
+  if (!tripleChainUsed) {
+    forceTripleNext = true;
+    
+  }
 
-  const rect  = gameArea.getBoundingClientRect();
-  const touch = e.touches ? e.touches[0] : e;
-  const rx    = touch.clientX - rect.left;
-  const ry    = touch.clientY - rect.top;
+} else if (tappedPaw.classList.contains("rare")) {
+  addScore = 3;
+  playRare();
 
-  spawnRipple(rx, ry);
-  showScorePopup(pts, rx, ry);
-
-  setTimeout(() => { if (active) placePaw(); }, 60);
+} else {
+  playTap();
 }
 
-pawEl.addEventListener('touchstart', onPawTap, { passive: false });
+  score += addScore;
+  scoreEl.textContent = score;
 
-function startGame() {
-  score           = 0;
-  timeLeft        = GAME_DURATION;
-  tripleChainUsed = false;
-  forceTripleNext = false;
-  scoreEl.textContent    = '0';
-  timeEl.textContent     = GAME_DURATION;
-  timeEl.style.color     = '';
-  timeEl.style.animation = '';
-  timeEl.style.transform = 'scale(1)';
+  const now = Date.now();
+  if (now - lastTapTime < 250) {
+    comboCount++;
+  } else {
+    comboCount = 0;
+  }
+  lastTapTime = now;
+
+ const rect = gameArea.getBoundingClientRect();
+const touch = e.touches ? e.touches[0] : e;
+const rx = touch.clientX - rect.left;
+const ry = touch.clientY - rect.top;
+const absoluteY = rect.top + ry;
+
+spawnRipple(rx, ry);
+
+if (absoluteY <= 500) {
+  showScorePopup(addScore, rx, ry);
+}
+
+setTimeout(() => {
+  if (active) placePaw();
+}, 60);
+  }
+  pawEl.addEventListener('touchstart', onPawTap, { passive: false });
+  
+  function startGame() {
+  score = 0;
+  timeLeft = GAME_DURATION;
+  scoreEl.textContent = '0';
+  timeEl.textContent = GAME_DURATION;
+  timeEl.classList.remove('urgent');
+  timeEl.style.color = "";
+  timeEl.style.animation = "";
+  timeEl.style.transform = "scale(1)";
+
   active = true;
   placePaw();
 
   gameTimer = setInterval(() => {
     timeLeft--;
     timeEl.textContent = timeLeft;
+
     if (timeLeft === 2 || timeLeft === 1) {
-      timeEl.style.color     = '#ff0000';
-      timeEl.style.animation = 'dangerShake 0.2s infinite';
-      playSound('seCount');
+      timeEl.style.color = "#ff0000";
+      timeEl.style.animation = "dangerShake 0.2s infinite";
+
+      const c = document.getElementById("seCount");
+      if (c) {
+        c.currentTime = 0;
+        c.play().catch(() => {});
+      }
     } else {
-      timeEl.style.color     = '';
-      timeEl.style.animation = '';
-      timeEl.style.transform = 'scale(1)';
+      timeEl.style.color = "";
+      timeEl.style.animation = "";
+      timeEl.style.transform = "scale(1)";
     }
-    if (timeLeft <= 0) endGame();
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
   }, 1000);
 }
 
-function endGame() {
+ function endGame() {
   clearInterval(gameTimer);
   active = false;
-  timeEl.style.color     = '';
-  timeEl.style.animation = '';
-  pawEl.style.display    = 'none';
-  clearExtraPaws();
+  timeEl.classList.remove('urgent');
 
-  resultScore.textContent   = score;
+  resultScore.textContent = score;
   resultComment.textContent = getComment(score);
-
-  const sponsorBox = document.getElementById('sponsorBox');
-  if (sponsorBox) {
-    sponsorBox.innerHTML = '🐾 今日の補給所<br>テストカフェ&ensp;コーヒー100円引き';
-  }
-
+const seResult = document.getElementById("seResult");
+if (seResult) {
+  seResult.currentTime = 0;
   setTimeout(() => {
-    resultScr.classList.remove('hidden');
-   setTimeout(() => playDirect('seResult'), 300);
+    seResult.play().catch(() => {});
   }, 600);
-
-  const total = Number(localStorage.getItem('wanwan_score') || 0) + score;
-  localStorage.setItem('wanwan_score', total);
 }
-
-function runCountdown(cb) {
-  countScr.classList.remove('hidden');
-  let n = 3;
-  function tick() {
-    if (n <= 0) {
-      countScr.classList.add('hidden');
-      cb();
-      return;
-    }
-    countNum.textContent = n;
-    countNum.style.animation = 'none';
-    void countNum.offsetWidth;
-    countNum.style.animation = 'countPop 0.6s ease-out';
-    n--;
-    setTimeout(tick, 700);
+  const sponsorBox = document.getElementById("sponsorBox");
+  if (sponsorBox) {
+    sponsorBox.innerHTML = `
+      🐾 今日の補給所<br>
+      テストカフェ<br>
+      コーヒー100円引き
+    `;
   }
-  tick();
-}
 
-startBtn.addEventListener('touchstart', (e) => {
+  // ① まず止まる（余韻①）
+  setTimeout(() => {
+    pawEl.style.display = 'none';
+    if (extraPaw) {
+      extraPaw.style.display = 'none';
+    }
+if (thirdPaw) {
+  thirdPaw.style.display = 'none';
+}
+    // ② 少し間を空けて結果表示（余韻②）
+    setTimeout(() => {
+      resultScr.classList.remove('hidden');
+    }, 500);
+
+  }, 500);
+
+  let totalScore = Number(localStorage.getItem("wanwan_score") || 0);
+  totalScore += score;
+  localStorage.setItem("wanwan_score", totalScore);
+}
+  function runCountdown(cb) {
+    countScr.classList.remove('hidden');
+    let n = 3;
+    countNum.textContent = n;
+
+    const tick = () => {
+      countNum.classList.remove('countPop');
+      void countNum.offsetWidth;
+      countNum.classList.add('countPop');
+
+      if (n <= 0) {
+        countScr.classList.add('hidden');
+        cb();
+        return;
+      }
+      countNum.textContent = n;
+      n--;
+      setTimeout(tick, 700);
+    };
+    tick();
+  }
+
+  startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
   e.stopPropagation();
- unlockSound();
-playDirect('seStart');
-  
+
+  // ① まず音を最優先で鳴らす
+  playStartSound();
+
+  // ② その後で解放処理
+  unlockSound();
+
+  // ③ 見た目
   startBtn.style.transform = 'scale(0.94)';
-  startBtn.style.opacity   = '0.88';
+  startBtn.style.opacity = '0.88';
+
+  // ④ 少し後で画面遷移
   setTimeout(() => {
     startBtn.style.transform = '';
-    startBtn.style.opacity   = '';
+    startBtn.style.opacity = '';
+
     startScr.classList.add('hidden');
     runCountdown(startGame);
   }, 150);
+
 }, { passive: false });
 
-retryBtn.addEventListener('touchstart', (e) => {
+  retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
-  e.stopPropagation();
-  playDirect('seStart');
+
+  playStartSound();
+
   retryBtn.style.transform = 'scale(0.94)';
-  retryBtn.style.opacity   = '0.88';
+  retryBtn.style.opacity = '0.88';
+
   setTimeout(() => {
     retryBtn.style.transform = '';
-    retryBtn.style.opacity   = '';
+    retryBtn.style.opacity = '';
+
     resultScr.classList.add('hidden');
     runCountdown(startGame);
   }, 150);
-}, { passive: false });
 
-backBtn.addEventListener('click', () => {
-  location.href = 'index.html';
-});
+}, { passive: false });
+ function playStartSound() {
+  const a = document.getElementById("seStart");
+  if (!a) return;
+
+  a.pause();
+  a.currentTime = 0;
+  a.play().catch(() => {});
+}
+const backBtn = document.getElementById("backBtn");
+
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    location.href = "index.html";
+  });
+}
+
+function showScorePopup(score, x, y) {
+  const el = document.createElement("div");
+  el.textContent = "+" + score;
+
+ if (score === 3) {
+  el.classList.add("score-popup", "gold");
+}
+
+if (score === 4) {
+  el.classList.add("score-popup", "rainbow", "super");
+
+  document.body.classList.add("shake");
+  setTimeout(() => {
+    document.body.classList.remove("shake");
+  }, 200);
+}
+el.style.position = "absolute";
+el.style.left = x + "px";
+el.style.top = y + "px";
+el.style.transform = "translate(-50%, -50%)";
+ if (y > 300) return;
+
+if (score === 4) {
+  el.style.transform = "translate(-50%, -50%) scale(1.4)";
+  setTimeout(() => {
+    el.style.transform = "translate(-50%, -50%) scale(1)";
+  }, 100);
+}
+
+el.style.fontSize = score === 4 ? "44px" : "28px";
+el.style.fontWeight = "900";
+
+if (score === 4) {
+  el.style.textShadow = "0 0 8px #fff, 0 0 16px #fff";
+} else {
+  el.style.textShadow = "0 0 6px #000, 0 0 10px #000";
+}
+  el.style.pointerEvents = "none";
+  el.style.zIndex = "9999";
+  el.style.transition = "all 0.6s ease";
+
+  gameArea.appendChild(el);
+
+  setTimeout(() => {
+    el.style.top = (y - 40) + "px";
+    el.style.opacity = "0";
+  }, 10);
+
+  setTimeout(() => {
+    el.remove();
+  }, 600);
+}
+
 </script>
+ <audio id="seTap" src="start_ui.mp3" preload="auto"></audio>
+ <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
+ <audio id="seCount" src="count.mp3" preload="auto"></audio>
+ <audio id="seResult" src="reward.mp3" preload="auto"></audio>
+ <audio id="seStart" src="seTap.mp3" preload="auto"></audio>
+ <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
 </body>
 </html>
