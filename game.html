@@ -777,14 +777,13 @@ function showScorePopup(score, x, y) {
   const el = document.createElement("div");
   el.textContent = "+" + score;
 
-  if (score === 3) {
-    el.classList.add("gold");
-  }
+ if (score === 3) {
+  el.classList.add("score-popup", "gold");
+}
 
-  if (score === 4) {
-    el.classList.add("rainbow");
-  }
-
+if (score === 4) {
+  el.classList.add("score-popup", "rainbow");
+}
   el.style.position = "absolute";
   el.style.left = x + "px";
   el.style.top = y + "px";
