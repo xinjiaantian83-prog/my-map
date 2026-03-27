@@ -620,16 +620,21 @@ function getComment(s) {
   }
   lastTapTime = now;
 
-  const rect = gameArea.getBoundingClientRect();
-  const touch = e.touches ? e.touches[0] : e;
-  const rx = touch.clientX - rect.left;
-  const ry = touch.clientY - rect.top;
-  spawnRipple(rx, ry);
-showScorePopup(addScore, rx, ry);
-  setTimeout(() => {
-    if (active) placePaw();
-  }, 60);
+ const rect = gameArea.getBoundingClientRect();
+const touch = e.touches ? e.touches[0] : e;
+const rx = touch.clientX - rect.left;
+const ry = touch.clientY - rect.top;
+const absoluteY = rect.top + ry;
+
+spawnRipple(rx, ry);
+
+if (absoluteY <= 500) {
+  showScorePopup(addScore, rx, ry);
 }
+
+setTimeout(() => {
+  if (active) placePaw();
+}, 60);
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
   
   function startGame() {
