@@ -672,7 +672,12 @@ document.getElementById("spotSearch").addEventListener("keypress",function(e){
 
 var miniBtn = document.getElementById("miniGameBtn");
 if(miniBtn) miniBtn.addEventListener("click",function(){location.href="game.html";});
-
+var playBtn = document.getElementById("playBtn");
+if(playBtn){
+  playBtn.addEventListener("click", function(){
+    location.href = "game.html";
+  });
+}
 document.addEventListener("click",function(e){
   if(e.target&&e.target.id==="shopNightMap"){
     var score = Number(localStorage.getItem("wanwan_score")||0);
