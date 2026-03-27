@@ -100,16 +100,17 @@ if (localStorage.getItem("game_version") !== VERSION) {
 }
 
 .score-popup.rainbow {
-  background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 6px #000;
+  color: #fff !important;
+  text-shadow:
+    0 0 6px #000,
+    0 0 10px red,
+    0 0 14px orange,
+    0 0 18px yellow,
+    0 0 22px green,
+    0 0 26px cyan,
+    0 0 30px blue,
+    0 0 34px violet;
 }
-  @keyframes tapBounce {
-    0%   { transform: translate(-50%, -50%) scale(1); }
-    40%  { transform: translate(-50%, -50%) scale(0.6) rotate(-15deg); }
-    100% { transform: translate(-50%, -50%) scale(1); }
-  }
 
   /* Ripple */
   .ripple {
@@ -784,6 +785,9 @@ function playStartSound() {
   el.style.top = y + "px";
   el.style.transform = "translate(-50%, -50%)";
   el.style.fontSize = "28px";
+  if (score === 4) {
+  el.style.fontSize = "36px";
+}
   el.style.fontWeight = "900";
   el.style.color = "#ffffff";
 el.style.textShadow = "0 0 6px #000, 0 0 10px #000";
