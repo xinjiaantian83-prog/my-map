@@ -479,7 +479,8 @@ function startTutorial(){
 
   setTimeout(function(){
     document.getElementById("tutorialRecordBtn").onclick = function(){
-
+foundSound.currentTime = 0;
+foundSound.play().catch(function(){});
       showDiscoverToast();
 
       var count = Number(localStorage.getItem("wanwan_found")||0);
