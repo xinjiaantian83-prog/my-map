@@ -449,24 +449,50 @@ function recordFind(lat,lng,type){
   map.closePopup();
   renderMarkers();
 }
-  function startTutorial(){
+function startTutorial(){
   if(!userLatLng) return;
 
- var tutorialMarker = L.marker(userLatLng,{
-  icon: shibaIcon
-}).addTo(map);
+  var tutorialMarker = L.marker(userLatLng,{
+    icon: shibaIcon
+  }).addTo(map);
+
+  tutorialMarker.setZIndexOffset(1000);
+
+  // 👇これ追加
+  alert("🐾 まずはこれをタップしてみよう");
 
   tutorialMarker.on("click",function(){
-    map.removeLayer(tutorialMarker);
 
-    showDiscoverToast();
+  var popup = L.popup()
+    .setLatLng(userLatLng)
+    .setContent(`
+      <div class="spot-card">
+        <div class="spot-title">🐾 チュートリアル</div>
+        <div class="spot-actions">
+          <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">
+            発見を記録（+1）
+          </button>
+        </div>
+      </div>
+    `)
+    .openOn(map);
 
-    var count = Number(localStorage.getItem("wanwan_found")||0);
-    localStorage.setItem("wanwan_found",count+1);
+  setTimeout(function(){
+    document.getElementById("tutorialRecordBtn").onclick = function(){
 
-    localStorage.setItem("tutorial_done","1");
-  });
-}
+      showDiscoverToast();
+
+      var count = Number(localStorage.getItem("wanwan_found")||0);
+      localStorage.setItem("wanwan_found",count+1);
+
+      localStorage.setItem("tutorial_done","1");
+
+      map.closePopup();
+    };
+  },100);
+
+  map.removeLayer(tutorialMarker);
+});
 function getLevel(found){
   if(found===0) return "Lv0 野良犬";
   if(found<=9) return "Lv1 ルーキー探索犬";
