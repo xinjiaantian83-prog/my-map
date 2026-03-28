@@ -180,37 +180,62 @@ button:active{transform:scale(0.95);}
       <div class="record-subtitle">松山ワンコイン自販機検索マップ</div>
     </div>
   </div>
+
   <div class="record-section">
-  <div class="record-label">🐾 肉球ポイント</div>
-  <div class="record-value"><span id="miniGameScore">0</span>P</div>
-</div>
-
-<div class="record-section">
-  <div class="record-label">🐾 肉球交換所</div>
-  <div class="record-value" id="shopNightMap">ナイトマップ　500P</div>
-</div>
-
-<div class="record-section">
-  <div class="record-label">🏆 探索レベル</div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-    <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+    <div class="record-label">🐾 わんわん探索隊</div>
+    <div class="record-subtitle">あなたの発見</div>
+    <div class="record-value">
+      <span id="foundCountCard">0</span> / 1500（<span id="foundPercentCard">0.0</span>%）
+    </div>
   </div>
-</div>
 
-<div class="record-section">
-  <div class="record-label">ユーザー名</div>
-  <div class="record-value level-link" id="userNameText">未設定</div>
-</div>
+  <div class="record-section">
+    <div class="record-label">🌍 全体発見</div>
+    <div class="record-value">
+      <span id="globalFound">0</span> / 推定1500（<span id="globalPercent">0.0</span>%）
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar-fill" id="globalProgressBar"></div>
+    </div>
+    <div class="record-subtitle" id="remainText">松山制覇まであと 1500 台 🐾</div>
+  </div>
 
-<div class="record-section">
-  <div class="record-label">🐾 情報提供</div>
-  <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
-</div>
+  <div class="record-section">
+    <div class="record-label">今日の発見</div>
+    <div class="record-value" id="todayCountCard">0</div>
+  </div>
 
-<div class="record-section">
-  <div class="record-label">運営方針</div>
-  <div class="record-value" onclick="showPolicy()">見る</div>
-</div>
+  <div class="record-section">
+    <div class="record-label">🐾 肉球ポイント</div>
+    <div class="record-value"><span id="miniGameScore">0</span>P</div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">🐾 肉球交換所</div>
+    <div class="record-value" id="shopNightMap">ナイトマップ　500P</div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">🏆 探索レベル</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+    </div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">ユーザー名</div>
+    <div class="record-value level-link" id="userNameText">未設定</div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">🐾 情報提供</div>
+    <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
+  </div>
+
+  <div class="record-section">
+    <div class="record-label">運営方針</div>
+    <div class="record-value" onclick="showPolicy()">見る</div>
+  </div>
 </div>
 
 <div id="map"></div>
