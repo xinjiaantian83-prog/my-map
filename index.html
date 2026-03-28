@@ -654,7 +654,7 @@ btnLocate.addEventListener("click",function(){
   watchId = navigator.geolocation.watchPosition(
     function(pos){
       updateUserMarker(pos.coords.latitude,pos.coords.longitude);
-      if(!tutorialShown && !localStorage.getItem("tutorial_done")){
+      if(!tutorialShown && (!localStorage.getItem("tutorial_done") || isDev)){
   tutorialShown = true;
   setTimeout(function(){
     startTutorial();
