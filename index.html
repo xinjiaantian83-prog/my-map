@@ -635,7 +635,7 @@ async function loadSpots(){
   renderMarkers();
 }
 function showFirstGuide(){
-  if(localStorage.getItem("wanwan_guide_shown")) return;
+if(localStorage.getItem("wanwan_guide_shown") && !isDev) return;
   setTimeout(function(){
     alert("🐾 使い方\n地図にいるわんこ＝『ワンコイン自販機』！\n近づくと\n👉「発見を記録」が押せます\nまだ地図に無いワンコイン自販機は\n👉🐾ボタン → 長押しで教えてください");
     localStorage.setItem("wanwan_guide_shown","1");
