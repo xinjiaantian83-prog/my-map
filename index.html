@@ -452,13 +452,9 @@ function recordFind(lat,lng,type){
   function startTutorial(){
   if(!userLatLng) return;
 
-  var tutorialMarker = L.marker(userLatLng,{
-    icon: L.divIcon({
-      className:"tutorial-marker",
-      html:"✨",
-      iconSize:[30,30]
-    })
-  }).addTo(map);
+ var tutorialMarker = L.marker(userLatLng,{
+  icon: shibaIcon
+}).addTo(map);
 
   tutorialMarker.on("click",function(){
     map.removeLayer(tutorialMarker);
