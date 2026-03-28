@@ -494,6 +494,7 @@ foundSound.play().catch(function(){});
 
   map.removeLayer(tutorialMarker);
 });
+  }
 function getLevel(found){
   if(found===0) return "Lv0 野良犬";
   if(found<=9) return "Lv1 ルーキー探索犬";
@@ -668,6 +669,9 @@ document.getElementById("btn3k").addEventListener("click",function(e){setRangeAc
 
 var btnLocate = document.getElementById("btnLocate");
 btnLocate.addEventListener("click",function(){
+  foundSound.play().catch(function(){});
+foundSound.pause();
+foundSound.currentTime = 0;
   if(!navigator.geolocation){show("位置情報が使えません");return;}
   if(watchId!==null){
     navigator.geolocation.clearWatch(watchId);watchId=null;
