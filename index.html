@@ -126,6 +126,21 @@ button:active{transform:scale(0.95);}
 .progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#00d2ff,#3a7bd5);border-radius:999px;transition:width 0.4s ease;}
 .title-banner{display:block;margin:10px auto 6px auto;width:200px;max-width:80%;height:auto;border-radius:10px;}
 .title-characters{width:180px;display:block;margin:10px auto 6px auto;}
+  .tutorial-arrow{
+  position:absolute;
+  transform:translate(-50%,-120%);
+  font-size:32px;
+  font-weight:900;
+  color:#ff3b30;
+  animation:arrowBlink 0.8s infinite;
+  text-shadow:0 0 6px rgba(0,0,0,0.4);
+}
+
+@keyframes arrowBlink{
+  0%{opacity:1; transform:translate(-50%,-120%) scale(1);}
+  50%{opacity:0.4; transform:translate(-50%,-140%) scale(1.2);}
+  100%{opacity:1; transform:translate(-50%,-120%) scale(1);}
+}
 </style>
 </head>
 <body>
@@ -452,14 +467,19 @@ function recordFind(lat,lng,type){
 function startTutorial(){
   if(!userLatLng) return;
 
-  var tutorialMarker = L.marker(userLatLng,{
-    icon: shibaIcon
-  }).addTo(map);
+ var tutorialMarker = L.marker(userLatLng,{
+  icon: L.divIcon({
+    className:"",
+    html:'<div class="tutorial-arrow">↓<br><span style="font-size:14px;">押す</span></div>',
+    iconSize:[40,40],
+    iconAnchor:[20,40]
+  })
+}).addTo(map);
 
   tutorialMarker.setZIndexOffset(1000);
 
   // 👇これ追加
-  alert("🐾 まずはこれをタップしてみよう");
+ 
 
   tutorialMarker.on("click",function(){
 
