@@ -974,9 +974,22 @@ startBtn.addEventListener('click', (e) => {
     runCountdown(startGame);
   }, 150);
 });
-  retryBtn.addEventListener('touchstart', (e) => {
+retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
 
+  if (!isDev) {
+    const playsLeft = getRecoveredPlayCount();
+    if (playsLeft <= 0) {
+      alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
+      return;
+    }
+
+    let plays = playsLeft;
+    plays = Math.max(plays - 1, 0);
+    localStorage.setItem(PLAY_KEY, plays);
+  }
+
+  updatePlayCountUI();
   playStartSound();
 
   retryBtn.style.transform = 'scale(0.94)';
