@@ -776,10 +776,12 @@ function startGame() {
   score = 0;
   timeLeft = GAME_DURATION;
 
+ if (!isDev) {
   let plays = getRecoveredPlayCount();
   plays = Math.max(plays - 1, 0);
   localStorage.setItem(PLAY_KEY, plays);
-  updatePlayCountUI();
+}
+updatePlayCountUI();
 
   if (isDev || Math.random() < 0.06) {
     isDogRun = true;
@@ -920,10 +922,12 @@ if (thirdPaw) {
   startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
   e.stopPropagation();
-const playsLeft = getRecoveredPlayCount();
-if (playsLeft <= 0) {
-  alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
-  return;
+if (!isDev) {
+  const playsLeft = getRecoveredPlayCount();
+  if (playsLeft <= 0) {
+    alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
+    return;
+  }
 }
   // ① まず音を最優先で鳴らす
   playStartSound();
