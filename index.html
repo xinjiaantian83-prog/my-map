@@ -497,8 +497,39 @@ var tutorialMarker = L.marker(userLatLng,{
   })
 }).addTo(map);
 tutorialMarker.setZIndexOffset(1000);
-
-  tutorialMarker.setZIndexOffset(1000);
+var tutorialGuide = L.marker(userLatLng,{
+  interactive:false,
+  icon: L.divIcon({
+    className:"",
+    html:`
+      <div style="
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        animation:arrowBlink 0.6s infinite;
+        pointer-events:none;
+      ">
+        <div style="
+          font-size:52px;
+          font-weight:900;
+          line-height:0.8;
+          color:#000;
+          text-shadow:0 0 8px rgba(0,0,0,0.7);
+        ">⬇</div>
+        <div style="
+          margin-top:4px;
+          font-size:15px;
+          font-weight:900;
+          line-height:1;
+          color:#000;
+          text-shadow:0 0 6px rgba(0,0,0,0.6);
+        ">押す</div>
+      </div>
+    `,
+    iconSize:[80,80],
+    iconAnchor:[40,90]
+  })
+}).addTo(map);
 
   // 👇これ追加
  
