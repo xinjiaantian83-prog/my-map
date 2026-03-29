@@ -490,43 +490,85 @@ function recordFind(lat,lng,type){
 function startTutorial(){
   if(!userLatLng) return;
 
-var tutorialMarker = L.marker(userLatLng,{
-  icon: shibaIcon
-}).addTo(map);
-tutorialMarker.setZIndexOffset(1000);
-var tutorialGuide = L.marker(userLatLng,{
-  interactive:false,
-  icon: L.divIcon({
-    className:"",
-    html:`
-      <div style="
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        animation:arrowBlink 0.6s infinite;
-        pointer-events:none;
-      ">
+  var bouncingShibaIcon = L.divIcon({
+    className: "",
+    html: '<img src="shiba.png" style="width:30px;height:36px;object-fit:contain;display:block;animation:tutorialBounce 0.9s ease-in-out infinite;">',
+    iconSize: [30, 36],
+    iconAnchor: [15, 36]
+  });
+
+  var tutorialMarker = L.marker(userLatLng, {
+    icon: bouncingShibaIcon
+  }).addTo(map);
+  tutorialMarker.setZIndexOffset(1000);
+
+  var tutorialGuide = L.marker(userLatLng, {
+    interactive: false,
+    icon: L.divIcon({
+      className: "",
+      html: `
         <div style="
-          font-size:52px;
-          font-weight:900;
-          line-height:0.8;
-          color:#000;
-          text-shadow:0 0 8px rgba(0,0,0,0.7);
-        ">⬇</div>
-        <div style="
-          margin-top:4px;
-          font-size:15px;
-          font-weight:900;
-          line-height:1;
-          color:#000;
-          text-shadow:0 0 6px rgba(0,0,0,0.6);
-        ">押す</div>
-      </div>
-    `,
-    iconSize:[80,80],
-    iconAnchor:[40,90]
-  })
-}).addTo(map);
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          animation:arrowBlink 0.6s infinite;
+          pointer-events:none;
+        ">
+          <div style="
+            font-size:52px;
+            font-weight:900;
+            line-height:0.8;
+            color:#000;
+            text-shadow:0 0 8px rgba(0,0,0,0.7);
+          ">⬇</div>
+          <div style="
+            margin-top:4px;
+            font-size:15px;
+            font-weight:900;
+            line-height:1;
+            color:#000;
+            text-shadow:0 0 6px rgba(0,0,0,0.6);
+          ">押す</div>
+        </div>
+      `,
+      iconSize: [80, 80],
+      iconAnchor: [40, 90]
+    })
+  }).addTo(map);
+
+  tutorialMarker.on("click", function(){
+    var popup = L.popup()
+      .setLatLng(userLatLng)
+      .setContent(`
+        <div class="spot-card">
+          <div class="spot-title">🐾 チュートリアル</div>
+          <div class="spot-actions">
+            <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">
+              発見を記録（+1）
+            </button>
+          </div>
+        </div>
+      `)
+      .openOn(map);
+
+    setTimeout(function(){
+      document.getElementById("tutorialRecordBtn").onclick = function(){
+        foundSound.currentTime = 0;
+        foundSound.play().catch(function(){});
+        showDiscoverToast();
+
+        var count = Number(localStorage.getItem("wanwan_found") || 0);
+        localStorage.setItem("wanwan_found", count + 1);
+        localStorage.setItem("tutorial_done", "1");
+
+        map.closePopup();
+      };
+    }, 100);
+
+    map.removeLayer(tutorialMarker);
+    map.removeLayer(tutorialGuide);
+  });
+}
 
   // 👇これ追加
  
