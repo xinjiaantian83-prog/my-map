@@ -687,6 +687,10 @@ setTimeout(() => {
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
   
   function startGame() {
+  clearInterval(gameTimer);
+  isGameOver = false;
+  isEnding = false;
+
   score = 0;
   timeLeft = GAME_DURATION;
 
@@ -706,9 +710,10 @@ setTimeout(() => {
   placePaw();
 
   gameTimer = setInterval(() => {
-    timeLeft--;
-    timeEl.textContent = timeLeft;
-
+ if (timeLeft > 0) {
+  timeLeft--;
+}
+timeEl.textContent = Math.max(timeLeft, 0);
     if (timeLeft === 2 || timeLeft === 1) {
       timeEl.style.color = "#ff0000";
       timeEl.style.animation = "dangerShake 0.2s infinite";
@@ -750,9 +755,12 @@ function startDogRun() {
   }, 5000);
 }
 
- function endGame() {
+function endGame() {
   clearInterval(gameTimer);
+  gameTimer = null;
   active = false;
+  isGameOver = true;
+  isEnding = false;
   timeEl.classList.remove('urgent');
 
   resultScore.textContent = score;
