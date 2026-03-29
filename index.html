@@ -565,9 +565,11 @@ foundSound.play().catch(function(){});
     };
   },100);
  
-map.removeLayer(tutorialMarker);
-map.removeLayer(tutorialGuide);
-  }
+  map.removeLayer(tutorialMarker);
+  map.removeLayer(tutorialGuide);
+});
+}
+
 function getLevel(found){
   if(found===0) return "Lv0 野良犬";
   if(found<=9) return "Lv1 ルーキー探索犬";
