@@ -317,7 +317,7 @@ bottom: 20px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.18s ease;
-  z-index: 999; /* ←これ追加 */
+  z-index: 1;
 "></div>
 
 <!-- Start screen -->
@@ -437,35 +437,27 @@ function playRare() {
   const resultComment = document.getElementById('result-comment');
   const startBtn  = document.getElementById('start-btn');
   const retryBtn  = document.getElementById('retry-btn');
- const playCountText = document.getElementById('playCountText');
+const playCountText = document.getElementById('playCountText');
+
 const GAME_DURATION = 10;
- function updatePlayCountUI() {
-  if (!playCountText) return;
-
-  const count = getRecoveredPlayCount();
-  playCountText.textContent = "残りプレイ回数：" + count + "回";
-}
-let score = 0;
-let timeLeft = GAME_DURATION;
- let plays = getRecoveredPlayCount();
-plays = Math.max(plays - 1, 0);
-localStorage.setItem(PLAY_KEY, plays);
-updatePlayCountUI();
-
-let gameTimer = null;
-let active = false;
-let lastTapTime = 0;
-let comboCount = 0;
-let isDogRun = false;
- let isGameOver = false;
-let isEnding = false;
- const PLAY_KEY = "wanwan_play_count";
+const PLAY_KEY = "wanwan_play_count";
 const PLAY_MAX = 20;
 const PLAY_START = 10;
 const PLAY_RECOVER_HOURS = 8;
 const PLAY_RECOVER_MS = PLAY_RECOVER_HOURS * 60 * 60 * 1000;
 const PLAY_LAST_RECOVER_KEY = "wanwan_play_last_recover";
- function getPlayCount() {
+
+let score = 0;
+let timeLeft = GAME_DURATION;
+let gameTimer = null;
+let active = false;
+let lastTapTime = 0;
+let comboCount = 0;
+let isDogRun = false;
+let isGameOver = false;
+let isEnding = false;
+
+function getPlayCount() {
   let count = Number(localStorage.getItem(PLAY_KEY));
 
   if (isNaN(count)) {
@@ -499,6 +491,14 @@ function getRecoveredPlayCount() {
 
   return count;
 }
+
+function updatePlayCountUI() {
+  if (!playCountText) return;
+
+  const count = getRecoveredPlayCount();
+  playCountText.textContent = "残りプレイ回数：" + count + "回";
+}
+
 const params = new URLSearchParams(location.search);
 let isDev = params.get("dev") === "1";
 const comments = {
@@ -755,20 +755,29 @@ setTimeout(() => {
   }
   pawEl.addEventListener('touchstart', onPawTap, { passive: false });
   
-  function startGame() {
+function startGame() {
   clearInterval(gameTimer);
   isGameOver = false;
   isEnding = false;
-const dim = document.getElementById("endDim");
-dim.style.opacity = "0";
-dim.style.pointerEvents = "none";
+
+  const dim = document.getElementById("endDim");
+  dim.style.opacity = "0";
+  dim.style.pointerEvents = "none";
+
   score = 0;
   timeLeft = GAME_DURATION;
 
+  let plays = getRecoveredPlayCount();
+  plays = Math.max(plays - 1, 0);
+  localStorage.setItem(PLAY_KEY, plays);
+  updatePlayCountUI();
+
   if (isDev || Math.random() < 0.06) {
-  isDogRun = true;
-  startDogRun();
-}
+    isDogRun = true;
+    startDogRun();
+  } else {
+    isDogRun = false;
+  }
 
   scoreEl.textContent = '0';
   timeEl.textContent = GAME_DURATION;
@@ -781,10 +790,11 @@ dim.style.pointerEvents = "none";
   placePaw();
 
   gameTimer = setInterval(() => {
- if (timeLeft > 0) {
-  timeLeft--;
-}
-timeEl.textContent = Math.max(timeLeft, 0);
+    if (timeLeft > 0) {
+      timeLeft--;
+    }
+    timeEl.textContent = Math.max(timeLeft, 0);
+
     if (timeLeft === 2 || timeLeft === 1) {
       timeEl.style.color = "#ff0000";
       timeEl.style.animation = "dangerShake 0.2s infinite";
@@ -800,15 +810,14 @@ timeEl.textContent = Math.max(timeLeft, 0);
       timeEl.style.transform = "scale(1)";
     }
 
-   if (timeLeft <= 0 && !isEnding) {
-  isEnding = true;
+    if (timeLeft <= 0 && !isEnding) {
+      isEnding = true;
 
-  setTimeout(() => {
-    isGameOver = true;
-    endGame();
-  
-  }, 150);
-}
+      setTimeout(() => {
+        isGameOver = true;
+        endGame();
+      }, 150);
+    }
   }, 1000);
 }
 function startDogRun() {
@@ -836,7 +845,7 @@ function endGame() {
 
   const dim = document.getElementById("endDim");
   dim.style.opacity = "1";
-  dim.style.pointerEvents = "auto";
+ dim.style.pointerEvents = "none";
   timeEl.classList.remove('urgent');
 
   resultScore.textContent = score;
@@ -982,8 +991,12 @@ if (backBtn) {
   backBtn.addEventListener("click", () => {
     location.href = "index.html";
   });
-}
 
+  backBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    location.href = "index.html";
+  }, { passive: false });
+}
 function showScorePopup(score, x, y) {
   const el = document.createElement("div");
   el.textContent = "+" + score;
@@ -991,7 +1004,6 @@ function showScorePopup(score, x, y) {
  if (score === 3) {
   el.classList.add("score-popup", "gold");
 }
-
 if (score === 4) {
   el.classList.add("score-popup", "rainbow", "super");
 
@@ -1032,7 +1044,7 @@ if (score === 4) {
     el.remove();
   }, 600);
 }
-
+updatePlayCountUI();
 </script>
 <audio id="seTap" src="seTap.mp3" preload="auto"></audio>
 <audio id="seRare" src="rare_bonus.mp3" preload="auto"></audio>
