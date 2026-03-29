@@ -428,6 +428,8 @@ let active = false;
 let lastTapTime = 0;
 let comboCount = 0;
 let isDogRun = false;
+ let isGameOver = false;
+let isEnding = false;
 const params = new URLSearchParams(location.search);
 let isDev = params.get("dev") === "1";
 const comments = {
@@ -607,8 +609,10 @@ if (Math.random() < 0.85) {
     r.addEventListener('animationend', () => r.remove());
   }
 
-  function onPawTap(e) {
+ function onPawTap(e) {
   if (!active) return;
+  if (isGameOver) return;  // ←これ追加
+
   e.preventDefault();
   e.stopPropagation();
 
@@ -720,9 +724,14 @@ setTimeout(() => {
       timeEl.style.transform = "scale(1)";
     }
 
-    if (timeLeft <= 0) {
-      endGame();
-    }
+   if (timeLeft <= 0 && !isEnding) {
+  isEnding = true;
+
+  setTimeout(() => {
+    isGameOver = true;
+    endGame();
+  }, 150);
+}
   }, 1000);
 }
 function startDogRun() {
