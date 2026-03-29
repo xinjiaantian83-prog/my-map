@@ -447,10 +447,10 @@ const GAME_DURATION = 10;
 }
 let score = 0;
 let timeLeft = GAME_DURATION;
- let plays = getRecoveredPlayCount();
+let plays = getRecoveredPlayCount();
 plays = Math.max(plays - 1, 0);
 localStorage.setItem(PLAY_KEY, plays);
- updatePlayCountUI();
+updatePlayCountUI();
 let gameTimer = null;
 let active = false;
 let lastTapTime = 0;
