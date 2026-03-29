@@ -953,12 +953,13 @@ startBtn.addEventListener('click', (e) => {
   e.preventDefault();
   e.stopPropagation();
 
+ if (!isDev) {
   const playsLeft = getRecoveredPlayCount();
   if (playsLeft <= 0) {
     alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
     return;
   }
-
+}
   playStartSound();
   unlockSound();
 
