@@ -570,45 +570,6 @@ function startTutorial(){
   });
 }
 
-  // 👇これ追加
- 
-
-  tutorialMarker.on("click",function(){
-
-  var popup = L.popup()
-    .setLatLng(userLatLng)
-    .setContent(`
-      <div class="spot-card">
-        <div class="spot-title">🐾 チュートリアル</div>
-        <div class="spot-actions">
-          <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">
-            発見を記録（+1）
-          </button>
-        </div>
-      </div>
-    `)
-    .openOn(map);
-
-  setTimeout(function(){
-    document.getElementById("tutorialRecordBtn").onclick = function(){
-foundSound.currentTime = 0;
-foundSound.play().catch(function(){});
-      showDiscoverToast();
-
-      var count = Number(localStorage.getItem("wanwan_found")||0);
-      localStorage.setItem("wanwan_found",count+1);
-
-      localStorage.setItem("tutorial_done","1");
-
-      map.closePopup();
-    };
-  },100);
- 
-  map.removeLayer(tutorialMarker);
-  map.removeLayer(tutorialGuide);
-});
-}
-
 function getLevel(found){
   if(found===0) return "Lv0 野良犬";
   if(found<=9) return "Lv1 ルーキー探索犬";
