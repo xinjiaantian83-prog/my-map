@@ -610,8 +610,8 @@ if (Math.random() < 0.85) {
   }
 
  function onPawTap(e) {
-  if (!active) return;
-  if (isGameOver) return;  // ←これ追加
+if (!active && !isEnding) return;
+if (isGameOver) return; // ←これ追加
 
   e.preventDefault();
   e.stopPropagation();
