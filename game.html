@@ -306,6 +306,20 @@ bottom: 20px;
   <div id="paw" class="paw">🐾</div>
 </div>
 
+<!-- 👇ここ追加 -->
+<div id="endDim" style="
+  position: fixed;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+  z-index: 9;
+"></div>
+
 <!-- Start screen -->
 <div class="screen" id="start-screen">
   <div class="screen-emoji">🐾</div>
@@ -690,7 +704,7 @@ setTimeout(() => {
   clearInterval(gameTimer);
   isGameOver = false;
   isEnding = false;
-
+document.getElementById("endDim").style.opacity = "0";
   score = 0;
   timeLeft = GAME_DURATION;
 
@@ -761,6 +775,7 @@ function endGame() {
   active = false;
   isGameOver = true;
   isEnding = false;
+ document.getElementById("endDim").style.opacity = "1";
   timeEl.classList.remove('urgent');
 
   resultScore.textContent = score;
