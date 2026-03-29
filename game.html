@@ -446,7 +446,7 @@ const PLAY_START = 10;
 const PLAY_RECOVER_HOURS = 8;
 const PLAY_RECOVER_MS = PLAY_RECOVER_HOURS * 60 * 60 * 1000;
 const PLAY_LAST_RECOVER_KEY = "wanwan_play_last_recover";
-
+const PLAY_INIT_KEY = "wanwan_play_initialized";
 let score = 0;
 let timeLeft = GAME_DURATION;
 let gameTimer = null;
@@ -458,7 +458,16 @@ let isGameOver = false;
 let isEnding = false;
 
 function getPlayCount() {
+  const initialized = localStorage.getItem("wanwan_play_initialized");
   let count = Number(localStorage.getItem(PLAY_KEY));
+
+  if (!initialized) {
+    count = PLAY_START;
+    localStorage.setItem(PLAY_KEY, count);
+    localStorage.setItem("wanwan_play_initialized", "1");
+    localStorage.setItem(PLAY_LAST_RECOVER_KEY, Date.now());
+    return count;
+  }
 
   if (isNaN(count)) {
     count = PLAY_START;
