@@ -666,7 +666,25 @@ function renderMarkers(){
     }
     var sponsor = getSponsorForSpot(s);
     var sponsorPart = sponsor ? '<div style="margin-top:8px;font-size:12px;color:#666;text-align:center;">──────<br>探索隊サポーター<br><a href="'+sponsor.url+'" target="_blank">'+sponsor.name+'</a></div>' : '';
-    m.bindPopup('<div class="spot-card"><div class="spot-title">'+title+'</div><div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;"><span>'+spotId+'</span><span onclick="copySpotId(\''+spotId+'\')" style="cursor:pointer;font-size:14px;">📋</span></div><div class="spot-actions"><button class="spot-btn spot-btn-go" onclick="goNav('+s.lat+','+s.lng+')">ここへ行く</button>'+recordPart+'</div>'+sponsorPart+'</div>');
+m.bindPopup(
+  '<div class="spot-card">' +
+
+    '<div class="spot-title">' + title + '</div>' +
+
+    '<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#777;margin-bottom:10px;">' +
+      '<span>' + spotId + '</span>' +
+      '<span onclick="copySpotId(\'' + spotId + '\')" style="cursor:pointer;font-size:12px;color:#666;">📋コピー</span>' +
+    '</div>' +
+
+    '<div class="spot-actions">' +
+      '<button class="spot-btn spot-btn-go" onclick="goNav(' + s.lat + ',' + s.lng + ')">ここへ行く（ナビ開始）</button>' +
+      recordPart +
+    '</div>' +
+
+    sponsorPart +
+
+  '</div>'
+);
     if(clusterEnabled){
       if(s.type==="bul") bulldogCluster.addLayer(m);
       else if(s.type==="pom") pomeCluster.addLayer(m);
