@@ -564,9 +564,9 @@ foundSound.play().catch(function(){});
       map.closePopup();
     };
   },100);
-
-  map.removeLayer(tutorialMarker);
-});
+ 
+map.removeLayer(tutorialMarker);
+map.removeLayer(tutorialGuide);
   }
 function getLevel(found){
   if(found===0) return "Lv0 野良犬";
