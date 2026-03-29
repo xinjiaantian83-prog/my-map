@@ -325,6 +325,9 @@ bottom: 20px;
   <div class="screen-emoji">🐾</div>
   <div class="screen-title">肉球タップゲーム</div>
   <div class="screen-sub">10秒間で肉球をできるだけ<br>たくさんタップしよう！</div>
+ <div id="playCountText" style="font-size:14px;color:#666;font-weight:700;">
+  残りプレイ回数：10回
+</div>
   <button class="btn" id="start-btn">スタート</button>
 </div>
 
@@ -434,9 +437,20 @@ function playRare() {
   const resultComment = document.getElementById('result-comment');
   const startBtn  = document.getElementById('start-btn');
   const retryBtn  = document.getElementById('retry-btn');
+ const playCountText = document.getElementById('playCountText');
 const GAME_DURATION = 10;
+ function updatePlayCountUI() {
+  if (!playCountText) return;
+
+  const count = getRecoveredPlayCount();
+  playCountText.textContent = "残りプレイ回数：" + count + "回";
+}
 let score = 0;
 let timeLeft = GAME_DURATION;
+ let plays = getRecoveredPlayCount();
+plays = Math.max(plays - 1, 0);
+localStorage.setItem(PLAY_KEY, plays);
+ updatePlayCountUI();
 let gameTimer = null;
 let active = false;
 let lastTapTime = 0;
@@ -444,6 +458,46 @@ let comboCount = 0;
 let isDogRun = false;
  let isGameOver = false;
 let isEnding = false;
+ const PLAY_KEY = "wanwan_play_count";
+const PLAY_MAX = 20;
+const PLAY_START = 10;
+const PLAY_RECOVER_HOURS = 8;
+const PLAY_RECOVER_MS = PLAY_RECOVER_HOURS * 60 * 60 * 1000;
+const PLAY_LAST_RECOVER_KEY = "wanwan_play_last_recover";
+ function getPlayCount() {
+  let count = Number(localStorage.getItem(PLAY_KEY));
+
+  if (isNaN(count)) {
+    count = PLAY_START;
+    localStorage.setItem(PLAY_KEY, count);
+  }
+
+  return Math.min(count, PLAY_MAX);
+}
+
+function getRecoveredPlayCount() {
+  let count = getPlayCount();
+  let lastRecover = Number(localStorage.getItem(PLAY_LAST_RECOVER_KEY) || Date.now());
+  let now = Date.now();
+
+  if (!localStorage.getItem(PLAY_LAST_RECOVER_KEY)) {
+    localStorage.setItem(PLAY_LAST_RECOVER_KEY, now);
+    return count;
+  }
+
+  let elapsed = now - lastRecover;
+  let recovered = Math.floor(elapsed / PLAY_RECOVER_MS);
+
+  if (recovered > 0) {
+    count = Math.min(count + recovered, PLAY_MAX);
+    localStorage.setItem(PLAY_KEY, count);
+
+    let nextBase = lastRecover + recovered * PLAY_RECOVER_MS;
+    localStorage.setItem(PLAY_LAST_RECOVER_KEY, nextBase);
+  }
+
+  return count;
+}
 const params = new URLSearchParams(location.search);
 let isDev = params.get("dev") === "1";
 const comments = {
@@ -841,7 +895,11 @@ if (thirdPaw) {
   startBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
   e.stopPropagation();
-
+const playsLeft = getRecoveredPlayCount();
+if (playsLeft <= 0) {
+  alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
+  return;
+}
   // ① まず音を最優先で鳴らす
   playStartSound();
 
