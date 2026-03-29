@@ -491,12 +491,7 @@ function startTutorial(){
   if(!userLatLng) return;
 
 var tutorialMarker = L.marker(userLatLng,{
-  icon: L.icon({
-    iconUrl:'shiba.png',
-    iconSize:[30,36],
-    iconAnchor:[15,36],
-    className:'tutorial-bounce'
-  })
+  icon: shibaIcon
 }).addTo(map);
 tutorialMarker.setZIndexOffset(1000);
 var tutorialGuide = L.marker(userLatLng,{
