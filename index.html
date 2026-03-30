@@ -125,6 +125,17 @@ button:active{transform:scale(0.95);}
   border-radius:16px;padding:10px 22px;
   box-shadow:0 4px 18px rgba(255,180,0,0.4);
 }
+  @keyframes shakeLight {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shakeLight 0.25s ease;
+}
 </style>
 </head>
 <body>
@@ -502,7 +513,12 @@ function vibrateOnce(){
   lastVibeAt = now;
   if(navigator.vibrate) navigator.vibrate([80]);
 }
-
+function shakeScreen(){
+  document.body.classList.add("shake");
+  setTimeout(function(){
+    document.body.classList.remove("shake");
+  }, 250);
+}
 function vibrateOnce(){
   var now = Date.now();
   if(now-lastVibeAt<8000) return;
@@ -572,6 +588,7 @@ function recordFind(lat, lng, type) {
 if(goldBonus){
   tripleSound.currentTime = 0;
   tripleSound.play().catch(function(){});
+  shakeScreen(); // ←追加
 }else{
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
