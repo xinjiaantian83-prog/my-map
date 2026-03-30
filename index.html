@@ -849,9 +849,9 @@ var miniBtn = document.getElementById("miniGameBtn");
 if(miniBtn) miniBtn.addEventListener("click",function(){location.href="game.html";});
 var playBtn = document.getElementById("playBtn");
 if(playBtn){
-  playBtn.addEventListener("click", function(){
-    location.href = "game.html";
-  });
+playBtn.addEventListener("click", function(){
+  location.href = "game.html" + location.search;
+});
 }
 document.addEventListener("click",function(e){
   if(e.target&&e.target.id==="shopNightMap"){
