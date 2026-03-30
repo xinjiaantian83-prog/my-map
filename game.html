@@ -781,12 +781,7 @@ function startGame() {
 
 updatePlayCountUI();
 
-  if (isDev)
-    isDogRun = true;
-    startDogRun();
-  } else {
-    isDogRun = false;
-  }
+  isDogRun = false;
 
   scoreEl.textContent = '0';
   timeEl.textContent = GAME_DURATION;
