@@ -509,9 +509,18 @@ function updatePlayCountUI() {
 }
 
 const params = new URLSearchParams(location.search);
+
+if (params.get("dev") === "1") {
+  localStorage.setItem("dev_mode", "1");
+}
+if (params.get("dev") === "0") {
+  localStorage.removeItem("dev_mode");
+}
+
 let isDev =
   params.get("dev") === "1" ||
   localStorage.getItem("dev_mode") === "1";
+
 const comments = {
   zero: [
     "0点で草ww🤣",
@@ -912,7 +921,7 @@ if (thirdPaw) {
     tick();
   }
 
-  startBtn.addEventListener('touchstart', (e) => {
+startBtn.addEventListener('click', (e) => {
   e.preventDefault();
   e.stopPropagation();
 
@@ -941,7 +950,8 @@ if (thirdPaw) {
     startScr.classList.add('hidden');
     runCountdown(startGame);
   }, 150);
-}, { passive: false });
+});
+
 
 retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
