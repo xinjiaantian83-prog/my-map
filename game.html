@@ -923,6 +923,7 @@ if (thirdPaw) {
   e.preventDefault();
   e.stopPropagation();
 if (!isDev) {
+ if (!isDev) {
   const playsLeft = getRecoveredPlayCount();
   if (playsLeft <= 0) {
     alert("プレイ回数がありません🐾\n8時間ごとに1回復します");
@@ -945,6 +946,11 @@ if (!isDev) {
     startBtn.style.opacity = '';
 
     startScr.classList.add('hidden');
+   if (!isDev) {
+  let plays = getRecoveredPlayCount();
+  plays = Math.max(plays - 1, 0);
+  localStorage.setItem(PLAY_KEY, plays);
+}
     runCountdown(startGame);
   }, 150);
 
@@ -967,12 +973,19 @@ startBtn.addEventListener('click', (e) => {
   startBtn.style.opacity = '0.88';
 
   setTimeout(() => {
-    startBtn.style.transform = '';
-    startBtn.style.opacity = '';
+  startBtn.style.transform = '';
+  startBtn.style.opacity = '';
 
-    startScr.classList.add('hidden');
-    runCountdown(startGame);
-  }, 150);
+  startScr.classList.add('hidden');
+
+  if (!isDev) {
+    let plays = getRecoveredPlayCount();
+    plays = Math.max(plays - 1, 0);
+    localStorage.setItem(PLAY_KEY, plays);
+  }
+
+  runCountdown(startGame);
+}, 150);
 });
 retryBtn.addEventListener('touchstart', (e) => {
   e.preventDefault();
