@@ -510,6 +510,12 @@ function vibrateOnce(){
   lastVibeAt = now;
   if(navigator.vibrate) navigator.vibrate([80]);
 }
+function vibrateOnce(){
+  var now = Date.now();
+  if(now-lastVibeAt<8000) return;
+  lastVibeAt = now;
+  if(navigator.vibrate) navigator.vibrate([80]);
+}
 
 function resetGoldTest() {
   const testKey = "33.789259,132.786781,nky";
