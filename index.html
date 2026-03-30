@@ -677,13 +677,17 @@ m.bindPopup(
     '</div>' +
 
     '<div class="spot-actions">' +
-      '<button class="spot-btn spot-btn-go" onclick="goNav(' + s.lat + ',' + s.lng + ')">ここへ行く（ナビ開始）</button>' +
-      recordPart +
-    '</div>' +
 
-    sponsorPart +
+  '<div style="font-size:12px;color:#777;margin:6px 0;">🐾 近づくと発見できます（約30m以内）</div>' +
 
-  '</div>'
+  '<button class="spot-btn spot-btn-go" onclick="goNav(' + s.lat + ',' + s.lng + ')">ここへ行く（ナビ開始）</button>' +
+  recordPart +
+
+'</div>' +
+
+sponsorPart +
+
+'</div>'
 );
     if(clusterEnabled){
       if(s.type==="bul") bulldogCluster.addLayer(m);
