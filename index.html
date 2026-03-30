@@ -267,6 +267,7 @@ var lastRenderAt = 0;
 var pawMarkers = [];
 var tutorialShown = false;
 var foundSound = new Audio("chieuk-coin-257878.mp3");
+  var tripleSound = document.getElementById("seTriple");
 
 /* ─────────────────────────────────────────
    ユーザー名管理
@@ -536,9 +537,13 @@ function recordFind(lat, lng, type) {
     var mgEl2 = document.getElementById("miniGameScore");
     if(mgEl2) mgEl2.textContent = curScore2 + 1;
   }
-
+if(goldBonus){
+  tripleSound.currentTime = 0;
+  tripleSound.play().catch(function(){});
+}else{
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
+}
   showDiscoverToast(goldBonus);
   if(navigator.vibrate) navigator.vibrate(goldBonus ? [80,60,80,60,200] : [200]);
 
@@ -1053,5 +1058,6 @@ if(localStorage.getItem("open_record_on_return")==="1"){
   },600);
 }
 </script>
+  <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
 </body>
 </html>
