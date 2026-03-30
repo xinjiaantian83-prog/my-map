@@ -777,7 +777,11 @@
   "lat": 33.7892594,
   "lng": 132.7867806,
   "type": "nky",
-  "id": "WNWN-0130"
+  "id": "WNWN-0130",
+  "isGold": true,
+  "goldUntil": 9999999999999,
+  "reporterName": "テスト",
+  "firstFinder": ""
 },
   {
     "lat": 33.8096946,
