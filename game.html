@@ -781,7 +781,7 @@ function startGame() {
 
 updatePlayCountUI();
 
-  if (isDev || Math.random() < 0.06) {
+  if (isDev)
     isDogRun = true;
     startDogRun();
   } else {
