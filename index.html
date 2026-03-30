@@ -533,6 +533,8 @@ function vibrateOnce(){
 }
 
 function resetGoldTest() {
+  if (!isDev) return;
+
   const testKey = "33.789259,132.786781,nky";
 
   let discoveredList = JSON.parse(localStorage.getItem("wanwan_discovered") || "[]");
