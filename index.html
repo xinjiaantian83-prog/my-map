@@ -286,7 +286,18 @@ button:active{transform:scale(0.95);}
 
 <script>
 var isDev = location.search.includes("dev=1");
+function getUserId() {
+  let id = localStorage.getItem("wanwan_user_id");
+  if (!id) {
+    id = "user_" + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem("wanwan_user_id", id);
+  }
+  return id;
+}
 
+function getUserName() {
+  return localStorage.getItem("wanwan_user_name") || "";
+}
 var btn = document.getElementById("resetGoldBtn");
 
 if (btn) {
@@ -929,7 +940,19 @@ map.on('contextmenu',function(e){
   }
   if(!confirm("未確認補給所を報告する？")) return;
   var formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScVLaiHOoCP9sg3weumXm9_fhhaCLs-1lwemVqb-RYRAetezw/formResponse";
-  fetch(formUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:"entry.755147629="+e.latlng.lat+"&entry.906767353="+e.latlng.lng});
+var reporterId = getUserId();
+var reporterName = getUserName();
+
+fetch(formUrl,{
+  method:"POST",
+  mode:"no-cors",
+  headers:{"Content-Type":"application/x-www-form-urlencoded"},
+  body:
+    "entry.755147629=" + e.latlng.lat +
+    "&entry.906767353=" + e.latlng.lng +
+    "&entry.2115527963=" + encodeURIComponent(reporterName) +
+    "&entry.257832665=" + encodeURIComponent(reporterId)
+});
   var pm = L.marker([e.latlng.lat,e.latlng.lng],{icon:pawIconLeaflet}).addTo(map);
   pawMarkers.push(pm);
   var toast = document.getElementById("discoverToast");
