@@ -631,11 +631,11 @@ if(goldBonus){
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
 }
-
 var dog = document.getElementById("seDog");
 if(dog){
-  dog.currentTime = 0;
-  dog.play().catch(function(){});
+  var a = dog.cloneNode();
+  a.currentTime = 0;
+  a.play().catch(function(){});
 }
   
   addMiniGamePlay(goldBonus ? 3 : 1);
