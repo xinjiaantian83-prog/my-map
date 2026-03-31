@@ -343,19 +343,7 @@ bottom: 20px;
   <div id="result-label">スコア</div>
   <div id="result-score">0</div>
   <div class="screen-sub" id="result-comment"></div>
- <div id="sponsorBox" style="
-  margin-top:16px;
-  padding:14px;
-  border-radius:14px;
-  background:#f5f1ff;
-  font-size:14px;
-  text-align:center;
-  line-height:1.6;
-  box-shadow:0 4px 12px rgba(124,58,237,0.15);
-">
-  🐾 今日の補給所<br>
-  （準備中）
-</div>
+
   <button class="btn" id="retry-btn">もう一度遊ぶ</button>
 </div>
 
@@ -869,14 +857,7 @@ if (seResult) {
     seResult.play().catch(() => {});
   }, 600);
 }
-  const sponsorBox = document.getElementById("sponsorBox");
-  if (sponsorBox) {
-    sponsorBox.innerHTML = `
-      🐾 今日の補給所<br>
-      テストカフェ<br>
-      コーヒー100円引き
-    `;
-  }
+  
 
   // ① まず止まる（余韻①）
   setTimeout(() => {
