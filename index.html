@@ -631,6 +631,16 @@ if(goldBonus){
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
 }
+
+setTimeout(function(){
+  var dog = document.getElementById("seDog");
+  if(dog){
+    var a = dog.cloneNode();
+    a.currentTime = 0;
+    a.play().catch(function(){});
+  }
+}, 180);
+  
   addMiniGamePlay(goldBonus ? 3 : 1);
   showDiscoverToast(goldBonus);
   if(navigator.vibrate) navigator.vibrate(goldBonus ? [80,60,80,60,200] : [200]);
