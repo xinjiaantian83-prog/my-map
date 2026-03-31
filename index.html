@@ -631,12 +631,8 @@ if(goldBonus){
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
 }
-var dog = document.getElementById("seDog");
-if(dog){
-  var a = dog.cloneNode();
-  a.currentTime = 0;
-  a.play().catch(function(){});
-}
+var dog = new Audio("dog_cute.mp3");
+dog.play().catch(function(){});
   
   addMiniGamePlay(goldBonus ? 3 : 1);
   showDiscoverToast(goldBonus);
@@ -1176,6 +1172,6 @@ if(localStorage.getItem("open_record_on_return")==="1"){
 }
 </script>
   <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
-  <audio id="seDog" src="dog_cute.mp3" preload="auto"></audio>
+ 
 </body>
 </html>
