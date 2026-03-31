@@ -430,7 +430,7 @@ function goldIconUrl(type) {
 var map = L.map('map',{
   tapHold:true,
   tapTolerance:25,
-  closePopupOnClick:false
+ 
 }).setView([33.8392,132.7657],13);
 var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
 var darkLayer  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
@@ -707,34 +707,45 @@ function startTutorial(){
     })
   }).addTo(map);
 
-  tutorialMarker.on("click", function(){
-    var popup = L.popup()
-      .setLatLng(userLatLng)
-      .setContent(`
-        <div class="spot-card">
-          <div class="spot-title">🥤 ワンコイン自販機発見！</div>
-          <div class="spot-actions">
-            <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">発見を記録（+1）</button>
-          </div>
+tutorialMarker.on("click", function(){
+
+  map.options.closePopupOnClick = false;
+
+  var popup = L.popup()
+    .setLatLng(userLatLng)
+    .setContent(`
+      <div class="spot-card">
+        <div class="spot-title">🥤 ワンコイン自販機発見！</div>
+        <div class="spot-actions">
+          <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">
+            発見を記録（+1）
+          </button>
         </div>
-      `)
-      .openOn(map);
+      </div>
+    `)
+    .openOn(map);
 
-    setTimeout(function(){
-      document.getElementById("tutorialRecordBtn").onclick = function(){
-        foundSound.currentTime = 0;
-        foundSound.play().catch(function(){});
-        showDiscoverToast(false);
-        var count = Number(localStorage.getItem("wanwan_found") || 0);
-        localStorage.setItem("wanwan_found", count + 1);
-        localStorage.setItem("tutorial_done", "1");
-        map.closePopup();
-      };
-    }, 100);
+  setTimeout(function(){
+    document.getElementById("tutorialRecordBtn").onclick = function(){
 
-    map.removeLayer(tutorialMarker);
-    map.removeLayer(tutorialGuide);
-  });
+      map.options.closePopupOnClick = true;
+
+      foundSound.currentTime = 0;
+      foundSound.play().catch(function(){});
+
+      showDiscoverToast(false);
+
+      var count = Number(localStorage.getItem("wanwan_found") || 0);
+      localStorage.setItem("wanwan_found", count + 1);
+      localStorage.setItem("tutorial_done", "1");
+
+      map.closePopup();
+    };
+  },100);
+
+  map.removeLayer(tutorialMarker);
+  map.removeLayer(tutorialGuide);
+});
 }
 
 /* ─────────────────────────────────────────
