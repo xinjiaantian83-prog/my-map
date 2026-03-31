@@ -631,6 +631,7 @@ if(goldBonus){
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
 }
+  addMiniGamePlay(goldBonus ? 3 : 1);
   showDiscoverToast(goldBonus);
   if(navigator.vibrate) navigator.vibrate(goldBonus ? [80,60,80,60,200] : [200]);
 
@@ -720,7 +721,11 @@ function getLevel(found){
   if(found<=1499) return "Lv8 暫定神";
   return "Lv9 チーター";
 }
-
+function addMiniGamePlay(amount){
+  var current = Number(localStorage.getItem("wanwan_play_count") || 10);
+  current = Math.min(current + amount, 20);
+  localStorage.setItem("wanwan_play_count", current);
+}
 function updateFoundUI(){
   foundCount = discovered.size;
   var percent = ((foundCount/ESTIMATED_TOTAL)*100).toFixed(1);
