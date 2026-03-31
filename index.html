@@ -427,8 +427,11 @@ function goldIconUrl(type) {
 /* ─────────────────────────────────────────
    地図初期化
 ───────────────────────────────────────── */
-var map = L.map('map',{tapHold:true,tapTolerance:25}).setView([33.8392,132.7657],13);
-
+var map = L.map('map',{
+  tapHold:true,
+  tapTolerance:25,
+  closePopupOnClick:false
+}).setView([33.8392,132.7657],13);
 var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
 var darkLayer  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19});
 
@@ -821,7 +824,9 @@ function renderMarkers(){
     var m = L.marker([displayLat,displayLng],{icon:icon});
     m.on("popupopen",function(){popupOpen=true;});
     m.on("popupclose",function(){popupOpen=false;});
-
+m.on("click", function(e){
+  L.DomEvent.stopPropagation(e);
+});
     var canRecord = userLatLng && userLatLng.distanceTo([s.lat,s.lng])<=30;
 
     // タイトル
