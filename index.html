@@ -326,6 +326,11 @@ var pawMarkers = [];
 var tutorialShown = false;
 var foundSound = new Audio("chieuk-coin-257878.mp3");
 var tripleSound = new Audio("triple.mp3");
+var dogSound = new Audio("dog_cute.mp3");
+
+foundSound.preload = "auto";
+tripleSound.preload = "auto";
+dogSound.preload = "auto";
 /* ─────────────────────────────────────────
    ユーザー名管理
    優先キー: "wanwan_name"（旧 "wanwan_user_name" も互換）
@@ -631,8 +636,11 @@ if(goldBonus){
   foundSound.currentTime = 0;
   foundSound.play().catch(function(){});
 }
-var dog = new Audio("dog_cute.mp3");
-dog.play().catch(function(){});
+
+setTimeout(function(){
+  dogSound.currentTime = 0;
+  dogSound.play().catch(function(){});
+}, 320);
   
   addMiniGamePlay(goldBonus ? 3 : 1);
   showDiscoverToast(goldBonus);
@@ -1000,6 +1008,10 @@ btnLocate.addEventListener("click",function(){
   foundSound.play().catch(function(){});
   foundSound.pause();
   foundSound.currentTime = 0;
+
+  dogSound.play().catch(function(){});
+  dogSound.pause();
+  dogSound.currentTime = 0;
   if(!navigator.geolocation){show("位置情報が使えません");return;}
   if(watchId!==null){
     navigator.geolocation.clearWatch(watchId);watchId=null;
