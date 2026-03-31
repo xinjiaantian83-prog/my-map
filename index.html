@@ -1258,16 +1258,24 @@ const btnCloseShop = document.getElementById("btnCloseShop");
 
 
 if(openShopBtn){
-  openShopBtn.addEventListener("click", function(){
-    recordCard.classList.add("hidden");
-    shopCard.classList.remove("hidden");
-  });
-}
+openShopBtn.addEventListener("click", function(){
+  history.pushState(null, null, null); // ←これ追加
 
+  recordCard.classList.add("hidden");
+  shopCard.classList.remove("hidden");
+});
+}
+window.addEventListener("popstate", function(){
+  if(!shopCard.classList.contains("hidden")){
+    shopCard.classList.add("hidden");
+    recordCard.classList.remove("hidden");
+  }
+});
 if(btnCloseShop){
   btnCloseShop.addEventListener("click", function(){
     shopCard.classList.add("hidden");
     recordCard.classList.remove("hidden");
+    history.back(); // ←追加
   });
 }
     });
