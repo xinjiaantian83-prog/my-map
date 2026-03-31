@@ -644,11 +644,15 @@
     "lng": 132.7712831,
     "type": "nky"
   },
-  {
-    "lat": 33.7892594,
-    "lng": 132.7867806,
-    "type": "nky"
-  },
+ {
+  "lat": 33.7892594,
+  "lng": 132.7867806,
+  "type": "nky",
+  "isGold": true,
+  "goldUntil": 1775516400000,
+  "reporterName": "user",
+  "firstFinder": ""
+}
   {
     "lat": 33.8086051,
     "lng": 132.7698428,
