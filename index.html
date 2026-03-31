@@ -1112,11 +1112,17 @@ var recordCard = document.getElementById("recordCard");
 var btnCloseRecord = document.getElementById("btnCloseRecord");
 btnRecord.addEventListener("click",function(){recordCard.classList.toggle("hidden");});
 btnCloseRecord.addEventListener("click",function(){recordCard.classList.add("hidden");});
-
 document.addEventListener("click",function(e){
   var policyPage = document.getElementById("policyPage");
+  var shopPage = document.getElementById("shopPage");
+
   if(!recordCard.classList.contains("hidden")){
-    if(!recordCard.contains(e.target)&&!btnRecord.contains(e.target)&&!policyPage.contains(e.target)){
+    if(
+      !recordCard.contains(e.target) &&
+      !btnRecord.contains(e.target) &&
+      !policyPage.contains(e.target) &&
+      !shopPage.contains(e.target)
+    ){
       recordCard.classList.add("hidden");
     }
   }
