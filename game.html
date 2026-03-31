@@ -505,10 +505,6 @@ function updatePlayCountUI() {
   if (!playCountText) return;
 
   const count = getRecoveredPlayCount();
- function updatePlayCountUI() {
-  if (!playCountText) return;
-
-  const count = getRecoveredPlayCount();
   playCountText.textContent = "残りプレイ回数：" + count + " / " + PLAY_MAX;
 }
 const params = new URLSearchParams(location.search);
