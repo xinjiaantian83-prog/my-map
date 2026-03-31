@@ -40,10 +40,11 @@ def main():
     spots = []
 
     with open(RAW_FILE, "r", encoding="utf-8") as f:
-        for line in f:
-            item = parse_line(line)
-            if item:
-                spots.append(item)
+   for i, line in enumerate(f):
+    item = parse_line(line)
+    if item:
+        item["id"] = "WNWN-" + str(i + 1).zfill(4)
+        spots.append(item)
 
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         json.dump(spots, f, ensure_ascii=False, indent=2)
