@@ -282,24 +282,7 @@ button:active{transform:scale(0.95);}
     </div>
   </div>
 
-  <div id="shopMain" class="hidden">
-    <div class="record-card-header">
-      <button id="btnBackToRecord" class="record-close">←</button>
-      <div class="record-title">🐾 肉球ショップ</div>
-    </div>
-
-    <div class="record-section">
-      <div class="record-label">特別アイテム</div>
-
-      <div class="record-value" id="shopNightMap">
-        ナイトマップ　500P
-      </div>
-
-      <div class="record-value" onclick="buyNaming()">
-        自販機命名権　5000P
-      </div>
-    </div>
-  </div>
+ 
 </div>
 </div>
 
@@ -1299,17 +1282,6 @@ function buyNaming(){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-  const recordMain = document.getElementById("recordMain");
-  const shopMain = document.getElementById("shopMain");
-  const openShopBtn = document.getElementById("openShopBtn");
-  const btnBackToRecord = document.getElementById("btnBackToRecord");
-
-  if(openShopBtn){
-    openShopBtn.addEventListener("click", function(){
-      recordMain.classList.add("hidden");
-      shopMain.classList.remove("hidden");
-    });
-  }
 
   if(btnBackToRecord){
     btnBackToRecord.addEventListener("click", function(){
