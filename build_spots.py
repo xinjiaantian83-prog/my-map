@@ -9,13 +9,8 @@ def parse_line(line: str):
     if not line:
         return None
 
-    # 例:
-    # 33.786,132.724
-    # 33.786,132.724,nky
-    # 33.7864888,132.7245295 , pom
     parts = [p.strip() for p in line.split(",")]
 
-    # 緯度経度が最低2つ必要
     if len(parts) < 2:
         return None
 
@@ -25,31 +20,31 @@ def parse_line(line: str):
     except:
         return None
 
-    # type（勢力タグ）
     vtype = "nky"
     if len(parts) >= 3 and parts[2]:
         vtype = parts[2].strip()
-        # ",nky" みたいに先頭カンマが付いてても剥がす
         vtype = re.sub(r"^,+", "", vtype)
         if not vtype:
             vtype = "nky"
 
     return {"lat": lat, "lng": lng, "type": vtype}
 
+
 def main():
     spots = []
 
     with open(RAW_FILE, "r", encoding="utf-8") as f:
-   for i, line in enumerate(f):
-    item = parse_line(line)
-    if item:
-        item["id"] = "WNWN-" + str(i + 1).zfill(4)
-        spots.append(item)
+        for i, line in enumerate(f):
+            item = parse_line(line)
+            if item:
+                item["id"] = "WNWN-" + str(i + 1).zfill(4)
+                spots.append(item)
 
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         json.dump(spots, f, ensure_ascii=False, indent=2)
 
     print(f"Wrote {len(spots)} spots to {OUT_FILE}")
+
 
 if __name__ == "__main__":
     main()
