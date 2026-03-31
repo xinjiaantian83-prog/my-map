@@ -512,7 +512,7 @@ var bulldogCluster = L.markerClusterGroup({
   showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,
   iconCreateFunction:function(cluster){
     var count = cluster.getChildCount();
-    return L.divIcon({html:'<div class="coin"><img src="bull_yellow.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
+    return L.divIcon({html:'<div class="coin"><img src="bulldog.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
   }
 });
 var pomeCluster = L.markerClusterGroup({
@@ -520,7 +520,7 @@ var pomeCluster = L.markerClusterGroup({
   showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,
   iconCreateFunction:function(cluster){
     var count = cluster.getChildCount();
-    return L.divIcon({html:'<div class="coin"><img src="pome_white.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
+    return L.divIcon({html:'<div class="coin"><img src="pome.png"><span>'+count+'</span></div>',className:"coin-cluster",iconSize:L.point(60,60)});
   }
 });
 map.addLayer(shibaCluster);
@@ -531,11 +531,11 @@ map.addLayer(pomeCluster);
    通常アイコン
 ───────────────────────────────────────── */
 var shibaIcon      = L.icon({iconUrl:'shiba.png',      iconSize:[30,36],iconAnchor:[15,36]});
-var bulldogIcon    = L.icon({iconUrl:'bull_yellow.png',    iconSize:[30,36],iconAnchor:[15,36]});
-var pomeIcon       = L.icon({iconUrl:'pome_white.png',       iconSize:[30,36],iconAnchor:[15,36]});
+var bulldogIcon    = L.icon({iconUrl:'bulldog.png',    iconSize:[30,36],iconAnchor:[15,36]});
+var pomeIcon       = L.icon({iconUrl:'pome.png',       iconSize:[30,36],iconAnchor:[15,36]});
 var shibaDotIcon   = L.icon({iconUrl:'shiba_dot.png',   iconSize:[22,26],iconAnchor:[11,26]});
-var bulldogDotIcon = L.icon({iconUrl:'bull_yellow.dot.png', iconSize:[22,26],iconAnchor:[11,26]});
-var pomeDotIcon    = L.icon({iconUrl:'pome_white.dot.png',    iconSize:[22,26],iconAnchor:[11,26]});
+var bulldogDotIcon = L.icon({iconUrl:'bulldog_dot.png', iconSize:[22,26],iconAnchor:[11,26]});
+var pomeDotIcon    = L.icon({iconUrl:'pome_dot.png',    iconSize:[22,26],iconAnchor:[11,26]});
 
 /* 金ピカアイコン（輝きアニメーション付き DivIcon） */
 function makeGoldIcon(type) {
@@ -913,12 +913,11 @@ m.on("click", function(e){
       recordPart = '<div class="spot-note">✅ 記録済み</div>';
     } else if(canRecord){
       if(goldActive){
-        var dogImg = (s.type==="bul") ? "gold_bull.png" : (s.type==="pom") ? "gold_pome_white.png
-          " : "gold_shiba.png";
+        var dogImg = (s.type==="bul") ? "gold_bull.png" : (s.type==="pom") ? "gold_pome.png" : "gold_shiba.png";
         recordPart = '<button class="spot-btn spot-btn-gold" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')">'
           + '<img src="'+dogImg+'" style="height:26px;vertical-align:-4px;"> 金ピカ発見を記録（ミニゲーム+3）</button>';
       } else {
-        var dogImg2 = (s.type==="bul") ? "bull_yellow.png" : (s.type==="pom") ? "pome_white.png" : "shiba.png";
+        var dogImg2 = (s.type==="bul") ? "bulldog.png" : (s.type==="pom") ? "pome.png" : "shiba.png";
         recordPart = '<button class="spot-btn spot-btn-record" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')">'
           + '<img src="'+dogImg2+'" style="height:26px;vertical-align:-4px;"> 発見を記録（+1）</button>';
       }
