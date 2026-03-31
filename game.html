@@ -585,7 +585,7 @@ if (isDev && isDogRun) {
   const areaW = gameArea.offsetWidth;
   const areaH = gameArea.offsetHeight;
   const margin = 50;
-const bottomSafe = 120; // ←ここ追加（戻るボタン分
+const bottomSafe = ２20; // ←ここ追加（戻るボタン分
   const x = margin + Math.random() * (areaW - margin * 2);
   const y = margin + Math.random() * (areaH - margin * 2);
 
@@ -651,7 +651,7 @@ const bottomSafe = 120; // ←ここ追加（戻るボタン分
   const margin = 50;
 
   const pawCount = 8;
-const bottomSafe = 120;
+const bottomSafe = 220;
   for (let i = 0; i < pawCount; i++) {
     const paw = pawEl.cloneNode(true);
     paw.id = "";
