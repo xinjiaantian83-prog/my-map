@@ -6,6 +6,7 @@ on:
     paths:
       - "raw_coords.txt"
       - "build_spots.py"
+      - "add_ids.py"
       - ".github/workflows/build-spots.yml"
 
 permissions:
@@ -20,10 +21,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Debug (pwd & ls)
         run: |
           pwd
           ls -la
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -31,6 +34,9 @@ jobs:
 
       - name: Build spots.json
         run: python build_spots.py
+
+      - name: Add fixed IDs
+        run: python add_ids.py
 
       - name: Commit spots.json if changed
         run: |
