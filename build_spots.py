@@ -32,25 +32,13 @@ def parse_line(line: str):
 
 def main():
     spots = []
-    exact_seen = set()
 
     with open(RAW_FILE, "r", encoding="utf-8") as f:
         for line in f:
             item = parse_line(line)
-            if not item:
-                continue
-
-            lat = item["lat"]
-            lng = item["lng"]
-            vtype = item["type"]
-
-            exact_key = (lat, lng, vtype)
-            if exact_key in exact_seen:
-                continue
-
-            exact_seen.add(exact_key)
-            item["id"] = "WNWN-" + str(len(spots) + 1).zfill(4)
-            spots.append(item)
+            if item:
+                item["id"] = "WNWN-" + str(len(spots) + 1).zfill(4)
+                spots.append(item)
 
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         json.dump(spots, f, ensure_ascii=False, indent=2)
