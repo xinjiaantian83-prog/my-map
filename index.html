@@ -215,82 +215,92 @@ button:active{transform:scale(0.95);}
 </button>
 
 <div id="recordCard" class="record-card hidden">
-  <div class="record-card-header">
-    <button id="btnCloseRecord" class="record-close">×</button>
-    <div class="record-title">
-      <img src="dogs_banner.png" class="title-banner">
-      わんわんコイン
-      <div class="record-subtitle">松山ワンコイン自販機検索マップ</div>
+  <div id="recordMain">
+    <div class="record-card-header">
+      <button id="btnCloseRecord" class="record-close">×</button>
+      <div class="record-title">
+        <img src="dogs_banner.png" class="title-banner">
+        わんわんコイン
+        <div class="record-subtitle">松山ワンコイン自販機検索マップ</div>
+      </div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🐾 わんわん探索隊</div>
+      <div class="record-subtitle">あなたの発見</div>
+      <div class="record-value">
+        <span id="foundCountCard">0</span> / 1500（<span id="foundPercentCard">0.0</span>%）
+      </div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🌍 全体発見</div>
+      <div class="record-value">
+        <span id="globalFound">0</span> / 推定1500（<span id="globalPercent">0.0</span>%）
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar-fill" id="globalProgressBar"></div>
+      </div>
+      <div class="record-subtitle" id="remainText">松山制覇まであと 1500 台 🐾</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">今日の発見</div>
+      <div class="record-value" id="todayCountCard">0</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🐾 肉球ポイント</div>
+      <div class="record-value"><span id="miniGameScore">0</span>P</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🐾 肉球ショップ</div>
+      <div class="record-value" id="openShopBtn">見る</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🏆 探索レベル</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
+      </div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">ユーザー名</div>
+      <div class="record-value level-link" id="userNameText">未設定</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">🐾 情報提供</div>
+      <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">運営方針</div>
+      <div class="record-value" onclick="showPolicy()">見る</div>
     </div>
   </div>
-  <div class="record-section">
-    <div class="record-label">🐾 わんわん探索隊</div>
-    <div class="record-subtitle">あなたの発見</div>
-    <div class="record-value">
-      <span id="foundCountCard">0</span> / 1500（<span id="foundPercentCard">0.0</span>%）
+
+  <div id="shopMain" class="hidden">
+    <div class="record-card-header">
+      <button id="btnBackToRecord" class="record-close">←</button>
+      <div class="record-title">🐾 肉球ショップ</div>
+    </div>
+
+    <div class="record-section">
+      <div class="record-label">特別アイテム</div>
+
+      <div class="record-value" id="shopNightMap">
+        ナイトマップ　500P
+      </div>
+
+      <div class="record-value" onclick="buyNaming()">
+        自販機命名権　5000P
+      </div>
     </div>
   </div>
-  <div class="record-section">
-    <div class="record-label">🌍 全体発見</div>
-    <div class="record-value">
-      <span id="globalFound">0</span> / 推定1500（<span id="globalPercent">0.0</span>%）
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-bar-fill" id="globalProgressBar"></div>
-    </div>
-    <div class="record-subtitle" id="remainText">松山制覇まであと 1500 台 🐾</div>
-  </div>
-  <div class="record-section">
-    <div class="record-label">今日の発見</div>
-    <div class="record-value" id="todayCountCard">0</div>
-  </div>
-  <div class="record-section">
-    <div class="record-label">🐾 肉球ポイント</div>
-    <div class="record-value"><span id="miniGameScore">0</span>P</div>
-  </div>
- <div class="record-section">
-  <div class="record-label">🐾 肉球ショップ</div>
-  <div class="record-value" id="openShopBtn">見る</div>
 </div>
-  <div class="record-section">
-    <div class="record-label">🏆 探索レベル</div>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-      <div class="record-value level-link" id="levelTextCard" onclick="location.href='titles.html'">Lv0 野良犬 〉</div>
-    </div>
-  </div>
-  <div class="record-section">
-    <div class="record-label">ユーザー名</div>
-    <div class="record-value level-link" id="userNameText">未設定</div>
-  </div>
-  <div class="record-section">
-    <div class="record-label">🐾 情報提供</div>
-    <div class="record-value" onclick="window.location.href='https://docs.google.com/forms/d/e/1FAIpQLSdMzm6TbSPSvdzFG3glq1w5qBAKhLDiPJgmjmaU5x-P9J4S3w/viewform'">送る</div>
-  </div>
-  <div class="record-section">
-    <div class="record-label">運営方針</div>
-    <div class="record-value" onclick="showPolicy()">見る</div>
-  </div>
-</div>
-<div id="shopCard" class="record-card hidden" style="top:56px;width:min(92vw,340px);max-height:calc(100dvh - 80px);overflow-y:auto;">
-  <div class="record-card-header">
-    <button id="btnCloseShop" class="record-close">×</button>
-    <div class="record-title">🐾 肉球ショップ</div>
-  </div>
-
-  <div class="record-section">
-    <div class="record-label">特別アイテム</div>
-
-    <div class="record-value">
-      ナイトマップ　500P
-    </div>
-
-    <div class="record-value">
-      自販機命名権　5000P
-    </div>
-  </div>
-</div>
-<div id="map"></div>
-
 <div id="discoverToast" class="discover-toast hidden">🐾発見！<br>+1</div>
 
 <div id="policyPage" class="hidden" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:4000;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 28px;">
@@ -1230,7 +1240,8 @@ if(localStorage.getItem("open_record_on_return")==="1"){
     localStorage.removeItem("open_record_on_return");
   },600);
 }
-  function buyNaming(){
+<script>
+function buyNaming(){
   const score = Number(localStorage.getItem("wanwan_score") || 0);
 
   if(score < 5000){
@@ -1243,41 +1254,32 @@ if(localStorage.getItem("open_record_on_return")==="1"){
   }
 
   localStorage.setItem("wanwan_score", score - 5000);
-
-  alert("命名権を獲得しました🐾");
-
-  // とりあえず仮フラグ（あとで本実装）
   localStorage.setItem("naming_ticket", "1");
 
+  alert("命名権を獲得しました🐾");
   location.reload();
 }
-  document.addEventListener("DOMContentLoaded", function(){
-  const shopCard = document.getElementById("shopCard");
-const openShopBtn = document.getElementById("openShopBtn");
-const btnCloseShop = document.getElementById("btnCloseShop");
 
+document.addEventListener("DOMContentLoaded", function(){
+  const recordMain = document.getElementById("recordMain");
+  const shopMain = document.getElementById("shopMain");
+  const openShopBtn = document.getElementById("openShopBtn");
+  const btnBackToRecord = document.getElementById("btnBackToRecord");
 
-if(openShopBtn){
-openShopBtn.addEventListener("click", function(){
-  history.pushState(null, null, null); // ←これ追加
+  if(openShopBtn){
+    openShopBtn.addEventListener("click", function(){
+      recordMain.classList.add("hidden");
+      shopMain.classList.remove("hidden");
+    });
+  }
 
-  recordCard.classList.add("hidden");
-  shopCard.classList.remove("hidden");
-});
-}
-window.addEventListener("popstate", function(){
-  if(!shopCard.classList.contains("hidden")){
-    shopCard.classList.add("hidden");
-    recordCard.classList.remove("hidden");
+  if(btnBackToRecord){
+    btnBackToRecord.addEventListener("click", function(){
+      shopMain.classList.add("hidden");
+      recordMain.classList.remove("hidden");
+    });
   }
 });
-if(btnCloseShop){
-  btnCloseShop.addEventListener("click", function(){
-    shopCard.classList.add("hidden");
-    recordCard.classList.remove("hidden");
-  });
-}
-    });
 </script>
   <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
  
