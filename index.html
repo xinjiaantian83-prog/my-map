@@ -1256,8 +1256,10 @@ if(localStorage.getItem("open_record_on_return")==="1"){
 const openShopBtn = document.getElementById("openShopBtn");
 const btnCloseShop = document.getElementById("btnCloseShop");
 
+
 if(openShopBtn){
   openShopBtn.addEventListener("click", function(){
+    recordCard.classList.add("hidden");
     shopCard.classList.remove("hidden");
   });
 }
@@ -1265,6 +1267,7 @@ if(openShopBtn){
 if(btnCloseShop){
   btnCloseShop.addEventListener("click", function(){
     shopCard.classList.add("hidden");
+    recordCard.classList.remove("hidden");
   });
 }
     });
