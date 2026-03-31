@@ -62,7 +62,13 @@ button:active{transform:scale(0.95);}
 .spot-actions{display:flex;flex-direction:column;gap:8px;border-top:1px solid #e5dccb;margin-top:10px;padding-top:10px;}
 .spot-btn{width:100%;border:none;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;cursor:pointer;height:44px;}
 .spot-btn-go{background:#efe3c9;}
-.spot-btn-record{background:#fff4d6;}
+.spot-btn-record{
+  background:#fff4d6;
+  box-shadow:0 4px 12px rgba(255,180,0,0.4);
+}
+.spot-btn-record:active{
+  transform:scale(0.92);
+}
 .spot-btn-gold{background:linear-gradient(135deg,#ffd700,#ffaa00);color:#5a3a00;box-shadow:0 2px 8px rgba(255,170,0,0.45);}
 .spot-note{margin-top:8px;font-size:12px;color:#666;line-height:1.4;}
 .gold-reporter{margin-top:8px;font-size:12px;color:#a06000;font-weight:700;background:#fff8d0;border-radius:8px;padding:6px 10px;border:1px solid #f0c040;}
@@ -691,7 +697,7 @@ function startTutorial(){
       html: `
   <div style="display:flex;flex-direction:column;align-items:center;animation:arrowBlink 0.6s infinite;pointer-events:none;">
     <div style="font-size:52px;font-weight:900;line-height:0.8;color:#000;text-shadow:0 0 2px #fff,0 0 4px #fff,0 0 8px rgba(0,0,0,0.8);">⬇</div>
-    <div style="margin-top:12px;font-size:22px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 2px #000,0 0 4px #000,0 0 6px #000;animation:sparkle 1s infinite alternate;">押す</div>
+    <div style="margin-top:16px;font-size:30px;font-weight:900;line-height:1;color:#fff;text-shadow:0 0 2px #000,0 0 4px #000,0 0 6px #000;animation:sparkle 1s infinite alternate;">押す</div>
   </div>`,
       iconSize: [80, 80],
       iconAnchor: [40, 120]
