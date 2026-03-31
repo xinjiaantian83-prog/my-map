@@ -327,7 +327,21 @@ var tutorialShown = false;
 var foundSound = new Audio("chieuk-coin-257878.mp3");
 var tripleSound = new Audio("triple.mp3");
 var dogSound = new Audio("dog_cute.mp3");
+document.addEventListener("touchstart", function initAudio(){
+  foundSound.play().catch(()=>{});
+  tripleSound.play().catch(()=>{});
+  dogSound.play().catch(()=>{});
 
+  foundSound.pause();
+  tripleSound.pause();
+  dogSound.pause();
+
+  foundSound.currentTime = 0;
+  tripleSound.currentTime = 0;
+  dogSound.currentTime = 0;
+
+  document.removeEventListener("touchstart", initAudio);
+});
 foundSound.preload = "auto";
 tripleSound.preload = "auto";
 dogSound.preload = "auto";
