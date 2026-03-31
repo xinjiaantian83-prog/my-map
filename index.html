@@ -252,6 +252,9 @@ button:active{transform:scale(0.95);}
     <div class="record-label">🐾 肉球交換所</div>
     <div class="record-value" id="shopNightMap">ナイトマップ　500P</div>
   </div>
+  <div class="record-value" onclick="buyNaming()">
+  自販機命名権　5000P
+</div>
   <div class="record-section">
     <div class="record-label">🏆 探索レベル</div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
@@ -1212,6 +1215,27 @@ if(localStorage.getItem("open_record_on_return")==="1"){
     recordCard.classList.remove("hidden");
     localStorage.removeItem("open_record_on_return");
   },600);
+}
+  function buyNaming(){
+  const score = Number(localStorage.getItem("wanwan_score") || 0);
+
+  if(score < 5000){
+    alert("ポイントが足りません🐾");
+    return;
+  }
+
+  if(!confirm("5000P使って命名権を購入しますか？")){
+    return;
+  }
+
+  localStorage.setItem("wanwan_score", score - 5000);
+
+  alert("命名権を獲得しました🐾");
+
+  // とりあえず仮フラグ（あとで本実装）
+  localStorage.setItem("naming_ticket", "1");
+
+  location.reload();
 }
 </script>
   <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
