@@ -319,7 +319,36 @@ button:active{transform:scale(0.95);}
   <h3 style="margin-top:18px;font-size:16px;">■ サービスについて</h3>
   <p style="font-size:14px;line-height:1.9;color:#333;">・本サービスは予告なく仕様変更・更新を行う場合があります。<br>・探索は自己責任で行ってください。</p>
 </div>
+<div id="shopPage" class="hidden" style="
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:#fff;
+  z-index:4000;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding:20px 16px 28px;
+">
+  <button class="back-btn" onclick="closeShop()">← 戻る</button>
 
+  <h2 style="margin:0 0 12px;font-size:22px;">
+    🐾 肉球ショップ
+  </h2>
+
+  <div class="record-section">
+    <div class="record-label">特別アイテム</div>
+
+    <div class="record-value" id="shopNightMap">
+      ナイトマップ　500P
+    </div>
+
+    <div class="record-value" onclick="buyNaming()">
+      自販機命名権　5000P
+    </div>
+  </div>
+</div>
 <script>
 var isDev = location.search.includes("dev=1");
 function getUserId() {
@@ -1119,7 +1148,14 @@ document.getElementById("userNameText").addEventListener("click",function(){
     document.getElementById("userNameText").textContent = userName + " ✏️";
   }
 });
-
+document.getElementById("openShopBtn").addEventListener("click", function(){
+  document.getElementById("recordCard").classList.add("hidden");
+  document.getElementById("shopPage").classList.remove("hidden");
+});
+  function closeShop(){
+  document.getElementById("shopPage").classList.add("hidden");
+  document.getElementById("recordCard").classList.remove("hidden");
+}
 document.getElementById("btnSearch").addEventListener("click",function(){
   var id = document.getElementById("spotSearch").value.trim().toUpperCase();
   if(!id) return;
