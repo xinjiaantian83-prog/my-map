@@ -142,6 +142,17 @@ button:active{transform:scale(0.95);}
 .shake {
   animation: shakeLight 0.25s ease;
 }
+  .marker-bounce {
+  animation: markerBounce 2.2s ease-in-out infinite;
+}
+
+@keyframes markerBounce {
+  0% { transform: translateY(0); }
+  8% { transform: translateY(-6px); }
+  16% { transform: translateY(0); }
+
+  100% { transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -854,6 +865,9 @@ function updateFoundUI(){
    マーカー描画
 ───────────────────────────────────────── */
 function renderMarkers(){
+  document.querySelectorAll(".marker-bounce").forEach(el=>{
+  el.classList.remove("marker-bounce");
+});
   markers.forEach(function(m){map.removeLayer(m);});
   markers = [];
   shibaCluster.clearLayers();
@@ -907,6 +921,7 @@ if(userLatLng && !isFound){
       fillOpacity: 0.08,
       interactive: false
     }).addTo(map);
+    marker.getElement()?.classList.add("marker-bounce");
   }
 }
     if(nearby.length>0){
