@@ -11,6 +11,22 @@
 <style>
 body{margin:0;}
 #map{height:100vh;}
+  .leaflet-interactive.circle-pulse {
+  animation: circlePulse 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes circlePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>
 </head>
 
@@ -38,7 +54,15 @@ var circle = L.circle(spot, {
   fillColor: "#ff9900",
   fillOpacity: 0.08
 }).addTo(map);
+var circle = L.circle(spot, {
+  radius: 30,
+  color: "#ff9900",
+  weight: 2,
+  fillColor: "#ff9900",
+  fillOpacity: 0.08
+}).addTo(map);
 
+circle.getElement().classList.add("circle-pulse");
 </script>
 </body>
 </html>
