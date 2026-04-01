@@ -142,17 +142,7 @@ button:active{transform:scale(0.95);}
 .shake {
   animation: shakeLight 0.25s ease;
 }
- img.marker-bounce {
-  animation: markerBounce 2.2s ease-in-out infinite;
-}
 
-@keyframes markerBounce {
-  0% { transform: translateY(0); }
-  8% { transform: translateY(-10px); }
-  16% { transform: translateY(0); }
-
-  100% { transform: translateY(0); }
-}
 </style>
 </head>
 <body>
@@ -936,15 +926,7 @@ if(userLatLng && !isFound){
 
 var m = L.marker([displayLat,displayLng],{icon:icon});
 
-if(userLatLng && !isFound){
-  var dist = userLatLng.distanceTo([s.lat, s.lng]);
 
-  if(dist <= 35){
-    m.on("add", function(){
-      this.getElement()?.classList.add("marker-bounce");
-    });
-  }
-}
     m.on("popupopen",function(){popupOpen=true;});
     m.on("popupclose",function(){popupOpen=false;});
 m.on("click", function(e){
