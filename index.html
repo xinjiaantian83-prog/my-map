@@ -610,11 +610,13 @@ function showDiscoverToast(isGold){
   }
   void toast.offsetWidth;
   setTimeout(function(){toast.classList.add("show");},10);
-  setTimeout(function(){
-    toast.classList.add("hidden");
-    toast.classList.remove("show","gold-toast");
-    toast.innerHTML = "🐾発見！<br>+1";
-  },1800);
+  var duration = localStorage.getItem("tutorial_done") ? 1800 : 3000;
+
+setTimeout(function(){
+  toast.classList.add("hidden");
+  toast.classList.remove("show","gold-toast");
+  toast.innerHTML = "🐾発見！<br>+1";
+}, duration);
 }
 function copySpotId(id){
   navigator.clipboard.writeText(id);
