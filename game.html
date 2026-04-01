@@ -560,7 +560,8 @@ function getComment(s) {
 
   if (s === 0) return getRandom(comments.zero);
 
-  if (s >= 30) return getRandom(comments.legend);
+  if (s >= 40) return getRandom(comments.legend);
+  if (s >= 30) return getRandom(comments.top);
 
   if (s < 10) return getRandom(comments.low);
   if (s < 20) return getRandom(comments.mid);
