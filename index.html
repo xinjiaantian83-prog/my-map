@@ -906,7 +906,7 @@ if(nearbySpotCircle){
     });
     // 👇30mガイド円（35m以内で表示）
 if(userLatLng && !isFound){
-  var dist = userLatLng.distanceTo([s.lat, s.lng]);
+var dist = userLatLng.distanceTo([displayLat, displayLng]);
 
   if(dist <= 35){
     if(nearbySpotCircle){
