@@ -12,7 +12,16 @@
 body{margin:0;}
 #map{height:100vh;}
 
+.marker-bounce {
+  animation: markerBounce 1.2s ease-in-out infinite;
 }
+
+@keyframes markerBounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+  
 </style>
 </head>
 
@@ -30,8 +39,13 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 // ダミー自販機
 var spot = [33.7987, 132.7555];
 
-L.marker(spot).addTo(map);
+var icon = L.divIcon({
+  html: '<img src="shiba.png" class="marker-bounce" style="width:40px;">',
+  iconSize: [40, 40],
+  className: ''
+});
 
+L.marker(spot, { icon: icon }).addTo(map);
 // 円（ここだけいじればOK）
 var circle = L.circle(spot, {
   radius: 30,
