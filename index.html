@@ -767,10 +767,13 @@ tutorialMarker.on("click", function(){
     .setLatLng(userLatLng)
     .setContent(`
       <div class="spot-card">
-        <div class="spot-title">🥤 ワンコイン自販機発見！</div>
+      <div class="spot-title">🥤 ワンコイン自販機発見！</div>
+<div style="font-size:13px;color:#666;margin-bottom:6px;">
+  押すとポイントがもらえます🐾
+</div>
         <div class="spot-actions">
           <button class="spot-btn spot-btn-record" id="tutorialRecordBtn">
-            発見を記録（+1）
+           👆ここを押す（+1）
           </button>
         </div>
       </div>
@@ -790,7 +793,7 @@ tutorialMarker.on("click", function(){
       var count = Number(localStorage.getItem("wanwan_found") || 0);
       localStorage.setItem("wanwan_found", count + 1);
       localStorage.setItem("tutorial_done", "1");
-
+localStorage.setItem("open_record_on_return","1");
       map.closePopup();
     };
   },100);
@@ -1013,7 +1016,7 @@ async function loadSpots(){
 function showFirstGuide(){
   if(localStorage.getItem("wanwan_guide_shown") && !isDev) return;
   setTimeout(function(){
-    alert("🐾 使い方\n地図にいるわんこ＝『ワンコイン自販機』！\n近づくと\n👉「発見を記録」が押せます\nまだ地図に無いワンコイン自販機は\n👉🐾ボタン → 長押しで教えてください\n\n✨金色のアイコンは金ピカ自販機！\n最初の発見者にはミニゲームボーナス+3！");
+  alert("松山の安い自販機を探すアプリです🐾\n\n近くのワンコをタップして\n👉 発見を記録してみてください\n\n発見するとポイントが増えます");
     localStorage.setItem("wanwan_guide_shown","1");
   },800);
 }
