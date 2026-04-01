@@ -602,7 +602,11 @@ function showDiscoverToast(isGold){
     toast.innerHTML = "✨金ピカ発見！<br>ミニゲーム+3";
     toast.classList.add("gold-toast");
   } else {
-    toast.innerHTML = "🐾発見！<br>+1";
+  if(!localStorage.getItem("tutorial_done")){
+  toast.innerHTML = "🐾発見！<br>他の場所も探してみよう（ナビも使えるよ）";
+} else {
+  toast.innerHTML = "🐾発見！<br>+1";
+}
   }
   void toast.offsetWidth;
   setTimeout(function(){toast.classList.add("show");},10);
