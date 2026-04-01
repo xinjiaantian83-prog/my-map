@@ -793,7 +793,7 @@ tutorialMarker.on("click", function(){
       var count = Number(localStorage.getItem("wanwan_found") || 0);
       localStorage.setItem("wanwan_found", count + 1);
       localStorage.setItem("tutorial_done", "1");
-localStorage.setItem("open_record_on_return","1");
+recordCard.classList.remove("hidden");
       map.closePopup();
     };
   },100);
