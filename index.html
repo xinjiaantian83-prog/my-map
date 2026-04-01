@@ -908,7 +908,7 @@ if(nearbySpotCircle){
 if(userLatLng && !isFound){
   var dist = userLatLng.distanceTo([s.lat, s.lng]);
 
-  if(true){
+  if(dist <= 35){
     if(nearbySpotCircle){
       map.removeLayer(nearbySpotCircle);
     }
