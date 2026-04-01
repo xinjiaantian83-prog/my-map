@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>円テスト</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+body{margin:0;}
+#map{height:100vh;}
+</style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<script>
+// 地図
+var map = L.map('map').setView([33.7987, 132.7555], 17);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// ダミー自販機
+var spot = [33.7987, 132.7555];
+
+L.marker(spot).addTo(map);
+
+// 円（ここだけいじればOK）
+var circle = L.circle(spot, {
+  radius: 30,
+  color: "#ff9900",
+  weight: 2,
+  fillColor: "#ff9900",
+  fillOpacity: 0.08
+}).addTo(map);
+
+</script>
+</body>
+</html>
