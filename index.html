@@ -373,7 +373,8 @@ var sponsorsMap = {};
 var clusterEnabled = true;
 var userLatLng = null;
 var userMarker = null;
-var userCircle = null;
+var userCircle = null; 
+  var nearbySpotCircle = null;
 var hasCentered = false;
 var popupOpen = false;
 var watchId = null;
@@ -858,7 +859,10 @@ function renderMarkers(){
   shibaCluster.clearLayers();
   bulldogCluster.clearLayers();
   pomeCluster.clearLayers();
-
+if(nearbySpotCircle){
+  map.removeLayer(nearbySpotCircle);
+  nearbySpotCircle = null;
+}
   spotsRaw.forEach(function(s){
     if(currentRadius && userLatLng){
       if(userLatLng.distanceTo([s.lat,s.lng])>currentRadius) return;
@@ -886,6 +890,25 @@ function renderMarkers(){
       if(other===s) return false;
       return L.latLng(s.lat,s.lng).distanceTo([other.lat,other.lng])<12;
     });
+    // 👇30mガイド円（35m以内で表示）
+if(userLatLng && !isFound){
+  var dist = userLatLng.distanceTo([s.lat, s.lng]);
+
+  if(dist <= 35){
+    if(nearbySpotCircle){
+      map.removeLayer(nearbySpotCircle);
+    }
+
+    nearbySpotCircle = L.circle([s.lat, s.lng], {
+      radius: 30,
+      color: "#00cc66",
+      weight: 2,
+      fillColor: "#00cc66",
+      fillOpacity: 0.08,
+      interactive: false
+    }).addTo(map);
+  }
+}
     if(nearby.length>0){
       var offsets = {nky:[0,0],bul:[0,0.00006],pom:[0,-0.00006]};
       var off = offsets[s.type]||[0,0];
