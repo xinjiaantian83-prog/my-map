@@ -148,7 +148,7 @@ button:active{transform:scale(0.95);}
 
 @keyframes markerBounce {
   0% { transform: translateY(0); }
-  8% { transform: translateY(-6px); }
+  8% { transform: translateY(-10px); }
   16% { transform: translateY(0); }
 
   100% { transform: translateY(0); }
@@ -913,11 +913,11 @@ if(userLatLng && !isFound){
       map.removeLayer(nearbySpotCircle);
     }
 
-    nearbySpotCircle = L.circle([s.lat, s.lng], {
+   nearbySpotCircle = L.circle([displayLat, displayLng], {
       radius: 30,
-      color: "#00cc66",
+    color: "#ff9900",
       weight: 2,
-      fillColor: "#00cc66",
+     fillColor: "#ff9900",
       fillOpacity: 0.08,
       interactive: false
     }).addTo(map);
