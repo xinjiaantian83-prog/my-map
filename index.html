@@ -142,7 +142,7 @@ button:active{transform:scale(0.95);}
 .shake {
   animation: shakeLight 0.25s ease;
 }
-  .marker-bounce img {
+ img.marker-bounce {
   animation: markerBounce 2.2s ease-in-out infinite;
 }
 
@@ -900,38 +900,43 @@ if(nearbySpotCircle){
     }
 
     var displayLat = s.lat, displayLng = s.lng;
-    var nearby = spotsRaw.filter(function(other){
-      if(other===s) return false;
-      return L.latLng(s.lat,s.lng).distanceTo([other.lat,other.lng])<12;
-    });
-    // 👇30mガイド円（35m以内で表示）
+var nearby = spotsRaw.filter(function(other){
+  if(other===s) return false;
+  return L.latLng(s.lat,s.lng).distanceTo([other.lat,other.lng]) < 12;
+});
+
+// 近くに重なりがある時だけ、通常時は少しずらす
+// ただし35m以内に入った対象は、ずらさない
+if(nearby.length > 0 && !(userLatLng && !isFound && userLatLng.distanceTo([s.lat, s.lng]) <= 35)){
+  var offsets = {nky:[0,0], bul:[0,0.00006], pom:[0,-0.00006]};
+  var off = offsets[s.type] || [0,0];
+  displayLat += off[0];
+  displayLng += off[1];
+}
+
+// 35mガイド円
 if(userLatLng && !isFound){
-var dist = userLatLng.distanceTo([displayLat, displayLng]);
+  var dist = userLatLng.distanceTo([s.lat, s.lng]);
 
   if(dist <= 35){
     if(nearbySpotCircle){
       map.removeLayer(nearbySpotCircle);
     }
 
-   nearbySpotCircle = L.circle([displayLat, displayLng], {
+    nearbySpotCircle = L.circle([displayLat, displayLng], {
       radius: 30,
-    color: "#ff9900",
+      color: "#ff9900",
       weight: 2,
-     fillColor: "#ff9900",
+      fillColor: "#ff9900",
       fillOpacity: 0.08,
       interactive: false
     }).addTo(map);
-   
   }
 }
-    if(nearby.length>0){
-      var offsets = {nky:[0,0],bul:[0,0.00006],pom:[0,-0.00006]};
-      var off = offsets[s.type]||[0,0];
-      displayLat += off[0]; displayLng += off[1];
-    }
 
-    var m = L.marker([displayLat,displayLng],{icon:icon});
-    if(userLatLng && !isFound){
+var m = L.marker([displayLat,displayLng],{icon:icon});
+
+if(userLatLng && !isFound){
   var dist = userLatLng.distanceTo([s.lat, s.lng]);
 
   if(dist <= 35){
