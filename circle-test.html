@@ -39,11 +39,14 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 // ダミー自販機
 var spot = [33.7987, 132.7555];
 
-var icon = L.divIcon({
+
+  var icon = L.divIcon({
   html: '<img src="shiba.png" class="marker-bounce" style="width:40px;">',
   iconSize: [40, 40],
   className: ''
 });
+
+L.marker(spot, { icon: icon }).addTo(map);
 
 L.marker(spot, { icon: icon }).addTo(map);
 // 円（ここだけいじればOK）
