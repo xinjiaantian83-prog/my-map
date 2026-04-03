@@ -100,9 +100,7 @@ body {
   color: #7878c0;
   margin-bottom: 30px;
   letter-spacing: 1px;
-}
-
-/* ドット人間キャラ（CSS描画） */
+  
 .pixel-char {
   display: inline-block;
   margin: 20px auto;
@@ -485,23 +483,24 @@ const CANVAS_H = 480;
 
 // ===== ゲーム状態 =====
 let state = {
-  phase: 'title',   // title / walk / board / falling / ladder / result
+  phase: 'title',
   playerX: 160,
   playerY: 300,
-  playerDir: 1,     // 1=右向き, -1=左向き
-  playerAnim: 0,    // 歩きアニメフレーム
-  safeIndex: 0,     // 安全な板のインデックス (0,1,2)
-  boards: [],       // 板オブジェクト配列
-  targetBoardIdx: -1, // 今乗ろうとしている板のインデックス
+  playerDir: 1,
+  playerAnim: 0,
+  safeIndex: 0,
+  boards: [],
+  targetBoardIdx: -1,
   fallingY: 0,
   fallSpeed: 0,
   boardCrackFrame: 0,
   keys: { left: false, right: false },
+  trapStep: 0,
   playCount: 0,
   successCount: 0,
   frameCount: 0,
   canMove: true,
-  chosenLadder: null, // YES/NOの選択
+  chosenLadder: null,
 };
 
 // ===== キャンバス取得 =====
@@ -636,9 +635,12 @@ function drawPixelChar(ctx, x, y, dir, animFrame, variant) {
 
 // ===== 板の初期化 =====
 function initBoards() {
-  if (state.stage === 1) {
-    state.safeIndex = 1; // 真ん中固定
+
+  if (state.trapStep === 0) {
+    // 1回目は必ず安全（中央にしておくのが分かりやすい）
+    state.safeIndex = 1;
   } else {
+    // 2回目以降はランダム
     state.safeIndex = Math.floor(Math.random() * 3);
   }
 
@@ -988,7 +990,7 @@ function onSafeBoard() {
 // ===== 「次の板」への誘導（2回目は必ず落ちる） =====
 function proceedToNextTrap() {
 
-  state.stage++; // ←追加
+  state.trapStep++; // ←これに変更
 
   // 板をリセット
   state.boards.forEach(b => {
@@ -1243,20 +1245,21 @@ function startGame() {
   canvas.height = CANVAS_H;
 
   // 状態リセット
-  state.phase = 'walk';
-  state.playerX = 10;
-  state.playerY = 274;
-  state.playerDir = 1;
-  state.playerAnim = 0;
-  state.fallingY = 0;
-  state.fallSpeed = 0;
-  state.frameCount = 0;
-  state.canMove = true;
-  state.targetBoardIdx = -1;
-  state.keys = { left: false, right: false };
+ state.phase = 'walk';
+state.trapStep = 0; // ←これ追加
+state.playerX = 10;
+state.playerY = 274;
+state.playerDir = 1;
+state.playerAnim = 0;
+state.fallingY = 0;
+state.fallSpeed = 0;
+state.frameCount = 0;
+state.canMove = true;
+state.targetBoardIdx = -1;
+state.keys = { left: false, right: false };
 
-  initBoards();
- updateStatusMsg('左右で板まで移動しろ！');
+initBoards();
+updateStatusMsg('左右で板まで移動しろ！');
 
   // メインループ開始
   requestAnimationFrame(gameLoop);
