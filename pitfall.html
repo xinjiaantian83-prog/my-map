@@ -2,333 +2,322 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>落とし穴からの脱出</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+
 <style>
 *{
   box-sizing:border-box;
+  -webkit-tap-highlight-color: transparent;
 }
+
 body{
   margin:0;
   background:#111;
   color:#fff;
-  font-family:"Arial",sans-serif;
+  font-family:'DotGothic16', sans-serif;
   overflow:hidden;
 }
+
 .screen{
   display:none;
   width:100vw;
   height:100vh;
   position:relative;
+  padding:16px;
 }
+
 .screen.active{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:20px;
 }
-h1,h2,p{
-  margin:0;
-}
+
 .title{
-  font-size:42px;
-  font-weight:900;
-  line-height:1.25;
-  margin-bottom:18px;
+  font-size:34px;
+  line-height:1.4;
+  margin-bottom:12px;
   text-shadow:3px 3px 0 #000;
 }
+
 .sub{
-  font-size:20px;
+  font-size:18px;
   color:#ddd;
-  margin-bottom:24px;
+  margin-bottom:18px;
+  line-height:1.6;
 }
+
 .btn{
+  font-family:'DotGothic16', sans-serif;
   background:#1a1a1a;
   color:#fff;
   border:4px solid #fff;
-  padding:16px 28px;
-  font-size:28px;
-  font-weight:900;
-  border-radius:0;
-  box-shadow:6px 6px 0 #000;
+  padding:14px 24px;
+  font-size:24px;
   cursor:pointer;
+  box-shadow:5px 5px 0 #000;
 }
+
 .btn:active{
-  transform:translate(4px,4px);
+  transform:translate(3px,3px);
   box-shadow:2px 2px 0 #000;
 }
+
 .ground{
   position:absolute;
-  bottom:0;
   left:0;
+  bottom:0;
   width:100%;
-  height:34%;
+  height:38%;
   background:
     repeating-linear-gradient(
       90deg,
-      #5b3a1a 0 28px,
-      #6a4420 28px 56px
+      #5c3b1a 0 24px,
+      #6d4720 24px 48px
     );
-  border-top:6px solid #2a1808;
+  border-top:6px solid #2d1a0c;
 }
-.runner{
+
+.holes{
   position:absolute;
   left:50%;
-  bottom:34%;
+  bottom:18%;
   transform:translateX(-50%);
-  font-size:72px;
+  width:min(92vw, 430px);
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
   z-index:2;
 }
-.warning{
-  position:absolute;
-  top:60px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:22px;
-  font-weight:900;
-  color:#ffdf6b;
-  text-shadow:2px 2px 0 #000;
-}
-.pit{
-  position:absolute;
-  left:50%;
-  bottom:21%;
-  transform:translateX(-50%);
-  width:210px;
-  height:90px;
-  background:#000;
-  border:5px solid #333;
-  border-radius:50%;
-  box-shadow:inset 0 12px 20px rgba(255,255,255,0.08);
-}
-.pit-label{
-  position:absolute;
-  left:50%;
-  bottom:14%;
-  transform:translateX(-50%);
-  font-size:18px;
-  color:#aaa;
-}
-.fall-char{
-  position:absolute;
-  left:50%;
-  top:22%;
-  transform:translateX(-50%);
-  font-size:72px;
-  animation:drop 1s ease-in forwards;
-}
-@keyframes drop{
-  0%{ top:22%; opacity:1; transform:translateX(-50%) scale(1) rotate(0deg); }
-  100%{ top:68%; opacity:1; transform:translateX(-50%) scale(0.45) rotate(24deg); }
-}
-.fall-text{
-  position:absolute;
-  top:12%;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:38px;
-  font-weight:900;
-  text-shadow:3px 3px 0 #000;
-}
-.impact{
-  position:absolute;
-  bottom:20%;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:42px;
-  font-weight:900;
-  color:#ff5252;
-  text-shadow:3px 3px 0 #000;
-  animation:impactPop 0.35s infinite alternate;
-}
-@keyframes impactPop{
-  from{ transform:translateX(-50%) scale(1); }
-  to{ transform:translateX(-50%) scale(1.08); }
-}
-.ladder-wrap{
-  position:absolute;
-  left:50%;
-  bottom:27%;
-  transform:translateX(-50%);
-  width:120px;
-  height:210px;
-}
-.ladder{
-  position:absolute;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:90px;
-  height:190px;
-}
-.side{
-  position:absolute;
-  top:0;
-  width:10px;
-  height:100%;
-  background:#d8b37a;
-  border:2px solid #8b5a2b;
-}
-.side.left{ left:12px; }
-.side.right{ right:12px; }
-.step{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  width:66px;
-  height:10px;
-  background:#d8b37a;
-  border:2px solid #8b5a2b;
-}
-.fake{
-  position:absolute;
-  top:-28px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:18px;
-  color:#ffdf6b;
-  font-weight:900;
-}
-.choice-title{
-  font-size:38px;
-  font-weight:900;
-  margin-bottom:18px;
-  text-shadow:3px 3px 0 #000;
-}
-.choice-sub{
-  font-size:20px;
-  color:#ddd;
-  margin-bottom:26px;
-}
-.choice-buttons{
+
+.hole-wrap{
+  width:30%;
   display:flex;
-  gap:14px;
-  flex-wrap:wrap;
-  justify-content:center;
+  flex-direction:column;
+  align-items:center;
 }
+
+.hole-btn{
+  font-family:'DotGothic16', sans-serif;
+  width:100%;
+  max-width:110px;
+  background:#1a1a1a;
+  color:#fff;
+  border:3px solid #fff;
+  padding:8px 0;
+  font-size:22px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.hole{
+  width:100%;
+  height:64px;
+  background:#000;
+  border:4px solid #333;
+  border-radius:50%;
+  box-shadow:inset 0 10px 16px rgba(255,255,255,0.06);
+}
+
+.runner{
+  position:absolute;
+  top:20%;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:68px;
+  z-index:3;
+  transition:left 0.45s ease, top 0.45s ease, transform 0.45s ease, opacity 0.45s ease;
+}
+
+.runner.fall{
+  top:64%;
+  transform:translateX(-50%) scale(0.35) rotate(18deg);
+}
+
+.runner.escape{
+  top:10%;
+  transform:translateX(-50%) scale(1.15);
+}
+
+.flash{
+  animation:flash 0.18s 4 alternate;
+}
+@keyframes flash{
+  from{ opacity:1; }
+  to{ opacity:0.2; }
+}
+
+.label-row{
+  position:absolute;
+  left:50%;
+  bottom:8%;
+  transform:translateX(-50%);
+  width:min(92vw, 430px);
+  display:flex;
+  justify-content:space-between;
+  color:#aaa;
+  font-size:14px;
+}
+
 .result-box{
+  width:min(92vw, 420px);
   background:#000;
   border:4px solid #fff;
-  padding:28px 20px;
-  width:min(90vw,420px);
-  box-shadow:8px 8px 0 #333;
+  padding:24px 16px;
+  box-shadow:7px 7px 0 #333;
 }
+
 .result-main{
-  font-size:40px;
-  font-weight:900;
+  font-size:32px;
+  line-height:1.5;
   margin-bottom:14px;
-  line-height:1.35;
   white-space:pre-line;
 }
+
 .result-sub{
-  font-size:22px;
+  font-size:20px;
+  line-height:1.6;
   color:#ddd;
-  margin-bottom:22px;
+  margin-bottom:18px;
   white-space:pre-line;
 }
-.retry{
-  margin-top:18px;
-}
-.small-note{
+
+.note{
   position:absolute;
-  bottom:18px;
+  bottom:16px;
   left:50%;
   transform:translateX(-50%);
   font-size:14px;
   color:#888;
+  width:90%;
+}
+
+.top-banner{
+  position:absolute;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:15px;
+  color:#ffdf6b;
+  text-shadow:2px 2px 0 #000;
+}
+
+@media (max-width:420px){
+  .title{
+    font-size:28px;
+  }
+  .sub{
+    font-size:16px;
+  }
+  .btn{
+    font-size:20px;
+    padding:12px 18px;
+  }
+  .result-main{
+    font-size:28px;
+  }
 }
 </style>
 </head>
 <body>
 
 <div id="startScreen" class="screen active">
-  <div class="warning">RETRO TRAP GAME</div>
+  <div class="top-banner">MINNA NO KUSOGE 001</div>
   <div class="title">落とし穴からの脱出</div>
-  <div class="sub">前に進め</div>
+  <div class="sub">3つの穴がある。<br>1つだけ助かる。</div>
+
+  <button class="btn" onclick="startGame()">スタート</button>
+  <div class="note">※ 見た目で判断しても、たぶん無駄です</div>
+</div>
+
+<div id="gameScreen" class="screen">
+  <div class="top-banner">穴を えらべ！</div>
+  <div class="title" style="font-size:26px;margin-bottom:8px;">どの穴にする？</div>
+  <div class="sub" style="margin-bottom:0;">1つだけ当たり</div>
+
+  <div id="runner" class="runner">🐶</div>
 
   <div class="ground"></div>
-  <div class="pit"></div>
-  <div class="pit-label">あからさまな穴</div>
-  <div class="runner">🐶</div>
 
-  <button class="btn" style="position:relative;z-index:3;" onclick="startFall()">進む</button>
-  <div class="small-note">※たまに勝てます</div>
-</div>
-
-<div id="fallScreen" class="screen">
-  <div class="fall-text">ヒューン…</div>
-  <div class="fall-char">🐶</div>
-  <div class="pit"></div>
-  <div class="impact">ドン！！</div>
-  <div class="small-note">ワン！</div>
-</div>
-
-<div id="choiceScreen" class="screen">
-  <div class="choice-title">ハシゴがある！</div>
-  <div class="choice-sub">どうする？</div>
-
-  <div class="ladder-wrap">
-    <div class="fake">たぶん助かる</div>
-    <div class="ladder">
-      <div class="side left"></div>
-      <div class="side right"></div>
-      <div class="step" style="top:20px;"></div>
-      <div class="step" style="top:50px;"></div>
-      <div class="step" style="top:80px;"></div>
-      <div class="step" style="top:110px;"></div>
-      <div class="step" style="top:140px;"></div>
+  <div class="holes">
+    <div class="hole-wrap">
+      <button class="hole-btn" onclick="chooseHole(0)">①</button>
+      <div class="hole"></div>
+    </div>
+    <div class="hole-wrap">
+      <button class="hole-btn" onclick="chooseHole(1)">②</button>
+      <div class="hole"></div>
+    </div>
+    <div class="hole-wrap">
+      <button class="hole-btn" onclick="chooseHole(2)">③</button>
+      <div class="hole"></div>
     </div>
   </div>
 
-  <div class="choice-buttons" style="margin-top:250px;">
-    <button class="btn" onclick="judge('yes')">YES</button>
-    <button class="btn" onclick="judge('no')">NO</button>
+  <div class="label-row">
+    <div>あな1</div>
+    <div>あな2</div>
+    <div>あな3</div>
   </div>
+
+  <div class="note">あきらかに全部あぶない</div>
 </div>
 
 <div id="resultScreen" class="screen">
   <div class="result-box">
     <div id="resultMain" class="result-main"></div>
     <div id="resultSub" class="result-sub"></div>
-    <button class="btn retry" onclick="location.reload()">もう一回</button>
+    <button class="btn" onclick="location.reload()">もう一回</button>
   </div>
 </div>
 
 <script>
+let safeHole = 0;
+let locked = false;
+
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function startFall(){
-  showScreen('fallScreen');
-  setTimeout(()=>{
-    showScreen('choiceScreen');
-  },1400);
+function startGame(){
+  safeHole = Math.floor(Math.random() * 3);
+  locked = false;
+  showScreen('gameScreen');
 }
 
-function judge(choice){
-  showScreen('resultScreen');
+function chooseHole(index){
+  if(locked) return;
+  locked = true;
 
-  const win = Math.random() < 0.33;
-  const resultMain = document.getElementById('resultMain');
-  const resultSub = document.getElementById('resultSub');
+  const runner = document.getElementById('runner');
+  const lefts = ['20%', '50%', '80%'];
+  runner.style.left = lefts[index];
 
-  if(win){
-    resultMain.textContent = '…あれ？登れた！？';
-    resultSub.textContent = 'YOU WIN！🎉';
-    return;
-  }
-
-  if(choice === 'yes'){
-    resultMain.textContent = 'そんなもんあるか笑笑';
-    resultSub.textContent = 'GAME OVER';
-  }else{
-    resultMain.textContent = '諦めるなや笑';
-    resultSub.textContent = 'GAME OVER';
-  }
+  setTimeout(() => {
+    if(index === safeHole){
+      runner.classList.add('escape');
+      setTimeout(() => {
+        showScreen('resultScreen');
+        document.getElementById('resultMain').textContent = '…あれ？\n助かった！？';
+        document.getElementById('resultSub').textContent = 'YOU WIN！🎉';
+      }, 500);
+    } else {
+      runner.classList.add('fall');
+      runner.classList.add('flash');
+      setTimeout(() => {
+        showScreen('resultScreen');
+        document.getElementById('resultMain').textContent = 'ヒューン…\nドン！！';
+        document.getElementById('resultSub').textContent = 'そんなもんあるか笑\nGAME OVER';
+      }, 500);
+    }
+  }, 250);
 }
 </script>
 
