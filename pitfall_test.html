@@ -667,6 +667,27 @@ function onBoardHit(idx) {
 }
 
 function onSafeBoard() {
+  function onSafeBoard() {
+
+  state.successCount = (state.successCount || 0) + 1;
+
+  if(state.successCount >= 3){
+    showOverlay(
+      'ゴール！！',
+      '渡りきった！！\nコーラがあるぞ！',
+      [{
+        label: '飲む',
+        cls: 'btn btn-primary',
+        action: () => {
+          hideOverlay();
+          showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
+        }
+      }]
+    );
+    return;
+  }
+
+  const lines = [
   const lines = [
     'あれ？\n割れない…？\nもしかして…',
     'ん？\n大丈夫か？\nいけそう！',
