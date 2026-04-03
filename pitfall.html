@@ -636,13 +636,18 @@ function drawPixelChar(ctx, x, y, dir, animFrame, variant) {
 
 // ===== 板の初期化 =====
 function initBoards() {
-  // 3枚の板を等間隔に配置
-  state.safeIndex = Math.floor(Math.random() * 3);
+  if (state.stage === 1) {
+    state.safeIndex = 1; // 真ん中固定
+  } else {
+    state.safeIndex = Math.floor(Math.random() * 3);
+  }
+
   state.boards = [
     { x: 50,  y: 320, w: 80, h: 18, crackLevel: 0, broken: false, safe: false },
     { x: 145, y: 320, w: 80, h: 18, crackLevel: 0, broken: false, safe: false },
     { x: 240, y: 320, w: 80, h: 18, crackLevel: 0, broken: false, safe: false },
   ];
+
   state.boards[state.safeIndex].safe = true;
 }
 
@@ -982,15 +987,26 @@ function onSafeBoard() {
 
 // ===== 「次の板」への誘導（2回目は必ず落ちる） =====
 function proceedToNextTrap() {
-  // 板を再配置（今度は全部危険に）
+
+  state.stage++; // ←追加
+
+  // 板をリセット
   state.boards.forEach(b => {
     b.crackLevel = 0;
     b.broken = false;
-    b.safe = false; // 今度は全部危険
+    b.safe = false;
   });
-  // ランダムに1つだけ安全にする（でも実は全部危険にして前回と逆の位置）
-  // クソゲー的に：今度は違う板
-  const newSafe = (state.safeIndex + 1 + Math.floor(Math.random() * 2)) % 3;
+
+  let newSafe;
+
+  if (state.stage === 2) {
+    // 2回目は「さっきと違う位置」にして裏切る
+    newSafe = (state.safeIndex + 1) % 3;
+  } else {
+    // 3回目以降は完全ランダム
+    newSafe = Math.floor(Math.random() * 3);
+  }
+
   state.boards[newSafe].safe = true;
   state.safeIndex = newSafe;
 
