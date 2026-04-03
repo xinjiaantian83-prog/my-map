@@ -666,21 +666,23 @@ function onBoardHit(idx) {
 
   state.successCount = (state.successCount || 0) + 1;
 
-  if(state.successCount >= 3){
-    showOverlay(
-      'ゴール！！',
-      '渡りきった！！\nコーラがあるぞ！',
-      [{
-        label: '飲む',
-        cls: 'btn btn-primary',
-        action: () => {
-          hideOverlay();
-          showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
-        }
-      }]
-    );
-    return;
-  }
+ if(state.playerX > 300){
+  showOverlay(
+    'ゴール！！',
+    '渡りきった！！\nコーラがあるぞ！',
+    [{
+      label: '飲む',
+      cls: 'btn btn-primary',
+      action: () => {
+        hideOverlay();
+        showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
+      }
+    }]
+  );
+
+  state.phase = 'event';
+}
+     
 
   const lines = [
     'あれ？\n割れない…？\nもしかして…',
