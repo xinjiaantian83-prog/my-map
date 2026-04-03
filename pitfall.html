@@ -684,7 +684,7 @@ function updatePlayer(){
 }
 
 function onBoardHit(idx){
-  if(state.boards[idx].safe) onSafeBoard(); else onDangerBoard(idx);
+  onSafeBoard();
 }
 
 function onDangerBoard(idx){
