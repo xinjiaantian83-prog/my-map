@@ -637,11 +637,7 @@ function drawPixelChar(ctx, x, y, dir, animFrame, variant) {
 // ===== 板の初期化 =====
 function initBoards() {
 
-  if (state.trapStep === 0) {
-    // 1回目は必ず安全（中央にしておくのが分かりやすい）
-    state.safeIndex = 0;
-  } else {
-    // 2回目以降はランダム
+ 
     state.safeIndex = Math.floor(Math.random() * 3);
   }
 
@@ -1247,7 +1243,7 @@ function startGame() {
   // 状態リセット
  state.phase = 'walk';
 state.trapStep = 0; // ←これ追加
-state.playerX = 90;
+state.playerX = 20;
 state.playerY = 274;
 state.playerDir = 1;
 state.playerAnim = 0;
