@@ -649,16 +649,28 @@ function renderGame() {
 /* ================================================
    板衝突チェック（中央25〜75%のみ）
    ================================================ */
-function checkBoardCollision(){
-  const px=state.playerX+12, py=state.playerY+46;
-  for(let i=0;i<state.boards.length;i++){
-    const b=state.boards[i];
-    if(b.broken) continue;
-    if(px>=b.x+b.w*0.25&&px<=b.x+b.w*0.75&&py>=b.y-4&&py<=b.y+b.h) return i;
+function checkBoardCollision() {
+  const px = state.playerX + 12;
+  const py = state.playerY + 46;
+
+  for (let i = 0; i < state.boards.length; i++) {
+    const b = state.boards[i];
+    if (b.broken) continue;
+
+    const triggerLeft = b.x + b.w * 0.4;
+    const triggerRight = b.x + b.w * 0.6;
+
+    if (
+      px >= triggerLeft &&
+      px <= triggerRight &&
+      py >= b.y - 4 &&
+      py <= b.y + b.h
+    ) {
+      return i;
+    }
   }
   return -1;
 }
-
 /* ================================================
    プレイヤー更新
    ================================================ */
