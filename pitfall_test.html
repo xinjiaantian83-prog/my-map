@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>落とし穴からの脱出</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  font-family:'Courier New',monospace;
+}
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+#game{
+  position:relative;
+  width:100vw;
+  max-width:420px;
+  height:100dvh;
+  overflow:hidden;
+  background:#0a0a16;
+  color:#e8e8d0;
+  border-left:2px solid #3a3a5c;
+  border-right:2px solid #3a3a5c;
+}
+#game::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+  );
+  z-index:99;
+}
+.screen{
+  position:absolute;
+  inset:0;
+}
+.hidden{display:none;}
+/* title */
+#titleScreen{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:24px;
+  text-align:center;
+}
+.title{
+  font-size:24px;
+  line-height:1.4;
+  color:#f8d800;
+  text-shadow:3px 3px 0 #8b7800;
+  margin-bottom:10px;
+}
+.subtitle{
+  font-size:11px;
+  color:#7878c0;
+  margin-bottom:20px;
+  letter-spacing:1px;
+}
+.info{
+  font-size:11px;
+  line-height:1.9;
+  max-width:300px;
+  border:1px solid #3a3a5c;
+  padding:12px;
+  background:rgba(255,255,255,0.03);
+  margin-bottom:20px;
+  white-space:pre-line;
+}
+.btn{
+  border:none;
+  font-family:inherit;
+  font-weight:bold;
+  letter-spacing:2px;
+  cursor:pointer;
+  color:#fff;
+  padding:14px 24px;
+}
+.btn-main{
+  background:#e02020;
+  box-shadow:4px 4px 0 #800000,-2px -2px 0 #ff6060;
+}
+.btn-main:active{
+  transform:translate(2px,2px);
+  box-shadow:2px 2px 0 #800000;
+}
+/* play */
+#playScreen{
+  background:#0a0a16;
+}
+#statusBar{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:42px;
+  background:#0d0d22;
+  border-bottom:2px solid #3a3a5c;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  z-index:10;
+  font-size:10px;
+  color:#7878c0;
+}
+#statusMsg{
+  flex:1;
+  text-align:center;
+  color:#f8d800;
+  font-size:11px;
+}
+#scene{
+  position:absolute;
+  top:42px;
+  bottom:110px;
+  left:0;right:0;
+}
+#controls{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:calc(110px + env(safe-area-inset-bottom));
+  padding:12px 16px calc(16px + env(safe-area-inset-bottom));
+  background:#0a0a18;
+  border-top:2px solid #3a3a5c;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  z-index:10;
+}
+.ctrl{
+  width:88px;
+  height:64px;
+  border:3px solid #4a4a80;
+  background:#1a1a40;
+  color:#fff;
+  font-size:28px;
+  font-weight:bold;
+  box-shadow:4px 4px 0 #000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  user-select:none;
+}
+.ctrl:active,.ctrl.pressed{
+  transform:translate(3px,3px);
+  box-shadow:1px 1px 0 #000;
+  background:#2a2a60;
+}
+#ctrlCenter{
+  flex:1;
+  text-align:center;
+  font-size:9px;
+  color:#4a4a70;
+  line-height:1.6;
+}
+#overlay{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  background:rgba(0,0,0,0.88);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  text-align:center;
+}
+#overlay.hidden{display:none;}
+.ovTitle{
+  font-size:20px;
+  color:#f8d800;
+  text-shadow:3px 3px 0 #6b5c00;
+  margin-bottom:16px;
+  line-height:1.5;
+}
+.ovMsg{
+  font-size:12px;
+  line-height:1.9;
+  white-space:pre-line;
+  border:1px solid #4a4a30;
+  background:rgba(255,255,255,0.03);
+  padding:12px;
+  margin-bottom:16px;
+  max-width:300px;
+}
+.row{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.btn-yes{
+  background:#20a020;
+  box-shadow:4px 4px 0 #006000,-2px -2px 0 #60ff60;
+}
+.btn-no{
+  background:#a02020;
+  box-shadow:4px 4px 0 #600000,-2px -2px 0 #ff6060;
+}
+.btn-sub{
+  background:#2828a0;
+  box-shadow:4px 4px 0 #000880,-2px -2px 0 #6060f8;
+}
+.btn-yes:active,.btn-no:active,.btn-sub:active{
+  transform:translate(2px,2px);
+}
+/* result */
+#resultScreen{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:24px;
+}
+.resultTitle{
+  font-size:20px;
+  margin-bottom:16px;
+  line-height:1.5;
+}
+.resultTitle.fail{
+  color:#e04040;
+  text-shadow:3px 3px 0 #600000;
+}
+.resultTitle.success{
+  color:#40e040;
+  text-shadow:3px 3px 0 #006000;
+}
+.resultMsg{
+  font-size:12px;
+  line-height:2;
+  white-space:pre-line;
+  border:1px solid #3a3a5c;
+  background:rgba(255,255,255,0.03);
+  padding:14px;
+  margin-bottom:18px;
+  max-width:300px;
+}
+.resultMeta{
+  font-size:10px;
+  color:#5a5a80;
+  margin-bottom:20px;
+}
+/* scene art */
+.pixel{
+  image-rendering:pixelated;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+.shake{
+  animation:shake .35s ease;
+}
+</style>
+</head>
+<body>
+<div id="game">
+
+  <div id="titleScreen" class="screen">
+    <div class="title">落とし穴からの<br>脱出</div>
+    <div class="subtitle">PITFALL ESCAPE v2.0</div>
+    <div class="info">前方に3つの板がある。
+2つは「落とし穴」だ。
+1つだけ安全な床がある。
+
+でもどれが安全かは分からない。
+踏んでみるしかない。
+
+※ このゲームは理不尽です。</div>
+    <button class="btn btn-main" id="startBtn">PUSH START</button>
+  </div>
+
+  <div id="playScreen" class="screen hidden">
+    <div id="statusBar">
+      <span id="statusLeft">STAGE 1</span>
+      <span id="statusMsg">板まで歩け！</span>
+      <span id="statusRight">HP: ♥</span>
+    </div>
+    <canvas id="scene" width="360" height="480"></canvas>
+
+    <div id="controls">
+      <div class="ctrl" id="leftBtn">◀</div>
+      <div id="ctrlCenter">LEFT / RIGHT<br>で板まで移動</div>
+      <div class="ctrl" id="rightBtn">▶</div>
+    </div>
+
+    <div id="overlay" class="hidden">
+      <div class="ovTitle" id="ovTitle">！！</div>
+      <div class="ovMsg" id="ovMsg"></div>
+      <div class="row" id="ovButtons"></div>
+    </div>
+  </div>
+
+  <div id="resultScreen" class="screen hidden">
+    <div id="resultTitle" class="resultTitle fail">GAME OVER</div>
+    <div id="resultMsg" class="resultMsg"></div>
+    <div id="resultMeta" class="resultMeta"></div>
+    <button class="btn btn-main" id="retryBtn">もう一度</button>
+    <button class="btn btn-sub" id="backTitleBtn" style="margin-top:10px;">タイトルへ</button>
+  </div>
+
+</div>
+
+<script>
+const scene = document.getElementById('scene');
+const ctx = scene.getContext('2d');
+
+const state = {
+  phase: 'title', // title walk board falling event result
+  playerX: 10,
+  playerY: 255,
+  dir: 1,
+  walkFrame: 0,
+  moving: { left:false, right:false },
+  boards: [],
+  safeIndex: 0,
+  stage: 1,
+  progress: 0,
+  fallingDepth: 0,
+  playCount: 0,
+  successCount: 0,
+  eventType: null,
+  choiceLabel: '',
+  canInput: true,
+};
+
+const boardDefs = [
+  { x: 75,  y: 315, w: 70, h: 18 },
+  { x: 155, y: 315, w: 70, h: 18 },
+  { x: 235, y: 315, w: 70, h: 18 },
+];
+
+function makeBoards() {
+  state.safeIndex = Math.floor(Math.random() * 3);
+  state.boards = boardDefs.map((b, i) => ({
+    ...b,
+    safe: i === state.safeIndex,
+    broken: false,
+    crack: 0,
+  }));
+}
+
+function resetGame() {
+  state.phase = 'walk';
+  state.playerX = 10;
+  state.playerY = 255;
+  state.dir = 1;
+  state.walkFrame = 0;
+  state.moving.left = false;
+  state.moving.right = false;
+  state.stage = 1;
+  state.progress = 0;
+  state.fallingDepth = 0;
+  state.eventType = null;
+  state.choiceLabel = '';
+  state.canInput = true;
+  makeBoards();
+  setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
+}
+
+function setStatus(left, msg, right) {
+  document.getElementById('statusLeft').textContent = left;
+  document.getElementById('statusMsg').textContent = msg;
+  document.getElementById('statusRight').textContent = right;
+}
+
+function showScreen(name) {
+  document.getElementById('titleScreen').classList.add('hidden');
+  document.getElementById('playScreen').classList.add('hidden');
+  document.getElementById('resultScreen').classList.add('hidden');
+  document.getElementById(name).classList.remove('hidden');
+}
+
+function showOverlay(title, msg, buttons) {
+  document.getElementById('ovTitle').textContent = title;
+  document.getElementById('ovMsg').textContent = msg;
+  const box = document.getElementById('ovButtons');
+  box.innerHTML = '';
+  buttons.forEach(b => {
+    const el = document.createElement('button');
+    el.className = 'btn ' + b.cls;
+    el.textContent = b.label;
+    el.ontouchstart = function(e){ e.preventDefault(); b.action(); };
+    el.onclick = function(e){ e.preventDefault(); b.action(); };
+    box.appendChild(el);
+  });
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+function hideOverlay() {
+  document.getElementById('overlay').classList.add('hidden');
+}
+
+function drawBackground() {
+  const g = ctx.createLinearGradient(0,0,0,480);
+  g.addColorStop(0,'#0a0a20');
+  g.addColorStop(1,'#1a1a30');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,360,480);
+
+  ctx.fillStyle = '#e8e8c0';
+  [[30,20],[80,50],[150,15],[220,40],[300,25],[340,60],[60,80],[180,70],[270,55],[320,90],[10,100],[130,95]]
+    .forEach(([x,y]) => ctx.fillRect(x,y,2,2));
+
+  ctx.fillStyle = '#2a1e08';
+  ctx.fillRect(0,260,36,58);
+  ctx.fillRect(324,260,36,58);
+
+  ctx.fillStyle = '#3a2a10';
+  ctx.fillRect(0,305,360,10);
+  ctx.fillStyle = '#2a1a08';
+  ctx.fillRect(0,315,360,165);
+
+  ctx.fillStyle = '#4a3a18';
+  for(let x=0;x<360;x+=16) ctx.fillRect(x,308,8,4);
+  for(let x=8;x<360;x+=16) ctx.fillRect(x,316,8,4);
+
+  ctx.fillStyle = '#5a4a20';
+  ctx.fillRect(0,315,40,165);
+  ctx.fillRect(320,315,40,165);
+}
+
+function drawHoleBackground() {
+  ctx.fillStyle = '#050508';
+  ctx.fillRect(0,0,360,480);
+
+  ctx.fillStyle = '#1a1008';
+  for(let y=0;y<480;y+=24){
+    for(let x=(y%48===0?0:12);x<360;x+=24){
+      ctx.fillRect(x,y,10,10);
+    }
+  }
+
+  const g = ctx.createLinearGradient(180,0,180,220);
+  g.addColorStop(0,'rgba(100,100,60,0.3)');
+  g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.moveTo(125,0);
+  ctx.lineTo(235,0);
+  ctx.lineTo(280,220);
+  ctx.lineTo(80,220);
+  ctx.closePath();
+  ctx.fill();
+
+  if(state.fallingDepth > 20){
+    ctx.fillStyle = '#4a3a20';
+    ctx.font = '10px Courier New';
+    ctx.fillText('深さ: ' + Math.floor(state.fallingDepth) + 'm...', 10, 20);
+  }
+}
+
+function drawBoard(b) {
+  if (b.broken) return;
+  const wood = ['#8b5e3c','#7a5030','#6a4020'][Math.min(b.crack,2)];
+  const grain = ['#6b4020','#5a3010','#4a2010'][Math.min(b.crack,2)];
+
+  ctx.fillStyle = 'rgba(0,0,0,0.5)';
+  ctx.fillRect(b.x+3,b.y+3,b.w,b.h);
+
+  ctx.fillStyle = wood;
+  ctx.fillRect(b.x,b.y,b.w,b.h);
+
+  ctx.fillStyle = grain;
+  for(let i=0;i<4;i++) ctx.fillRect(b.x+4+i*16,b.y+2,2,b.h-4);
+
+  ctx.strokeStyle = '#4a2800';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(b.x,b.y,b.w,b.h);
+
+  if(b.crack >= 1){
+    ctx.strokeStyle = '#1a0800';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(b.x+b.w*0.3,b.y);
+    ctx.lineTo(b.x+b.w*0.4,b.y+b.h);
+    ctx.stroke();
+  }
+  if(b.crack >= 2){
+    ctx.beginPath();
+    ctx.moveTo(b.x+b.w*0.6,b.y);
+    ctx.lineTo(b.x+b.w*0.5,b.y+b.h);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#a08060';
+  ctx.font = '9px Courier New';
+  ctx.fillText('[板' + (state.boards.indexOf(b)+1) + ']', b.x+18, b.y-6);
+}
+
+function drawPixelChar(x,y,dir,variant='normal') {
+  const s = 3;
+  const colors = ['', '#f5c48a', '#3a1a00', '#2060e0', '#1a1a8a', '#202020', '#ffffff', '#e04040'];
+
+  const walkA = [
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,6,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [0,0,3,3,3,0,0,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,0,4,4,4,0,0,0],
+    [0,0,4,4,4,0,0,0],[0,5,0,0,0,5,0,0],[0,5,0,0,0,5,0,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+  ];
+  const walkB = [
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,6,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [0,0,3,3,3,0,0,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,0,4,0,4,0,0,0],
+    [0,4,0,0,0,4,0,0],[5,0,0,0,0,0,5,0],[5,0,0,0,0,0,5,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+  ];
+  const fall = [
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,7,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [3,0,3,3,3,0,3,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,4,0,4,0,4,0,0],
+    [4,0,0,0,0,0,4,0],[5,0,0,0,0,0,5,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
+  ];
+
+  const px = variant === 'fall' ? fall : ((Math.floor(state.walkFrame/8)%2===0)?walkA:walkB);
+
+  ctx.save();
+  ctx.translate(x,y);
+  if(dir < 0){
+    ctx.scale(-1,1);
+    ctx.translate(-8*s,0);
+  }
+
+  for(let r=0;r<16;r++){
+    for(let c=0;c<8;c++){
+      const v = px[r][c];
+      if(!v) continue;
+      ctx.fillStyle = colors[v];
+      ctx.fillRect(c*s,r*s,s,s);
+    }
+  }
+  ctx.restore();
+}
+
+function render() {
+  ctx.clearRect(0,0,360,480);
+
+  if(state.phase === 'falling' || state.phase === 'event'){
+    drawHoleBackground();
+
+    if(state.phase === 'event'){
+      if(state.eventType === 'ladder'){
+        drawLadder();
+      } else if(state.eventType === 'rope'){
+        drawRope();
+      } else if(state.eventType === 'sign'){
+        drawSign();
+      }
+    }
+
+    const y = Math.min(210, 80 + state.fallingDepth * 0.25);
+    drawPixelChar(state.playerX, y, state.dir, 'fall');
+    return;
+  }
+
+  drawBackground();
+  state.boards.forEach(drawBoard);
+  drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
+
+  if(state.phase === 'walk' && state.walkFrame < 90){
+    const a = 0.5 + 0.5 * Math.sin(state.walkFrame * 0.18);
+    ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
+    ctx.font = '11px Courier New';
+    ctx.fillText('▶ 板に乗れ！', state.playerX + 26, state.playerY + 10);
+  }
+}
+
+function drawLadder(){
+  const x = 165, y = 80, h = 320;
+  ctx.fillStyle = '#a0701a';
+  ctx.fillRect(x,y,6,h);
+  ctx.fillRect(x+24,y,6,h);
+  ctx.fillStyle = '#c08020';
+  for(let yy=y+8;yy<y+h;yy+=18) ctx.fillRect(x,yy,30,5);
+  ctx.strokeStyle = '#6b4800';
+  ctx.strokeRect(x,y,30,h);
+}
+
+function drawRope(){
+  const x = 176, y = 0, h = 340;
+  ctx.strokeStyle = '#c8a050';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(x+4,y);
+  for(let yy=y;yy<y+h;yy+=20){
+    ctx.lineTo(x + (yy%40<20?0:8), yy+10);
+    ctx.lineTo(x+4, yy+20);
+  }
+  ctx.stroke();
+}
+
+function drawSign(){
+  const x = 135, y = 120;
+  ctx.fillStyle = '#8b5e3c';
+  ctx.fillRect(x+12,y,6,80);
+  ctx.fillStyle = '#f5d060';
+  ctx.fillRect(x,y,90,40);
+  ctx.strokeStyle = '#8b6000';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x,y,90,40);
+  ctx.fillStyle = '#3a1a00';
+  ctx.font = 'bold 11px Courier New';
+  ctx.fillText('出口 →', x+8, y+16);
+  ctx.font = '9px Courier New';
+  ctx.fillText('(たぶん)', x+18, y+32);
+}
+
+function update() {
+  if(state.phase !== 'walk' || !state.canInput) return;
+
+  const speed = 3;
+  if(state.moving.left){
+    state.playerX = Math.max(8, state.playerX - speed);
+    state.dir = -1;
+    state.walkFrame++;
+  }
+  if(state.moving.right){
+    state.playerX = Math.min(326, state.playerX + speed);
+    state.dir = 1;
+    state.walkFrame++;
+  }
+
+  const hit = checkBoardCollision();
+  if(hit !== -1){
+    state.canInput = false;
+    onBoardHit(hit);
+  }
+}
+
+function checkBoardCollision() {
+  const px = state.playerX + 12;
+  const py = state.playerY + 46;
+
+  for(let i=0;i<state.boards.length;i++){
+    const b = state.boards[i];
+    if(b.broken) continue;
+
+    const innerLeft = b.x + b.w * 0.25;
+    const innerRight = b.x + b.w * 0.75;
+
+    if(px >= innerLeft && px <= innerRight && py >= b.y - 4 && py <= b.y + b.h){
+      return i;
+    }
+  }
+  return -1;
+}
+
+function onBoardHit(idx) {
+  if(state.boards[idx].safe){
+    onSafeBoard();
+  } else {
+    onDangerBoard(idx);
+  }
+}
+
+function onSafeBoard() {
+  const lines = [
+    'あれ？\n割れない…？\nもしかして…',
+    'ん？\n大丈夫か？\nいけそう！',
+    'お！\nなんか固い。\n安全かも！',
+    'えっ\n落ちない！\nやるじゃん自分！'
+  ];
+
+  setStatus('STAGE ' + state.stage, '助かった？', 'HP: ♥');
+
+  showOverlay(
+    '助かった！！？',
+    lines[Math.floor(Math.random()*lines.length)] + '\n\nでも前がある…\n次の板は…？',
+    [{
+      label: '次に進む →',
+      cls: 'btn-main',
+      action: () => {
+        hideOverlay();
+        proceedToNextTrap();
+      }
+    }]
+  );
+}
+
+function proceedToNextTrap() {
+  state.progress++;
+  state.stage++;
+
+  if(state.progress >= 3){
+    showFallEvent();
+    return;
+  }
+
+  makeBoards();
+  state.playerX = 90 + state.progress * 35;
+  state.playerY = 255;
+  state.dir = 1;
+  state.phase = 'walk';
+  state.canInput = true;
+  setStatus('STAGE ' + state.stage, '次の板を踏め！', 'HP: ♥');
+}
+
+function onDangerBoard(idx) {
+  const b = state.boards[idx];
+  let n = 0;
+
+  const iv = setInterval(() => {
+    n++;
+    b.crack = n;
+
+    if(n === 1){
+      shakeGame();
+      setStatus('STAGE ' + state.stage, 'ミシ…', 'HP: ♥');
+    } else if(n === 2){
+      shakeGame();
+      setStatus('STAGE ' + state.stage, 'ミシミシ！！', 'HP: ♥');
+    } else if(n === 3){
+      b.broken = true;
+      clearInterval(iv);
+      startFalling();
+    }
+  }, 260);
+}
+
+function startFalling() {
+  state.phase = 'falling';
+  state.fallingDepth = 0;
+  setStatus('STAGE ' + state.stage, '落ちてる！！', 'HP: 0');
+
+  const iv = setInterval(() => {
+    state.fallingDepth += 6;
+    if(state.fallingDepth >= 280){
+      clearInterval(iv);
+      shakeGame();
+      setTimeout(showFallEvent, 400);
+    }
+  }, 30);
+}
+
+function showFallEvent() {
+  state.phase = 'event';
+  const types = ['ladder','rope','sign','nothing'];
+  state.eventType = types[Math.floor(Math.random() * types.length)];
+
+  if(state.eventType === 'ladder'){
+    showOverlay('ハシゴ発見！！','ハシゴがある！\nこれで助かる！\n\nこのハシゴを使いますか？',[
+      { label:'YES', cls:'btn-yes', action:() => resolveEvent(true) },
+      { label:'NO', cls:'btn-no', action:() => resolveEvent(false) }
+    ]);
+  } else if(state.eventType === 'rope'){
+    showOverlay('ロープ発見！！','ロープが垂れている。\n登れそう…？\n\nつかまりますか？',[
+      { label:'つかむ', cls:'btn-yes', action:() => resolveEvent(true) },
+      { label:'やめる', cls:'btn-no', action:() => resolveEvent(false) }
+    ]);
+  } else if(state.eventType === 'sign'){
+    showOverlay('看板発見！！','「出口 →」\nと書いてある。\n\n信じますか？',[
+      { label:'信じる', cls:'btn-yes', action:() => resolveEvent(true) },
+      { label:'信じない', cls:'btn-no', action:() => resolveEvent(false) }
+    ]);
+  } else {
+    showOverlay('何もない…','本当に何もない。\n\nそれでも諦めないか？',[
+      { label:'諦めない', cls:'btn-yes', action:() => resolveEvent(true) },
+      { label:'諦める', cls:'btn-no', action:() => resolveEvent(false) }
+    ]);
+  }
+}
+
+function resolveEvent(yes) {
+  hideOverlay();
+  state.playCount++;
+  state.choiceLabel = yes ? 'YES' : 'NO';
+
+  const ok = Math.random() < 0.35;
+  if(ok){
+    const wins = [
+      'なんとか助かった。\nでも理由はよく分からない。',
+      '奇跡的に脱出した！\n一応クリアでいいだろう。',
+      'なぜか助かった。\nゲームってそういうものだ。'
+    ];
+    showResult(true, 'なんか助かった', wins[Math.floor(Math.random()*wins.length)]);
+  } else {
+    const fails = [
+      'そんなもんあるか笑笑',
+      '期待したお前の負けです。',
+      '助かると思った？\n残念でした。',
+      '仕様です。'
+    ];
+    showResult(false, 'GAME OVER', fails[Math.floor(Math.random()*fails.length)]);
+  }
+}
+
+function showResult(success, title, msg) {
+  state.phase = 'result';
+  if(success) state.successCount++;
+
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultTitle').className = 'resultTitle ' + (success ? 'success' : 'fail');
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultMeta').textContent =
+    'イベント: ' + (state.eventType || '?') +
+    ' | 選択: ' + state.choiceLabel +
+    ' | 挑戦: ' + state.playCount + '回 | 脱出: ' + state.successCount + '回';
+
+  showScreen('resultScreen');
+}
+
+function shakeGame() {
+  const g = document.getElementById('game');
+  g.classList.remove('shake');
+  void g.offsetWidth;
+  g.classList.add('shake');
+  g.addEventListener('animationend', () => g.classList.remove('shake'), { once:true });
+}
+
+function loop() {
+  update();
+  render();
+  requestAnimationFrame(loop);
+}
+
+function bindHoldButton(el, dir) {
+  const press = (e) => {
+    e.preventDefault();
+    state.moving[dir] = true;
+    el.classList.add('pressed');
+  };
+  const release = (e) => {
+    if(e) e.preventDefault();
+    state.moving[dir] = false;
+    el.classList.remove('pressed');
+  };
+
+  el.addEventListener('touchstart', press, { passive:false });
+  el.addEventListener('touchend', release, { passive:false });
+  el.addEventListener('touchcancel', release, { passive:false });
+  el.addEventListener('mousedown', press);
+  el.addEventListener('mouseup', release);
+  el.addEventListener('mouseleave', release);
+}
+
+document.getElementById('startBtn').onclick = () => {
+  resetGame();
+  showScreen('playScreen');
+};
+document.getElementById('retryBtn').onclick = () => {
+  resetGame();
+  showScreen('playScreen');
+};
+document.getElementById('backTitleBtn').onclick = () => {
+  state.phase = 'title';
+  showScreen('titleScreen');
+};
+
+bindHoldButton(document.getElementById('leftBtn'), 'left');
+bindHoldButton(document.getElementById('rightBtn'), 'right');
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowLeft') state.moving.left = true;
+  if(e.key === 'ArrowRight') state.moving.right = true;
+});
+document.addEventListener('keyup', (e) => {
+  if(e.key === 'ArrowLeft') state.moving.left = false;
+  if(e.key === 'ArrowRight') state.moving.right = false;
+});
+
+showScreen('titleScreen');
+loop();
+</script>
+</body>
+</html>
