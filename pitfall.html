@@ -870,7 +870,7 @@ function renderGame() {
 // ===== 板への接触チェック =====
 function checkBoardCollision() {
   const px = state.playerX + 12; // キャラ中心
-  const py = state.playerY + 44; // キャラ足元
+  const py = state.playerY + 46; // キャラ足元
 
   for (let i = 0; i < state.boards.length; i++) {
     const b = state.boards[i];
@@ -1225,8 +1225,8 @@ function startGame() {
 
   // 状態リセット
   state.phase = 'walk';
-  state.playerX = 160;
-  state.playerY = 260;
+  state.playerX = 10;
+  state.playerY = 274;
   state.playerDir = 1;
   state.playerAnim = 0;
   state.fallingY = 0;
@@ -1237,7 +1237,7 @@ function startGame() {
   state.keys = { left: false, right: false };
 
   initBoards();
-  updateStatusMsg('板に乗れ！（2つは危険）');
+ updateStatusMsg('左右で板まで移動しろ！');
 
   // メインループ開始
   requestAnimationFrame(gameLoop);
