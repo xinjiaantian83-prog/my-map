@@ -391,6 +391,7 @@ let state = {
   keys: { left: false, right: false },
   playCount: 0, successCount: 0, frameCount: 0,
   canMove: true, eventType: null, lastChoice: null,
+  testStep: 0,
 };
 
 let canvas, ctx;
@@ -684,7 +685,7 @@ function updatePlayer(){
 }
 
 function onBoardHit(idx){
-  onSafeBoard();
+  proceedToNextTrap();
 }
 
 function onDangerBoard(idx){
@@ -709,6 +710,11 @@ function onSafeBoard(){
 }
 
 function proceedToNextTrap(){
+  state.testStep++;
+  if (state.testStep >= 3) {
+  showFallEvent();
+  return;
+}
   const ns=Math.floor(Math.random()*3);
   state.boards.forEach((b,i)=>{ b.crackLevel=0; b.broken=false; b.safe=(i===ns); });
   state.safeIndex=ns; state.phase='walk'; state.canMove=true;
@@ -894,6 +900,7 @@ function startGame(){
   // キャンバス高さ確定（レイアウト確定後に計算）
   requestAnimationFrame(()=>{ resizeCanvas(); });
   state.phase='walk'; state.playerX=8; state.playerY=268; state.playerDir=1;
+  state.testStep = 0;
   state.fallingY=0; state.fallSpeed=0; state.frameCount=0;
   state.canMove=true; state.eventType=null; state.lastChoice=null;
   state.keys={left:false,right:false};
