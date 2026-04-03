@@ -619,6 +619,7 @@ function drawSign(){
 }
 
 function update() {
+  console.log("X:", state.playerX);
   if(state.phase !== 'walk' || !state.canInput) return;
 
   const speed = 3;
