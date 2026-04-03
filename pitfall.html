@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>落とし穴からの脱出</title>
+
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:monospace;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  text-align:center;
+}
+
+.container{
+  max-width:300px;
+}
+
+button{
+  margin:10px;
+  padding:12px 20px;
+  font-size:16px;
+  background:#111;
+  color:#fff;
+  border:2px solid #fff;
+  cursor:pointer;
+}
+
+button:active{
+  background:#fff;
+  color:#000;
+}
+
+.hidden{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- スタート -->
+  <div id="start">
+    <h1>落とし穴からの脱出</h1>
+    <p>前に進め</p>
+    <button onclick="fall()">進む</button>
+  </div>
+
+  <!-- 落下 -->
+  <div id="fall" class="hidden">
+    <h2>ヒューン…</h2>
+    <p>ドン！！💥</p>
+    <p>🐶 ワン！</p>
+  </div>
+
+  <!-- 選択 -->
+  <div id="choice" class="hidden">
+    <h2>ハシゴがある！</h2>
+    <button onclick="selectYes()">YES</button>
+    <button onclick="selectNo()">NO</button>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result" class="hidden">
+    <h2 id="resultText"></h2>
+    <button onclick="location.reload()">もう一回</button>
+  </div>
+
+</div>
+
+<script>
+
+function fall(){
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("fall").classList.remove("hidden");
+
+  setTimeout(()=>{
+    document.getElementById("fall").classList.add("hidden");
+    document.getElementById("choice").classList.remove("hidden");
+  },1500);
+}
+
+function selectYes(){
+  judge("yes");
+}
+
+function selectNo(){
+  judge("no");
+}
+
+function judge(choice){
+  document.getElementById("choice").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  const win = Math.random() < 0.33;
+
+  if(win){
+    document.getElementById("resultText").innerText = "…あれ？登れた！？😳\nYOU WIN！🎉";
+  }else{
+    if(choice === "yes"){
+      document.getElementById("resultText").innerText = "そんなもんあるか笑笑\nGAME OVER";
+    }else{
+      document.getElementById("resultText").innerText = "諦めるなや笑\nGAME OVER";
+    }
+  }
+}
+
+</script>
+
+</body>
+</html>
