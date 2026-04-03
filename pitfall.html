@@ -857,7 +857,15 @@ function showOverlay(title,msg,buttons){
     const el=document.createElement('button');
     el.textContent=b.label; el.className=b.cls;
     // iOSタップ確実化：touchstartとclickの両方登録
-    el.addEventListener('touchstart',e=>{e.preventDefault();b.action();},{passive:false});
+   el.ontouchstart = function(e){
+  e.preventDefault();
+  b.action();
+};
+
+el.onclick = function(e){
+  e.preventDefault();
+  b.action();
+};
    
     btns.appendChild(el);
   });
