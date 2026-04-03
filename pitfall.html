@@ -144,8 +144,17 @@ canvas { image-rendering: pixelated; display: block; }
 .btn-no:active { box-shadow: 2px 2px 0 #600000; transform: translate(2px,2px); }
 
 /* ===== ゲームプレイ画面 ===== */
-#screen-play { padding: 0; justify-content: flex-start; }
-
+#screen-play {
+  position: absolute;
+  inset: 0;
+}
+  #game-canvas {
+  position: absolute;
+  top: 40px;
+  bottom: 100px;
+  left: 0;
+  width: 100%;
+}
 /* ステータスバー */
 #status-bar {
   width: 100%;
@@ -334,7 +343,7 @@ canvas { image-rendering: pixelated; display: block; }
       <span id="status-hp">HP: &#9829;</span>
     </div>
     <canvas id="game-canvas" width="360" height="480"
-      style="width:100%;flex:1;"></canvas>
+  style="width:100%;"></canvas>
     <div id="ctrl-area">
      
         <div class="ctrl-btn" id="btn-left"
