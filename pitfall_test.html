@@ -659,11 +659,7 @@ function checkBoardCollision() {
 }
 
 function onBoardHit(idx) {
-  if(state.boards[idx].safe){
-    onSafeBoard();
-  } else {
-    onDangerBoard(idx);
-  }
+  onSafeBoard();
 }
 
   function onSafeBoard() {
