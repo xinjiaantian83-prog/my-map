@@ -636,10 +636,7 @@ function drawPixelChar(ctx, x, y, dir, animFrame, variant) {
 
 // ===== 板の初期化 =====
 function initBoards() {
-
- 
-    state.safeIndex = Math.floor(Math.random() * 3);
-  }
+  state.safeIndex = Math.floor(Math.random() * 3);
 
   state.boards = [
     { x: 50,  y: 320, w: 80, h: 18, crackLevel: 0, broken: false, safe: false },
@@ -997,14 +994,10 @@ function proceedToNextTrap() {
   });
 
   let newSafe;
-if (state.trapStep === 1) {
-    // 2回目は「さっきと違う位置」にして裏切る
-    newSafe = (state.safeIndex + 1) % 3;
-  } else {
-    // 3回目以降は完全ランダム
-    newSafe = Math.floor(Math.random() * 3);
-  }
+const newSafe = Math.floor(Math.random() * 3);
 
+state.boards[newSafe].safe = true;
+state.safeIndex = newSafe;
   state.boards[newSafe].safe = true;
   state.safeIndex = newSafe;
 
