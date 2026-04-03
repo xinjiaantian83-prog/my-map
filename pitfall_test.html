@@ -848,13 +848,15 @@ function bindHoldButton(el, dir) {
 }
 
 document.getElementById('startBtn').onclick = () => {
-  resetGame();
   showScreen('playScreen');
+  resetGame();
 };
+
 document.getElementById('retryBtn').onclick = () => {
-  resetGame();
   showScreen('playScreen');
+  resetGame();
 };
+
 document.getElementById('backTitleBtn').onclick = () => {
   state.phase = 'title';
   showScreen('titleScreen');
