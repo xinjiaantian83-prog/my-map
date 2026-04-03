@@ -335,14 +335,24 @@ canvas { image-rendering: pixelated; display: block; }
     <canvas id="game-canvas" width="360" height="480"
       style="width:100%;flex:1;"></canvas>
     <div id="ctrl-area">
-      <div class="ctrl-btn" id="btn-left"
-        ontouchstart="ctrlPress('left')" ontouchend="ctrlRelease('left')"
-        onmousedown="ctrlPress('left')" onmouseup="ctrlRelease('left')">◀</div>
+     
+        <div class="ctrl-btn" id="btn-left"
+  ontouchstart="ctrlPress('left')" 
+  ontouchend="ctrlRelease('left')"
+  onmousedown="ctrlPress('left')" 
+  onmouseup="ctrlRelease('left')"
+  onclick="ctrlPress('left')">
+  ◀
+</div>
       <div id="ctrl-center">LEFT &nbsp;|&nbsp; RIGHT<br>で板まで移動</div>
       <div class="ctrl-btn" id="btn-right"
-        ontouchstart="ctrlPress('right')" ontouchend="ctrlRelease('right')"
-        onmousedown="ctrlPress('right')" onmouseup="ctrlRelease('right')">▶</div>
-    </div>
+  ontouchstart="ctrlPress('right')" 
+  ontouchend="ctrlRelease('right')"
+  onmousedown="ctrlPress('right')" 
+  onmouseup="ctrlRelease('right')"
+  onclick="ctrlPress('right')">
+  ▶
+</div>
   </div>
 
   <!-- ===== オーバーレイ ===== -->
@@ -1140,6 +1150,7 @@ function showResult(survived, title, msg) {
 /* ================================================
    ユーティリティ
    ================================================ */
+  
 function updateStatusMsg(msg) {
   const el = document.getElementById('status-msg');
   if (el) el.textContent = msg;
