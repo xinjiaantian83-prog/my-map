@@ -1,12 +1,15 @@
+すみません、ファイル作成が途中で切れてしまいました。
+
+改めて完全なコードを出力します。
+
 ```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>落とし穴からの脱出</title>
 <style>
-/* ===== リセット & 基本 ===== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -14,48 +17,49 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
-  background: #0a0a0a;
-  color: #e8e8d0;
-  font-family: 'Courier New', Courier, monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+html, body {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  background: #000;
   touch-action: none;
 }
+body {
+  position: fixed;
+  top: 0; left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  font-family: 'Courier New', Courier, monospace;
+  color: #e8e8d0;
+}
 
-/* ===== ゲームコンテナ ===== */
 #game-container {
-  width: 100vw;
+  position: relative;
+  width: 100%;
   max-width: 420px;
   height: 100vh;
-  max-height: 750px;
-  position: relative;
+  height: 100dvh;
   overflow: hidden;
   background: #0a0a16;
-  border: 2px solid #3a3a5c;
+  border-left: 2px solid #3a3a5c;
+  border-right: 2px solid #3a3a5c;
   image-rendering: pixelated;
 }
 
-/* スキャンライン演出 */
 #game-container::after {
   content: '';
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
   );
   pointer-events: none;
   z-index: 100;
 }
 
-/* ===== 各画面 ===== */
 .screen {
   position: absolute;
   inset: 0;
@@ -64,11 +68,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   text-align: center;
 }
 .screen.hidden { display: none; }
 
-/* ===== スタート画面 ===== */
 #screen-title { background: #0a0a16; }
 
 .pixel-title {
@@ -83,24 +87,24 @@ body {
 .pixel-subtitle {
   font-size: 11px;
   color: #7878c0;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   letter-spacing: 1px;
 }
-
-canvas { image-rendering: pixelated; display: block; }
-
+canvas {
+  image-rendering: pixelated;
+  display: block;
+}
 .start-info {
   font-size: 11px;
   color: #a0a080;
   line-height: 1.8;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   max-width: 300px;
   border: 1px solid #3a3a5c;
   padding: 12px;
   background: rgba(255,255,255,0.02);
 }
 
-/* ===== ボタン共通 ===== */
 .btn {
   display: inline-block;
   padding: 14px 28px;
@@ -111,87 +115,93 @@ canvas { image-rendering: pixelated; display: block; }
   cursor: pointer;
   border: none;
   outline: none;
-  image-rendering: pixelated;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: manipulation;
 }
 .btn-primary {
-  background: #e02020;
-  color: #fff;
+  background: #e02020; color: #fff;
   box-shadow: 4px 4px 0 #800000, -2px -2px 0 #ff6060;
   text-transform: uppercase;
 }
 .btn-primary:active { box-shadow: 2px 2px 0 #800000; transform: translate(2px,2px); }
 .btn-secondary {
-  background: #2828a0;
-  color: #fff;
+  background: #2828a0; color: #fff;
   box-shadow: 4px 4px 0 #000880, -2px -2px 0 #6060f8;
 }
 .btn-secondary:active { box-shadow: 2px 2px 0 #000880; transform: translate(2px,2px); }
 .btn-yes {
-  background: #20a020;
-  color: #fff;
+  background: #20a020; color: #fff;
   box-shadow: 4px 4px 0 #006000, -2px -2px 0 #60ff60;
   min-width: 110px;
 }
 .btn-yes:active { box-shadow: 2px 2px 0 #006000; transform: translate(2px,2px); }
 .btn-no {
-  background: #a02020;
-  color: #fff;
+  background: #a02020; color: #fff;
   box-shadow: 4px 4px 0 #600000, -2px -2px 0 #ff6060;
   min-width: 110px;
 }
 .btn-no:active { box-shadow: 2px 2px 0 #600000; transform: translate(2px,2px); }
 
-/* ===== ゲームプレイ画面 ===== */
+/* ===== ゲームプレイ画面 (positionベース) ===== */
 #screen-play {
   position: absolute;
   inset: 0;
+  background: #0a0a16;
 }
-  #game-canvas {
-  position: absolute;
-  top: 40px;
-  bottom: 100px;
-  left: 0;
-  width: 100%;
-}
-/* ステータスバー */
+#screen-play.hidden { display: none; }
+
 #status-bar {
-  width: 100%;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40px;
   background: #0d0d22;
   border-bottom: 2px solid #3a3a5c;
-  padding: 6px 12px;
-  font-size: 10px;
-  color: #7878c0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 12px;
+  font-size: 10px;
+  color: #7878c0;
   letter-spacing: 1px;
+  z-index: 10;
 }
 #status-msg {
   font-size: 11px;
   color: #f8d800;
-  min-height: 14px;
   flex: 1;
   text-align: center;
 }
 
-/* 操作ボタンエリア */
 #ctrl-area {
-  width: 100%;
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: calc(100px + env(safe-area-inset-bottom));
   background: #0a0a18;
   border-top: 2px solid #3a3a5c;
-  padding: 12px 16px calc(20px + env(safe-area-inset-bottom));
-}
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
   gap: 8px;
+  z-index: 10;
 }
+
+#game-canvas {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: block;
+  image-rendering: pixelated;
+  /* bottomはJSで動的にセット */
+}
+
 .ctrl-btn {
   width: 80px;
   height: 60px;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: bold;
   color: #fff;
   background: #1a1a40;
@@ -203,11 +213,13 @@ canvas { image-rendering: pixelated; display: block; }
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: manipulation;
   flex-shrink: 0;
+  -webkit-touch-callout: none;
 }
 .ctrl-btn:active, .ctrl-btn.pressed {
   box-shadow: 1px 1px 0 #000;
-  transform: translate(3px,3px);
+  transform: translate(3px, 3px);
   background: #2a2a60;
 }
 #ctrl-center {
@@ -219,7 +231,6 @@ canvas { image-rendering: pixelated; display: block; }
   letter-spacing: 1px;
 }
 
-/* ===== 演出オーバーレイ ===== */
 #overlay {
   position: absolute;
   inset: 0;
@@ -229,8 +240,9 @@ canvas { image-rendering: pixelated; display: block; }
   align-items: center;
   justify-content: center;
   padding: 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   text-align: center;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.88);
 }
 #overlay.hidden { display: none; }
 .overlay-title {
@@ -261,7 +273,6 @@ canvas { image-rendering: pixelated; display: block; }
   justify-content: center;
 }
 
-/* ===== 結果画面 ===== */
 #screen-result { background: #0a0a16; }
 .result-title {
   font-size: 18px;
@@ -270,13 +281,13 @@ canvas { image-rendering: pixelated; display: block; }
   margin-bottom: 16px;
   line-height: 1.5;
 }
-.result-title.fail  { color: #e04040; text-shadow: 3px 3px 0 #600000; }
+.result-title.fail    { color: #e04040; text-shadow: 3px 3px 0 #600000; }
 .result-title.success { color: #40e040; text-shadow: 3px 3px 0 #006000; }
 .result-msg {
   font-size: 11px;
   color: #c8c8a0;
   line-height: 2;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   max-width: 300px;
   border: 1px solid #3a3a5c;
   padding: 14px;
@@ -290,7 +301,6 @@ canvas { image-rendering: pixelated; display: block; }
   letter-spacing: 1px;
 }
 
-/* ===== シェイク ===== */
 @keyframes shake {
   0%,100% { transform: translateX(0); }
   10%,50%,90% { transform: translateX(-6px); }
@@ -298,7 +308,6 @@ canvas { image-rendering: pixelated; display: block; }
 }
 .shake { animation: shake 0.4s ease; }
 
-/* ===== フラッシュ ===== */
 @keyframes flash-in {
   0% { opacity:0; } 30% { opacity:1; } 70% { opacity:1; } 100% { opacity:0; }
 }
@@ -308,19 +317,17 @@ canvas { image-rendering: pixelated; display: block; }
   z-index: 90; animation: flash-in 0.4s ease forwards;
 }
 
-/* コピーライト */
 .copyright { font-size: 9px; color: #3a3a5c; margin-top: 16px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
 <div id="game-container">
 
-  <!-- ===== スタート画面 ===== -->
   <div id="screen-title" class="screen">
     <div class="pixel-title">落とし穴からの<br>脱出</div>
-    <div class="pixel-subtitle">PITFALL ESCAPE v1.1</div>
+    <div class="pixel-subtitle">PITFALL ESCAPE v1.2</div>
     <canvas id="title-char-canvas" width="48" height="64"
-      style="width:72px;height:96px;margin:16px auto;"></canvas>
+      style="width:72px;height:96px;margin:12px auto;"></canvas>
     <div class="start-info">
       前方に3つの板がある。<br>
       2つは「落とし穴」だ。<br>
@@ -335,44 +342,25 @@ canvas { image-rendering: pixelated; display: block; }
     <div class="copyright">© 2026 PITFALL GAMES INC.</div>
   </div>
 
-  <!-- ===== ゲームプレイ画面 ===== -->
   <div id="screen-play" class="screen hidden">
     <div id="status-bar">
       <span id="status-label">STAGE 1</span>
       <span id="status-msg">板まで歩け！</span>
       <span id="status-hp">HP: &#9829;</span>
     </div>
-    <canvas id="game-canvas" width="360" height="480"
-  style="width:100%;"></canvas>
+    <canvas id="game-canvas" width="360" height="480"></canvas>
     <div id="ctrl-area">
-     
-        <div class="ctrl-btn" id="btn-left"
-  ontouchstart="ctrlPress('left')" 
-  ontouchend="ctrlRelease('left')"
-  onmousedown="ctrlPress('left')" 
-  onmouseup="ctrlRelease('left')"
-  onclick="ctrlPress('left')">
-  ◀
-</div>
+      <div class="ctrl-btn" id="btn-left">◀</div>
       <div id="ctrl-center">LEFT &nbsp;|&nbsp; RIGHT<br>で板まで移動</div>
-      <div class="ctrl-btn" id="btn-right"
-  ontouchstart="ctrlPress('right')" 
-  ontouchend="ctrlRelease('right')"
-  onmousedown="ctrlPress('right')" 
-  onmouseup="ctrlRelease('right')"
-  onclick="ctrlPress('right')">
-  ▶
-</div>
+      <div class="ctrl-btn" id="btn-right">▶</div>
+    </div>
+    <div id="overlay" class="hidden">
+      <div class="overlay-title" id="overlay-title">！！</div>
+      <div class="overlay-msg" id="overlay-msg"></div>
+      <div class="btn-row" id="overlay-btns"></div>
+    </div>
   </div>
 
-  <!-- ===== オーバーレイ ===== -->
-  <div id="overlay" class="hidden">
-    <div class="overlay-title" id="overlay-title">！！</div>
-    <div class="overlay-msg" id="overlay-msg"></div>
-    <div class="btn-row" id="overlay-btns"></div>
-  </div>
-
-  <!-- ===== 結果画面 ===== -->
   <div id="screen-result" class="screen hidden">
     <div class="result-title" id="result-title">GAME OVER</div>
     <canvas id="result-char-canvas" width="48" height="64"
@@ -380,49 +368,72 @@ canvas { image-rendering: pixelated; display: block; }
     <div class="result-msg" id="result-msg"></div>
     <div class="result-score" id="result-score"></div>
     <button class="btn btn-primary" onclick="restartGame()">もう一度</button>
-    <button class="btn btn-secondary" style="margin-top:10px"
-      onclick="goTitle()">タイトルへ</button>
+    <button class="btn btn-secondary" style="margin-top:10px" onclick="goTitle()">タイトルへ</button>
   </div>
 
-</div><!-- /game-container -->
+</div>
 
 <script>
 /* ================================================
-   落とし穴からの脱出 v1.1 - メインスクリプト
+   落とし穴からの脱出 v1.2
    ================================================ */
 
-// ===== キャンバス定数 =====
 const CANVAS_W = 360;
 const CANVAS_H = 480;
 
-// ===== 板の配置定数 =====
 const BOARD_DEFS = [
   { x: 80,  w: 70 },
-  { x: 150, w: 70 },
+  { x: 155, w: 70 },
   { x: 255, w: 70 },
 ];
 
-// ===== ゲーム状態 =====
 let state = {
   phase: 'title',
-  playerX: 0,
-  playerY: 268,
-  playerDir: 1,
-  safeIndex: 0,
-  boards: [],
-  fallingY: 0,
-  fallSpeed: 0,
+  playerX: 8, playerY: 268, playerDir: 1,
+  safeIndex: 0, boards: [],
+  fallingY: 0, fallSpeed: 0,
   keys: { left: false, right: false },
-  playCount: 0,
-  successCount: 0,
-  frameCount: 0,
-  canMove: true,
-  eventType: null,
-  lastChoice: null,
+  playCount: 0, successCount: 0, frameCount: 0,
+  canMove: true, eventType: null, lastChoice: null,
 };
 
-// ===== キャンバス =====
 let canvas, ctx;
+
+/* ================================================
+   タッチ/マウス入力登録（passive:false でiOS対応）
+   ================================================ */
+function setupControls() {
+  const btnL = document.getElementById('btn-left');
+  const btnR = document.getElementById('btn-right');
+
+  btnL.addEventListener('touchstart',  e => { e.preventDefault(); ctrlPress('left');   }, { passive: false });
+  btnL.addEventListener('touchend',    e => { e.preventDefault(); ctrlRelease('left'); }, { passive: false });
+  btnL.addEventListener('touchcancel', e => { e.preventDefault(); ctrlRelease('left'); }, { passive: false });
+  btnL.addEventListener('mousedown',  () => ctrlPress('left'));
+  btnL.addEventListener('mouseup',    () => ctrlRelease('left'));
+  btnL.addEventListener('mouseleave', () => ctrlRelease('left'));
+
+  btnR.addEventListener('touchstart',  e => { e.preventDefault(); ctrlPress('right');   }, { passive: false });
+  btnR.addEventListener('touchend',    e => { e.preventDefault(); ctrlRelease('right'); }, { passive: false });
+  btnR.addEventListener('touchcancel', e => { e.preventDefault(); ctrlRelease('right'); }, { passive: false });
+  btnR.addEventListener('mousedown',  () => ctrlPress('right'));
+  btnR.addEventListener('mouseup',    () => ctrlRelease('right'));
+  btnR.addEventListener('mouseleave', () => ctrlRelease('right'));
+}
+
+/* ================================================
+   キャンバス高さをposition計算で動的にセット
+   ================================================ */
+function resizeCanvas() {
+  const gc   = document.getElementById('game-container');
+  const ctrl = document.getElementById('ctrl-area');
+  const cvs  = document.getElementById('game-canvas');
+  if (!gc || !ctrl || !cvs) return;
+  const totalH = gc.getBoundingClientRect().height;
+  const ctrlH  = ctrl.getBoundingClientRect().height;
+  const availH = Math.max(totalH - 40 - ctrlH, 80);
+  cvs.style.height = availH + 'px';
+}
 
 /* ================================================
    ドット人間描画
@@ -431,98 +442,43 @@ function drawPixelChar(targetCtx, x, y, dir, animFrame, variant) {
   const scale = 3;
   targetCtx.save();
   targetCtx.imageSmoothingEnabled = false;
-
-  const colorMap = ['', '#f5c48a','#3a1a00','#2060e0','#1a1a8a','#202020','#ffffff','#e04040'];
-
+  const colorMap = ['','#f5c48a','#3a1a00','#2060e0','#1a1a8a','#202020','#ffffff','#e04040'];
   const walkA = [
-    [0,0,2,2,2,0,0,0],
-    [0,0,1,1,1,0,0,0],
-    [0,0,1,6,1,0,0,0],
-    [0,2,1,1,1,2,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,3,3,3,3,3,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,0,4,4,4,0,0,0],
-    [0,0,4,4,4,0,0,0],
-    [0,5,0,0,0,5,0,0],
-    [0,5,0,0,0,5,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,6,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [0,0,3,3,3,0,0,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,0,4,4,4,0,0,0],
+    [0,0,4,4,4,0,0,0],[0,5,0,0,0,5,0,0],[0,5,0,0,0,5,0,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
   ];
   const walkB = [
-    [0,0,2,2,2,0,0,0],
-    [0,0,1,1,1,0,0,0],
-    [0,0,1,6,1,0,0,0],
-    [0,2,1,1,1,2,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,3,3,3,3,3,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,0,4,0,4,0,0,0],
-    [0,4,0,0,0,4,0,0],
-    [5,0,0,0,0,0,5,0],
-    [5,0,0,0,0,0,5,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,6,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [0,0,3,3,3,0,0,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,0,4,0,4,0,0,0],
+    [0,4,0,0,0,4,0,0],[5,0,0,0,0,0,5,0],[5,0,0,0,0,0,5,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
   ];
   const fallPx = [
-    [0,0,2,2,2,0,0,0],
-    [0,0,1,1,1,0,0,0],
-    [0,0,1,7,1,0,0,0],
-    [0,2,1,1,1,2,0,0],
-    [3,0,3,3,3,0,3,0],
-    [0,3,3,3,3,3,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,4,0,4,0,4,0,0],
-    [4,0,0,0,0,0,4,0],
-    [5,0,0,0,0,0,5,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+    [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,7,1,0,0,0],[0,2,1,1,1,2,0,0],
+    [3,0,3,3,3,0,3,0],[0,3,3,3,3,3,0,0],[0,0,3,3,3,0,0,0],[0,4,0,4,0,4,0,0],
+    [4,0,0,0,0,0,4,0],[5,0,0,0,0,0,5,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
   ];
   const deadPx = [
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [3,0,0,3,3,0,0,0],
-    [0,3,0,3,3,0,0,0],
-    [0,0,3,3,3,0,0,0],
-    [0,0,0,3,3,0,0,0],
-    [0,2,2,1,1,2,0,0],
-    [0,0,1,1,1,0,0,0],
-    [0,0,1,6,1,0,0,0],
-    [2,0,1,1,1,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[3,0,0,3,3,0,0,0],[0,3,0,3,3,0,0,0],
+    [0,0,3,3,3,0,0,0],[0,0,0,3,3,0,0,0],[0,2,2,1,1,2,0,0],[0,0,1,1,1,0,0,0],
+    [0,0,1,6,1,0,0,0],[2,0,1,1,1,0,0,0],
+    [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],
   ];
-
   let pixels;
-  if (variant === 'fall') pixels = fallPx;
+  if (variant === 'fall')      pixels = fallPx;
   else if (variant === 'dead') pixels = deadPx;
   else pixels = (animFrame % 2 === 0) ? walkA : walkB;
-
   targetCtx.translate(x, y);
-  if (dir < 0) {
-    targetCtx.scale(-1, 1);
-    targetCtx.translate(-8 * scale, 0);
-  }
+  if (dir < 0) { targetCtx.scale(-1,1); targetCtx.translate(-8*scale, 0); }
   for (let row = 0; row < 16; row++) {
     for (let col = 0; col < 8; col++) {
       const c = pixels[row][col];
-      if (c === 0) continue;
+      if (!c) continue;
       targetCtx.fillStyle = colorMap[c];
-      targetCtx.fillRect(col * scale, row * scale, scale, scale);
+      targetCtx.fillRect(col*scale, row*scale, scale, scale);
     }
   }
   targetCtx.restore();
@@ -534,13 +490,8 @@ function drawPixelChar(targetCtx, x, y, dir, animFrame, variant) {
 function initBoards() {
   state.safeIndex = Math.floor(Math.random() * 3);
   state.boards = BOARD_DEFS.map((def, i) => ({
-    x: def.x,
-    w: def.w,
-    h: 18,
-    y: 318,
-    crackLevel: 0,
-    broken: false,
-    safe: (i === state.safeIndex),
+    x: def.x, w: def.w, h: 18, y: 318,
+    crackLevel: 0, broken: false, safe: (i === state.safeIndex),
   }));
 }
 
@@ -550,742 +501,440 @@ function initBoards() {
 function drawBoard(targetCtx, board) {
   if (board.broken) return;
   const { x, y, w, h, crackLevel } = board;
-  const woodColors  = ['#8b5e3c', '#7a5030', '#6a4020'];
-  const grainColors = ['#6b4020', '#5a3010', '#4a2010'];
-
+  const wc = ['#8b5e3c','#7a5030','#6a4020'];
+  const gc = ['#6b4020','#5a3010','#4a2010'];
   targetCtx.save();
-  targetCtx.fillStyle = 'rgba(0,0,0,0.5)';
-  targetCtx.fillRect(x + 3, y + 3, w, h);
-  targetCtx.fillStyle = woodColors[Math.min(crackLevel, 2)];
-  targetCtx.fillRect(x, y, w, h);
-  targetCtx.fillStyle = grainColors[Math.min(crackLevel, 2)];
-  for (let i = 0; i < 4; i++) {
-    targetCtx.fillRect(x + 4 + i * 16, y + 2, 2, h - 4);
+  targetCtx.fillStyle = 'rgba(0,0,0,0.5)'; targetCtx.fillRect(x+3,y+3,w,h);
+  targetCtx.fillStyle = wc[Math.min(crackLevel,2)]; targetCtx.fillRect(x,y,w,h);
+  targetCtx.fillStyle = gc[Math.min(crackLevel,2)];
+  for (let i=0;i<4;i++) targetCtx.fillRect(x+4+i*16,y+2,2,h-4);
+  targetCtx.strokeStyle='#4a2800'; targetCtx.lineWidth=2; targetCtx.strokeRect(x,y,w,h);
+  if (crackLevel>=1) {
+    targetCtx.strokeStyle='#1a0800'; targetCtx.lineWidth=1;
+    targetCtx.beginPath(); targetCtx.moveTo(x+w*0.3,y); targetCtx.lineTo(x+w*0.4,y+h); targetCtx.stroke();
   }
-  targetCtx.strokeStyle = '#4a2800';
-  targetCtx.lineWidth = 2;
-  targetCtx.strokeRect(x, y, w, h);
-  if (crackLevel >= 1) {
-    targetCtx.strokeStyle = '#1a0800';
-    targetCtx.lineWidth = 1;
-    targetCtx.beginPath();
-    targetCtx.moveTo(x + w * 0.30, y);
-    targetCtx.lineTo(x + w * 0.40, y + h);
-    targetCtx.stroke();
+  if (crackLevel>=2) {
+    targetCtx.beginPath(); targetCtx.moveTo(x+w*0.6,y); targetCtx.lineTo(x+w*0.5,y+h); targetCtx.stroke();
+    targetCtx.fillStyle='rgba(0,0,0,0.3)'; targetCtx.fillRect(x+w*0.38,y,4,h);
   }
-  if (crackLevel >= 2) {
-    targetCtx.beginPath();
-    targetCtx.moveTo(x + w * 0.60, y);
-    targetCtx.lineTo(x + w * 0.50, y + h);
-    targetCtx.stroke();
-    targetCtx.fillStyle = 'rgba(0,0,0,0.3)';
-    targetCtx.fillRect(x + w * 0.38, y, 4, h);
-  }
-  if (crackLevel >= 3) {
-    targetCtx.globalAlpha = 0.6;
-    targetCtx.fillStyle = '#2a0800';
-    targetCtx.fillRect(x + w * 0.35, y, w * 0.3, h);
-    targetCtx.globalAlpha = 1;
+  if (crackLevel>=3) {
+    targetCtx.globalAlpha=0.6; targetCtx.fillStyle='#2a0800';
+    targetCtx.fillRect(x+w*0.35,y,w*0.3,h); targetCtx.globalAlpha=1;
   }
   targetCtx.restore();
 }
 
 /* ================================================
-   背景描画（通常フェーズ）
+   背景描画
    ================================================ */
 function drawBackground(targetCtx) {
-  const skyGrad = targetCtx.createLinearGradient(0, 0, 0, CANVAS_H);
-  skyGrad.addColorStop(0, '#0a0a20');
-  skyGrad.addColorStop(1, '#1a1a30');
-  targetCtx.fillStyle = skyGrad;
-  targetCtx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-
-  targetCtx.fillStyle = '#e8e8c0';
-  [[30,20],[80,50],[150,15],[220,40],[300,25],[340,60],
-   [60,80],[180,70],[270,55],[320,90],[10,100],[130,95]]
-  .forEach(([sx,sy]) => targetCtx.fillRect(sx, sy, 2, 2));
-
+  const sg = targetCtx.createLinearGradient(0,0,0,CANVAS_H);
+  sg.addColorStop(0,'#0a0a20'); sg.addColorStop(1,'#1a1a30');
+  targetCtx.fillStyle=sg; targetCtx.fillRect(0,0,CANVAS_W,CANVAS_H);
+  targetCtx.fillStyle='#e8e8c0';
+  [[30,20],[80,50],[150,15],[220,40],[300,25],[340,60],[60,80],[180,70],[270,55],[320,90],[10,100],[130,95]]
+  .forEach(([sx,sy])=>targetCtx.fillRect(sx,sy,2,2));
   drawFarSide(targetCtx);
-
-  targetCtx.fillStyle = '#3a2a10';
-  targetCtx.fillRect(0, 308, CANVAS_W, 10);
-  targetCtx.fillStyle = '#2a1a08';
-  targetCtx.fillRect(0, 318, CANVAS_W, CANVAS_H - 318);
-
-  targetCtx.fillStyle = '#4a3a18';
-  for (let xi = 0; xi < CANVAS_W; xi += 16) targetCtx.fillRect(xi, 310, 8, 4);
-  for (let xi = 8; xi < CANVAS_W; xi += 16) targetCtx.fillRect(xi, 318, 8, 4);
-
-  targetCtx.fillStyle = '#5a4a20';
-  targetCtx.fillRect(0, 318, 38, CANVAS_H - 318);
-  targetCtx.fillRect(CANVAS_W - 38, 318, 38, CANVAS_H - 318);
-  targetCtx.fillStyle = '#3a2a10';
-  targetCtx.fillRect(33, 318, 5, CANVAS_H - 318);
-  targetCtx.fillRect(CANVAS_W - 38, 318, 5, CANVAS_H - 318);
+  targetCtx.fillStyle='#3a2a10'; targetCtx.fillRect(0,308,CANVAS_W,10);
+  targetCtx.fillStyle='#2a1a08'; targetCtx.fillRect(0,318,CANVAS_W,CANVAS_H-318);
+  targetCtx.fillStyle='#4a3a18';
+  for(let xi=0;xi<CANVAS_W;xi+=16) targetCtx.fillRect(xi,310,8,4);
+  for(let xi=8;xi<CANVAS_W;xi+=16) targetCtx.fillRect(xi,318,8,4);
+  targetCtx.fillStyle='#5a4a20';
+  targetCtx.fillRect(0,318,38,CANVAS_H-318); targetCtx.fillRect(CANVAS_W-38,318,38,CANVAS_H-318);
+  targetCtx.fillStyle='#3a2a10';
+  targetCtx.fillRect(33,318,5,CANVAS_H-318); targetCtx.fillRect(CANVAS_W-38,318,5,CANVAS_H-318);
 }
 
-/* ================================================
-   対岸エリア描画（将来拡張用フック）
-   缶コーラ・おしるこ等をここに追加できる:
-     drawCola(targetCtx, CANVAS_W - 30, 250);
-     drawOshiruko(targetCtx, 10, 250);
-   ================================================ */
+/* 対岸（将来: drawCola / drawOshiruko をここに追加） */
 function drawFarSide(targetCtx) {
-  targetCtx.fillStyle = '#2a1e08';
-  targetCtx.fillRect(CANVAS_W - 36, 260, 36, 60);
-  targetCtx.fillStyle = '#1a1008';
-  targetCtx.fillRect(CANVAS_W - 36, 260, 4, 60);
-  targetCtx.fillStyle = '#2a1e08';
-  targetCtx.fillRect(0, 260, 36, 60);
-  targetCtx.fillStyle = '#1a1008';
-  targetCtx.fillRect(32, 260, 4, 60);
-  // アイテム配置フック ↓ここに追加
+  targetCtx.fillStyle='#2a1e08'; targetCtx.fillRect(CANVAS_W-36,260,36,60);
+  targetCtx.fillStyle='#1a1008'; targetCtx.fillRect(CANVAS_W-36,260,4,60);
+  targetCtx.fillStyle='#2a1e08'; targetCtx.fillRect(0,260,36,60);
+  targetCtx.fillStyle='#1a1008'; targetCtx.fillRect(32,260,4,60);
 }
 
 /* ================================================
-   穴の中の背景描画（落下フェーズ）
+   穴の中の背景
    ================================================ */
 function drawHoleBackground(targetCtx, depth) {
-  targetCtx.fillStyle = '#050508';
-  targetCtx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-
-  targetCtx.fillStyle = '#1a1008';
-  for (let yi = 0; yi < CANVAS_H; yi += 24) {
-    for (let xi = (yi % 48 === 0 ? 0 : 12); xi < CANVAS_W; xi += 24) {
-      targetCtx.fillRect(xi, yi, 10, 10);
-    }
-  }
-
-  const lightGrad = targetCtx.createLinearGradient(CANVAS_W/2, 0, CANVAS_W/2, 220);
-  lightGrad.addColorStop(0, 'rgba(100,100,60,0.3)');
-  lightGrad.addColorStop(1, 'rgba(0,0,0,0)');
-  targetCtx.fillStyle = lightGrad;
+  targetCtx.fillStyle='#050508'; targetCtx.fillRect(0,0,CANVAS_W,CANVAS_H);
+  targetCtx.fillStyle='#1a1008';
+  for(let yi=0;yi<CANVAS_H;yi+=24)
+    for(let xi=(yi%48===0?0:12);xi<CANVAS_W;xi+=24)
+      targetCtx.fillRect(xi,yi,10,10);
+  const lg=targetCtx.createLinearGradient(CANVAS_W/2,0,CANVAS_W/2,220);
+  lg.addColorStop(0,'rgba(100,100,60,0.3)'); lg.addColorStop(1,'rgba(0,0,0,0)');
+  targetCtx.fillStyle=lg;
   targetCtx.beginPath();
-  targetCtx.moveTo(CANVAS_W/2 - 55, 0);
-  targetCtx.lineTo(CANVAS_W/2 + 55, 0);
-  targetCtx.lineTo(CANVAS_W/2 + 100, 220);
-  targetCtx.lineTo(CANVAS_W/2 - 100, 220);
-  targetCtx.closePath();
-  targetCtx.fill();
-
-  if (depth > 30) {
-    targetCtx.fillStyle = '#4a3a20';
-    targetCtx.font = '10px Courier New';
-    targetCtx.fillText('深さ: ' + Math.floor(depth) + 'm...', 10, 20);
+  targetCtx.moveTo(CANVAS_W/2-55,0); targetCtx.lineTo(CANVAS_W/2+55,0);
+  targetCtx.lineTo(CANVAS_W/2+100,220); targetCtx.lineTo(CANVAS_W/2-100,220);
+  targetCtx.closePath(); targetCtx.fill();
+  if(depth>30){
+    targetCtx.fillStyle='#4a3a20'; targetCtx.font='10px Courier New';
+    targetCtx.fillText('深さ: '+Math.floor(depth)+'m...',10,20);
   }
 }
 
 /* ================================================
-   ハシゴ描画
+   ハシゴ / ロープ / 看板
    ================================================ */
-function drawLadder(targetCtx, x, y, height) {
+function drawLadder(targetCtx,x,y,height){
   targetCtx.save();
-  targetCtx.fillStyle = '#a0701a';
-  targetCtx.fillRect(x, y, 6, height);
-  targetCtx.fillRect(x + 24, y, 6, height);
-  targetCtx.fillStyle = '#c08020';
-  for (let yi = y + 8; yi < y + height; yi += 18) {
-    targetCtx.fillRect(x, yi, 30, 5);
-  }
-  targetCtx.strokeStyle = '#6b4800';
-  targetCtx.lineWidth = 1;
-  targetCtx.strokeRect(x, y, 30, height);
+  targetCtx.fillStyle='#a0701a';
+  targetCtx.fillRect(x,y,6,height); targetCtx.fillRect(x+24,y,6,height);
+  targetCtx.fillStyle='#c08020';
+  for(let yi=y+8;yi<y+height;yi+=18) targetCtx.fillRect(x,yi,30,5);
+  targetCtx.strokeStyle='#6b4800'; targetCtx.lineWidth=1; targetCtx.strokeRect(x,y,30,height);
   targetCtx.restore();
 }
-
-/* ================================================
-   ロープ描画
-   ================================================ */
-function drawRope(targetCtx, x, y, height) {
+function drawRope(targetCtx,x,y,height){
   targetCtx.save();
-  targetCtx.strokeStyle = '#c8a050';
-  targetCtx.lineWidth = 5;
-  targetCtx.beginPath();
-  targetCtx.moveTo(x + 4, y);
-  for (let yi = y; yi < y + height; yi += 20) {
-    targetCtx.lineTo(x + (yi % 40 < 20 ? 0 : 8), yi + 10);
-    targetCtx.lineTo(x + 4, yi + 20);
+  targetCtx.strokeStyle='#c8a050'; targetCtx.lineWidth=5;
+  targetCtx.beginPath(); targetCtx.moveTo(x+4,y);
+  for(let yi=y;yi<y+height;yi+=20){
+    targetCtx.lineTo(x+(yi%40<20?0:8),yi+10); targetCtx.lineTo(x+4,yi+20);
   }
   targetCtx.stroke();
-  targetCtx.strokeStyle = '#a07830';
-  targetCtx.lineWidth = 1;
-  for (let yi = y; yi < y + height; yi += 8) {
-    targetCtx.beginPath();
-    targetCtx.moveTo(x + 1, yi);
-    targetCtx.lineTo(x + 7, yi + 4);
-    targetCtx.stroke();
+  targetCtx.strokeStyle='#a07830'; targetCtx.lineWidth=1;
+  for(let yi=y;yi<y+height;yi+=8){
+    targetCtx.beginPath(); targetCtx.moveTo(x+1,yi); targetCtx.lineTo(x+7,yi+4); targetCtx.stroke();
   }
   targetCtx.restore();
 }
-
-/* ================================================
-   看板描画
-   ================================================ */
-function drawSign(targetCtx, x, y) {
+function drawSign(targetCtx,x,y){
   targetCtx.save();
-  targetCtx.fillStyle = '#8b5e3c';
-  targetCtx.fillRect(x + 12, y, 6, 80);
-  targetCtx.fillStyle = '#f5d060';
-  targetCtx.fillRect(x, y, 90, 40);
-  targetCtx.strokeStyle = '#8b6000';
-  targetCtx.lineWidth = 2;
-  targetCtx.strokeRect(x, y, 90, 40);
-  targetCtx.fillStyle = '#3a1a00';
-  targetCtx.font = 'bold 11px Courier New';
-  targetCtx.fillText('出口 →', x + 8, y + 16);
-  targetCtx.font = '9px Courier New';
-  targetCtx.fillText('(たぶん)', x + 18, y + 32);
+  targetCtx.fillStyle='#8b5e3c'; targetCtx.fillRect(x+12,y,6,80);
+  targetCtx.fillStyle='#f5d060'; targetCtx.fillRect(x,y,90,40);
+  targetCtx.strokeStyle='#8b6000'; targetCtx.lineWidth=2; targetCtx.strokeRect(x,y,90,40);
+  targetCtx.fillStyle='#3a1a00';
+  targetCtx.font='bold 11px Courier New'; targetCtx.fillText('出口 →',x+8,y+16);
+  targetCtx.font='9px Courier New'; targetCtx.fillText('(たぶん)',x+18,y+32);
   targetCtx.restore();
 }
 
 /* ================================================
-   メインゲームキャンバス描画
+   メイン描画
    ================================================ */
 function renderGame() {
-  if (!canvas || !ctx) return;
-  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-
-  const phase = state.phase;
-
-  if (phase === 'falling' || phase === 'event') {
-    drawHoleBackground(ctx, state.fallingY);
-
-    if (phase === 'event') {
-      if (state.eventType === 'ladder') {
-        drawLadder(ctx, CANVAS_W / 2 - 15, 80, 320);
-      } else if (state.eventType === 'rope') {
-        drawRope(ctx, CANVAS_W / 2 - 4, 0, 340);
-      } else if (state.eventType === 'sign') {
-        drawSign(ctx, CANVAS_W / 2 - 45, 120);
-      }
+  if(!canvas||!ctx) return;
+  ctx.clearRect(0,0,CANVAS_W,CANVAS_H);
+  const phase=state.phase;
+  if(phase==='falling'||phase==='event'){
+    drawHoleBackground(ctx,state.fallingY);
+    if(phase==='event'){
+      if(state.eventType==='ladder') drawLadder(ctx,CANVAS_W/2-15,80,320);
+      else if(state.eventType==='rope')  drawRope(ctx,CANVAS_W/2-4,0,340);
+      else if(state.eventType==='sign')  drawSign(ctx,CANVAS_W/2-45,120);
     }
-
-    const charY = Math.min(210, 80 + state.fallingY * 0.25);
-    drawPixelChar(ctx, state.playerX, charY, state.playerDir, 0, 'fall');
-
+    const charY=Math.min(210,80+state.fallingY*0.25);
+    drawPixelChar(ctx,state.playerX,charY,state.playerDir,0,'fall');
   } else {
     drawBackground(ctx);
-    state.boards.forEach(b => drawBoard(ctx, b));
-
-    const animF = Math.floor(state.frameCount / 8) % 2;
-    const isWalking = state.keys.left || state.keys.right;
-    drawPixelChar(ctx, state.playerX, state.playerY, state.playerDir,
-      isWalking ? animF : 0, 'normal');
-
-    if (state.frameCount < 90 && phase === 'walk') {
-      const alpha = 0.5 + 0.5 * Math.sin(state.frameCount * 0.18);
-      ctx.fillStyle = 'rgba(248,216,0,' + alpha + ')';
-      ctx.font = '11px Courier New';
-      ctx.fillText('▶ 板に乗れ！', state.playerX + 26, state.playerY + 10);
+    state.boards.forEach(b=>drawBoard(ctx,b));
+    const animF=Math.floor(state.frameCount/8)%2;
+    const isWalking=state.keys.left||state.keys.right;
+    drawPixelChar(ctx,state.playerX,state.playerY,state.playerDir,isWalking?animF:0,'normal');
+    if(state.frameCount<90&&phase==='walk'){
+      const alpha=0.5+0.5*Math.sin(state.frameCount*0.18);
+      ctx.fillStyle='rgba(248,216,0,'+alpha+')';
+      ctx.font='11px Courier New';
+      ctx.fillText('▶ 板に乗れ！',state.playerX+26,state.playerY+10);
     }
-
-    state.boards.forEach((b, i) => {
-      if (!b.broken) {
-        ctx.fillStyle = '#a08060';
-        ctx.font = '9px Courier New';
-        ctx.fillText('[板' + (i + 1) + ']', b.x + 20, b.y - 5);
+    state.boards.forEach((b,i)=>{
+      if(!b.broken){
+        ctx.fillStyle='#a08060'; ctx.font='9px Courier New';
+        ctx.fillText('[板'+(i+1)+']',b.x+20,b.y-5);
       }
     });
   }
 }
 
 /* ================================================
-   板への接触チェック（中央25%〜75%範囲のみ判定）
+   板衝突チェック（中央25〜75%のみ）
    ================================================ */
-function checkBoardCollision() {
-  const px = state.playerX + 12;
-  const py = state.playerY + 46;
-
-  for (let i = 0; i < state.boards.length; i++) {
-    const b = state.boards[i];
-    if (b.broken) continue;
-    const innerLeft  = b.x + b.w * 0.25;
-    const innerRight = b.x + b.w * 0.75;
-    if (px >= innerLeft && px <= innerRight && py >= b.y - 4 && py <= b.y + b.h) {
-      return i;
-    }
+function checkBoardCollision(){
+  const px=state.playerX+12, py=state.playerY+46;
+  for(let i=0;i<state.boards.length;i++){
+    const b=state.boards[i];
+    if(b.broken) continue;
+    if(px>=b.x+b.w*0.25&&px<=b.x+b.w*0.75&&py>=b.y-4&&py<=b.y+b.h) return i;
   }
   return -1;
 }
 
 /* ================================================
-   プレイヤー移動
+   プレイヤー更新
    ================================================ */
-function updatePlayer() {
-  if (!state.canMove || state.phase !== 'walk') return;
-
-  const speed = 3;
-  if (state.keys.left) {
-    state.playerX = Math.max(8, state.playerX - speed);
-    state.playerDir = -1;
-  }
-  if (state.keys.right) {
-    state.playerX = Math.min(CANVAS_W - 34, state.playerX + speed);
-    state.playerDir = 1;
-  }
-
-  const hit = checkBoardCollision();
-  if (hit !== -1) {
-    state.canMove = false;
-    state.phase = 'board';
-    onBoardHit(hit);
-  }
+function updatePlayer(){
+  if(!state.canMove||state.phase!=='walk') return;
+  const speed=3;
+  if(state.keys.left){  state.playerX=Math.max(8,state.playerX-speed); state.playerDir=-1; }
+  if(state.keys.right){ state.playerX=Math.min(CANVAS_W-34,state.playerX+speed); state.playerDir=1; }
+  const hit=checkBoardCollision();
+  if(hit!==-1){ state.canMove=false; state.phase='board'; onBoardHit(hit); }
 }
 
-/* ================================================
-   板を踏んだ時
-   ================================================ */
-function onBoardHit(idx) {
-  if (state.boards[idx].safe) {
-    onSafeBoard();
-  } else {
-    onDangerBoard(idx);
-  }
+function onBoardHit(idx){
+  if(state.boards[idx].safe) onSafeBoard(); else onDangerBoard(idx);
 }
 
-/* ================================================
-   危険な板：クラック→落下
-   ================================================ */
-function onDangerBoard(idx) {
-  const board = state.boards[idx];
-  let crackTimer = 0;
-  const crackInterval = setInterval(() => {
-    crackTimer++;
-    board.crackLevel = crackTimer;
-    if (crackTimer === 1) {
-      shakeScreen();
-      updateStatusMsg('ミシ…');
-    } else if (crackTimer === 2) {
-      shakeScreen();
-      updateStatusMsg('ミシミシ！！');
-    } else if (crackTimer === 3) {
-      board.broken = true;
-      clearInterval(crackInterval);
-      startFalling();
-    }
-  }, 300);
+function onDangerBoard(idx){
+  const board=state.boards[idx]; let ct=0;
+  const iv=setInterval(()=>{
+    ct++; board.crackLevel=ct;
+    if(ct===1){ shakeScreen(); updateStatusMsg('ミシ…'); }
+    else if(ct===2){ shakeScreen(); updateStatusMsg('ミシミシ！！'); }
+    else if(ct===3){ board.broken=true; clearInterval(iv); startFalling(); }
+  },300);
 }
 
-/* ================================================
-   安全な板：油断させてから再トライ
-   ================================================ */
-function onSafeBoard() {
+function onSafeBoard(){
   updateStatusMsg('助かった？');
-  const safeLines = [
-    'あれ？\n割れない…？\nもしかして…',
-    'ん？\n大丈夫か？\nいけそう！',
-    'お！\nなんか固い。\n安全かも！',
-    'えっ\n落ちない！\nやるじゃん自分！',
-  ];
-  const msg = safeLines[Math.floor(Math.random() * safeLines.length)];
-  setTimeout(() => {
-    showOverlay('助かった！！？', msg + '\n\nでも前がある…\n次の板は…？', [
-      {
-        label: '次に進む →',
-        cls: 'btn btn-primary',
-        action: () => { hideOverlay(); proceedToNextTrap(); }
-      }
+  const ms=['あれ？\n割れない…？\nもしかして…','ん？\n大丈夫か？\nいけそう！',
+            'お！\nなんか固い。\n安全かも！','えっ\n落ちない！\nやるじゃん自分！'];
+  setTimeout(()=>{
+    showOverlay('助かった！！？',ms[Math.floor(Math.random()*ms.length)]+'\n\nでも前がある…\n次の板は…？',[
+      {label:'次に進む →',cls:'btn btn-primary',action:()=>{hideOverlay();proceedToNextTrap();}}
     ]);
-  }, 700);
+  },700);
 }
 
-/* ================================================
-   安全板通過後：毎回完全ランダムで再配置
-   ================================================ */
-function proceedToNextTrap() {
-  const newSafe = Math.floor(Math.random() * 3);
-  state.boards.forEach((b, i) => {
-    b.crackLevel = 0;
-    b.broken = false;
-    b.safe = (i === newSafe);
-  });
-  state.safeIndex = newSafe;
-  state.phase = 'walk';
-  state.canMove = true;
+function proceedToNextTrap(){
+  const ns=Math.floor(Math.random()*3);
+  state.boards.forEach((b,i)=>{ b.crackLevel=0; b.broken=false; b.safe=(i===ns); });
+  state.safeIndex=ns; state.phase='walk'; state.canMove=true;
   updateStatusMsg('次の板を踏め！');
 }
 
 /* ================================================
-   落下開始（深さ280mまで）
+   落下
    ================================================ */
-function startFalling() {
-  state.phase = 'falling';
-  state.fallingY = 0;
-  state.fallSpeed = 1.5;
+function startFalling(){
+  state.phase='falling'; state.fallingY=0; state.fallSpeed=1.5;
   updateStatusMsg('落ちてる！！');
-
-  const fallInterval = setInterval(() => {
-    state.fallingY += state.fallSpeed;
-    if (state.fallSpeed < 8) state.fallSpeed += 0.35;
-    if (state.fallingY >= 280) {
-      clearInterval(fallInterval);
-      shakeScreen();
-      setTimeout(() => showFallEvent(), 500);
-    }
-  }, 30);
+  const iv=setInterval(()=>{
+    state.fallingY+=state.fallSpeed;
+    if(state.fallSpeed<8) state.fallSpeed+=0.35;
+    if(state.fallingY>=280){ clearInterval(iv); shakeScreen(); setTimeout(()=>showFallEvent(),500); }
+  },30);
 }
 
 /* ================================================
    落下後イベント（4種ランダム）
    ================================================ */
-function showFallEvent() {
-  const types = ['ladder', 'rope', 'sign', 'nothing'];
-  state.eventType = types[Math.floor(Math.random() * types.length)];
-  state.phase = 'event';
-
-  let title, msg, buttons;
-
-  switch (state.eventType) {
-
-    case 'ladder': {
-      const msgs = [
-        'ハシゴがある！\nこれで助かる！',
-        'なんか\nハシゴがあるぞ！\n誰が置いた？',
-        'おい！\nハシゴじゃないか！\nラッキー！',
-        'うわっ\nハシゴだ！！\nでも…使う？',
-      ];
-      title = 'ハシゴ発見！！';
-      msg = msgs[Math.floor(Math.random() * msgs.length)] + '\n\nこのハシゴを使いますか？';
-      buttons = [
-        { label: 'YES（使う）',    cls: 'btn btn-yes', action: () => { hideOverlay(); resolveLadder(true); } },
-        { label: 'NO（使わない）', cls: 'btn btn-no',  action: () => { hideOverlay(); resolveLadder(false); } },
-      ];
-      break;
+function showFallEvent(){
+  const types=['ladder','rope','sign','nothing'];
+  state.eventType=types[Math.floor(Math.random()*types.length)];
+  state.phase='event';
+  let title,msg,buttons;
+  switch(state.eventType){
+    case 'ladder':{
+      const ms=['ハシゴがある！\nこれで助かる！','なんか\nハシゴがあるぞ！\n誰が置いた？',
+                'おい！\nハシゴじゃないか！\nラッキー！','うわっ\nハシゴだ！！\nでも…使う？'];
+      title='ハシゴ発見！！'; msg=ms[Math.floor(Math.random()*ms.length)]+'\n\nこのハシゴを使いますか？';
+      buttons=[{label:'YES（使う）',cls:'btn btn-yes',action:()=>{hideOverlay();resolveLadder(true);}},
+               {label:'NO（使わない）',cls:'btn btn-no',action:()=>{hideOverlay();resolveLadder(false);}}]; break;
     }
-
-    case 'rope': {
-      const msgs = [
-        'ロープがある！\nよじ登れそう…？',
-        'なんか\nロープが垂れてる。\n登るか？',
-        'ロープだ！\nつかんでいいのか？',
-      ];
-      title = 'ロープ発見！！';
-      msg = msgs[Math.floor(Math.random() * msgs.length)] + '\n\nこのロープに\nつかまりますか？';
-      buttons = [
-        { label: 'つかむ',    cls: 'btn btn-yes', action: () => { hideOverlay(); resolveRope(true); } },
-        { label: 'やめとく', cls: 'btn btn-no',  action: () => { hideOverlay(); resolveRope(false); } },
-      ];
-      break;
+    case 'rope':{
+      const ms=['ロープがある！\nよじ登れそう…？','なんか\nロープが垂れてる。\n登るか？','ロープだ！\nつかんでいいのか？'];
+      title='ロープ発見！！'; msg=ms[Math.floor(Math.random()*ms.length)]+'\n\nこのロープに\nつかまりますか？';
+      buttons=[{label:'つかむ',cls:'btn btn-yes',action:()=>{hideOverlay();resolveRope(true);}},
+               {label:'やめとく',cls:'btn btn-no',action:()=>{hideOverlay();resolveRope(false);}}]; break;
     }
-
-    case 'sign': {
-      const msgs = [
-        '看板がある。\n「出口 →」\n…どっちだ？',
-        '看板には\n「出口」と書いてある。\n信じるか？',
-        '「出口 →」\nと書いてある看板。\n矢印の先は壁だが。',
-      ];
-      title = '看板発見！！';
-      msg = msgs[Math.floor(Math.random() * msgs.length)] + '\n\n看板の矢印を\n信じますか？';
-      buttons = [
-        { label: '信じる',   cls: 'btn btn-yes', action: () => { hideOverlay(); resolveSign(true); } },
-        { label: '信じない', cls: 'btn btn-no',  action: () => { hideOverlay(); resolveSign(false); } },
-      ];
-      break;
+    case 'sign':{
+      const ms=['看板がある。\n「出口 →」\n…どっちだ？','看板には\n「出口」と書いてある。\n信じるか？',
+                '「出口 →」\nと書いてある看板。\n矢印の先は壁だが。'];
+      title='看板発見！！'; msg=ms[Math.floor(Math.random()*ms.length)]+'\n\n看板の矢印を\n信じますか？';
+      buttons=[{label:'信じる',cls:'btn btn-yes',action:()=>{hideOverlay();resolveSign(true);}},
+               {label:'信じない',cls:'btn btn-no',action:()=>{hideOverlay();resolveSign(false);}}]; break;
     }
-
-    case 'nothing': {
-      const msgs = [
-        '何もない。\n本当に何もない。\nただ穴の底だ。',
-        '静かだ。\n暗い。\n何もない。',
-        'あたりを見渡したが\n何もなかった。\nそりゃそうだ。',
-      ];
-      title = '何もない…';
-      msg = msgs[Math.floor(Math.random() * msgs.length)] + '\n\n…それでも\n諦めないか？';
-      buttons = [
-        { label: '諦めない', cls: 'btn btn-yes', action: () => { hideOverlay(); resolveNothing(true); } },
-        { label: '諦める',   cls: 'btn btn-no',  action: () => { hideOverlay(); resolveNothing(false); } },
-      ];
-      break;
+    case 'nothing':{
+      const ms=['何もない。\n本当に何もない。\nただ穴の底だ。','静かだ。\n暗い。\n何もない。',
+                'あたりを見渡したが\n何もなかった。\nそりゃそうだ。'];
+      title='何もない…'; msg=ms[Math.floor(Math.random()*ms.length)]+'\n\n…それでも\n諦めないか？';
+      buttons=[{label:'諦めない',cls:'btn btn-yes',action:()=>{hideOverlay();resolveNothing(true);}},
+               {label:'諦める',cls:'btn btn-no',action:()=>{hideOverlay();resolveNothing(false);}}]; break;
     }
   }
-
-  setTimeout(() => showOverlay(title, msg, buttons), 600);
+  setTimeout(()=>showOverlay(title,msg,buttons),600);
 }
 
 /* ================================================
-   各イベントの結果解決
+   各イベント結果
    ================================================ */
-function resolveLadder(usedYes) {
-  state.lastChoice = usedYes;
-  state.playCount++;
-  const survived = Math.random() < (usedYes ? 0.30 : 0.35);
-  const failY = [
-    'ハシゴが朽ちていた。\n腐ってるじゃないか！',
-    'ハシゴを使ったら\n上で誰かが踏んでた。\nお前のせいじゃない。',
-    'ハシゴが逆向きだった。\n下に降りた。',
-    'ハシゴの途中で蜘蛛がいた。\nビビって落ちた。',
-    'ハシゴを掴んだら\nヌルヌルしていた。\n滑った。',
-  ];
-  const failN = [
-    'ハシゴを使わなかったら\nハシゴが怒って倒れてきた。',
-    'NOを選んだら\n床がさらに割れた。なぜ。',
-    '使わないなら\nハシゴさんも意地を張った。',
-    '選択を拒否したら\n重力が2倍になった。',
-  ];
-  const winY = [
-    'なんとか登れた！！\nでも上は別の穴だった。\n一応セーフ。',
-    'ハシゴで脱出成功！\nただし外は雨だった。\nどうでもいい。',
-    '奇跡的に登れた！\nゲームクリア…たぶん。',
-  ];
-  const winN = [
-    'ハシゴを使わなかったら\n下から風が吹いて浮いた。\nなんで。',
-    'NOを選んだら犬が来て\n引っ張り上げてくれた。謎。',
-    '断ったらハシゴが\n勝手に伸びてきた。助かった。謎。',
-  ];
-  const pool = survived ? (usedYes ? winY : winN) : (usedYes ? failY : failN);
-  showResult(survived, survived ? 'なんか助かった' : 'GAME OVER',
-    pool[Math.floor(Math.random() * pool.length)]);
+function resolveLadder(yes){
+  state.lastChoice=yes; state.playCount++;
+  const ok=Math.random()<(yes?0.30:0.35);
+  const fY=['ハシゴが朽ちていた。\n腐ってるじゃないか！','ハシゴを使ったら\n上で誰かが踏んでた。\nお前のせいじゃない。',
+            'ハシゴが逆向きだった。\n下に降りた。','ハシゴの途中で蜘蛛がいた。\nビビって落ちた。','ハシゴを掴んだら\nヌルヌルしていた。\n滑った。'];
+  const fN=['ハシゴを使わなかったら\nハシゴが怒って倒れてきた。','NOを選んだら\n床がさらに割れた。なぜ。',
+            '使わないなら\nハシゴさんも意地を張った。','選択を拒否したら\n重力が2倍になった。'];
+  const wY=['なんとか登れた！！\nでも上は別の穴だった。\n一応セーフ。','ハシゴで脱出成功！\nただし外は雨だった。\nどうでもいい。','奇跡的に登れた！\nゲームクリア…たぶん。'];
+  const wN=['ハシゴを使わなかったら\n下から風が吹いて浮いた。\nなんで。','NOを選んだら犬が来て\n引っ張り上げてくれた。謎。','断ったらハシゴが\n勝手に伸びてきた。助かった。謎。'];
+  const pool=ok?(yes?wY:wN):(yes?fY:fN);
+  showResult(ok,ok?'なんか助かった':'GAME OVER',pool[Math.floor(Math.random()*pool.length)]);
 }
-
-function resolveRope(grabbed) {
-  state.lastChoice = grabbed;
-  state.playCount++;
-  const survived = Math.random() < (grabbed ? 0.40 : 0.25);
-  const failG = [
-    'ロープがほどけた。\n古かったらしい。',
-    'ロープを掴んだら\n上の人が離した。\nひどい。',
-    '登り始めたら\nロープが燃えた。\nなぜ燃えた。',
-  ];
-  const failS = [
-    'ロープを無視したら\nロープが落ちてきた。\n頭に当たった。',
-    'やめとくを選んだら\n穴がさらに深くなった。\n物理よ。',
-    '断ったら\nロープが怒って消えた。',
-  ];
-  const winG = [
-    'するすると登れた！\nただし登った先は屋根裏だった。\nまあいいか。',
-    'ロープで生還！\n腕がパンパンだが\nまあ助かった。',
-  ];
-  const winS = [
-    'ロープをやめたら\n下から台が出てきた。\n謎の親切。',
-    'あきらめたら\n何かに乗せられて\n上に運ばれた。説明不能。',
-  ];
-  const pool = survived ? (grabbed ? winG : winS) : (grabbed ? failG : failS);
-  showResult(survived, survived ? 'なんか助かった' : 'GAME OVER',
-    pool[Math.floor(Math.random() * pool.length)]);
+function resolveRope(grabbed){
+  state.lastChoice=grabbed; state.playCount++;
+  const ok=Math.random()<(grabbed?0.40:0.25);
+  const fG=['ロープがほどけた。\n古かったらしい。','ロープを掴んだら\n上の人が離した。\nひどい。','登り始めたら\nロープが燃えた。\nなぜ燃えた。'];
+  const fS=['ロープを無視したら\nロープが落ちてきた。\n頭に当たった。','やめとくを選んだら\n穴がさらに深くなった。\n物理よ。','断ったら\nロープが怒って消えた。'];
+  const wG=['するすると登れた！\nただし登った先は屋根裏だった。\nまあいいか。','ロープで生還！\n腕がパンパンだが\nまあ助かった。'];
+  const wS=['ロープをやめたら\n下から台が出てきた。\n謎の親切。','あきらめたら\n何かに乗せられて\n上に運ばれた。説明不能。'];
+  const pool=ok?(grabbed?wG:wS):(grabbed?fG:fS);
+  showResult(ok,ok?'なんか助かった':'GAME OVER',pool[Math.floor(Math.random()*pool.length)]);
 }
-
-function resolveSign(trusted) {
-  state.lastChoice = trusted;
-  state.playCount++;
-  const survived = Math.random() < (trusted ? 0.35 : 0.40);
-  const failT = [
-    '矢印の先は壁だった。\n「出口」じゃなかった。',
-    '看板を信じて進んだら\n別の穴に落ちた。\n深さ2倍。',
-    '「出口 →」の矢印、\n逆に付いてた。ひどい。',
-  ];
-  const failF = [
-    '信じなかったら\n看板が怒って飛んできた。',
-    '反対方向に行ったら\n壁だった。普通に。',
-    '看板を無視したら\n暗くなって迷子になった。',
-  ];
-  const winT = [
-    '看板を信じたら\nたまたま出口だった。\n奇跡。',
-    '矢印の先に\n小さな出口があった。\n狭かったが通れた。',
-  ];
-  const winF = [
-    '看板を信じなかったら\n反対側に本当の出口があった。\n看板が嘘をついてた。',
-    '無視して歩いたら\n偶然外に出た。\nただの穴だったらしい。',
-  ];
-  const pool = survived ? (trusted ? winT : winF) : (trusted ? failT : failF);
-  showResult(survived, survived ? 'なんか助かった' : 'GAME OVER',
-    pool[Math.floor(Math.random() * pool.length)]);
+function resolveSign(trusted){
+  state.lastChoice=trusted; state.playCount++;
+  const ok=Math.random()<(trusted?0.35:0.40);
+  const fT=['矢印の先は壁だった。\n「出口」じゃなかった。','看板を信じて進んだら\n別の穴に落ちた。\n深さ2倍。','「出口 →」の矢印、\n逆に付いてた。ひどい。'];
+  const fF=['信じなかったら\n看板が怒って飛んできた。','反対方向に行ったら\n壁だった。普通に。','看板を無視したら\n暗くなって迷子になった。'];
+  const wT=['看板を信じたら\nたまたま出口だった。\n奇跡。','矢印の先に\n小さな出口があった。\n狭かったが通れた。'];
+  const wF=['看板を信じなかったら\n反対側に本当の出口があった。\n看板が嘘をついてた。','無視して歩いたら\n偶然外に出た。\nただの穴だったらしい。'];
+  const pool=ok?(trusted?wT:wF):(trusted?fT:fF);
+  showResult(ok,ok?'なんか助かった':'GAME OVER',pool[Math.floor(Math.random()*pool.length)]);
 }
-
-function resolveNothing(tryAgain) {
-  state.lastChoice = tryAgain;
-  state.playCount++;
-  const survived = Math.random() < (tryAgain ? 0.30 : 0.20);
-  const failT = [
-    '諦めなかったが\n特に何も起きなかった。\nそのまま。',
-    '叫び続けたが\n誰も来なかった。\n深夜だったらしい。',
-    '壁を掘り始めたが\n指が痛くなって\nやめた。',
-  ];
-  const failF = [
-    '諦めたら\n本当に終わった。\n早かった。',
-    '横になって待ったら\n何も来なかった。\n寝た。',
-  ];
-  const winT = [
-    '諦めずにいたら\nなぜか天井が開いた。\nコインが降ってきた。',
-    '粘り続けたら\n運営がバグに気づいて\n脱出させてくれた。',
-  ];
-  const winF = [
-    '諦めたら\nゲームが可哀想に思って\n助けてくれた。',
-    '「もういいや」と思ったら\n足場が現れた。\n謎。',
-  ];
-  const pool = survived ? (tryAgain ? winT : winF) : (tryAgain ? failT : failF);
-  showResult(survived, survived ? 'なんか助かった' : 'GAME OVER',
-    pool[Math.floor(Math.random() * pool.length)]);
+function resolveNothing(tryAgain){
+  state.lastChoice=tryAgain; state.playCount++;
+  const ok=Math.random()<(tryAgain?0.30:0.20);
+  const fT=['諦めなかったが\n特に何も起きなかった。\nそのまま。','叫び続けたが\n誰も来なかった。\n深夜だったらしい。','壁を掘り始めたが\n指が痛くなって\nやめた。'];
+  const fF=['諦めたら\n本当に終わった。\n早かった。','横になって待ったら\n何も来なかった。\n寝た。'];
+  const wT=['諦めずにいたら\nなぜか天井が開いた。\nコインが降ってきた。','粘り続けたら\n運営がバグに気づいて\n脱出させてくれた。'];
+  const wF=['諦めたら\nゲームが可哀想に思って\n助けてくれた。','「もういいや」と思ったら\n足場が現れた。\n謎。'];
+  const pool=ok?(tryAgain?wT:wF):(tryAgain?fT:fF);
+  showResult(ok,ok?'なんか助かった':'GAME OVER',pool[Math.floor(Math.random()*pool.length)]);
 }
 
 /* ================================================
-   結果画面表示
+   結果画面
    ================================================ */
-function showResult(survived, title, msg) {
+function showResult(survived,title,msg){
   hideAllScreens();
   document.getElementById('screen-result').classList.remove('hidden');
-
-  const titleEl = document.getElementById('result-title');
-  titleEl.textContent = title;
-  titleEl.className = 'result-title ' + (survived ? 'success' : 'fail');
-
-  const snarky = [
-    '\n\n（また来てね）',
-    '\n\n（ドンマイ）',
-    '\n\n（運が悪いね）',
-    '\n\n（ゲームとはそういうもの）',
-    '\n\n（仕様です）',
-    '\n\n（デバッグ済みです）',
-    '\n\n（わんわんコインは返ってきません）',
-  ];
-  document.getElementById('result-msg').textContent =
-    msg + snarky[Math.floor(Math.random() * snarky.length)];
-
-  const eventLabel = { ladder:'ハシゴ', rope:'ロープ', sign:'看板', nothing:'何もない' };
-  const choiceLabel = (state.lastChoice === null) ? '?' : (state.lastChoice ? 'YES' : 'NO');
-
-  if (survived) state.successCount++;
-  document.getElementById('result-score').textContent =
-    'イベント: ' + (eventLabel[state.eventType] || '?') +
-    ' | 選択: ' + choiceLabel +
-    ' | 挑戦: ' + state.playCount + '回 | 脱出: ' + state.successCount + '回';
-
-  const rc = document.getElementById('result-char-canvas');
-  if (rc) {
-    const rctx = rc.getContext('2d');
-    rctx.clearRect(0, 0, 48, 64);
-    drawPixelChar(rctx, 4, 0, 1, 0, survived ? 'normal' : 'dead');
+  const te=document.getElementById('result-title');
+  te.textContent=title; te.className='result-title '+(survived?'success':'fail');
+  const snarky=['\n\n（また来てね）','\n\n（ドンマイ）','\n\n（運が悪いね）',
+    '\n\n（ゲームとはそういうもの）','\n\n（仕様です）','\n\n（デバッグ済みです）','\n\n（わんわんコインは返ってきません）'];
+  document.getElementById('result-msg').textContent=msg+snarky[Math.floor(Math.random()*snarky.length)];
+  const evL={ladder:'ハシゴ',rope:'ロープ',sign:'看板',nothing:'何もない'};
+  const chL=state.lastChoice===null?'?':(state.lastChoice?'YES':'NO');
+  if(survived) state.successCount++;
+  document.getElementById('result-score').textContent=
+    'イベント: '+(evL[state.eventType]||'?')+' | 選択: '+chL+
+    ' | 挑戦: '+state.playCount+'回 | 脱出: '+state.successCount+'回';
+  const rc=document.getElementById('result-char-canvas');
+  if(rc){
+    const rctx=rc.getContext('2d'); rctx.clearRect(0,0,48,64);
+    drawPixelChar(rctx,4,0,1,0,survived?'normal':'dead');
   }
 }
 
 /* ================================================
    ユーティリティ
    ================================================ */
-  
-function updateStatusMsg(msg) {
-  const el = document.getElementById('status-msg');
-  if (el) el.textContent = msg;
+function updateStatusMsg(msg){
+  const el=document.getElementById('status-msg'); if(el) el.textContent=msg;
 }
-
-function shakeScreen() {
-  const gc = document.getElementById('game-container');
-  gc.classList.remove('shake');
-  void gc.offsetWidth;
-  gc.classList.add('shake');
-  gc.addEventListener('animationend', () => gc.classList.remove('shake'), { once: true });
+function shakeScreen(){
+  const gc=document.getElementById('game-container');
+  gc.classList.remove('shake'); void gc.offsetWidth; gc.classList.add('shake');
+  gc.addEventListener('animationend',()=>gc.classList.remove('shake'),{once:true});
 }
-
-function showOverlay(title, msg, buttons) {
-  document.getElementById('overlay-title').textContent = title;
-  document.getElementById('overlay-msg').textContent = msg;
-  const btns = document.getElementById('overlay-btns');
-  btns.innerHTML = '';
-  buttons.forEach(b => {
-    const el = document.createElement('button');
-    el.textContent = b.label;
-    el.className = b.cls;
-    el.onclick = b.action;
+function showOverlay(title,msg,buttons){
+  document.getElementById('overlay-title').textContent=title;
+  document.getElementById('overlay-msg').textContent=msg;
+  const btns=document.getElementById('overlay-btns'); btns.innerHTML='';
+  buttons.forEach(b=>{
+    const el=document.createElement('button');
+    el.textContent=b.label; el.className=b.cls;
+    // iOSタップ確実化：touchstartとclickの両方登録
+    el.addEventListener('touchstart',e=>{e.preventDefault();b.action();},{passive:false});
+   
     btns.appendChild(el);
   });
   document.getElementById('overlay').classList.remove('hidden');
 }
-
-function hideOverlay() {
+function hideOverlay(){
   document.getElementById('overlay').classList.add('hidden');
 }
-
-function hideAllScreens() {
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+function hideAllScreens(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));
+  const sp=document.getElementById('screen-play');
+  if(sp) sp.classList.add('hidden');
   hideOverlay();
 }
 
 /* ================================================
    ゲーム開始
    ================================================ */
-function startGame() {
+function startGame(){
   hideAllScreens();
-  document.getElementById('screen-play').classList.remove('hidden');
-
-  canvas = document.getElementById('game-canvas');
-  ctx    = canvas.getContext('2d');
-  canvas.width  = CANVAS_W;
-  canvas.height = CANVAS_H;
-
-  state.phase      = 'walk';
-  state.playerX    = 8;
-  state.playerY    = 268;
-  state.playerDir  = 1;
-  state.fallingY   = 0;
-  state.fallSpeed  = 0;
-  state.frameCount = 0;
-  state.canMove    = true;
-  state.eventType  = null;
-  state.lastChoice = null;
-  state.keys       = { left: false, right: false };
-
-  initBoards();
-  updateStatusMsg('板まで歩け！');
+  const sp=document.getElementById('screen-play');
+  sp.classList.remove('hidden');
+  canvas=document.getElementById('game-canvas');
+  ctx=canvas.getContext('2d');
+  canvas.width=CANVAS_W; canvas.height=CANVAS_H;
+  // キャンバス高さ確定（レイアウト確定後に計算）
+  requestAnimationFrame(()=>{ resizeCanvas(); });
+  state.phase='walk'; state.playerX=8; state.playerY=268; state.playerDir=1;
+  state.fallingY=0; state.fallSpeed=0; state.frameCount=0;
+  state.canMove=true; state.eventType=null; state.lastChoice=null;
+  state.keys={left:false,right:false};
+  initBoards(); updateStatusMsg('板まで歩け！');
   requestAnimationFrame(gameLoop);
 }
-
-function restartGame() { startGame(); }
-
-function goTitle() {
+function restartGame(){ startGame(); }
+function goTitle(){
   hideAllScreens();
   document.getElementById('screen-title').classList.remove('hidden');
-  const tc = document.getElementById('title-char-canvas');
-  if (tc) {
-    const tctx = tc.getContext('2d');
-    tctx.clearRect(0, 0, 48, 64);
-    drawPixelChar(tctx, 4, 0, 1, 0, 'normal');
-  }
+  const tc=document.getElementById('title-char-canvas');
+  if(tc){ const tctx=tc.getContext('2d'); tctx.clearRect(0,0,48,64); drawPixelChar(tctx,4,0,1,0,'normal'); }
 }
 
 /* ================================================
    メインループ
    ================================================ */
-function gameLoop() {
+function gameLoop(){
   state.frameCount++;
-  if (!document.getElementById('screen-play').classList.contains('hidden')) {
-    updatePlayer();
-    renderGame();
-    requestAnimationFrame(gameLoop);
-  }
+  const sp=document.getElementById('screen-play');
+  if(sp&&!sp.classList.contains('hidden')){ updatePlayer(); renderGame(); requestAnimationFrame(gameLoop); }
 }
 
 /* ================================================
    コントローラー
    ================================================ */
-function ctrlPress(dir) {
-  state.keys[dir] = true;
-  document.getElementById('btn-' + dir).classList.add('pressed');
+function ctrlPress(dir){
+  state.keys[dir]=true;
+  const btn=document.getElementById('btn-'+dir); if(btn) btn.classList.add('pressed');
 }
-function ctrlRelease(dir) {
-  state.keys[dir] = false;
-  document.getElementById('btn-' + dir).classList.remove('pressed');
+function ctrlRelease(dir){
+  state.keys[dir]=false;
+  const btn=document.getElementById('btn-'+dir); if(btn) btn.classList.remove('pressed');
 }
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowLeft')  ctrlPress('left');
-  if (e.key === 'ArrowRight') ctrlPress('right');
-});
-document.addEventListener('keyup', e => {
-  if (e.key === 'ArrowLeft')  ctrlRelease('left');
-  if (e.key === 'ArrowRight') ctrlRelease('right');
-});
+document.addEventListener('keydown',e=>{ if(e.key==='ArrowLeft') ctrlPress('left'); if(e.key==='ArrowRight') ctrlPress('right'); });
+document.addEventListener('keyup',  e=>{ if(e.key==='ArrowLeft') ctrlRelease('left'); if(e.key==='ArrowRight') ctrlRelease('right'); });
 
 /* ================================================
    初期化
    ================================================ */
-window.addEventListener('DOMContentLoaded', () => {
-  const tc = document.getElementById('title-char-canvas');
-  if (tc) {
-    const tctx = tc.getContext('2d');
-    drawPixelChar(tctx, 4, 0, 1, 0, 'normal');
-  }
+window.addEventListener('DOMContentLoaded',()=>{
+  const tc=document.getElementById('title-char-canvas');
+  if(tc){ const tctx=tc.getContext('2d'); drawPixelChar(tctx,4,0,1,0,'normal'); }
+  setupControls();
+  window.addEventListener('resize',resizeCanvas);
 });
-
-document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+//document.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 </script>
 </body>
 </html>
 ```
+
+以上が完全なコードです。主な修正点を改めてまとめると：
+
+- `viewport-fit=cover` でノッチ・ホームバー領域まで使用
+- `body` を `position:fixed` にして余白ゼロ化
+- `#screen-play` をflexなしのposition絶対配置に統一
+- `#game-canvas` の高さを `resizeCanvas()` で動的計算（safe-area込み）
+- タッチボタンを `setupControls()` で `passive:false` 登録し、iOSの誤動作を防止
+- オーバーレイボタンも `touchstart` + `click` の両方を登録
