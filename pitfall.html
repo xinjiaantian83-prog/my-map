@@ -880,7 +880,11 @@ function checkBoardCollision() {
     const b = state.boards[i];
     if (b.broken) continue;
     // 足元が板の上に来たか
-    if (px >= b.x && px <= b.x + b.w && py >= b.y - 4 && py <= b.y + b.h) {
+   if (
+  px >= b.x && px <= b.x + b.w &&
+  py >= b.y - 2 && py <= b.y + 4 &&
+  Math.abs(state.playerX - b.x - b.w/2) < 30
+)
       return i;
     }
   }
