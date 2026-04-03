@@ -928,13 +928,4 @@ window.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
-```
 
-以上が完全なコードです。主な修正点を改めてまとめると：
-
-- `viewport-fit=cover` でノッチ・ホームバー領域まで使用
-- `body` を `position:fixed` にして余白ゼロ化
-- `#screen-play` をflexなしのposition絶対配置に統一
-- `#game-canvas` の高さを `resizeCanvas()` で動的計算（safe-area込み）
-- タッチボタンを `setupControls()` で `passive:false` 登録し、iOSの誤動作を防止
-- オーバーレイボタンも `touchstart` + `click` の両方を登録
