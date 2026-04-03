@@ -639,7 +639,7 @@ function initBoards() {
 
   if (state.trapStep === 0) {
     // 1回目は必ず安全（中央にしておくのが分かりやすい）
-    state.safeIndex = 1;
+    state.safeIndex = 0;
   } else {
     // 2回目以降はランダム
     state.safeIndex = Math.floor(Math.random() * 3);
@@ -830,7 +830,7 @@ function renderGame() {
     }
 
     // 落下中のキャラ
-    const charY = Math.min(200, 80 + state.fallingY * 0.3);
+   const charY = Math.min(360, 40 + state.fallingY * 0.8);
     drawPixelChar(ctx, state.playerX, charY, state.playerDir, state.playerAnim, 'fall');
 
     // 穴の縁（上部に残っている板の破片）
@@ -1030,7 +1030,7 @@ function startFalling() {
     state.fallingY += state.fallSpeed;
     state.fallSpeed += 0.5;
 
-    if (state.fallingY >= 120) {
+    if (state.fallingY >= 260) {
       clearInterval(fallInterval);
       // 着地
       shakeScreen();
