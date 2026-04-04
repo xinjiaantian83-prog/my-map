@@ -635,12 +635,15 @@ function update() {
   }
 
 
-  // 向こう岸に届いたらゴール
-  const footX = state.playerX + 12;
-  if(footX >= 332){
-    state.canInput = false;
-    state.phase = 'event';
+ // 向こう岸に届いたら判定
+const footX = state.playerX + 12;
+if(footX >= 332){
+  state.canInput = false;
 
+  const realGoal = Math.random() < 0.35;
+
+  if(realGoal){
+    state.phase = 'event';
     showOverlay(
       'ゴール！！',
       '向こう岸に届いた！！\nコーラがあるぞ！',
@@ -655,8 +658,12 @@ function update() {
         }
       }]
     );
-    return;
+  } else {
+    startFalling();
   }
+
+  return;
+}
   const hit = checkBoardCollision();
   if(hit !== -1){
     state.canInput = false;
