@@ -342,6 +342,7 @@ const state = {
   eventType: null,
   choiceLabel: '',
   canInput: true,
+  bullets: [],
 };
 
 const boardDefs = [
@@ -575,7 +576,10 @@ function render() {
   drawBackground();
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
-
+ctx.fillStyle = '#ff4040';
+state.bullets.forEach(b=>{
+  ctx.fillRect(b.x, b.y, 6, 6);
+});
   if(state.phase === 'walk' && state.walkFrame < 90){
     const a = 0.5 + 0.5 * Math.sin(state.walkFrame * 0.18);
     ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
@@ -627,7 +631,24 @@ function drawSign(){
 function update() {
   console.log("X:", state.playerX);
   if(state.phase !== 'walk' || !state.canInput) return;
+if(state.bullets.length === 0){
+  state.bullets.push({ x: 180, y: 0 });
+}
+  state.bullets.forEach(b=>{
+  b.y += 5;
+});
+  for(let i=0;i<state.bullets.length;i++){
+  const b = state.bullets[i];
 
+  const dx = b.x - (state.playerX + 12);
+  const dy = b.y - (state.playerY + 20);
+
+  if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
+    state.bullets = [];
+    startFalling();
+    return;
+  }
+}
   const speed = 3;
   if(state.moving.left){
     state.playerX = Math.max(8, state.playerX - speed);
