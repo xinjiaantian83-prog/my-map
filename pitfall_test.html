@@ -1008,9 +1008,6 @@ function bindHoldButton(el, dir) {
 document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
-document.getElementById('bgmTitle').play();
-  document.getElementById('bgmTitle').pause();
-  document.getElementById('bgmTitle').currentTime = 0;
 
   showScreen('playScreen');
   resetGame();
@@ -1045,6 +1042,7 @@ scene.addEventListener('touchstart', () => {
   }
 });
 showScreen('titleScreen');
+  document.getElementById('bgmTitle').play().catch(() => {});
 loop();
   const subs = [
   'PITFALL ESCAPE v2.0',
