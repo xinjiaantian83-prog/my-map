@@ -633,7 +633,27 @@ function update() {
     state.dir = 1;
     state.walkFrame++;
   }
+  // 最後まで渡りきったらゴール
+  if(state.progress >= 2 && state.playerX >= 318){
+    state.canInput = false;
+    state.phase = 'event';
 
+    showOverlay(
+      'ゴール！！',
+      '渡りきった！！\nコーラがあるぞ！',
+      [{
+        label: '飲む',
+        cls: 'btn-main',
+        action: () => {
+          hideOverlay();
+          state.eventType = 'cola';
+          state.choiceLabel = '飲む';
+          showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
+        }
+      }]
+    );
+    return;
+  }
   const hit = checkBoardCollision();
   if(hit !== -1){
     state.canInput = false;
