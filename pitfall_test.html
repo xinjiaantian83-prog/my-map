@@ -343,6 +343,7 @@ const state = {
   choiceLabel: '',
   canInput: true,
   bullets: [],
+  showCola: false,
 };
 
 const boardDefs = [
@@ -375,6 +376,7 @@ function resetGame() {
   state.eventType = null;
   state.choiceLabel = '';
   state.canInput = true;
+  state.showCola = false;
   makeBoards();
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
 }
@@ -589,6 +591,19 @@ state.bullets.forEach(b=>{
     ctx.font = '11px Courier New';
     ctx.fillText('▶ 板に乗れ！', state.playerX + 26, state.playerY + 10);
   }
+  if(state.showCola){
+  // 黒背景
+  ctx.fillStyle = 'rgba(0,0,0,0.8)';
+  ctx.fillRect(0,0,360,480);
+
+  // コーラ（中央）
+  drawCola(168, 180, 2);
+
+  // YOU WIN
+  ctx.fillStyle = '#f8d800';
+  ctx.font = 'bold 20px Courier New';
+  ctx.fillText('YOU WIN!', 110, 140);
+}
 }
 
 function drawLadder(){
@@ -630,7 +645,24 @@ function drawSign(){
   ctx.font = '9px Courier New';
   ctx.fillText('(たぶん)', x+18, y+32);
 }
+function drawCola(x, y, scale=1){
+  const s = scale;
 
+  ctx.fillStyle = '#e02020';
+  ctx.fillRect(x, y, 24*s, 40*s);
+
+  ctx.fillStyle = '#cccccc';
+  ctx.fillRect(x, y, 24*s, 6*s);
+  ctx.fillRect(x, y + 34*s, 24*s, 6*s);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(x + 4*s, y + 12*s, 16*s, 3*s);
+  ctx.fillRect(x + 6*s, y + 18*s, 12*s, 3*s);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = (10*s) + 'px Courier New';
+  ctx.fillText('C', x + 8*s, y + 30*s);
+}
 function update() {
   console.log("update生きてる");
 
@@ -696,11 +728,12 @@ b.x += Math.sin(b.y * 0.1) * 2;
 if(footX >= 332){
   state.canInput = false;
 state.bullets = [];
-  if(Math.random() < 0.3){
-    showResult(true, 'ゴール！！', 'コーラGET！！');
-  } else {
-    startFalling();
-  }
+if(Math.random() < 0.3){
+  state.showCola = true;
+  state.canInput = false;
+} else {
+  startFalling();
+}
 
   return;
 }
