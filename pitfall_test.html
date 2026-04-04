@@ -217,14 +217,17 @@ body{
 }
 /* result */
 #resultScreen{
+  background:#0a0a16;
+  z-index:60;
+}
+
+#resultScreen:not(.hidden){
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
   padding:24px;
-  background:#0a0a16;
-  z-index:60;
 }
 .resultTitle{
   font-size:20px;
