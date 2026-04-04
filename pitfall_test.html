@@ -301,6 +301,7 @@ body{
 
 ※ 保証はありません</div>
     <button class="btn btn-main" id="startBtn">PUSH START</button>
+    <button class="btn btn-sub" id="musicBtn">MUSIC START</button>
   </div>
 
   <div id="playScreen" class="screen hidden">
@@ -1151,6 +1152,14 @@ function playHitSound(){
   osc.start();
   osc.stop(ctx.currentTime + 0.2);
 }
+  document.getElementById('musicBtn').onclick = () => {
+  const ctx = getCtx();
+  ctx.resume();
+
+  const bgm = document.getElementById('bgmTitle');
+  bgm.currentTime = 0;
+  bgm.play().catch(() => {});
+};
 </script>
 </body>
 </html>
