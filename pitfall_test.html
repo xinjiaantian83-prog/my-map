@@ -540,7 +540,16 @@ function drawBoard(b) {
 
 function drawPixelChar(x,y,dir,variant='normal') {
   const s = 3;
-  const colors = ['', '#f5c48a', '#3a1a00', '#2060e0', '#1a1a8a', '#202020', '#ffffff', '#e04040'];
+ const colors = [
+  '', 
+  '#f5c48a',   // 肌
+  '#3a1a00',   // 髪
+  '#e02020',   // 服（赤）
+  '#ffffff',   // 服サブ（白）
+  '#202020',   // 足
+  '#ffffff',   // 目
+  '#ff4040'    // アクセント
+];
 
   const walkA = [
     [0,0,2,2,2,0,0,0],[0,0,1,1,1,0,0,0],[0,0,1,6,1,0,0,0],[0,2,1,1,1,2,0,0],
