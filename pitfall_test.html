@@ -629,30 +629,39 @@ function drawSign(){
 }
 
 function update() {
-  console.log("X:", state.playerX);
   if(state.phase !== 'walk' || !state.canInput) return;
-if(state.bullets.length < 3){
-  state.bullets.push({
-    x: Math.random() * 320 + 20,
-    y: 0
-  });
-}
-  state.bullets.forEach(b=>{
-  b.y += 5;
-});
-state.bullets = state.bullets.filter(b => b.y < 500);
-  for(let i=0;i<state.bullets.length;i++){
-  const b = state.bullets[i];
 
-  const dx = b.x - (state.playerX + 12);
-  const dy = b.y - (state.playerY + 20);
-
-  if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
-    state.bullets = [];
-    startFalling();
-    return;
+  // 弾生成
+  if(state.bullets.length < 3){
+    state.bullets.push({
+      x: Math.random() * 320 + 20,
+      y: 0
+    });
   }
-}
+
+  // 弾移動
+  state.bullets.forEach(b=>{
+    b.y += 5;
+  });
+
+  // 画面外削除
+  state.bullets = state.bullets.filter(b => b.y < 500);
+
+  // 当たり判定
+  for(let i=0;i<state.bullets.length;i++){
+    const b = state.bullets[i];
+
+    const dx = b.x - (state.playerX + 12);
+    const dy = b.y - (state.playerY + 20);
+
+    if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
+      state.bullets = [];
+      startFalling();
+      return;
+    }
+  }
+
+  // 移動
   const speed = 3;
   if(state.moving.left){
     state.playerX = Math.max(8, state.playerX - speed);
@@ -665,45 +674,24 @@ state.bullets = state.bullets.filter(b => b.y < 500);
     state.walkFrame++;
   }
 
-
-// 向こう岸に届いたら判定
-const footX = state.playerX + 12;
-if(footX >= 332){
-  state.canInput = false;
-  startFalling();
-  return;
-}
-
-
-  return;
-}
-  const hit = checkBoardCollision();
-  if(hit !== -1){
+  // 右端到達 → 落下（理不尽）
+  const footX = state.playerX + 12;
+  if(footX >= 332){
     state.canInput = false;
-    onBoardHit(hit);
+    startFalling();
+    return;
+  }
+
+  // 左端戻り → 落下
+  if(state.playerX <= 10){
+    state.bullets = [];
+    startFalling();
+    return;
   }
 }
 
-function checkBoardCollision() {
-  const px = state.playerX + 12;
-  const py = state.playerY + 46;
 
-  for(let i=0;i<state.boards.length;i++){
-    const b = state.boards[i];
-    if(b.broken) continue;
-    if(b.passed) continue;
-    if(state.playerX > b.x + b.w) continue;
 
-    const innerLeft = b.x + b.w * 0.25;
-    const innerRight = b.x + b.w * 0.75;
-
-    if(px >= innerLeft && px <= innerRight && py >= b.y - 4 && py <= b.y + b.h){
-      return i;
-    }
-  }
-  return -1;
-}
- 
 
 function onBoardHit(idx) {
   if(state.boards[idx].safe){
