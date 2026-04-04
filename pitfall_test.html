@@ -1112,6 +1112,23 @@ function playHitSound(){
   osc.start();
   osc.stop(ctx.currentTime + 0.2);
 }
+  function playStepSound(){
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(250, ctx.currentTime);
+
+  gain.gain.setValueAtTime(0.08, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.05);
+}
 </script>
 </body>
 </html>
