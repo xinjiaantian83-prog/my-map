@@ -295,7 +295,8 @@ body{
 <div id="game">
 
   <div id="titleScreen" class="screen">
-<div class="title">I LOVE COKE</div>
+  <canvas id="titleChar" width="140" height="140" style="margin-bottom:10px;"></canvas>
+  <div class="title">I LOVE COKE</div>
     <div class="subtitle">PITFALL ESCAPE v2.0</div>
   <div class="info">目標
 
@@ -1195,6 +1196,62 @@ function playHitSound(){
   bgm.currentTime = 0;
   bgm.play().catch(() => {});
 };
+  const titleChar = document.getElementById('titleChar');
+const titleCtx = titleChar.getContext('2d');
+
+function drawTitleChar() {
+  titleCtx.clearRect(0, 0, 140, 140);
+
+  const offsetX = Math.sin(Date.now() * 0.025) * 3;
+  const offsetY = Math.sin(Date.now() * 0.025) * 2;
+
+  titleCtx.save();
+  titleCtx.translate(50 + offsetX, 28 + offsetY);
+
+  const s = 5;
+  const colors = [
+    '',
+    '#f5c48a',
+    '#3a1a00',
+    '#e02020',
+    '#ffffff',
+    '#202020',
+    '#ffffff',
+    '#ff4040'
+  ];
+
+  const px = [
+    [0,0,2,2,2,0,0,0],
+    [0,0,1,1,1,0,0,0],
+    [0,0,1,6,1,0,0,0],
+    [0,2,1,1,1,2,0,0],
+    [0,0,3,3,3,0,0,0],
+    [0,3,3,3,3,3,0,0],
+    [0,0,3,3,3,0,0,0],
+    [0,0,4,4,4,0,0,0],
+    [0,0,4,4,4,0,0,0],
+    [0,5,0,0,0,5,0,0],
+    [0,5,0,0,0,5,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+  ];
+
+  for(let r=0;r<16;r++){
+    for(let c=0;c<8;c++){
+      const v = px[r][c];
+      if(!v) continue;
+      titleCtx.fillStyle = colors[v];
+      titleCtx.fillRect(c*s, r*s, s, s);
+    }
+  }
+
+  titleCtx.restore();
+}
+
+setInterval(drawTitleChar, 16);
 </script>
 </body>
 </html>
