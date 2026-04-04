@@ -334,6 +334,8 @@ body{
 
 </div>
 
+<audio id="seHit" src="hit.mp3" preload="auto"></audio>
+
 <script>
 const scene = document.getElementById('scene');
 const ctx = scene.getContext('2d');
@@ -736,6 +738,7 @@ b.x += Math.sin(b.y * 0.1) * 2;
   state.canInput = false;
   state.moving.left = false;
   state.moving.right = false;
+     playHitSound();
   shakeGame();
  setStatus('HIT!!', 'やられた…', 'HP: 0');
   setTimeout(() => {
@@ -1029,6 +1032,23 @@ setInterval(()=>{
     el.textContent = subs[Math.floor(Math.random()*subs.length)];
   }
 }, 1500);
+  function playHitSound(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'square'; // レトロ音
+  osc.frequency.setValueAtTime(200, ctx.currentTime);
+
+  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.15);
+}
 </script>
 </body>
 </html>
