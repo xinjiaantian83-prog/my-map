@@ -631,7 +631,7 @@ function drawSign(){
 function update() {
   console.log("update生きてる");
 
-  if(state.phase !== 'walk') return;
+  if(state.phase !== 'walk' || !state.canInput) return;
  
   // 弾生成
 if(state.walkFrame > 20 && Math.random() < 0.3){
