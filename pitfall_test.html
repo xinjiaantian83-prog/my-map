@@ -707,14 +707,25 @@ function drawCola(x, y, scale=1){
   ctx.fillStyle = '#ffffff';
   ctx.font = (10*s) + 'px Courier New';
   ctx.fillText('C', x + 8*s, y + 30*s);
+
   // シュワシュワ（泡）
-ctx.fillStyle = '#ffffff';
-for(let i=0;i<6;i++){
-  const bx = x + 12*s + (Math.random()*8 - 4)*s;
-  const by = y - (Math.random()*20)*s;
-  ctx.fillRect(bx, by, 2*s, 2*s);
+  ctx.fillStyle = '#ffffff';
+  for(let i=0;i<6;i++){
+    const bx = x + 12*s + (Math.random()*8 - 4)*s;
+    const by = y - (Math.random()*20)*s;
+    ctx.fillRect(bx, by, 2*s, 2*s);
+  }
+
+  // 吹き出しライン
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x + 12*s, y);
+  ctx.lineTo(x + 12*s + Math.sin(Date.now()*0.01)*5, y - 20*s);
+  ctx.stroke();
 }
-  function drawGoalSign(){
+
+function drawGoalSign(){
   const poleX1 = 306;
   const poleX2 = 342;
   const poleTop = 228;
@@ -747,14 +758,6 @@ for(let i=0;i<6;i++){
   ctx.fillStyle = '#f8d800';
   ctx.font = 'bold 10px Courier New';
   ctx.fillText('GOAL', 309, 256);
-}
-  // 吹き出しライン
-ctx.strokeStyle = '#ffffff';
-ctx.lineWidth = 2;
-ctx.beginPath();
-ctx.moveTo(x + 12*s, y);
-ctx.lineTo(x + 12*s + Math.sin(Date.now()*0.01)*5, y - 20*s);
-ctx.stroke();
 }
 function update() {
   state.score++;
