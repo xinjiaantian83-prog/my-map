@@ -1215,24 +1215,30 @@ function playHitSound(){
   osc.start();
   osc.stop(ctx.currentTime + 0.1);
 }
-  function playWinSound(){
+function playWinSound(){
   const ctx = getCtx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
 
-  osc.type = 'square';
+  const notes = [523, 659, 784, 1046];
+  let t = ctx.currentTime;
 
-  osc.frequency.setValueAtTime(300, ctx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.2);
+  notes.forEach((freq) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
 
-  gain.gain.setValueAtTime(0.25, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, t);
 
-  osc.connect(gain);
-  gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
 
-  osc.start();
-  osc.stop(ctx.currentTime + 0.2);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(t);
+    osc.stop(t + 0.2);
+
+    t += 0.15;
+  });
 }
   function playStepSound(){
   const ctx = getCtx();
