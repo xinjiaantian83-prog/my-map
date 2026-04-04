@@ -769,6 +769,26 @@ state.bullets = [];
 if(Math.random() < 0.3){
   state.showCola = true;
   state.canInput = false;
+  function playWinSound(){
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'square';
+
+  // 上がる音
+  osc.frequency.setValueAtTime(300, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.2);
+
+  gain.gain.setValueAtTime(0.25, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
+}
 } else {
   startFalling();
 }
