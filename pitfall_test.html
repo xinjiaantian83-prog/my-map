@@ -633,8 +633,9 @@ function update() {
     state.dir = 1;
     state.walkFrame++;
   }
+
   // 最後まで渡りきったらゴール
-  if(state.progress >= 2 && state.playerX >= 318){
+  if(state.progress >= 2 && state.playerX >= 320){
     state.canInput = false;
     state.phase = 'event';
 
@@ -654,6 +655,7 @@ function update() {
     );
     return;
   }
+
   const hit = checkBoardCollision();
   if(hit !== -1){
     state.canInput = false;
@@ -688,25 +690,26 @@ function onBoardHit(idx) {
 }
 
 function onSafeBoard(idx) {
-  // 3枚目ならゴール
+  // 3枚目なら、その先へ強制的に進める
   if(idx === 2){
+    setStatus('GOAL', '渡りきれ！', 'HP: ♥');
+
     showOverlay(
-      'ゴール！！',
-      '渡りきった！！\nコーラがあるぞ！',
+      '最後の板だ！',
+      'このまま前へ進め！',
       [{
-        label: '飲む',
+        label: '進む →',
         cls: 'btn-main',
         action: () => {
           hideOverlay();
-          state.eventType = 'cola';
-          state.choiceLabel = '飲む';
-          showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
+          state.playerX = 310;   // ← 板の当たり判定の外へ出す
+          state.phase = 'walk';
+          state.canInput = true;
         }
       }]
     );
     return;
   }
-
   const lines = [
     'あれ？\n割れない…？\nもしかして…',
     'ん？\n大丈夫か？\nいけそう！',
