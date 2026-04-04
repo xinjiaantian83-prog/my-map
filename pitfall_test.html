@@ -780,7 +780,7 @@ function startFalling() {
 
   const iv = setInterval(() => {
     state.fallingDepth += 6;
-    if(state.fallingDepth >= 280){
+    if(state.fallingDepth >= 520){
       clearInterval(iv);
       shakeGame();
       setTimeout(showFallEvent, 400);
