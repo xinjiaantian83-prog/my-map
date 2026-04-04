@@ -351,9 +351,9 @@ function makeBoards() {
     safe: i === state.safeIndex,
     broken: false,
     crack: 0,
+    passed: false
   }));
 }
-
 function resetGame() {
   state.phase = 'walk';
   state.playerX = 10;
@@ -634,14 +634,16 @@ function update() {
     state.walkFrame++;
   }
 
-  // 最後まで渡りきったらゴール
-  if(state.progress >= 2 && state.playerX >= 320){
+
+  // 向こう岸に届いたらゴール
+  const footX = state.playerX + 12;
+  if(footX >= 332){
     state.canInput = false;
     state.phase = 'event';
 
     showOverlay(
       'ゴール！！',
-      '渡りきった！！\nコーラがあるぞ！',
+      '向こう岸に届いた！！\nコーラがあるぞ！',
       [{
         label: '飲む',
         cls: 'btn-main',
@@ -655,7 +657,6 @@ function update() {
     );
     return;
   }
-
   const hit = checkBoardCollision();
   if(hit !== -1){
     state.canInput = false;
@@ -670,6 +671,8 @@ function checkBoardCollision() {
   for(let i=0;i<state.boards.length;i++){
     const b = state.boards[i];
     if(b.broken) continue;
+    if(b.passed) continue;
+    if(state.playerX > b.x + b.w) continue;
 
     const innerLeft = b.x + b.w * 0.25;
     const innerRight = b.x + b.w * 0.75;
@@ -680,6 +683,7 @@ function checkBoardCollision() {
   }
   return -1;
 }
+ 
 
 function onBoardHit(idx) {
   if(state.boards[idx].safe){
@@ -688,28 +692,9 @@ function onBoardHit(idx) {
     onDangerBoard(idx);
   }
 }
-
 function onSafeBoard(idx) {
-  // 3枚目なら、その先へ強制的に進める
-  if(idx === 2){
-    setStatus('GOAL', '渡りきれ！', 'HP: ♥');
+  state.boards[idx].passed = true;
 
-    showOverlay(
-      '最後の板だ！',
-      'このまま前へ進め！',
-      [{
-        label: '進む →',
-        cls: 'btn-main',
-        action: () => {
-          hideOverlay();
-          state.playerX = 310;   // ← 板の当たり判定の外へ出す
-          state.phase = 'walk';
-          state.canInput = true;
-        }
-      }]
-    );
-    return;
-  }
   const lines = [
     'あれ？\n割れない…？\nもしかして…',
     'ん？\n大丈夫か？\nいけそう！',
@@ -717,17 +702,19 @@ function onSafeBoard(idx) {
     'えっ\n落ちない！\nやるじゃん自分！'
   ];
 
-  setStatus('STAGE ' + state.stage, '助かった？', 'HP: ♥');
+  setStatus('STAGE 1', '前へ進め！', 'HP: ♥');
 
   showOverlay(
-    '助かった！！？',
-    lines[Math.floor(Math.random()*lines.length)] + '\n\nでも前がある…\n次の板は…？',
+    'セーフ！！',
+    lines[Math.floor(Math.random()*lines.length)] + '\n\nこのまま前へ進め！',
     [{
-      label: '次に進む →',
+      label: '進む →',
       cls: 'btn-main',
       action: () => {
         hideOverlay();
-        proceedToNextTrap();
+        state.playerX = state.boards[idx].x + state.boards[idx].w - 10;
+        state.phase = 'walk';
+        state.canInput = true;
       }
     }]
   );
