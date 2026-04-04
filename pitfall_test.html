@@ -754,20 +754,26 @@ function drawCola(x, y, scale=1){
   ctx.font = (10*s) + 'px Courier New';
   ctx.fillText('C', x + 8*s, y + 30*s);
 
-  // シュワシュワ（泡）
-  ctx.fillStyle = '#ffffff';
-  for(let i=0;i<6;i++){
-    const bx = x + 12*s + (Math.random()*8 - 4)*s;
-    const by = y - (Math.random()*20)*s;
-    ctx.fillRect(bx, by, 2*s, 2*s);
-  }
+  // 爆発炭酸（アメリカン仕様）
+for(let i=0;i<80;i++){
+  const bx = x + 12*s + (Math.random()*60 - 30)*s;
+  const by = y - Math.random()*200*s;
 
-  // 吹き出しライン
+  const size = Math.random() < 0.7 ? 2*s : 3*s;
+
+  ctx.fillStyle = Math.random() < 0.8 ? '#ffffff' : '#f8d800';
+  ctx.fillRect(bx, by, size, size);
+}
+
+// 根元の噴射（太め）
+for(let i=0;i<6;i++){
+  const spread = (Math.random()*10 - 5)*s;
   ctx.strokeStyle = '#ffffff';
   ctx.lineWidth = 2;
+
   ctx.beginPath();
   ctx.moveTo(x + 12*s, y);
-  ctx.lineTo(x + 12*s + Math.sin(Date.now()*0.01)*5, y - 20*s);
+  ctx.lineTo(x + 12*s + spread, y - 20*s - Math.random()*30*s);
   ctx.stroke();
 }
 
