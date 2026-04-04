@@ -753,12 +753,17 @@ function drawGoalSign(){
   }
 
   ctx.strokeStyle = '#c8b070';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(signX, signY, signW, signH);
+ctx.lineWidth = 2;
+ctx.strokeRect(signX, signY, signW, signH);
 
-  ctx.fillStyle = '#f8d800';
-  ctx.font = 'bold 10px Courier New';
-  ctx.fillText('GOAL', 309, 256);
+// 影（白）
+ctx.fillStyle = '#ffffff';
+ctx.font = 'bold 10px Courier New';
+ctx.fillText('COKE', 302, 254);
+
+// 本体（赤）
+ctx.fillStyle = '#ff3030';
+ctx.fillText('COKE', 304, 256);
 }
 function update() {
   state.score++;
