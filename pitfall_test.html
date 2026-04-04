@@ -367,6 +367,7 @@ const state = {
   fallingDepth: 0,
   playCount: 0,
   successCount: 0,
+  score: 0,
   eventType: null,
   choiceLabel: '',
   canInput: true,
@@ -723,6 +724,7 @@ ctx.lineTo(x + 12*s + Math.sin(Date.now()*0.01)*5, y - 20*s);
 ctx.stroke();
 }
 function update() {
+  state.score++;
   console.log("update生きてる");
 
   if(state.phase !== 'walk' || !state.canInput) return;
@@ -976,7 +978,8 @@ function showResult(success, title, msg) {
 
   document.getElementById('resultTitle').textContent = title;
   document.getElementById('resultTitle').className = 'resultTitle ' + (success ? 'success' : 'fail');
-  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultMsg').textContent =
+  msg + '\n\nSCORE: ' + state.score;
   document.getElementById('resultMeta').textContent =
     'イベント: ' + (state.eventType || '?') +
     ' | 選択: ' + state.choiceLabel +
