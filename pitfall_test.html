@@ -576,6 +576,9 @@ function render() {
   drawBackground();
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
+  ctx.fillStyle = '#f8d800';
+ctx.font = 'bold 12px Courier New';
+ctx.fillText('GOAL', 300, 290);
 ctx.fillStyle = '#ff4040';
 state.bullets.forEach(b=>{
   ctx.fillRect(b.x, b.y, 6, 6);
@@ -690,11 +693,17 @@ b.x += Math.sin(b.y * 0.1) * 2;
 
   // 右端到達 → 落下（理不尽）
   const footX = state.playerX + 12;
-  if(footX >= 332){
-    state.canInput = false;
+if(footX >= 332){
+  state.canInput = false;
+state.bullets = [];
+  if(Math.random() < 0.3){
+    showResult(true, 'ゴール！！', 'コーラGET！！');
+  } else {
     startFalling();
-    return;
   }
+
+  return;
+}
 
   // 左端戻り → 落下
 if(state.playerX <= 10 && state.walkFrame > 10){
