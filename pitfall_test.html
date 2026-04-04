@@ -993,7 +993,13 @@ document.addEventListener('keyup', (e) => {
   if(e.key === 'ArrowLeft') state.moving.left = false;
   if(e.key === 'ArrowRight') state.moving.right = false;
 });
-
+scene.addEventListener('touchstart', () => {
+  if(state.showCola){
+    state.showCola = false;
+    showScreen('titleScreen');
+    state.phase = 'title';
+  }
+});
 showScreen('titleScreen');
 loop();
 </script>
