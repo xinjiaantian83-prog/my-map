@@ -1009,7 +1009,8 @@ document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
 
-  document.getElementById('bgmTitle').play(); // ←これ追加
+  document.getElementById('bgmTitle').pause();
+  document.getElementById('bgmTitle').currentTime = 0;
 
   showScreen('playScreen');
   resetGame();
@@ -1022,6 +1023,7 @@ document.getElementById('retryBtn').onclick = () => {
 document.getElementById('backTitleBtn').onclick = () => {
   state.phase = 'title';
   showScreen('titleScreen');
+  document.getElementById('bgmTitle').play();
 };
 
 bindHoldButton(document.getElementById('leftBtn'), 'left');
