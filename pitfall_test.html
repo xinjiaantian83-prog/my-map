@@ -1062,8 +1062,9 @@ document.addEventListener('keyup', (e) => {
 scene.addEventListener('touchstart', () => {
   if(state.showCola){
     state.showCola = false;
-    showScreen('titleScreen');
-    state.phase = 'title';
+
+    showResult(true, 'YOU WIN!', 'コーラ最高！！');
+
   }
 });
 showScreen('titleScreen');
