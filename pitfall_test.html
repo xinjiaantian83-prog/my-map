@@ -631,8 +631,11 @@ function drawSign(){
 function update() {
   console.log("X:", state.playerX);
   if(state.phase !== 'walk' || !state.canInput) return;
-if(state.bullets.length === 0 || state.bullets[0].y > 500){
-  state.bullets = [{ x: 180, y: 0 }];
+if(state.bullets.length < 3){
+  state.bullets.push({
+    x: Math.random() * 320 + 20,
+    y: 0
+  });
 }
   state.bullets.forEach(b=>{
   b.y += 5;
