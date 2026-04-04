@@ -363,7 +363,7 @@ function makeBoards() {
 }
 function resetGame() {
   state.phase = 'walk';
-  state.playerX = 150;
+  state.playerX = 10;
   state.playerY = 255;
   state.dir = 1;
   state.walkFrame = 0;
@@ -633,16 +633,21 @@ function update() {
   if(state.phase !== 'walk' || !state.canInput) return;
 
   // 弾生成
-  if(state.bullets.length < 3){
-    state.bullets.push({
-      x: Math.random() * 320 + 20,
-      y: 0
-    });
+if(Math.random() < 0.3){
+  if(state.bullets.length < 8){
+   const killer = Math.random() < 0.2;
+
+state.bullets.push({
+  x: killer ? state.playerX : state.playerX + (Math.random()*40 - 20),
+  y: 0
+});
   }
+}
 
   // 弾移動
   state.bullets.forEach(b=>{
-    b.y += 5;
+   b.y += 9;
+b.x += Math.sin(b.y * 0.1) * 2;
   });
 
   // 画面外削除
@@ -656,10 +661,13 @@ function update() {
     const dy = b.y - (state.playerY + 20);
 
     if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
-      state.bullets = [];
-      startFalling();
-     
-    }
+ state.bullets = [];
+shakeGame();
+setTimeout(() => {
+  startFalling();
+}, 200);
+      return; 
+}
   }
 
   // 移動
@@ -684,7 +692,7 @@ function update() {
   }
 
   // 左端戻り → 落下
-  if(state.playerX <= 10){
+if(state.playerX <= 10 && state.walkFrame > 10){
     state.bullets = [];
     startFalling();
     return;
