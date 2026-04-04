@@ -1008,7 +1008,7 @@ function bindHoldButton(el, dir) {
 document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
-
+document.getElementById('bgmTitle').play();
   document.getElementById('bgmTitle').pause();
   document.getElementById('bgmTitle').currentTime = 0;
 
