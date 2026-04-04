@@ -635,14 +635,14 @@ function update() {
 
  
   // 弾生成
-if(Math.random() < 0.3){
+if(state.walkFrame > 20 && Math.random() < 0.3){
   if(state.bullets.length < 8){
-   const killer = Math.random() < 0.2;
+    const killer = Math.random() < 0.2;
 
-state.bullets.push({
-  x: killer ? state.playerX : state.playerX + (Math.random()*40 - 20),
-  y: 0
-});
+    state.bullets.push({
+      x: killer ? state.playerX : state.playerX + (Math.random()*40 - 20),
+      y: 0
+    });
   }
 }
 
