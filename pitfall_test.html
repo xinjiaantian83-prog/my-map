@@ -698,20 +698,19 @@ function drawSign(){
 }
   function drawMissile(x, y){
   // 先端（赤）
-  ctx.fillStyle = '#ff4040';
+  ctx.fillStyle = '#ff0000';
   ctx.fillRect(x+2, y, 2, 4);
 
   // 胴体（白）
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#666';
   ctx.fillRect(x, y+4, 6, 10);
 
   // 羽（グレー）
   ctx.fillStyle = '#808080';
-  ctx.fillRect(x-1, y+8, 2, 4);
-  ctx.fillRect(x+5, y+8, 2, 4);
-
+ ctx.fillRect(x-2, y+8, 3, 5);
+ctx.fillRect(x+7, y+8, 3, 5);
   // 炎（ランダムで揺らす）
-  ctx.fillStyle = '#ffcc00';
+  ctx.fillStyle = '#ff8000';
   const flame = Math.random() * 4;
   ctx.fillRect(x+2, y+14, 2, flame);
 }
