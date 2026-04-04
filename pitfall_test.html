@@ -714,6 +714,40 @@ for(let i=0;i<6;i++){
   const by = y - (Math.random()*20)*s;
   ctx.fillRect(bx, by, 2*s, 2*s);
 }
+  function drawGoalSign(){
+  const poleX1 = 306;
+  const poleX2 = 342;
+  const poleTop = 228;
+  const poleBottom = 315;
+
+  ctx.fillStyle = '#6e5a2a';
+  ctx.fillRect(poleX1, poleTop, 4, poleBottom - poleTop);
+  ctx.fillRect(poleX2, poleTop, 4, poleBottom - poleTop);
+
+  const signX = 298;
+  const signY = 238;
+  const signW = 52;
+  const signH = 28;
+
+  ctx.fillStyle = '#111';
+  ctx.fillRect(signX + 2, signY + 2, signW, signH);
+
+  const cell = 6;
+  for(let row = 0; row < 4; row++){
+    for(let col = 0; col < 8; col++){
+      ctx.fillStyle = ((row + col) % 2 === 0) ? '#f5f5f5' : '#111111';
+      ctx.fillRect(signX + col * cell, signY + row * cell, cell, cell);
+    }
+  }
+
+  ctx.strokeStyle = '#c8b070';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(signX, signY, signW, signH);
+
+  ctx.fillStyle = '#f8d800';
+  ctx.font = 'bold 10px Courier New';
+  ctx.fillText('GOAL', 309, 256);
+}
   // 吹き出しライン
 ctx.strokeStyle = '#ffffff';
 ctx.lineWidth = 2;
