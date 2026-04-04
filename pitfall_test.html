@@ -380,6 +380,7 @@ const state = {
   canInput: true,
   bullets: [],
   showCola: false,
+  ufo: null,
 };
 
 const boardDefs = [
@@ -625,6 +626,9 @@ function render() {
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
   drawGoalSign();
+  if(state.ufo){
+  drawUFO(state.ufo.x, state.ufo.y);
+}
 state.bullets.forEach(b=>{
   drawMissile(b.x, b.y);
 });
@@ -695,6 +699,24 @@ function drawSign(){
   ctx.fillText('出口 →', x+8, y+16);
   ctx.font = '9px Courier New';
   ctx.fillText('(たぶん)', x+18, y+32);
+}
+  function drawUFO(x, y){
+  // 本体
+  ctx.fillStyle = '#888888';
+  ctx.fillRect(x + 4, y + 4, 20, 6);
+
+  // ドーム
+  ctx.fillStyle = '#a8e8ff';
+  ctx.fillRect(x + 8, y, 12, 5);
+
+  // 下の光
+  ctx.fillStyle = '#fff280';
+  ctx.fillRect(x + 10, y + 10, 8, 2);
+
+  // ちっさい足
+  ctx.fillStyle = '#666666';
+  ctx.fillRect(x + 6, y + 10, 2, 2);
+  ctx.fillRect(x + 20, y + 10, 2, 2);
 }
   function drawMissile(x, y){
   // 先端（赤）
@@ -790,6 +812,21 @@ ctx.fillText('COKE', 293, 247);
 }
 function update() {
   state.score++;
+  // UFO出現（たまに）
+if(!state.ufo && Math.random() < 0.002){
+  state.ufo = {
+    x: -40,
+    y: Math.random()*120 + 20
+  };
+}
+  // UFO移動
+if(state.ufo){
+  state.ufo.x += 2;
+
+  if(state.ufo.x > 400){
+    state.ufo = null;
+  }
+}
   console.log("update生きてる");
 
   if(state.phase !== 'walk' || !state.canInput) return;
