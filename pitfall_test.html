@@ -617,9 +617,7 @@ function render() {
   drawBackground();
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
-  ctx.fillStyle = '#f8d800';
-ctx.font = 'bold 12px Courier New';
-ctx.fillText('GOAL', 300, 290);
+  drawGoalSign();
 ctx.fillStyle = '#ff4040';
 state.bullets.forEach(b=>{
   ctx.fillRect(b.x, b.y, 6, 6);
