@@ -1218,7 +1218,7 @@ function playHitSound(){
 function playWinSound(){
   const ctx = getCtx();
 
-  const notes = [523, 659, 784, 1046];
+  const notes = [659, 784, 988, 1318]; // ミソシ高ミ
   let t = ctx.currentTime;
 
   notes.forEach((freq) => {
@@ -1228,16 +1228,16 @@ function playWinSound(){
     osc.type = 'square';
     osc.frequency.setValueAtTime(freq, t);
 
-    gain.gain.setValueAtTime(0.2, t);
-    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+    gain.gain.setValueAtTime(0.22, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.11);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(t);
-    osc.stop(t + 0.2);
+    osc.stop(t + 0.11);
 
-    t += 0.15;
+    t += 0.09;
   });
 }
   function playStepSound(){
