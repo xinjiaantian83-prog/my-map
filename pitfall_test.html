@@ -56,11 +56,26 @@ body{
   text-align:center;
 }
 .title{
-  font-size:24px;
-  line-height:1.4;
-color:#ff3030;
-text-shadow:3px 3px 0 #600000;
-  margin-bottom:10px;
+  font-size:32px;
+  color:#ff3030;
+  text-shadow:
+    2px 2px 0 #ffffff,
+    -2px -2px 0 #ffffff,
+    2px -2px 0 #ffffff,
+    -2px 2px 0 #ffffff,
+    4px 4px 0 #800000;
+}
+  @keyframes titleGlitch {
+  0% { transform: translate(0,0); }
+  20% { transform: translate(-1px,1px); }
+  40% { transform: translate(1px,-1px); }
+  60% { transform: translate(-1px,0); }
+  80% { transform: translate(1px,1px); }
+  100% { transform: translate(0,0); }
+}
+
+.title{
+  animation: titleGlitch 0.25s infinite;
 }
 .subtitle{
   font-size:11px;
