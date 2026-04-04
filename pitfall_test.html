@@ -796,20 +796,12 @@ if(state.moving.right){
 }
 
   // 右端到達 → 落下（理不尽）
-  const footX = state.playerX + 12;
+ const footX = state.playerX + 12;
 if(footX >= 332){
   state.canInput = false;
-state.bullets = [];
-if(Math.random() < 0.3){
+  state.bullets = [];
   state.showCola = true;
-  state.canInput = false;
-  playWinSound(); // ←これ追加
-  
-
-} else {
-  startFalling();
-}
-
+  playWinSound();
   return;
 }
 
