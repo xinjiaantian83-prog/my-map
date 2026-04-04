@@ -335,7 +335,7 @@ body{
 </div>
 
 <audio id="seHit" src="hit.mp3" preload="auto"></audio>
-
+<audio id="bgmTitle" src="title_bgm.wav" preload="auto" loop></audio>
 <script>
   let audioCtx = null;
 
@@ -1007,12 +1007,13 @@ function bindHoldButton(el, dir) {
 
 document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
-  ctx.resume(); // ←これが最重要
+  ctx.resume();
+
+  document.getElementById('bgmTitle').play(); // ←これ追加
 
   showScreen('playScreen');
   resetGame();
 };
-
 document.getElementById('retryBtn').onclick = () => {
   showScreen('playScreen');
   resetGame();
