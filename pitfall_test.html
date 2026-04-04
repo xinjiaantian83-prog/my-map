@@ -640,6 +640,7 @@ if(state.bullets.length < 3){
   state.bullets.forEach(b=>{
   b.y += 5;
 });
+state.bullets = state.bullets.filter(b => b.y < 500);
   for(let i=0;i<state.bullets.length;i++){
   const b = state.bullets[i];
 
