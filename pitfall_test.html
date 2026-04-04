@@ -629,6 +629,7 @@ function drawSign(){
 }
 
 function update() {
+  console.log("update生きてる");
   if(state.phase !== 'walk' || !state.canInput) return;
 
   // 弾生成
@@ -657,7 +658,7 @@ function update() {
     if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
       state.bullets = [];
       startFalling();
-      return;
+     
     }
   }
 
