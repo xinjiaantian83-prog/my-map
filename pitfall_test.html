@@ -819,27 +819,7 @@ function showFallEvent() {
     }
   }, 900);
 }
-    showOverlay('ハシゴ発見！！','ハシゴがある！\nこれで助かる！\n\nこのハシゴを使いますか？',[
-      { label:'YES', cls:'btn-yes', action:() => resolveEvent(true) },
-      { label:'NO', cls:'btn-no', action:() => resolveEvent(false) }
-    ]);
-  } else if(state.eventType === 'rope'){
-    showOverlay('ロープ発見！！','ロープが垂れている。\n登れそう…？\n\nつかまりますか？',[
-      { label:'つかむ', cls:'btn-yes', action:() => resolveEvent(true) },
-      { label:'やめる', cls:'btn-no', action:() => resolveEvent(false) }
-    ]);
-  } else if(state.eventType === 'sign'){
-    showOverlay('看板発見！！','「出口 →」\nと書いてある。\n\n信じますか？',[
-      { label:'信じる', cls:'btn-yes', action:() => resolveEvent(true) },
-      { label:'信じない', cls:'btn-no', action:() => resolveEvent(false) }
-    ]);
-  } else {
-    showOverlay('何もない…','本当に何もない。\n\nそれでも諦めないか？',[
-      { label:'諦めない', cls:'btn-yes', action:() => resolveEvent(true) },
-      { label:'諦める', cls:'btn-no', action:() => resolveEvent(false) }
-    ]);
-  }
-}
+    
 
 function resolveEvent(yes) {
   hideOverlay();
