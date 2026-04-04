@@ -110,6 +110,9 @@ body{
   transform:translate(2px,2px);
   box-shadow:2px 2px 0 #800000;
 }
+  #musicBtn{
+  margin-top: 12px;
+}
 /* play */
 #playScreen{
   background:#0a0a16;
@@ -1009,6 +1012,10 @@ function bindHoldButton(el, dir) {
 document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
+
+  const bgm = document.getElementById('bgmTitle');
+  bgm.pause();
+  bgm.currentTime = 0;
 
   showScreen('playScreen');
   resetGame();
