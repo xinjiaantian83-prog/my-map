@@ -639,7 +639,7 @@ if(state.walkFrame > 20 && Math.random() < 0.3){
     const killer = Math.random() < 0.2;
 
     state.bullets.push({
-      x: killer ? state.playerX : state.playerX + (Math.random()*40 - 20),
+     x: killer ? state.playerX : Math.random() * 320 + 20,
       y: 0
     });
   }
