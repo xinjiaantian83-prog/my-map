@@ -675,29 +675,7 @@ if(footX >= 332){
 }
 
 // 左端に戻ったら落下
-if(state.playerX <= 10){
-  state.bullets = [];
-  startFalling();
-  return;
-}
-  const realGoal = Math.random() < 0.35;
 
-  if(realGoal){
-    state.phase = 'event';
-    showOverlay(
-      'ゴール！！',
-      '向こう岸に届いた！！\nコーラがあるぞ！',
-      [{
-        label: '飲む',
-        cls: 'btn-main',
-        action: () => {
-          hideOverlay();
-          state.eventType = 'cola';
-          state.choiceLabel = '飲む';
-          showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
-        }
-      }]
-    );
   } else {
     startFalling();
   }
