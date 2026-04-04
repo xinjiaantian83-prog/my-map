@@ -660,30 +660,33 @@ function checkBoardCollision() {
 }
 
 function onBoardHit(idx) {
+  if(state.boards[idx].safe){
+    onSafeBoard(idx);
+  } else {
+    onDangerBoard(idx);
+  }
+}
 
+function onSafeBoard(idx) {
   // 3枚目ならゴール
   if(idx === 2){
-    onSafeBoard(); // ←これ追加
-
     showOverlay(
       'ゴール！！',
       '渡りきった！！\nコーラがあるぞ！',
       [{
         label: '飲む',
-        cls: 'btn btn-primary',
+        cls: 'btn-main',
         action: () => {
           hideOverlay();
+          state.eventType = 'cola';
+          state.choiceLabel = '飲む';
           showResult(true, 'コーラ最高！！', 'なんやこのゲーム笑');
         }
       }]
     );
-
-    state.phase = 'event';
     return;
   }
 
-  onSafeBoard();
-}
   const lines = [
     'あれ？\n割れない…？\nもしかして…',
     'ん？\n大丈夫か？\nいけそう！',
