@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>落とし穴からの脱出</title>
+<title>I LOVE COKE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{
@@ -58,8 +58,8 @@ body{
 .title{
   font-size:24px;
   line-height:1.4;
-  color:#f8d800;
-  text-shadow:3px 3px 0 #8b7800;
+color:#ff3030;
+text-shadow:3px 3px 0 #600000;
   margin-bottom:10px;
 }
 .subtitle{
@@ -277,7 +277,7 @@ body{
 <div id="game">
 
   <div id="titleScreen" class="screen">
-    <div class="title">落とし穴からの<br>脱出</div>
+<div class="title">I LOVE COKE</div>
     <div class="subtitle">PITFALL ESCAPE v2.0</div>
     <div class="info">前方に3つの板がある。
 2つは「落とし穴」だ。
@@ -1002,6 +1002,20 @@ scene.addEventListener('touchstart', () => {
 });
 showScreen('titleScreen');
 loop();
+  const subs = [
+  'PITFALL ESCAPE v2.0',
+  'COKE IS LOVE',
+  'DO NOT TRUST',
+  '100% SAFE',
+  '助かる保証はありません'
+];
+
+setInterval(()=>{
+  const el = document.querySelector('.subtitle');
+  if(el){
+    el.textContent = subs[Math.floor(Math.random()*subs.length)];
+  }
+}, 1500);
 </script>
 </body>
 </html>
