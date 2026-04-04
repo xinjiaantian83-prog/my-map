@@ -1215,29 +1215,33 @@ function playHitSound(){
   osc.start();
   osc.stop(ctx.currentTime + 0.1);
 }
+  let winLoopTimer = null;
 function playWinSound(){
   const ctx = getCtx();
 
-  const notes = [659, 784, 988, 1318]; // ミソシ高ミ
+  const notes = [784, 988, 1174, 1568, 1976];
   let t = ctx.currentTime;
 
-  notes.forEach((freq) => {
+  notes.forEach((freq, i) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
     osc.type = 'square';
     osc.frequency.setValueAtTime(freq, t);
 
-    gain.gain.setValueAtTime(0.22, t);
-    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.11);
+    const vol = (i === notes.length - 1) ? 0.28 : 0.2;
+    const len = (i === notes.length - 1) ? 0.18 : 0.09;
+
+    gain.gain.setValueAtTime(vol, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + len);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(t);
-    osc.stop(t + 0.11);
+    osc.stop(t + len);
 
-    t += 0.09;
+    t += 0.075;
   });
 }
   function playStepSound(){
