@@ -631,8 +631,7 @@ function drawSign(){
 function update() {
   console.log("update生きてる");
 
-  if(state.phase !== 'walk' || !state.canInput) return;
-
+  if(state.phase !== 'walk') return;
  
   // 弾生成
 if(state.walkFrame > 20 && Math.random() < 0.3){
@@ -662,13 +661,17 @@ b.x += Math.sin(b.y * 0.1) * 2;
     const dx = b.x - (state.playerX + 12);
     const dy = b.y - (state.playerY + 20);
 
-    if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
- state.bullets = [];
-shakeGame();
-setTimeout(() => {
-  startFalling();
-}, 200);
-      return; 
+   if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
+  state.bullets = [];
+  state.canInput = false;
+  state.moving.left = false;
+  state.moving.right = false;
+  shakeGame();
+ setStatus('HIT!!', 'やられた…', 'HP: 0');
+  setTimeout(() => {
+    startFalling();
+  }, 500);
+  return;
 }
   }
 
