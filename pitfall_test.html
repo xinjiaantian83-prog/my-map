@@ -892,6 +892,7 @@ function startFalling() {
     state.fallingDepth += 6;
     if(state.fallingDepth >= 520){
       clearInterval(iv);
+      playLandSound();
       shakeGame();
       setTimeout(showFallEvent, 400);
     }
@@ -1129,6 +1130,25 @@ function playHitSound(){
 
   osc.start();
   osc.stop(ctx.currentTime + 0.5);
+}
+  function playLandSound(){
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'square';
+
+  osc.frequency.setValueAtTime(120, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.2);
+
+  gain.gain.setValueAtTime(0.25, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.2);
 }
 </script>
 </body>
