@@ -883,6 +883,25 @@ function onDangerBoard(idx) {
 }
 
 function startFalling() {
+  function playFallSound(){
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sawtooth';
+
+  osc.frequency.setValueAtTime(500, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.5);
+
+  gain.gain.setValueAtTime(0.12, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start();
+  osc.stop(ctx.currentTime + 0.5);
+}
   state.phase = 'falling';
   state.fallingDepth = 0;
   setStatus('STAGE ' + state.stage, '落ちてる！！', 'HP: 0');
