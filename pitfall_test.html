@@ -1008,7 +1008,7 @@ function startFalling() {
   playFallSound();
   state.phase = 'falling';
   state.fallingDepth = 0;
-  setStatus('STAGE ' + state.stage, '落ちてる！！', 'HP: 0');
+  setStatus('STAGE ' + state.stage, '落下中…', 'HP: 0');
 
   const iv = setInterval(() => {
     state.fallingDepth += 12;
