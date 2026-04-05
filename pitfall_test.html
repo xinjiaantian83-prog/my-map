@@ -1075,6 +1075,7 @@ function resolveEvent(yes) {
 }
 
 function showResult(success, title, msg) {
+  if(!success) state.successCount = 0;
   state.phase = 'result';
   if(success) state.successCount++;
 
