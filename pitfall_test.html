@@ -695,14 +695,14 @@ function render() {
   ctx.fillText('⚠', 145, 210);
 
   // REVERSE（白フチ）
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#ffffff';
-  ctx.strokeText('REVERSE', 86, 270);
+ctx.font = 'bold 20px Courier New';
+ctx.lineWidth = 3;
+ctx.strokeStyle = '#ffffff';
+ctx.strokeText('REVERSE', 100, 260);
 
-  ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
-  ctx.font = 'bold 20px Courier New';
-  ctx.fillText('REVERSE', 100, 260);
-}
+ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
+ctx.fillText('REVERSE', 100, 260);
+ }
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
