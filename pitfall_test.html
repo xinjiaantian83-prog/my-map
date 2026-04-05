@@ -1245,6 +1245,11 @@ function playWinSound(){
   const ctx = getCtx();
 
   const notes = [784, 988, 1174, 1568, 1976];
+  let pitchBoost = 1;
+
+if(state.colaStreak >= 3){
+  pitchBoost = 1 + ((state.colaStreak - 2) * 0.08);
+}
   let t = ctx.currentTime;
 
   notes.forEach((freq, i) => {
@@ -1252,8 +1257,7 @@ function playWinSound(){
     const gain = ctx.createGain();
 
     osc.type = 'square';
-    osc.frequency.setValueAtTime(freq, t);
-
+   osc.frequency.setValueAtTime(freq * pitchBoost, t);
     const vol = (i === notes.length - 1) ? 0.28 : 0.2;
     const len = (i === notes.length - 1) ? 0.18 : 0.09;
 
