@@ -185,7 +185,7 @@ button:active{transform:scale(0.95);}
   <img src="paw.png" alt="メニュー">
   <span class="record-text">記録</span>
 </button>
-<button id="colaBtn" onclick="location.href='pitfall_test.html'"
+<button id="colaBtn" 
   style="
     position:fixed;
     right:16px;
@@ -1377,8 +1377,16 @@ function buyNaming(){
   location.reload();
 }
 
+<script id="qv3y3s">
+function unlockSoundAndGo(){
+  const audio = new Audio();
+  audio.src = 'start_ui.mp3'; // 何でもOK
+  audio.volume = 0.3; // 無音でOK
+  audio.play().catch(()=>{});
 
-  </script>
+  location.href = 'pitfall_test.html';
+}
+</script>
   <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
  
 </body>
