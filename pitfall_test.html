@@ -387,6 +387,10 @@ const state = {
   bottomShotWarn: 0,
     reverseWarn: 0,
   flashTimer: 0,
+  bonusStage: false,
+bonusTimer: 0,
+bonusColas: [],
+bonusCaught: 0,
 };
 let clones = [];
 const boardDefs = [
@@ -421,6 +425,10 @@ function resetGame() {
   state.choiceLabel = '';
   state.canInput = true;
   state.showCola = false;
+  state.bonusStage = false;
+state.bonusTimer = 0;
+state.bonusColas = [];
+state.bonusCaught = 0;
  
   makeBoards();
    if(state.bottomShotStage){
@@ -660,7 +668,11 @@ function render() {
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
   drawGoalSign();
-
+if(state.bonusStage){
+  state.bonusColas.forEach(c => {
+    drawCola(c.x, c.y, 1);
+  });
+}
   if(state.ufo){
     drawUFO(state.ufo.x, state.ufo.y);
   }
@@ -898,6 +910,48 @@ ctx.fillText('COKE', 293, 247);
 }
 function update() {
   state.score++;
+  if(state.bonusStage){
+  state.bonusTimer--;
+
+  // コーラ生成
+  if(Math.random() < 0.18){
+    state.bonusColas.push({
+      x: Math.random() * 320 + 20,
+      y: -30,
+      vy: 4 + Math.random() * 2
+    });
+  }
+
+  // コーラ移動
+  state.bonusColas.forEach(c => {
+    c.y += c.vy;
+  });
+
+  // キャッチ判定
+  for(let i = state.bonusColas.length - 1; i >= 0; i--){
+    const c = state.bonusColas[i];
+    const dx = c.x - (state.playerX + 12);
+    const dy = c.y - (state.playerY + 20);
+
+    if(Math.abs(dx) < 22 && Math.abs(dy) < 26){
+      state.bonusColas.splice(i, 1);
+      state.bonusCaught++;
+      state.score += 100;
+      setStatus('BONUS', 'コーラを取りまくれ！！', 'GET: ' + state.bonusCaught);
+    }
+  }
+
+  // 画面外削除
+  state.bonusColas = state.bonusColas.filter(c => c.y < 520);
+
+  // ボーナス終了
+  if(state.bonusTimer <= 0){
+    state.bonusStage = false;
+    showResult(true, 'BONUS END!', 'コーラ ' + state.bonusCaught + '本GET！！');
+  }
+
+  return;
+}
     if(state.bottomShotWarn > 0){
     state.bottomShotWarn--;
   }
@@ -1171,6 +1225,25 @@ function resolveEvent(yes) {
   showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
 }
 }
+  function startBonusStage(){
+  state.phase = 'walk';
+  state.bonusStage = true;
+  state.bonusTimer = 300; // 約5秒
+  state.bonusColas = [];
+  state.bonusCaught = 0;
+
+  state.playerX = 170;
+  state.playerY = 255;
+  state.moving.left = false;
+  state.moving.right = false;
+  state.canInput = true;
+  state.showCola = false;
+  state.bullets = [];
+  state.ufo = null;
+
+  setStatus('BONUS', 'コーラを取りまくれ！！', 'GET: 0');
+  showScreen('playScreen');
+}
 function showResult(success, title, msg) {
   state.phase = 'result';
 
@@ -1280,7 +1353,13 @@ scene.addEventListener('touchstart', () => {
       state.bottomShotStage = true;
     }
 
-    showResult(true, 'YOU WIN!', 'コーラ最高！！');
+    const bonusRoll = Math.random();
+
+if(bonusRoll < 0.25){
+  startBonusStage();
+} else {
+  showResult(true, 'YOU WIN!', 'コーラ最高！！');
+}
   }
 });
 showScreen('titleScreen');
