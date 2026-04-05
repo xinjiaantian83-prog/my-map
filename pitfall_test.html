@@ -1128,9 +1128,10 @@ function bindHoldButton(el, dir) {
 }
 
 document.getElementById('startBtn').onclick = () => {
-  const ctx = getCtx();
-  ctx.resume();
-playStartSound();
+ const ctx = getCtx();
+ctx.resume().then(() => {
+  playStartSound();
+});
   const bgm = document.getElementById('bgmTitle');
   bgm.pause();
   bgm.currentTime = 0;
@@ -1310,13 +1311,13 @@ function playWinSound(){
   osc.start();
   osc.stop(ctx.currentTime + 0.2);
 }
-  document.getElementById('musicBtn').onclick = () => {
+document.getElementById('musicBtn').onclick = () => {
   const ctx = getCtx();
-  ctx.resume();
-
-  const bgm = document.getElementById('bgmTitle');
-  bgm.currentTime = 0;
-  bgm.play().catch(() => {});
+  ctx.resume().then(() => {
+    const bgm = document.getElementById('bgmTitle');
+    bgm.currentTime = 0;
+    bgm.play().catch(() => {});
+  });
 };
   const titleChar = document.getElementById('titleChar');
 const titleCtx = titleChar.getContext('2d');
