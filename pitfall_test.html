@@ -384,6 +384,7 @@ const state = {
   ufo: null,
   reverseStage: false,
   bottomShotStage: false,
+  bottomShotWarn: 0,
 };
 let clones = [];
 const boardDefs = [
@@ -420,6 +421,11 @@ function resetGame() {
   state.showCola = false;
  
   makeBoards();
+  if(state.bottomShotStage){
+  state.bottomShotWarn = 60;
+} else {
+  state.bottomShotWarn = 0;
+}
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
 
@@ -644,39 +650,43 @@ function render() {
 state.bullets.forEach(b=>{
   drawMissile(b.x, b.y);
 });
-  if(state.reverseStage){
-  ctx.restore();
-}
-  if(state.phase === 'walk' && state.walkFrame < 90){
-    const a = 0.5 + 0.5 * Math.sin(state.walkFrame * 0.18);
+   if(state.reverseStage){
+    ctx.restore();
+  }
+
+  // 下から弾ステージの予告
+  if(state.bottomShotWarn > 0){
+    const a = 0.5 + 0.5 * Math.sin(Date.now() * 0.015);
+
     ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
-    ctx.font = '11px Courier New';
-    ctx.fillText('▶ 板に乗れ！', state.playerX + 26, state.playerY + 10);
+    ctx.font = 'bold 36px Courier New';
+    ctx.fillText('⬆', 168, 430);
+
+    ctx.font = 'bold 14px Courier New';
+    ctx.fillText('WARNING', 132, 408);
   }
- if(state.showCola){
-  // 黒背景
-  ctx.fillStyle = 'rgba(0,0,0,0.8)';
-  ctx.fillRect(0,0,360,480);
 
-  // コーラ（中央）
-  drawCola(168, 180, 2);
+  // コーラ演出
+  if(state.showCola){
+    ctx.fillStyle = 'rgba(0,0,0,0.8)';
+    ctx.fillRect(0,0,360,480);
 
-  // YOU WIN
- ctx.fillStyle = '#000';
-ctx.font = 'bold 32px Courier New';
-ctx.fillText('COKE x ' + (state.colaStreak + 1), 112, 262);
+    drawCola(156, 180, 2);
 
-ctx.fillStyle = '#f8d800';
-ctx.fillText('COKE x ' + (state.colaStreak + 1), 110, 260);
-  // 紙吹雪
-  for(let i=0;i<20;i++){
-    ctx.fillStyle = ['#ff4040','#40ff40','#4040ff','#ffff40'][i%4];
-    const x = Math.random()*360;
-    const y = Math.random()*480;
-    ctx.fillRect(x, y, 4, 4);
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 32px Courier New';
+    ctx.fillText('COKE x ' + (state.colaStreak + 1), 102, 262);
+
+    ctx.fillStyle = '#f8d800';
+    ctx.fillText('COKE x ' + (state.colaStreak + 1), 100, 260);
+
+    for(let i=0;i<20;i++){
+      ctx.fillStyle = ['#ff4040','#40ff40','#4040ff','#ffff40'][i%4];
+      const x = Math.random()*360;
+      const y = Math.random()*480;
+      ctx.fillRect(x, y, 4, 4);
+    }
   }
-}
-}
 
 function drawLadder(){
   const x = 165, y = 80, h = 320;
@@ -835,6 +845,9 @@ ctx.fillText('COKE', 293, 247);
 }
 function update() {
   state.score++;
+    if(state.bottomShotWarn > 0){
+    state.bottomShotWarn--;
+  }
   // UFO出現（たまに）
 if(!state.ufo && Math.random() < 0.002){
   state.ufo = {
