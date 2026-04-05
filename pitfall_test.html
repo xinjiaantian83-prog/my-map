@@ -385,6 +385,7 @@ const state = {
   reverseStage: false,
   bottomShotStage: false,
   bottomShotWarn: 0,
+    reverseWarn: 0,
 };
 let clones = [];
 const boardDefs = [
@@ -421,11 +422,17 @@ function resetGame() {
   state.showCola = false;
  
   makeBoards();
-  if(state.bottomShotStage){
-  state.bottomShotWarn = 60;
-} else {
-  state.bottomShotWarn = 0;
-}
+   if(state.bottomShotStage){
+    state.bottomShotWarn = 120;
+  } else {
+    state.bottomShotWarn = 0;
+  }
+
+  if(state.reverseStage){
+    state.reverseWarn = 120;
+  } else {
+    state.reverseWarn = 0;
+  }
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
 
@@ -661,18 +668,30 @@ function render() {
   if(state.reverseStage){
     ctx.restore();
   }
-
-  if(state.bottomShotWarn > 0){
-    const a = 0.5 + 0.5 * Math.sin(Date.now() * 0.015);
-
-    ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
-    ctx.font = 'bold 36px Courier New';
-    ctx.fillText('⬆', 168, 430);
-
-    ctx.font = 'bold 14px Courier New';
-    ctx.fillText('WARNING', 132, 408);
+    if(state.reverseWarn > 0){
+    state.reverseWarn--;
   }
 
+    if(state.bottomShotWarn > 0){
+    const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
+
+    ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
+    ctx.font = 'bold 72px Courier New';
+    ctx.fillText('⬆', 150, 448);
+
+    ctx.font = 'bold 28px Courier New';
+    ctx.fillText('WARNING', 96, 400);
+  }
+  if(state.reverseWarn > 0){
+    const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
+
+    ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
+    ctx.font = 'bold 86px Courier New';
+    ctx.fillText('⚠', 145, 210);
+
+    ctx.font = 'bold 30px Courier New';
+    ctx.fillText('REVERSE', 86, 270);
+  }
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
