@@ -1005,7 +1005,7 @@ function startFalling() {
   setStatus('STAGE ' + state.stage, '落ちてる！！', 'HP: 0');
 
   const iv = setInterval(() => {
-    state.fallingDepth += 6;
+    state.fallingDepth += 10;
     if(state.fallingDepth >= 520){
       clearInterval(iv);
       playLandSound();
