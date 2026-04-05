@@ -1082,10 +1082,8 @@ function resolveEvent(yes) {
 }
 function showResult(success, title, msg) {
   state.phase = 'result';
-if(!success) state.colaStreak = 0;
- if(false){
-    state.successCount++;
-  } else {
+
+  if(!success){
     state.colaStreak = 0;
   }
 
