@@ -374,6 +374,7 @@ const state = {
   fallingDepth: 0,
   playCount: 0,
   successCount: 0,
+  colaStreak: 0,
   score: 0,
   eventType: null,
   choiceLabel: '',
@@ -419,7 +420,7 @@ function resetGame() {
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
 
-if(state.successCount >= 3){
+if(state.colaStreak >= 3){
   bgm.volume = 0.15;
   bgm.play().catch(()=>{});
 } else {
@@ -657,10 +658,10 @@ state.bullets.forEach(b=>{
   // YOU WIN
  ctx.fillStyle = '#000';
 ctx.font = 'bold 32px Courier New';
-ctx.fillText('COKE x ' + (state.successCount + 1), 112, 262);
+ctx.fillText('COKE x ' + (state.colaStreak + 1), 112, 262);
 
 ctx.fillStyle = '#f8d800';
-ctx.fillText('COKE x ' + (state.successCount + 1), 110, 260);
+ctx.fillText('COKE x ' + (state.colaStreak + 1), 110, 260);
   // 紙吹雪
   for(let i=0;i<20;i++){
     ctx.fillStyle = ['#ff4040','#40ff40','#4040ff','#ffff40'][i%4];
@@ -1088,7 +1089,7 @@ function showResult(success, title, msg) {
   if(success){
     state.successCount++;
   } else {
-    state.successCount = 0;
+    state.colaStreak = 0;
   }
 
   document.getElementById('resultTitle').textContent = title;
@@ -1179,9 +1180,9 @@ document.addEventListener('keyup', (e) => {
 scene.addEventListener('touchstart', () => {
   if(state.showCola){
     state.showCola = false;
+    state.colaStreak++;
 
     showResult(true, 'YOU WIN!', 'コーラ最高！！');
-
   }
 });
 showScreen('titleScreen');
