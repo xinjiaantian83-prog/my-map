@@ -382,7 +382,7 @@ const state = {
   showCola: false,
   ufo: null,
 };
-
+let clones = [];
 const boardDefs = [
   { x: 75,  y: 315, w: 70, h: 18 },
   { x: 155, y: 315, w: 70, h: 18 },
@@ -1329,7 +1329,15 @@ document.getElementById('musicBtn').onclick = () => {
     bgm.play().catch(() => {});
   });
 };
-  const titleChar = document.getElementById('titleChar');
+ const titleChar = document.getElementById('titleChar');
+titleChar.addEventListener('touchstart', () => {
+  clones.push({
+    x: 0,
+    y: 0,
+    vx: Math.random()*6 - 3,
+    vy: Math.random()*6 - 3
+  });
+});
 const titleCtx = titleChar.getContext('2d');
 
 function drawTitleChar() {
@@ -1382,9 +1390,33 @@ function drawTitleChar() {
   }
 
   titleCtx.restore();
+
+  clones.forEach(c => {
+    c.x += c.vx;
+    c.y += c.vy;
+    c.vy += 0.2;
+
+    titleCtx.save();
+    titleCtx.translate(50 + offsetX + c.x, 28 + offsetY + c.y);
+
+    for(let r=0;r<16;r++){
+      for(let col=0;col<8;col++){
+        const v = px[r][col];
+        if(!v) continue;
+        titleCtx.fillStyle = colors[v];
+        titleCtx.fillRect(col*s, r*s, s, s);
+      }
+    }
+
+    titleCtx.restore();
+  });
+
+  clones = clones.filter(c => c.y < 160);
 }
 
 setInterval(drawTitleChar, 16);
+
+
 </script>
 <button id="mapBackBtn" onclick="location.href='index.html'"
   style="
