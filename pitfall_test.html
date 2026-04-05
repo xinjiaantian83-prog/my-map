@@ -383,6 +383,7 @@ const state = {
   showCola: false,
   ufo: null,
   reverseStage: false,
+  bottomShotStage: false,
 };
 let clones = [];
 const boardDefs = [
@@ -860,15 +861,15 @@ if(state.walkFrame > 20 && Math.random() < 0.3){
     const killer = Math.random() < 0.2;
 
     state.bullets.push({
-     x: killer ? state.playerX : Math.random() * 320 + 20,
-      y: 0
-    });
+  x: killer ? state.playerX : Math.random() * 320 + 20,
+  y: state.bottomShotStage ? 480 : 0
+});
   }
 }
 
   // 弾移動
   state.bullets.forEach(b=>{
-   b.y += 9;
+  b.y += state.bottomShotStage ? -9 : 9;
 b.x += Math.sin(b.y * 0.1) * 2;
   });
 
@@ -1196,6 +1197,18 @@ scene.addEventListener('touchstart', () => {
   if(state.showCola){
     state.showCola = false;
     state.colaStreak++;
+
+    // ステージ抽選
+    state.reverseStage = false;
+    state.bottomShotStage = false;
+
+    const r = Math.random();
+
+    if(r < 0.33){
+      state.reverseStage = true;
+    } else if(r < 0.66){
+      state.bottomShotStage = true;
+    }
 
     showResult(true, 'YOU WIN!', 'コーラ最高！！');
   }
