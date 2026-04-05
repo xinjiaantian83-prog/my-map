@@ -419,7 +419,7 @@ function resetGame() {
   state.canInput = true;
   state.showCola = false;
   state.reverseStage = false;
-  
+  state.bottomShotStage = false;
   makeBoards();
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
