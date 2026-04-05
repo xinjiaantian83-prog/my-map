@@ -1082,11 +1082,14 @@ function resolveEvent(yes) {
     showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
   }
 }
-
 function showResult(success, title, msg) {
- 
   state.phase = 'result';
-  if(success) state.successCount++;
+
+  if(success){
+    state.successCount++;
+  } else {
+    state.successCount = 0;
+  }
 
   document.getElementById('resultTitle').textContent = title;
   document.getElementById('resultTitle').className = 'resultTitle ' + (success ? 'success' : 'fail');
