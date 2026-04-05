@@ -382,6 +382,7 @@ const state = {
   bullets: [],
   showCola: false,
   ufo: null,
+  reverseStage: false,
 };
 let clones = [];
 const boardDefs = [
@@ -416,6 +417,8 @@ function resetGame() {
   state.choiceLabel = '';
   state.canInput = true;
   state.showCola = false;
+  state.reverseStage = false;
+  state.reverseStage = true;
   makeBoards();
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
@@ -889,8 +892,9 @@ b.x += Math.sin(b.y * 0.1) * 2;
   // 移動
   const speed = 3;
  if(state.moving.left){
-  state.playerX = Math.max(8, state.playerX - speed);
-  state.dir = -1;
+  const dir = state.reverseStage ? 1 : -1;
+  state.playerX = Math.max(8, state.playerX + dir * 3);
+  state.dir = dir;
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
@@ -899,15 +903,15 @@ b.x += Math.sin(b.y * 0.1) * 2;
 }
 
 if(state.moving.right){
-  state.playerX = Math.min(326, state.playerX + speed);
-  state.dir = 1;
+  const dir = state.reverseStage ? -1 : 1;
+  state.playerX = Math.min(326, state.playerX + dir * 3);
+  state.dir = dir;
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
     playStepSound();
   }
 }
-
   // 右端到達 → 落下（理不尽）
  const footX = state.playerX + 12;
 if(footX >= 332){
