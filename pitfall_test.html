@@ -616,11 +616,12 @@ function drawPixelChar(x,y,dir,variant='normal') {
 
 function render() {
   ctx.clearRect(0,0,360,480);
+
   if(state.reverseStage){
-  ctx.save();
-  ctx.translate(360, 0);
-  ctx.scale(-1, 1);
-}
+    ctx.save();
+    ctx.translate(360, 0);
+    ctx.scale(-1, 1);
+  }
 
   if(state.phase === 'falling' || state.phase === 'event'){
     drawHoleBackground();
@@ -635,8 +636,12 @@ function render() {
       }
     }
 
-   const y = Math.min(410, 80 + state.fallingDepth * 0.7);
+    const y = Math.min(410, 80 + state.fallingDepth * 0.7);
     drawPixelChar(state.playerX, y, state.dir, 'fall');
+
+    if(state.reverseStage){
+      ctx.restore();
+    }
     return;
   }
 
@@ -644,17 +649,19 @@ function render() {
   state.boards.forEach(drawBoard);
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
   drawGoalSign();
+
   if(state.ufo){
-  drawUFO(state.ufo.x, state.ufo.y);
-}
-state.bullets.forEach(b=>{
-  drawMissile(b.x, b.y);
-});
-   if(state.reverseStage){
+    drawUFO(state.ufo.x, state.ufo.y);
+  }
+
+  state.bullets.forEach(b => {
+    drawMissile(b.x, b.y);
+  });
+
+  if(state.reverseStage){
     ctx.restore();
   }
 
-  // 下から弾ステージの予告
   if(state.bottomShotWarn > 0){
     const a = 0.5 + 0.5 * Math.sin(Date.now() * 0.015);
 
@@ -666,7 +673,6 @@ state.bullets.forEach(b=>{
     ctx.fillText('WARNING', 132, 408);
   }
 
-  // コーラ演出
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
@@ -687,6 +693,7 @@ state.bullets.forEach(b=>{
       ctx.fillRect(x, y, 4, 4);
     }
   }
+}
 
 function drawLadder(){
   const x = 165, y = 80, h = 320;
@@ -863,7 +870,7 @@ if(state.ufo){
     state.ufo = null;
   }
 }
-  console.log("update生きてる");
+  
 
   if(state.phase !== 'walk' || !state.canInput) return;
  
