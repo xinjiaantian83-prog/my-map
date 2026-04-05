@@ -450,8 +450,7 @@ function showOverlay(title, msg, buttons) {
     const el = document.createElement('button');
     el.className = 'btn ' + b.cls;
     el.textContent = b.label;
-    el.ontouchstart = function(e){ e.preventDefault(); b.action(); };
-    el.onclick = function(e){ e.preventDefault(); b.action(); };
+    el.ontouchend = function(e){ e.preventDefault(); b.action(); };
     box.appendChild(el);
   });
   document.getElementById('overlay').classList.remove('hidden');
