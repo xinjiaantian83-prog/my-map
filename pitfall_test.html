@@ -1079,6 +1079,7 @@ function resolveEvent(yes) {
   // ガチ失敗
   showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
 }
+}
 function showResult(success, title, msg) {
   state.phase = 'result';
 if(!success) state.colaStreak = 0;
