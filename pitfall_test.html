@@ -610,6 +610,11 @@ function drawPixelChar(x,y,dir,variant='normal') {
 
 function render() {
   ctx.clearRect(0,0,360,480);
+  if(state.reverseStage){
+  ctx.save();
+  ctx.translate(360, 0);
+  ctx.scale(-1, 1);
+}
 
   if(state.phase === 'falling' || state.phase === 'event'){
     drawHoleBackground();
@@ -639,6 +644,9 @@ function render() {
 state.bullets.forEach(b=>{
   drawMissile(b.x, b.y);
 });
+  if(state.reverseStage){
+  ctx.restore();
+}
   if(state.phase === 'walk' && state.walkFrame < 90){
     const a = 0.5 + 0.5 * Math.sin(state.walkFrame * 0.18);
     ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
@@ -891,10 +899,9 @@ b.x += Math.sin(b.y * 0.1) * 2;
 
   // 移動
   const speed = 3;
- if(state.moving.left){
-  const dir = state.reverseStage ? 1 : -1;
-  state.playerX = Math.max(8, state.playerX + dir * 3);
-  state.dir = dir;
+if(state.moving.left){
+  state.playerX = Math.max(8, state.playerX - 3);
+  state.dir = -1;
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
@@ -903,9 +910,8 @@ b.x += Math.sin(b.y * 0.1) * 2;
 }
 
 if(state.moving.right){
-  const dir = state.reverseStage ? -1 : 1;
-  state.playerX = Math.min(326, state.playerX + dir * 3);
-  state.dir = dir;
+  state.playerX = Math.min(326, state.playerX + 3);
+  state.dir = 1;
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
