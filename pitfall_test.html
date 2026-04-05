@@ -937,6 +937,7 @@ function update() {
       state.bonusColas.splice(i, 1);
       state.bonusCaught++;
       state.score += 100;
+      playGetSound();
       setStatus('BONUS', 'コーラを取りまくれ！！', 'GET: ' + state.bonusCaught);
     }
   }
@@ -1409,6 +1410,43 @@ function playHitSound(){
 
   osc.start();
   osc.stop(ctx.currentTime + 0.12);
+}
+  function playGetSound(){
+  const ctx = getCtx();
+  ctx.resume();
+
+  const now = ctx.currentTime;
+
+  const osc1 = ctx.createOscillator();
+  const gain1 = ctx.createGain();
+
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+
+  osc1.type = 'square';
+  osc2.type = 'square';
+
+  // 音程（上昇）
+  osc1.frequency.setValueAtTime(800, now);
+  osc2.frequency.setValueAtTime(1200, now + 0.06);
+
+  gain1.gain.setValueAtTime(0.12, now);
+  gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+  gain2.gain.setValueAtTime(0.12, now + 0.06);
+  gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.14);
+
+  osc1.connect(gain1);
+  gain1.connect(ctx.destination);
+
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+
+  osc1.start(now);
+  osc1.stop(now + 0.1);
+
+  osc2.start(now + 0.06);
+  osc2.stop(now + 0.14);
 }
   function playStartSound(){
   const ctx = getCtx();
