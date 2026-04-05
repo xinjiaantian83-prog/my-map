@@ -418,8 +418,7 @@ function resetGame() {
   state.choiceLabel = '';
   state.canInput = true;
   state.showCola = false;
-  state.reverseStage = false;
-  state.bottomShotStage = false;
+ 
   makeBoards();
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
@@ -892,6 +891,8 @@ b.x += Math.sin(b.y * 0.1) * 2;
   shakeGame();
  setStatus('HIT!!', 'やられた…', 'HP: 0');
   setTimeout(() => {
+    state.reverseStage = false;
+state.bottomShotStage = false;
     startFalling();
   }, 500);
   return;
