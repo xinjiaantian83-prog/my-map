@@ -949,7 +949,18 @@ function update() {
     state.bonusStage = false;
     showResult(true, 'BONUS END!', 'コーラ ' + state.bonusCaught + '本GET！！');
   }
+  // ボーナス中の左右移動
+  if(state.moving.left){
+    state.playerX = Math.max(8, state.playerX - 4);
+    state.dir = -1;
+    state.walkFrame++;
+  }
 
+  if(state.moving.right){
+    state.playerX = Math.min(326, state.playerX + 4);
+    state.dir = 1;
+    state.walkFrame++;
+  }
   return;
 }
     if(state.bottomShotWarn > 0){
