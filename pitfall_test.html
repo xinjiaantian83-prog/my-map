@@ -1233,6 +1233,7 @@ setInterval(()=>{
 }, 1500);
 function playHitSound(){
   const ctx = getCtx();
+  ctx.resume();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
@@ -1252,6 +1253,8 @@ function playHitSound(){
 }
   function playStartSound(){
   const ctx = getCtx();
+    ctx.resume();
+    
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
@@ -1272,7 +1275,7 @@ function playHitSound(){
   let winLoopTimer = null;
 function playWinSound(){
   const ctx = getCtx();
-
+ctx.resume();
   const notes = [784, 988, 1174, 1568, 1976];
   let pitchBoost = 1;
 
@@ -1304,6 +1307,7 @@ if(state.colaStreak >= 3){
 }
   function playStepSound(){
   const ctx = getCtx();
+    ctx.resume();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
@@ -1321,6 +1325,7 @@ if(state.colaStreak >= 3){
 }
   function playFallSound(){
   const ctx = getCtx();
+    ctx.resume();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
@@ -1340,6 +1345,7 @@ if(state.colaStreak >= 3){
 }
   function playLandSound(){
   const ctx = getCtx();
+    ctx.resume();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
