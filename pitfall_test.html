@@ -1138,18 +1138,17 @@ function bindHoldButton(el, dir) {
 }
 
 document.getElementById('startBtn').onclick = () => {
- const ctx = getCtx();
-ctx.resume();
-playStartSound();
+  const ctx = getCtx();
+  ctx.resume();
+  playStartSound();
 
-const bgm = document.getElementById('bgmTitle');
-bgm.pause();
-bgm.currentTime = 0;
+  const bgm = document.getElementById('bgmTitle');
+  bgm.pause();
+  bgm.currentTime = 0;
 
-showScreen('playScreen');
-document.getElementById('mapBackBtn').style.display = 'none';
-resetGame();
-  });
+  showScreen('playScreen');
+  document.getElementById('mapBackBtn').style.display = 'none';
+  resetGame();
 };
 document.getElementById('retryBtn').onclick = () => {
   showScreen('playScreen');
