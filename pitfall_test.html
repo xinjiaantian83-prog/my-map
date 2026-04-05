@@ -1065,6 +1065,7 @@ function resolveEvent(yes) {
   state.choiceLabel = yes ? 'YES' : 'NO';
 
   const ok = Math.random() < 0.35;
+
   if(ok){
     const wins = [
       'なんとか助かった。\nでも理由はよく分からない。',
@@ -1073,15 +1074,14 @@ function resolveEvent(yes) {
     ];
     showResult(true, 'なんか助かった', wins[Math.floor(Math.random()*wins.length)]);
   } else {
-  const fails = [
-    'そんなもんあるか笑笑',
-    '期待したお前の負けです。',
-    '助かると思った？\n残念でした。',
-    '仕様です。'
-  ];
-
-  showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
-}
+    const fails = [
+      'そんなもんあるか笑笑',
+      '期待したお前の負けです。',
+      '助かると思った？\n残念でした。',
+      '仕様です。'
+    ];
+    showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
+  }
 }
 
 function showResult(success, title, msg) {
