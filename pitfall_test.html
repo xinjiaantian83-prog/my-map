@@ -900,8 +900,13 @@ b.x += Math.sin(b.y * 0.1) * 2;
   // 移動
   const speed = 3;
 if(state.moving.left){
-  state.playerX = Math.max(8, state.playerX - 3);
-  state.dir = -1;
+  if(state.reverseStage){
+    state.playerX = Math.min(326, state.playerX + 3);
+    state.dir = 1;
+  } else {
+    state.playerX = Math.max(8, state.playerX - 3);
+    state.dir = -1;
+  }
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
@@ -910,8 +915,13 @@ if(state.moving.left){
 }
 
 if(state.moving.right){
-  state.playerX = Math.min(326, state.playerX + 3);
-  state.dir = 1;
+  if(state.reverseStage){
+    state.playerX = Math.max(8, state.playerX - 3);
+    state.dir = -1;
+  } else {
+    state.playerX = Math.min(326, state.playerX + 3);
+    state.dir = 1;
+  }
   state.walkFrame++;
 
   if(state.walkFrame % 6 === 0){
