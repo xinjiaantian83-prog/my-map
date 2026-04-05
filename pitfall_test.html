@@ -386,6 +386,7 @@ const state = {
   bottomShotStage: false,
   bottomShotWarn: 0,
     reverseWarn: 0,
+  flashTimer: 0,
 };
 let clones = [];
 const boardDefs = [
@@ -433,6 +434,9 @@ function resetGame() {
   } else {
     state.reverseWarn = 0;
   }
+  if(state.reverseStage){
+  state.flashTimer = 12;
+}
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
 
@@ -706,6 +710,14 @@ function render() {
   ctx.fillText('REVERSE', 180, 260);
 
   ctx.textAlign = 'left'; // ←戻す（重要）
+   
+}
+  // フラッシュ演出
+if(state.flashTimer > 0){
+  const alpha = state.flashTimer / 12;
+
+  ctx.fillStyle = 'rgba(255,255,180,' + alpha + ')';
+  ctx.fillRect(0,0,360,480);
 }
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
@@ -889,6 +901,9 @@ function update() {
     if(state.bottomShotWarn > 0){
     state.bottomShotWarn--;
   }
+  if(state.flashTimer > 0){
+  state.flashTimer--;
+}
   // UFO出現（たまに）
 if(!state.ufo && Math.random() < 0.002){
   state.ufo = {
