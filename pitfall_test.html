@@ -1134,16 +1134,19 @@ playStartSound();
   bgm.currentTime = 0;
 
   showScreen('playScreen');
+  document.getElementById('mapBackBtn').style.display = 'none';
   resetGame();
 };
 document.getElementById('retryBtn').onclick = () => {
   showScreen('playScreen');
+  document.getElementById('mapBackBtn').style.display = 'none';
   resetGame();
 };
 
 document.getElementById('backTitleBtn').onclick = () => {
   state.phase = 'title';
   showScreen('titleScreen');
+  document.getElementById('mapBackBtn').style.display = '';
   document.getElementById('bgmTitle').play();
 };
 
@@ -1370,7 +1373,7 @@ function drawTitleChar() {
 
 setInterval(drawTitleChar, 16);
 </script>
- <button onclick="location.href='index.html'"
+<button id="mapBackBtn" onclick="location.href='index.html'"
   style="
     position:fixed;
     left:50%;
