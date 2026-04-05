@@ -1079,12 +1079,13 @@ function resolveEvent(yes) {
       '助かると思った？\n残念でした。',
       '仕様です。'
     ];
+    state.successCount = 0;
     showResult(false, 'wasted', fails[Math.floor(Math.random()*fails.length)]);
   }
 }
 
 function showResult(success, title, msg) {
-  if(!success) state.successCount = 0;
+ 
   state.phase = 'result';
   if(success) state.successCount++;
 
