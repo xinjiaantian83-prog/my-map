@@ -682,16 +682,27 @@ function render() {
     ctx.font = 'bold 28px Courier New';
     ctx.fillText('WARNING', 96, 400);
   }
-  if(state.reverseWarn > 0){
-    const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
+ if(state.reverseWarn > 0){
+  const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
 
-    ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
-    ctx.font = 'bold 86px Courier New';
-    ctx.fillText('⚠', 145, 210);
+  // ⚠ 本体（白フチ）
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = '#ffffff';
+  ctx.strokeText('⚠', 145, 210);
 
-    ctx.font = 'bold 30px Courier New';
-    ctx.fillText('REVERSE', 86, 270);
-  }
+  ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
+  ctx.font = 'bold 86px Courier New';
+  ctx.fillText('⚠', 145, 210);
+
+  // REVERSE（白フチ）
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#ffffff';
+  ctx.strokeText('REVERSE', 86, 270);
+
+  ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
+  ctx.font = 'bold 30px Courier New';
+  ctx.fillText('REVERSE', 86, 270);
+}
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
