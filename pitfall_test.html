@@ -675,7 +675,7 @@ function render() {
     if(state.bottomShotWarn > 0){
     const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
 
-    ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
+    ctx.fillStyle = 'rgba(250,80,80,' + a + ')';
     ctx.font = 'bold 72px Courier New';
     ctx.fillText('⬆', 150, 448);
 
@@ -685,24 +685,28 @@ function render() {
  if(state.reverseWarn > 0){
   const a = 0.45 + 0.55 * Math.sin(Date.now() * 0.012);
 
-  // ⚠ 本体（白フチ）
+  ctx.textAlign = 'center';  // ←追加
+
+  // ⚠
   ctx.lineWidth = 6;
   ctx.strokeStyle = '#ffffff';
-  ctx.strokeText('⚠', 145, 210);
+  ctx.font = 'bold 64px Courier New';
+  ctx.strokeText('⚠', 180, 200);
 
   ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
-  ctx.font = 'bold 86px Courier New';
-  ctx.fillText('⚠', 145, 210);
+  ctx.fillText('⚠', 180, 200);
 
-  // REVERSE（白フチ）
-ctx.font = 'bold 20px Courier New';
-ctx.lineWidth = 3;
-ctx.strokeStyle = '#ffffff';
-ctx.strokeText('REVERSE', 100, 260);
+  // REVERSE
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#ffffff';
+  ctx.font = 'bold 20px Courier New';
+  ctx.strokeText('REVERSE', 180, 260);
 
-ctx.fillStyle = 'rgba(255,80,80,' + a + ')';
-ctx.fillText('REVERSE', 100, 260);
- }
+  ctx.fillStyle = 'rgba(248,216,0,' + a + ')';
+  ctx.fillText('REVERSE', 180, 260);
+
+  ctx.textAlign = 'left'; // ←戻す（重要）
+}
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
