@@ -420,7 +420,7 @@ function resetGame() {
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
   const bgm = document.getElementById('bgmTitle');
 
-if(state.colaStreak >= 1){
+if(state.colaStreak >= 3){
   bgm.volume = 0.15;
   bgm.play().catch(()=>{});
 } else {
