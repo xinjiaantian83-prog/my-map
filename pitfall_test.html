@@ -417,6 +417,15 @@ function resetGame() {
   state.showCola = false;
   makeBoards();
   setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
+  const bgm = document.getElementById('bgmTitle');
+
+if(state.successCount >= 3){
+  bgm.volume = 0.15;
+  bgm.play().catch(()=>{});
+} else {
+  bgm.pause();
+  bgm.currentTime = 0;
+}
 }
 
 function setStatus(left, msg, right) {
