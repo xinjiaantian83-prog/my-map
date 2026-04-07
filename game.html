@@ -130,20 +130,37 @@ if (localStorage.getItem("game_version") !== VERSION) {
       linear-gradient(180deg, rgba(0,255,255,0.03), rgba(255,0,255,0.02));
   }
 
-  .paw {
-    position: absolute;
-    font-size: 62px;
-    cursor: pointer;
-    transform: translate(-50%, -50%);
-    transition: transform 0.05s;
-    display: none;
-    line-height: 1;
-    filter:
-      drop-shadow(0 0 4px rgba(255,255,255,0.8))
-      drop-shadow(0 0 10px rgba(77,255,234,0.75))
-      drop-shadow(0 0 18px rgba(77,255,234,0.45));
-    image-rendering: pixelated;
-  }
+.paw {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.05s;
+  display: none;
+  image-rendering: pixelated;
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'>\
+<rect width='16' height='16' fill='none'/>\
+<rect x='6' y='7' width='4' height='1' fill='%23333'/>\
+<rect x='5' y='8' width='6' height='3' fill='%23333'/>\
+<rect x='6' y='11' width='4' height='2' fill='%23333'/>\
+<rect x='3' y='3' width='2' height='2' fill='%23333'/>\
+<rect x='5' y='1' width='2' height='2' fill='%23333'/>\
+<rect x='9' y='1' width='2' height='2' fill='%23333'/>\
+<rect x='11' y='3' width='2' height='2' fill='%23333'/>\
+</svg>");
+
+  filter:
+    drop-shadow(0 0 2px rgba(255,255,255,0.85))
+    drop-shadow(0 0 8px rgba(77,255,234,0.8))
+    drop-shadow(0 0 16px rgba(77,255,234,0.45));
+}
 
   .paw.tap-anim {
     animation: tapBounce 0.18s ease-out;
@@ -225,7 +242,28 @@ if (localStorage.getItem("game_version") !== VERSION) {
       drop-shadow(0 0 4px rgba(255,255,255,0.7))
       drop-shadow(0 0 14px rgba(255,224,102,0.7));
   }
-
+.pixel-paw {
+  width: 110px;
+  height: 110px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  image-rendering: pixelated;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'>\
+<rect width='16' height='16' fill='none'/>\
+<rect x='6' y='7' width='4' height='1' fill='%23ffe066'/>\
+<rect x='5' y='8' width='6' height='3' fill='%23ffe066'/>\
+<rect x='6' y='11' width='4' height='2' fill='%23ffe066'/>\
+<rect x='3' y='3' width='2' height='2' fill='%23ffe066'/>\
+<rect x='5' y='1' width='2' height='2' fill='%23ffe066'/>\
+<rect x='9' y='1' width='2' height='2' fill='%23ffe066'/>\
+<rect x='11' y='3' width='2' height='2' fill='%23ffe066'/>\
+</svg>");
+  filter:
+    drop-shadow(0 0 4px rgba(255,255,255,0.7))
+    drop-shadow(0 0 14px rgba(255,224,102,0.7));
+}
   .screen-title {
     font-size: 30px;
     font-weight: 900;
@@ -317,16 +355,14 @@ if (localStorage.getItem("game_version") !== VERSION) {
   }
 
   .triple {
-    transform: translate(-50%, -50%) scale(0.78);
-    filter:
-      hue-rotate(220deg)
-      saturate(2)
-      brightness(1.2)
-      drop-shadow(0 0 6px #7df9ff)
-      drop-shadow(0 0 14px #29adff)
-      drop-shadow(0 0 24px #c77dff);
-    animation: tripleBlink 0.3s infinite alternate;
-  }
+  transform: translate(-50%, -50%) scale(0.82);
+  filter:
+    drop-shadow(0 0 3px #7df9ff)
+    drop-shadow(0 0 10px #29adff)
+    drop-shadow(0 0 20px #c77dff)
+    drop-shadow(0 0 30px rgba(199,125,255,0.45));
+  animation: tripleBlink 0.3s infinite alternate;
+}
 
   @keyframes tripleBlink {
     from {
@@ -489,7 +525,7 @@ if (localStorage.getItem("game_version") !== VERSION) {
 <!-- Game area -->
 <div id="game-area">
   <div class="arcade-grid"></div>
-  <div id="paw" class="paw">🐾</div>
+ <div id="paw" class="paw"></div>
 
   <div class="arcade-footer">
     <span class="arcade-left">1 CREDIT</span>
@@ -514,7 +550,7 @@ if (localStorage.getItem("game_version") !== VERSION) {
 
 <!-- Start screen -->
 <div class="screen" id="start-screen">
-  <div class="screen-emoji">🐾</div>
+<div class="screen-emoji pixel-paw"></div>
  <div class="screen-title">PAW TAP ARCADE</div>
 <div class="screen-sub">10びょうの あいだに<br>できるだけ たくさん たたけ！</div>
  <div id="playCountText" style="font-size:14px;color:#666;font-weight:700;">
