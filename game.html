@@ -373,7 +373,61 @@ if (localStorage.getItem("game_version") !== VERSION) {
   .shake {
     animation: screenShake 0.2s;
   }
+  .arcade-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      linear-gradient(rgba(77,255,234,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,79,216,0.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+    opacity: 0.22;
+    mask-image: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.45) 55%, rgba(255,255,255,0.1) 100%);
+    -webkit-mask-image: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.45) 55%, rgba(255,255,255,0.1) 100%);
+  }
 
+  .arcade-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 84px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 14px;
+    pointer-events: none;
+    z-index: 2;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .arcade-left,
+  .arcade-center,
+  .arcade-right {
+    color: #ffe066;
+    text-shadow:
+      0 0 4px rgba(255,224,102,0.8),
+      0 0 8px rgba(255,224,102,0.35);
+    white-space: nowrap;
+  }
+
+  .arcade-center {
+    color: #ff4fd8;
+    text-shadow:
+      0 0 4px rgba(255,79,216,0.85),
+      0 0 10px rgba(255,79,216,0.35);
+  }
+
+  .arcade-right {
+    color: #4dffea;
+    text-shadow:
+      0 0 4px rgba(77,255,234,0.85),
+      0 0 10px rgba(77,255,234,0.35);
+  }
   #backBtn {
     position: fixed;
     bottom: 18px;
@@ -434,7 +488,14 @@ if (localStorage.getItem("game_version") !== VERSION) {
 
 <!-- Game area -->
 <div id="game-area">
+  <div class="arcade-grid"></div>
   <div id="paw" class="paw">🐾</div>
+
+  <div class="arcade-footer">
+    <span class="arcade-left">1 CREDIT</span>
+    <span class="arcade-center">WANWAN ARCADE</span>
+    <span class="arcade-right" id="hiScoreText">HI 000</span>
+  </div>
 </div>
 
 <!-- 👇ここ追加 -->
@@ -625,6 +686,13 @@ function updatePlayCountUI() {
 
   const count = getRecoveredPlayCount();
   playCountText.textContent = "残りプレイ回数：" + count + " / " + PLAY_MAX;
+}
+ function updateHiScoreUI() {
+  const hiScoreEl = document.getElementById("hiScoreText");
+  if (!hiScoreEl) return;
+
+  const hi = Number(localStorage.getItem("wanwan_hi_score") || 0);
+  hiScoreEl.textContent = "HI " + String(hi).padStart(3, "0");
 }
 const params = new URLSearchParams(location.search);
 
@@ -1007,8 +1075,15 @@ if (thirdPaw) {
   }, 500);
 
   let totalScore = Number(localStorage.getItem("wanwan_score") || 0);
-  totalScore += score;
-  localStorage.setItem("wanwan_score", totalScore);
+totalScore += score;
+localStorage.setItem("wanwan_score", totalScore);
+
+let hiScore = Number(localStorage.getItem("wanwan_hi_score") || 0);
+if (score > hiScore) {
+  localStorage.setItem("wanwan_hi_score", score);
+}
+
+updateHiScoreUI();
 }
   function runCountdown(cb) {
     countScr.classList.remove('hidden');
@@ -1162,6 +1237,7 @@ if (score === 4) {
   }, 600);
 }
 updatePlayCountUI();
+updateHiScoreUI();
 
 </script>
 <audio id="seTap" src="seTap.mp3" preload="auto"></audio>
