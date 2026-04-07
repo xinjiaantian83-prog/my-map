@@ -132,8 +132,8 @@ if (localStorage.getItem("game_version") !== VERSION) {
 
 .paw {
   position: absolute;
-  width: 88px;
-  height: 88px;
+ width: 64px;
+height: 64px;
   cursor: pointer;
   transform: translate(-50%, -50%);
   transition: transform 0.05s;
@@ -249,20 +249,20 @@ if (localStorage.getItem("game_version") !== VERSION) {
   background-position: center;
   background-size: contain;
   image-rendering: pixelated;
-  background-image: url("data:image/svg+xml;utf8,\
+ background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'>\
 <rect width='16' height='16' fill='none'/>\
-<rect x='6' y='7' width='4' height='1' fill='%23ffe066'/>\
-<rect x='5' y='8' width='6' height='3' fill='%23ffe066'/>\
-<rect x='6' y='11' width='4' height='2' fill='%23ffe066'/>\
-<rect x='3' y='3' width='2' height='2' fill='%23ffe066'/>\
-<rect x='5' y='1' width='2' height='2' fill='%23ffe066'/>\
-<rect x='9' y='1' width='2' height='2' fill='%23ffe066'/>\
-<rect x='11' y='3' width='2' height='2' fill='%23ffe066'/>\
+<rect x='6' y='9' width='4' height='3' fill='%23333'/>\
+<rect x='5' y='8' width='6' height='2' fill='%23333'/>\
+<rect x='6' y='6' width='1' height='1' fill='%23333'/>\
+<rect x='9' y='6' width='1' height='1' fill='%23333'/>\
+<rect x='4' y='4' width='2' height='2' fill='%23333'/>\
+<rect x='10' y='4' width='2' height='2' fill='%23333'/>\
 </svg>");
-  filter:
-    drop-shadow(0 0 4px rgba(255,255,255,0.7))
-    drop-shadow(0 0 14px rgba(255,224,102,0.7));
+ filter:
+  drop-shadow(0 0 2px rgba(255,255,255,0.9))
+  drop-shadow(0 0 10px rgba(77,255,234,0.9))
+  drop-shadow(0 0 20px rgba(77,255,234,0.5));
 }
   .screen-title {
     font-size: 30px;
