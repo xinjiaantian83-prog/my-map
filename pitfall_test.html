@@ -608,11 +608,13 @@ function showScreen(name) {
   document.getElementById('playScreen').classList.add('hidden');
   document.getElementById('resultScreen').classList.add('hidden');
   document.getElementById(name).classList.remove('hidden');
-  const mapBtn = document.getElementById('mapBackBtn');
-if(name === 'titleScreen'){
-  mapBtn.style.display = '';
-} else {
-  mapBtn.style.display = 'none';
+ const mapBtn = document.getElementById('mapBackBtn');
+if(mapBtn){
+  if(name === 'titleScreen'){
+    mapBtn.style.display = '';
+  } else {
+    mapBtn.style.display = 'none';
+  }
 }
   // 👇追加
 const game = document.getElementById('game');
