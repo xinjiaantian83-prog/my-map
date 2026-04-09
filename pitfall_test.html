@@ -955,15 +955,21 @@ if(state.flashTimer > 0){
   if(state.showCola){
     ctx.fillStyle = 'rgba(0,0,0,0.8)';
     ctx.fillRect(0,0,360,480);
+const colaCount = state.colaStreak + 1;
+const drawCount = Math.min(colaCount, 5); // 最大5本まで表示
 
-    drawCola(156, 180, 2);
+for(let i = 0; i < drawCount; i++){
+  const offsetX = (i - (drawCount - 1) / 2) * 34;
+  const offsetY = Math.abs(i - (drawCount - 1) / 2) * 8;
+  drawCola(156 + offsetX, 180 + offsetY, 2);
+}
 
     ctx.fillStyle = '#000';
     ctx.font = 'bold 32px Courier New';
-    ctx.fillText('COKE x ' + (state.colaStreak + 1), 102, 262);
+    ctx.fillText('COLA x ' + (state.colaStreak + 1), 102, 262);
 
     ctx.fillStyle = '#f8d800';
-    ctx.fillText('COKE x ' + (state.colaStreak + 1), 100, 260);
+    ctx.fillText('COLA x ' + (state.colaStreak + 1), 100, 260);
 
     for(let i=0;i<20;i++){
       ctx.fillStyle = ['#ff4040','#40ff40','#4040ff','#ffff40'][i%4];
