@@ -828,11 +828,7 @@ function render() {
     ctx.fillStyle = p.color;
     ctx.fillRect(p.x, p.y, p.size, p.size);
   });
-// 花火描画
-state.fireworks.forEach(f => {
-  ctx.fillStyle = f.color;
-  ctx.fillRect(f.x, f.y, 3, 3);
-});
+
   if(state.hitTextTimer > 0){
     const rise = 18 - state.hitTextTimer;
 
@@ -846,13 +842,7 @@ state.fireworks.forEach(f => {
     ctx.fillText('BANG!!', state.playerX + 20, state.playerY - 10 - rise);
     ctx.restore();
   }
-// 花火更新
-state.fireworks.forEach(f => {
-  f.x += f.vx;
-  f.y += f.vy;
-  f.vy += 0.05;
-  f.life--;
-});
+
 
 state.fireworks = state.fireworks.filter(f => f.life > 0);
   return;
@@ -1465,20 +1455,7 @@ function onDangerBoard(idx) {
   state.phase = 'explode';
   state.hitTextTimer = 18;
   state.explodePieces = [];
-// 花火生成
-const fx = Math.random() * 280 + 40;
-const fy = Math.random() * 120 + 40;
 
-for(let i = 0; i < 24; i++){
-  state.fireworks.push({
-    x: fx,
-    y: fy,
-    vx: Math.cos(i * Math.PI * 2 / 24) * (Math.random() * 3 + 2),
-    vy: Math.sin(i * Math.PI * 2 / 24) * (Math.random() * 3 + 2),
-    life: 40,
-    color: ['#ff4040','#ffff40','#40ff40','#40a0ff','#ffffff'][Math.floor(Math.random()*5)]
-  });
-}
   const colors = ['#e02020', '#ffffff', '#f5c48a', '#3a1a00', '#202020'];
 
   for(let i = 0; i < 24; i++){
