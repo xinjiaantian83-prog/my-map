@@ -360,6 +360,7 @@ body{
   100% { opacity: 1; }
 }
     #game::before{
+      
   content:"";
   position:absolute;
   inset:0;
@@ -372,6 +373,7 @@ body{
   );
   z-index:98;
 }
+
 </style>
 </head>
 <body>
@@ -581,6 +583,13 @@ function showScreen(name) {
   document.getElementById('playScreen').classList.add('hidden');
   document.getElementById('resultScreen').classList.add('hidden');
   document.getElementById(name).classList.remove('hidden');
+  // 👇追加
+const game = document.getElementById('game');
+if(name === 'titleScreen'){
+  game.classList.remove('lightMode');
+} else {
+  game.classList.add('lightMode');
+}
 }
 
 function showOverlay(title, msg, buttons) {
