@@ -1260,7 +1260,7 @@ if(state.phase !== 'walk' || !state.canInput) return;
  
   // 弾生成
 if(state.walkFrame > 20 && Math.random() < 0.3){
-  if(state.bullets.length < 8){
+  if(state.bullets.length < 7){
     const killer = Math.random() < 0.2;
 
     state.bullets.push({
