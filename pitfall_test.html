@@ -135,7 +135,11 @@ body{
   flex:1;
   text-align:center;
   color:#f8d800;
-  font-size:11px;
+  font-size:18px; /* ←デカく */
+  font-weight:bold;
+  text-shadow:0 0 6px rgba(248,216,0,0.7);
+
+  
 }
 #scene{
   position:absolute;
@@ -295,6 +299,11 @@ body{
 }
 .shake{
   animation:shake .35s ease;
+}
+  @keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 </style>
 </head>
@@ -462,6 +471,7 @@ function setStatus(left, msg, right) {
 
   if(state.colaStreak === 0){
     text = '???';
+el.style.color = '#888';
   } else if(state.colaStreak < 3){
     text = 'COLA x ' + state.colaStreak;
   } else if(state.colaStreak < 5){
@@ -469,9 +479,23 @@ function setStatus(left, msg, right) {
   } else {
     text = 'EXCELLENT x ' + state.colaStreak;
   }
+const el = document.getElementById('statusMsg');
+el.textContent = text;
 
-  document.getElementById('statusMsg').textContent = text;
+let color = '#f8d800';
 
+if(state.colaStreak >= 5){
+  color = '#ff4040'; // 赤
+} else if(state.colaStreak >= 3){
+  color = '#40ff40'; // 緑
+}
+
+el.style.color = color;
+if(state.colaStreak >= 3){
+  el.style.animation = 'pulse 0.6s infinite';
+} else {
+  el.style.animation = '';
+}
   document.getElementById('statusRight').textContent = right;
 }
 
