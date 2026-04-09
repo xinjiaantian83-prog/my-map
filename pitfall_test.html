@@ -28,6 +28,9 @@ body{
   color:#e8e8d0;
   border-left:2px solid #3a3a5c;
   border-right:2px solid #3a3a5c;
+    transform:perspective(800px) rotateX(1.2deg);
+  transform-origin:center center;
+    animation: crtFlicker 0.12s infinite;
 }
 #game::after{
   content:"";
@@ -36,8 +39,10 @@ body{
   pointer-events:none;
   background:repeating-linear-gradient(
     0deg,
-    transparent 0px, transparent 2px,
-    rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.12) 3px,
+    rgba(0,0,0,0.12) 4px
   );
   z-index:99;
 }
@@ -348,6 +353,24 @@ body{
   0% { transform: scale(1); }
   50% { transform: scale(1.15); }
   100% { transform: scale(1); }
+  }
+  @keyframes crtFlicker {
+  0% { opacity: 1; }
+  50% { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+    #game::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(
+    ellipse at center,
+    rgba(255,0,0,0.15) 0%,
+    rgba(0,0,0,0.6) 60%,
+    rgba(0,0,0,0.9) 100%
+  );
+  z-index:98;
 }
 </style>
 </head>
@@ -1930,9 +1953,9 @@ setInterval(drawTitleChar, 16);
 </script>
 <button id="mapBackBtn" onclick="location.href='index.html'"
   style="
-    position:fixed;
+    position:absolute;
     left:50%;
-    bottom:90px;
+    bottom:10px;
     transform:translateX(-50%);
     padding:10px 18px;
     border-radius:999px;
@@ -1940,8 +1963,8 @@ setInterval(drawTitleChar, 16);
     background:#333;
     color:#fff;
     font-weight:bold;
-   font-size:16px;
-    z-index:9999;
+    font-size:16px;
+    z-index:5;
   ">
   🛸 MAP
 </button>
