@@ -327,7 +327,7 @@ body{
   <div id="playScreen" class="screen hidden">
     <div id="statusBar">
       <span id="statusLeft">STAGE 1</span>
-      <span id="statusMsg">板まで歩け！</span>
+     <span id="statusMsg"></span>
       <span id="statusRight">HP: ♥</span>
     </div>
     <canvas id="scene" width="360" height="480"></canvas>
@@ -480,21 +480,30 @@ el.style.color = '#888';
     text = 'EXCELLENT x ' + state.colaStreak;
   }
 const el = document.getElementById('statusMsg');
-el.textContent = text;
 
-let color = '#f8d800';
-
-if(state.colaStreak >= 5){
-  color = '#ff4040'; // 赤
-} else if(state.colaStreak >= 3){
-  color = '#40ff40'; // 緑
-}
-
-el.style.color = color;
-if(state.colaStreak >= 3){
-  el.style.animation = 'pulse 0.6s infinite';
-} else {
+if(msg === 'HIT!!'){
+  el.textContent = 'HIT!!';
+  el.style.color = '#ff4040';
   el.style.animation = '';
+} else {
+
+  el.textContent = text;
+
+  let color = '#f8d800';
+
+  if(state.colaStreak >= 5){
+    color = '#ff4040';
+  } else if(state.colaStreak >= 3){
+    color = '#40ff40';
+  }
+
+  el.style.color = color;
+
+  if(state.colaStreak >= 3){
+    el.style.animation = 'pulse 0.6s infinite';
+  } else {
+    el.style.animation = '';
+  }
 }
   document.getElementById('statusRight').textContent = right;
 }
