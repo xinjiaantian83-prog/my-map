@@ -1339,9 +1339,10 @@ function onDangerBoard(idx) {
   state.bullets = [];
 }
   function startHitReaction() {
-
-  
-
+if(Math.random() < 0.16){
+  startExplodeReaction();
+  return;
+}
   const rareStraight = Math.random() < 0.22;
 
 
