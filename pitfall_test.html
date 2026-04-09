@@ -694,6 +694,24 @@ function render() {
     ctx.translate(360, 0);
     ctx.scale(-1, 1);
   }
+  if(state.phase === 'explode'){
+  if(state.hitTextTimer > 0){
+    state.hitTextTimer--;
+  }
+
+  state.explodePieces.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+  });
+
+  state.explodePieces = state.explodePieces.filter(p => p.y < 460);
+
+  if(state.explodePieces.length === 0){
+    showResult(false, 'wasted', '粉々になった！！');
+  }
+  return;
+}
 if(state.phase === 'hit'){
   drawBackground();
   state.boards.forEach(drawBoard);
@@ -1073,7 +1091,32 @@ if(state.ufo){
     state.ufo = null;
   }
 }
-  
+  if(state.phase === 'explode'){
+  drawBackground();
+  state.boards.forEach(drawBoard);
+  drawGoalSign();
+
+  state.explodePieces.forEach(p => {
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x, p.y, p.size, p.size);
+  });
+
+  if(state.hitTextTimer > 0){
+    const rise = 18 - state.hitTextTimer;
+
+    ctx.save();
+    ctx.font = 'bold 30px Courier New';
+    ctx.textAlign = 'left';
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = '#000000';
+    ctx.strokeText('BANG!!', state.playerX + 20, state.playerY - 10 - rise);
+    ctx.fillStyle = '#ff4040';
+    ctx.fillText('BANG!!', state.playerX + 20, state.playerY - 10 - rise);
+    ctx.restore();
+  }
+
+  return;
+}
 if(state.phase === 'hit'){
   const h = state.hitReaction;
   if(!h){
