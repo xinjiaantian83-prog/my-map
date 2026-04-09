@@ -404,6 +404,7 @@ bonusColas: [],
 bonusCaught: 0,
   hitReaction: null,
   hitTextTimer: 0,
+  explodePieces: [],
 };
 let clones = [];
 const boardDefs = [
@@ -444,6 +445,7 @@ state.bonusColas = [];
 state.bonusCaught = 0;
 state.hitReaction = null;
   state.hitTextTimer = 0;
+  state.explodePieces = [];
   makeBoards();
    if(state.bottomShotStage){
     state.bottomShotWarn = 120;
@@ -1267,8 +1269,41 @@ function onDangerBoard(idx) {
     }
   }, 260);
 }
-function startHitReaction() {
+  function startExplodeReaction() {
+  state.phase = 'explode';
+  state.hitTextTimer = 18;
+  state.explodePieces = [];
+
+  const colors = ['#e02020', '#ffffff', '#f5c48a', '#3a1a00', '#202020'];
+
+  for(let i = 0; i < 24; i++){
+    state.explodePieces.push({
+      x: state.playerX + 8 + Math.random() * 16,
+      y: state.playerY + 6 + Math.random() * 28,
+      vx: Math.random() * 8 - 4,
+      vy: -(Math.random() * 7 + 2),
+      gravity: 0.28,
+      size: Math.random() < 0.7 ? 4 : 6,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+
+  state.reverseStage = false;
+  state.bottomShotStage = false;
+  state.canInput = false;
+  state.moving.left = false;
+  state.moving.right = false;
+  state.bullets = [];
+}
+  function startHitReaction() {
+
+  if(Math.random() < 0.16){
+    startExplodeReaction();
+    return;
+  }
+
   const rareStraight = Math.random() < 0.22;
+
 
   let p;
 
