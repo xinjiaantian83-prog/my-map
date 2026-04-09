@@ -457,7 +457,21 @@ bgm.currentTime = 0;
 
 function setStatus(left, msg, right) {
   document.getElementById('statusLeft').textContent = left;
-  document.getElementById('statusMsg').textContent = msg;
+
+  let text = '';
+
+  if(state.colaStreak === 0){
+    text = '???';
+  } else if(state.colaStreak < 3){
+    text = 'COLA x ' + state.colaStreak;
+  } else if(state.colaStreak < 5){
+    text = 'NICE x ' + state.colaStreak;
+  } else {
+    text = 'EXCELLENT x ' + state.colaStreak;
+  }
+
+  document.getElementById('statusMsg').textContent = text;
+
   document.getElementById('statusRight').textContent = right;
 }
 
