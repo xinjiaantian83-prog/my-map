@@ -391,6 +391,7 @@ const state = {
 bonusTimer: 0,
 bonusColas: [],
 bonusCaught: 0,
+  hitReaction: null,
 };
 let clones = [];
 const boardDefs = [
@@ -429,7 +430,7 @@ function resetGame() {
 state.bonusTimer = 0;
 state.bonusColas = [];
 state.bonusCaught = 0;
- 
+state.hitReaction = null;
   makeBoards();
    if(state.bottomShotStage){
     state.bottomShotWarn = 120;
@@ -641,7 +642,25 @@ function render() {
     ctx.translate(360, 0);
     ctx.scale(-1, 1);
   }
+if(state.phase === 'hit'){
+  drawBackground();
+  state.boards.forEach(drawBoard);
+  drawGoalSign();
 
+  const h = state.hitReaction;
+  if(h){
+    ctx.save();
+    ctx.translate(h.x + 12, h.y + 20);
+    ctx.rotate(h.rot);
+    drawPixelChar(-12, -20, h.vx >= 0 ? 1 : -1, 'fall');
+    ctx.restore();
+  }
+
+  if(state.reverseStage){
+    ctx.restore();
+  }
+  return;
+}
   if(state.phase === 'falling' || state.phase === 'event'){
     drawHoleBackground();
 
@@ -986,7 +1005,22 @@ if(state.ufo){
   }
 }
   
+if(state.phase === 'hit'){
+  const h = state.hitReaction;
+  if(!h) return;
 
+  h.timer++;
+  h.x += h.vx;
+  h.y += h.vy;
+  h.vy += h.gravity;
+  h.rot += h.rotSpeed;
+
+  if(h.y > 430 || h.x < -80 || h.x > 420){
+    state.hitReaction = null;
+    showResult(false, 'wasted', 'ぶっ飛ばされた！！');
+  }
+  return;
+}
   if(state.phase !== 'walk' || !state.canInput) return;
  
   // 弾生成
@@ -1025,11 +1059,7 @@ b.x += Math.sin(b.y * 0.1) * 2;
      playHitSound();
   shakeGame();
  setStatus('HIT!!', 'やられた…', 'HP: 0');
-  setTimeout(() => {
-    state.reverseStage = false;
-state.bottomShotStage = false;
-    startFalling();
-  }, 500);
+ startHitReaction();
   return;
 }
   }
@@ -1160,7 +1190,35 @@ function onDangerBoard(idx) {
     }
   }, 260);
 }
+function startHitReaction() {
+  const patterns = [
+    { vx: 5.5,  vy: -7.5, rotSpeed: 0.22 },   // 右上
+    { vx: -5.2, vy: -7.0, rotSpeed: -0.2 },   // 左上
+    { vx: 1.2,  vy: -8.5, rotSpeed: 0.28 },   // 真上気味
+    { vx: 4.0,  vy: -5.2, rotSpeed: 0.14 }    // 軽く前方
+  ];
 
+  const p = patterns[Math.floor(Math.random() * patterns.length)];
+
+  state.phase = 'hit';
+  state.hitReaction = {
+    x: state.playerX,
+    y: state.playerY,
+    vx: p.vx,
+    vy: p.vy,
+    gravity: 0.42,
+    rot: 0,
+    rotSpeed: p.rotSpeed,
+    timer: 0
+  };
+
+  state.reverseStage = false;
+  state.bottomShotStage = false;
+  state.canInput = false;
+  state.moving.left = false;
+  state.moving.right = false;
+  state.bullets = [];
+}
 function startFalling() {
   playFallSound();
   state.phase = 'falling';
