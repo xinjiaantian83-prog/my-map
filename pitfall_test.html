@@ -904,10 +904,8 @@ if(h && state.hitTextTimer > 0){
 
   drawBackground();
 state.boards.forEach(drawBoard);
-
 if(state.ufoMode){
-  drawUFO(state.playerX, state.playerY - 8);
-  drawPixelChar(state.playerX, state.ufoBuddyY, state.dir, 'normal');
+  drawUFO(state.playerX, state.playerY);
 } else {
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
 }
@@ -1236,9 +1234,7 @@ if(state.ufo){
     state.ufo = null;
   }
 }
-  if(state.ufoMode){
-  state.ufoBuddyY = 95 + Math.sin(Date.now() * 0.01) * 10;
-}
+ 
   if(state.phase === 'explode'){
   if(state.hitTextTimer > 0){
     state.hitTextTimer--;
