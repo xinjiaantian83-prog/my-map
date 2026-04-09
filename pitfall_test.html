@@ -1077,19 +1077,23 @@ if(state.phase === 'hit'){
     state.phase = 'result';
     return;
   }
+
   h.timer++;
   h.x += h.vx;
   h.y += h.vy;
   h.vy += h.gravity;
   h.rot += h.rotSpeed;
+
   if(state.hitTextTimer > 0){
-  state.hitTextTimer--;
-}
+    state.hitTextTimer--;
+  }
 
   if(h.y > 430 || h.y < -60 || h.x < -80 || h.x > 420){
-  state.hitReaction = null;
-  state.phase = 'result';
-  showResult(false, 'wasted', 'ぶっ飛ばされた！！');
+    state.hitReaction = null;
+    state.phase = 'result';
+    showResult(false, 'wasted', 'ぶっ飛ばされた！！');
+  }
+  return;
 }
   return;
 }
