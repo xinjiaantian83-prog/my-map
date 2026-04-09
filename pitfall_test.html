@@ -1015,10 +1015,10 @@ if(state.phase === 'hit'){
   h.vy += h.gravity;
   h.rot += h.rotSpeed;
 
-  if(h.y > 430 || h.x < -80 || h.x > 420){
-    state.hitReaction = null;
-    showResult(false, 'wasted', 'ぶっ飛ばされた！！');
-  }
+  if(h.y > 430 || h.y < -60 || h.x < -80 || h.x > 420){
+  state.hitReaction = null;
+  showResult(false, 'wasted', 'ぶっ飛ばされた！！');
+}
   return;
 }
   if(state.phase !== 'walk' || !state.canInput) return;
