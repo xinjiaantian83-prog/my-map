@@ -1191,14 +1191,28 @@ function onDangerBoard(idx) {
   }, 260);
 }
 function startHitReaction() {
-  const patterns = [
-    { vx: 5.5,  vy: -7.5, rotSpeed: 0.22 },   // 右上
-    { vx: -5.2, vy: -7.0, rotSpeed: -0.2 },   // 左上
-    { vx: 1.2,  vy: -8.5, rotSpeed: 0.28 },   // 真上気味
-    { vx: 4.0,  vy: -5.2, rotSpeed: 0.14 }    // 軽く前方
-  ];
+  const rareStraight = Math.random() < 0.22;
 
-  const p = patterns[Math.floor(Math.random() * patterns.length)];
+  let p;
+
+  if(rareStraight){
+    const rarePatterns = [
+      { vx: 14,  vy: 0,    gravity: 0.02, rotSpeed: 0.45 },   // 超高速で右に真横
+      { vx: -14, vy: 0,    gravity: 0.02, rotSpeed: -0.45 },  // 超高速で左に真横
+      { vx: 0,   vy: -15,  gravity: 0.03, rotSpeed: 0.55 },   // 超高速で真上
+      { vx: 10,  vy: -13,  gravity: 0.06, rotSpeed: 0.5 },    // 右上ロケット
+      { vx: -10, vy: -13,  gravity: 0.06, rotSpeed: -0.5 }    // 左上ロケット
+    ];
+    p = rarePatterns[Math.floor(Math.random() * rarePatterns.length)];
+  } else {
+    const normalPatterns = [
+      { vx: 5.5,  vy: -7.5, gravity: 0.42, rotSpeed: 0.22 },
+      { vx: -5.2, vy: -7.0, gravity: 0.42, rotSpeed: -0.20 },
+      { vx: 1.2,  vy: -8.5, gravity: 0.42, rotSpeed: 0.28 },
+      { vx: 4.0,  vy: -5.2, gravity: 0.42, rotSpeed: 0.14 }
+    ];
+    p = normalPatterns[Math.floor(Math.random() * normalPatterns.length)];
+  }
 
   state.phase = 'hit';
   state.hitReaction = {
@@ -1206,7 +1220,7 @@ function startHitReaction() {
     y: state.playerY,
     vx: p.vx,
     vy: p.vy,
-    gravity: 0.42,
+    gravity: p.gravity,
     rot: 0,
     rotSpeed: p.rotSpeed,
     timer: 0
