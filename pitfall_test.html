@@ -1650,7 +1650,7 @@ function bindHoldButton(el, dir) {
 document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
-
+  playCoinSound();
   const flash = document.getElementById('startFlash');
   flash.classList.remove('flash');
   void flash.offsetWidth;
