@@ -1073,8 +1073,10 @@ if(state.ufo){
   
 if(state.phase === 'hit'){
   const h = state.hitReaction;
-  if(!h) return;
-
+  if(!h){
+    state.phase = 'result';
+    return;
+  }
   h.timer++;
   h.x += h.vx;
   h.y += h.vy;
@@ -1086,6 +1088,7 @@ if(state.phase === 'hit'){
 
   if(h.y > 430 || h.y < -60 || h.x < -80 || h.x > 420){
   state.hitReaction = null;
+  state.phase = 'result';
   showResult(false, 'wasted', 'ぶっ飛ばされた！！');
 }
   return;
