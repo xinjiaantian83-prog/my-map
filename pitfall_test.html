@@ -608,6 +608,12 @@ function showScreen(name) {
   document.getElementById('playScreen').classList.add('hidden');
   document.getElementById('resultScreen').classList.add('hidden');
   document.getElementById(name).classList.remove('hidden');
+  const mapBtn = document.getElementById('mapBackBtn');
+if(name === 'titleScreen'){
+  mapBtn.style.display = '';
+} else {
+  mapBtn.style.display = 'none';
+}
   // 👇追加
 const game = document.getElementById('game');
 if(name === 'titleScreen'){
@@ -1643,9 +1649,6 @@ document.getElementById('startBtn').onclick = () => {
   const ctx = getCtx();
   ctx.resume();
 
-  playCoinSound();
-  playStartSound();
-
   const flash = document.getElementById('startFlash');
   flash.classList.remove('flash');
   void flash.offsetWidth;
@@ -1661,8 +1664,6 @@ document.getElementById('startBtn').onclick = () => {
   }, 120);
 };
 document.getElementById('retryBtn').onclick = () => {
-  playCoinSound();
-
   const flash = document.getElementById('startFlash');
   flash.classList.remove('flash');
   void flash.offsetWidth;
@@ -1673,7 +1674,6 @@ document.getElementById('retryBtn').onclick = () => {
     resetGame();
   }, 120);
 };
-
 document.getElementById('backTitleBtn').onclick = () => {
   state.phase = 'title';
   showScreen('titleScreen');
