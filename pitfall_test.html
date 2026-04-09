@@ -1401,7 +1401,11 @@ function resolveEvent(yes) {
   state.showCola = false;
   state.bullets = [];
   state.ufo = null;
-
+state.reverseStage = false;
+state.bottomShotStage = false;
+state.reverseWarn = 0;
+state.bottomShotWarn = 0;
+state.flashTimer = 0;
   setStatus('BONUS', 'コーラを取りまくれ！！', 'GET: 0');
   showScreen('playScreen');
 }
