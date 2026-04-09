@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>I LOVE COKE</title>
+<title>I LOVE COLA</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{
@@ -497,6 +497,8 @@ bonusCaught: 0,
   hitReaction: null,
   hitTextTimer: 0,
   explodePieces: [],
+  ufoMode: false,
+ufoBuddyY: 120,
 };
 let clones = [];
 const boardDefs = [
@@ -538,7 +540,12 @@ state.bonusCaught = 0;
 state.hitReaction = null;
   state.hitTextTimer = 0;
   state.explodePieces = [];
+  state.ufoMode = false;
+state.ufoBuddyY = 120;
   makeBoards();
+  if(Math.random() < 0.08){
+  state.ufoMode = true;
+}
    if(state.bottomShotStage){
     state.bottomShotWarn = 120;
   } else {
@@ -553,7 +560,11 @@ state.hitReaction = null;
   if(state.reverseStage){
   state.flashTimer = 12;
 }
-  setStatus('STAGE 1', '板まで歩け！', 'HP: ♥');
+  setStatus(
+  'STAGE 1',
+  state.ufoMode ? 'UFO MODE' : '板まで歩け！',
+  state.ufoMode ? 'INVINCIBLE' : 'HP: ♥'
+);
   const bgm = document.getElementById('bgmTitle');
 
 bgm.pause();
@@ -575,7 +586,13 @@ function setStatus(left, msg, right) {
   text = 'EXCELLENT x ' + state.colaStreak;
 }
 const el = document.getElementById('statusMsg');
-
+if(state.ufoMode){
+  el.textContent = 'UFO MODE';
+  el.style.color = '#7fe8ff';
+  el.style.animation = 'pulse 0.6s infinite';
+  document.getElementById('statusRight').textContent = 'INVINCIBLE';
+  return;
+}
 if(left === 'HIT!!'){
   el.textContent = 'HIT!!';
   el.style.color = '#ff4040';
@@ -886,9 +903,16 @@ if(h && state.hitTextTimer > 0){
   }
 
   drawBackground();
-  state.boards.forEach(drawBoard);
+state.boards.forEach(drawBoard);
+
+if(state.ufoMode){
+  drawUFO(state.playerX, state.playerY - 8);
+  drawPixelChar(state.playerX, state.ufoBuddyY, state.dir, 'normal');
+} else {
   drawPixelChar(state.playerX, state.playerY, state.dir, 'normal');
-  drawGoalSign();
+}
+
+drawGoalSign();
 if(state.bonusStage){
   state.bonusColas.forEach(c => {
     drawCola(c.x, c.y, 1);
@@ -1130,10 +1154,10 @@ ctx.strokeRect(signX, signY, signW, signH);
 // 影（白）
 ctx.fillStyle = '#ffffff';
 ctx.font = 'bold 16px Courier New';
-ctx.fillText('COKE', 292, 246);
+ctx.fillText('COLA', 292, 246);
 
 ctx.fillStyle = '#ff3030';
-ctx.fillText('COKE', 293, 247);
+ctx.fillText('COLA', 293, 247);
 }
 function update() {
   state.score++;
@@ -1212,6 +1236,9 @@ if(state.ufo){
     state.ufo = null;
   }
 }
+  if(state.ufoMode){
+  state.ufoBuddyY = 95 + Math.sin(Date.now() * 0.01) * 10;
+}
   if(state.phase === 'explode'){
   if(state.hitTextTimer > 0){
     state.hitTextTimer--;
@@ -1286,7 +1313,7 @@ b.x += Math.sin(b.y * 0.1) * 2;
     const dx = b.x - (state.playerX + 12);
     const dy = b.y - (state.playerY + 20);
 
-   if(Math.abs(dx) < 16 && Math.abs(dy) < 20){
+   if(!state.ufoMode && Math.abs(dx) < 16 && Math.abs(dy) < 20){
   state.bullets = [];
   state.canInput = false;
   state.moving.left = false;
@@ -1300,13 +1327,13 @@ b.x += Math.sin(b.y * 0.1) * 2;
   }
 
   // 移動
-  const speed = 3;
+ const speed = state.ufoMode ? 6 : 3;
 if(state.moving.left){
   if(state.reverseStage){
-    state.playerX = Math.min(326, state.playerX + 3);
+  state.playerX = Math.min(326, state.playerX + speed);
     state.dir = 1;
   } else {
-    state.playerX = Math.max(8, state.playerX - 3);
+   state.playerX = Math.max(8, state.playerX - speed);
     state.dir = -1;
   }
   state.walkFrame++;
@@ -1318,10 +1345,10 @@ if(state.moving.left){
 
 if(state.moving.right){
   if(state.reverseStage){
-    state.playerX = Math.max(8, state.playerX - 3);
+    state.playerX = Math.max(8, state.playerX - speed);
     state.dir = -1;
   } else {
-    state.playerX = Math.min(326, state.playerX + 3);
+    state.playerX = Math.min(326, state.playerX + speed);
     state.dir = 1;
   }
   state.walkFrame++;
@@ -1731,7 +1758,7 @@ showScreen('titleScreen');
 loop();
   const subs = [
   'PITFALL ESCAPE v2.0',
-  'COKE IS LOVE',
+  'COLA IS LOVE',
   'DO NOT TRUST',
   '100% SAFE',
   '助かる保証はありません'
