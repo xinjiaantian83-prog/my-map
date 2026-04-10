@@ -1199,14 +1199,17 @@ function update() {
 if(state.bonusTimer <= 0){
   state.bonusStage = false;
 
-  // 10本ごとにUFO装着券+1
   const addTickets = Math.floor(state.bonusCaught / 10);
   if(addTickets > 0){
     state.ufoTickets += addTickets;
   }
 
-  // ボーナス後も次ステージ扱いにする
   state.showCola = true;
+
+  // ★これ追加
+  state.canInput = false;
+  state.bullets = [];
+  return;
 }
   
   // ボーナス中の左右移動
