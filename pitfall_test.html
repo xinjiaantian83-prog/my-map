@@ -1205,10 +1205,14 @@ if(state.bonusTimer <= 0){
     state.ufoTickets += addTickets;
   }
 
-  // ★ 次ステージ処理ルートに乗せる
-  state.showCola = true;
   state.canInput = false;
   state.bullets = [];
+
+  showResult(
+    true,
+    'BONUS END!',
+    'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
+  );
 
   return;
 }
