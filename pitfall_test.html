@@ -1195,7 +1195,7 @@ function update() {
   // 画面外削除
   state.bonusColas = state.bonusColas.filter(c => c.y < 520);
 
-  // ボーナス終了
+// ボーナス終了
 if(state.bonusTimer <= 0){
   state.bonusStage = false;
 
@@ -1204,7 +1204,6 @@ if(state.bonusTimer <= 0){
     state.ufoTickets += addTickets;
   }
 
-  // ★ボーナス結果をちゃんと見せる
   state.canInput = false;
   state.bullets = [];
 
@@ -1214,7 +1213,7 @@ if(state.bonusTimer <= 0){
     'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
   );
 
-  return; // ←これが超重要
+  return; // ← bonusStage の中で return させる
 }
   // ★これ追加
   state.canInput = false;
