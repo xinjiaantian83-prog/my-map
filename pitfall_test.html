@@ -1213,27 +1213,23 @@ if(state.bonusTimer <= 0){
     'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
   );
 
-  return; // ← bonusStage の中で return させる
+  return; // ← ここで終了（重要）
 }
-  // ★これ追加
-  state.canInput = false;
-  state.bullets = [];
-  return;
-}
-  
-  // ボーナス中の左右移動
-  if(state.moving.left){
-    state.playerX = Math.max(8, state.playerX - 4);
-    state.dir = -1;
-    state.walkFrame++;
-  }
 
-  if(state.moving.right){
-    state.playerX = Math.min(326, state.playerX + 4);
-    state.dir = 1;
-    state.walkFrame++;
-  }
-  return;
+// ボーナス中の左右移動
+if(state.moving.left){
+  state.playerX = Math.max(8, state.playerX - 4);
+  state.dir = -1;
+  state.walkFrame++;
+}
+
+if(state.moving.right){
+  state.playerX = Math.min(326, state.playerX + 4);
+  state.dir = 1;
+  state.walkFrame++;
+}
+
+return;
 }
     if(state.bottomShotWarn > 0){
     state.bottomShotWarn--;
