@@ -499,6 +499,8 @@ bonusCaught: 0,
   explodePieces: [],
   fireworks: [],
   ufoMode: false,
+    ufoTickets: 0, // UFO装着券の所持数
+    nextStageType: null, // 'normal' | 'reverse' | 'bottom'
 ufoBuddyY: 120,
 };
 let clones = [];
@@ -534,19 +536,15 @@ function resetGame() {
   state.choiceLabel = '';
   state.canInput = true;
   state.showCola = false;
-  state.bonusStage = false;
+   state.bonusStage = false;
 state.bonusTimer = 0;
 state.bonusColas = [];
 state.bonusCaught = 0;
 state.hitReaction = null;
   state.hitTextTimer = 0;
   state.explodePieces = [];
-  state.ufoMode = false;
 state.ufoBuddyY = 120;
   makeBoards();
-  if(Math.random() < 0.08){
-  state.ufoMode = true;
-}
    if(state.bottomShotStage){
     state.bottomShotWarn = 120;
   } else {
@@ -1197,10 +1195,21 @@ function update() {
   // 画面外削除
   state.bonusColas = state.bonusColas.filter(c => c.y < 520);
 
-  // ボーナス終了
+   // ボーナス終了
   if(state.bonusTimer <= 0){
     state.bonusStage = false;
-    showResult(true, 'BONUS END!', 'コーラ ' + state.bonusCaught + '本GET！！');
+
+    // 10本ごとにUFO装着券+1
+    const addTickets = Math.floor(state.bonusCaught / 10);
+    if(addTickets > 0){
+      state.ufoTickets += addTickets;
+    }
+
+    showResult(
+      true,
+      'BONUS END!',
+      'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
+    );
   }
   // ボーナス中の左右移動
   if(state.moving.left){
@@ -1624,6 +1633,31 @@ state.flashTimer = 0;
   setStatus('BONUS', 'コーラを取りまくれ！！', 'GET: 0');
   showScreen('playScreen');
 }
+  function startNextStage(useTicket){
+  state.reverseStage = false;
+  state.bottomShotStage = false;
+  state.ufoMode = false;
+
+  if(state.nextStageType === 'reverse'){
+    state.reverseStage = true;
+  } else if(state.nextStageType === 'bottom'){
+    state.bottomShotStage = true;
+  }
+
+  // ランダムUFOは残す
+  if(Math.random() < 0.05){
+    state.ufoMode = true;
+  }
+
+  // チケット使用なら強制UFO
+  if(useTicket && state.ufoTickets > 0){
+    state.ufoTickets--;
+    state.ufoMode = true;
+  }
+
+  showScreen('playScreen');
+  resetGame();
+}
 function showResult(success, title, msg) {
   state.phase = 'result';
 
@@ -1731,25 +1765,53 @@ scene.addEventListener('touchstart', () => {
     state.showCola = false;
     state.colaStreak++;
 
-    // ステージ抽選
-    state.reverseStage = false;
-    state.bottomShotStage = false;
-
+    // 次ステージ抽選
     const r = Math.random();
+    state.nextStageType = 'normal';
 
     if(r < 0.33){
-      state.reverseStage = true;
+      state.nextStageType = 'reverse';
     } else if(r < 0.66){
-      state.bottomShotStage = true;
+      state.nextStageType = 'bottom';
     }
 
     const bonusRoll = Math.random();
 
-if(bonusRoll < 0.25){
-  startBonusStage();
-} else {
-  showResult(true, 'YOU WIN!', 'コーラ最高！！');
-}
+    if(bonusRoll < 0.25){
+      startBonusStage();
+    } else {
+      if(state.ufoTickets > 0){
+        const stageLabel =
+          state.nextStageType === 'reverse' ? 'REVERSE STAGE' :
+          state.nextStageType === 'bottom' ? 'BOTTOM SHOT STAGE' :
+          'NORMAL STAGE';
+
+        showOverlay(
+          'NEXT STAGE',
+          stageLabel + '\n\n🛸 UFO装着券を使う？\n所持: ' + state.ufoTickets,
+          [
+            {
+              label: 'YES',
+              cls: 'btn-yes',
+              action: () => {
+                hideOverlay();
+                startNextStage(true);
+              }
+            },
+            {
+              label: 'NO',
+              cls: 'btn-no',
+              action: () => {
+                hideOverlay();
+                startNextStage(false);
+              }
+            }
+          ]
+        );
+      } else {
+        startNextStage(false);
+      }
+    }
   }
 });
 showScreen('titleScreen');
