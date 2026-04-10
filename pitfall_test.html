@@ -1204,8 +1204,18 @@ if(state.bonusTimer <= 0){
     state.ufoTickets += addTickets;
   }
 
-  state.showCola = true;
+  // ★ボーナス結果をちゃんと見せる
+  state.canInput = false;
+  state.bullets = [];
 
+  showResult(
+    true,
+    'BONUS END!',
+    'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
+  );
+
+  return; // ←これが超重要
+}
   // ★これ追加
   state.canInput = false;
   state.bullets = [];
