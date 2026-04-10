@@ -1195,22 +1195,19 @@ function update() {
   // 画面外削除
   state.bonusColas = state.bonusColas.filter(c => c.y < 520);
 
-   // ボーナス終了
-  if(state.bonusTimer <= 0){
-    state.bonusStage = false;
+  // ボーナス終了
+if(state.bonusTimer <= 0){
+  state.bonusStage = false;
 
-    // 10本ごとにUFO装着券+1
-    const addTickets = Math.floor(state.bonusCaught / 10);
-    if(addTickets > 0){
-      state.ufoTickets += addTickets;
-    }
-
-    showResult(
-      true,
-      'BONUS END!',
-      'コーラ ' + state.bonusCaught + '本GET！！\n🛸 UFO券 +' + addTickets
-    );
+  // 10本ごとにUFO装着券+1
+  const addTickets = Math.floor(state.bonusCaught / 10);
+  if(addTickets > 0){
+    state.ufoTickets += addTickets;
   }
+
+  // ボーナス後も次ステージ扱いにする
+  state.showCola = true;
+}
   // ボーナス中の左右移動
   if(state.moving.left){
     state.playerX = Math.max(8, state.playerX - 4);
