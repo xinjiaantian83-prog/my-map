@@ -1099,7 +1099,12 @@ async function loadSpots(){
 function showFirstGuide(){
   if(localStorage.getItem("wanwan_guide_shown") && !isDev) return;
   setTimeout(function(){
-  alert("松山の安い自販機を探すアプリです🐾\n\n近くのワンコをタップして\n👉 発見を記録してみてください\n\n発見するとポイントが増えます");
+    alert(
+      "近くのワンコイン自販機がすぐ見つかる🐾\n\n" +
+      "ピンをタップすると場所が分かります👇\n" +
+      "👉 見つけたら記録できます\n\n" +
+      "発見するとポイントが増えます"
+    );
     localStorage.setItem("wanwan_guide_shown","1");
   },800);
 }
