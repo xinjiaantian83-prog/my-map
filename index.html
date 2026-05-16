@@ -393,7 +393,7 @@ function buildPopup(s,isFound,goldActive){
   } else { recordPart='<div class="vm-note">30m以内に近づくと記録できます</div>'; }
   var sponsor=getSponsorForSpot(s);
   var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:11px;color:#9ca3af;text-align:center;">サポーター：<a href="'+sponsor.url+'" target="_blank" style="color:#6b7280;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
-  var localLinkPart='<div style="margin-top:8px;padding-top:6px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;line-height:1.5;color:#6b7280;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#6b7280;text-decoration:underline;text-decoration-color:#cbd5e1;text-underline-offset:2px;">リンク先 ↗</a></div>';
+  var localLinkPart='<div style="margin-top:8px;padding-top:6px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;line-height:1.5;color:#6b7280;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#6b7280;text-decoration:underline;text-decoration-color:#cbd5e1;text-underline-offset:2px;">EXたくみ ↗</a></div>';
   var cardClass=goldActive?'vm-card gold':'vm-card';
   return '<div class="'+cardClass+'">'
     +'<div class="vm-card-id">'+escapeHtml(idText)+'</div>'
