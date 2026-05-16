@@ -244,24 +244,23 @@ var darkLayer  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}
 var savedTheme = localStorage.getItem("map_theme") || "light";
 if(savedTheme === "dark"){ darkLayer.addTo(map); } else { lightLayer.addTo(map); }
 function vmSvg(_type, _isFound, _isGold, isNearest) {
-  var ink = isNearest ? '#0F8F96' : '#171717';
-  var soft = isNearest ? '#D9FBFB' : '#FFFFFF';
-  var mark = isNearest ? '#2DD4BF' : '#171717';
-  var breathe = isNearest ? '<animate attributeName="opacity" values="0.82;1;0.82" dur="2.6s" repeatCount="indefinite"/>' : '';
-  return '<svg width="44" height="30" viewBox="0 0 50 34" xmlns="http://www.w3.org/2000/svg" aria-label="COOL DOWN">' +
+  var ink = '#171717';
+  var pinFill = isNearest ? '#F3FCFB' : '#FFFFFF';
+  var canFill = isNearest ? '#D3F4F1' : '#F1FCFB';
+  var accent = isNearest ? '#5ECFC6' : '#A7E7E2';
+  var breathe = isNearest ? '<animate attributeName="opacity" values="0.82;1;0.82" dur="2.8s" repeatCount="indefinite"/>' : '';
+  return '<svg width="38" height="48" viewBox="0 0 38 48" xmlns="http://www.w3.org/2000/svg" aria-label="vending spot">' +
     '<g fill="none" stroke="'+ink+'" stroke-linecap="round" stroke-linejoin="round">' +
-    '<rect x="5" y="5" width="40" height="24" rx="5" fill="'+soft+'" stroke-width="2"/>' +
-    '<ellipse cx="8.5" cy="17" rx="5" ry="12" fill="#FFFFFF" stroke-width="2"/>' +
-    '<path d="M8.5 8.5 C6.2 11.2 5.4 14.4 5.4 17 C5.4 19.6 6.2 22.8 8.5 25.5" stroke-width="1.25"/>' +
-    '<circle cx="9" cy="17" r="3.3" stroke-width="1.45"/>' +
-    '<circle cx="9" cy="17" r="1.1" fill="'+mark+'" stroke="none">'+breathe+'</circle>' +
-    '<path d="M15 9.5 H40" stroke-width="1.55"/>' +
-    '<path d="M15 24.5 H40" stroke-width="1.55"/>' +
-    '<path d="M45 8.5 C47 11.1 48 13.9 48 17 C48 20.1 47 22.9 45 25.5" stroke-width="1.5"/>' +
+    '<path d="M19 46 C10.2 34.8 5 27 5 18.7 C5 10.5 11.3 4 19 4 C26.7 4 33 10.5 33 18.7 C33 27 27.8 34.8 19 46 Z" fill="'+pinFill+'" stroke-width="2.1"/>' +
+    '<g transform="translate(0.4 0.8) rotate(30 20 20) scale(1.06 1.06) translate(-1.1 -1.1)">' +
+    '<ellipse cx="18.1" cy="13" rx="6.1" ry="2.7" fill="'+canFill+'" stroke-width="1.7"/>' +
+    '<path d="M12 13.2 L15.1 27.2 C15.6 29.4 17.4 30.7 19.9 30.7 C22.4 30.7 24 29.1 24.1 26.8 L24.2 12.8" fill="'+canFill+'" stroke-width="1.7"/>' +
+    '<ellipse cx="19.6" cy="27.2" rx="4.7" ry="2.1" fill="'+canFill+'" stroke-width="1.45"/>' +
+    '<path d="M15.4 12.7 C16.6 11.9 19.7 11.7 21.2 12.5" stroke-width="1.05"/>' +
+    '<path d="M15.2 17.5 H22.4" stroke-width="1.35"/>' +
+    '<path d="M16.1 22.7 H22.4" stroke-width="1.35"/>' +
+    '<circle cx="23" cy="16.4" r="1.2" fill="'+accent+'" stroke="none">'+breathe+'</circle>' +
     '</g>' +
-    '<g fill="'+ink+'" font-family="-apple-system,BlinkMacSystemFont,Helvetica Neue,sans-serif" font-size="8.6" font-weight="900" letter-spacing="1.1">' +
-    '<text x="17" y="16">COOL</text>' +
-    '<text x="17" y="24">DOWN</text>' +
     '</g>' +
     '</svg>';
 }
@@ -270,9 +269,9 @@ function makeVmIcon(_type, _isFound, _isGold, isNearest) {
   return L.divIcon({
     html: vmSvg(_type, _isFound, _isGold, isNearest),
     className: 'vm-pin',
-    iconSize: [44, 30],
-    iconAnchor: [22, 27],
-    popupAnchor: [0, -28]
+    iconSize: [38, 48],
+    iconAnchor: [19, 46],
+    popupAnchor: [0, -44]
   });
 }
 function makeClusterIcon(colorClass){ return function(cluster){ var count=cluster.getChildCount(); return L.divIcon({ html:'<div class="cluster-pin '+colorClass+'">'+count+'</div>', className:'coin-cluster', iconSize:L.point(44,44) }); }; }
