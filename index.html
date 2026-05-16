@@ -360,7 +360,7 @@ function renderMarkers(){
   });
 }
 function buildPopup(s,isFound,goldActive){
-  var price=priceLabel(s.type); var dt=distanceText(s.lat,s.lng); var near=isNear(s.lat,s.lng);
+  var dt=distanceText(s.lat,s.lng); var near=isNear(s.lat,s.lng);
   var idText=shortId(s.id);
   var goldPart="";
   if(s.isGold){
@@ -378,7 +378,7 @@ function buildPopup(s,isFound,goldActive){
   var cardClass=goldActive?'vm-card gold':'vm-card';
   return '<div class="'+cardClass+'">'
     +'<div class="vm-card-id">'+escapeHtml(idText)+'</div>'
-    +'<div class="vm-card-price"><span class="vm-tag '+price.cls+'">'+price.tag+'</span>'+price.range+'</div>'
+    +'<div class="vm-card-price" id="6y4ehm">ワンコイン自販機</div>'
     +(dt?'<div class="vm-card-distance'+(near?'':' far')+'"><span class="dot"></span>'+dt+'</div>':'')
     +goldPart
     +'<div class="vm-actions">'
