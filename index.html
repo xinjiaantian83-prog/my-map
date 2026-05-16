@@ -64,10 +64,6 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
 .drawer-stat-label{font-size:11px;color:#6b7280;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px;}
 .drawer-stat-value{font-size:18px;font-weight:700;color:#111827;}
 .drawer-stat-sub{font-size:12px;color:#6b7280;margin-top:2px;}
-.legend-row{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;color:#374151;}
-.legend-dot{width:14px;height:14px;border-radius:3px;flex:0 0 auto;}
-.progress-wrap{width:100%;height:8px;background:#f1f5f9;border-radius:999px;margin-top:8px;overflow:hidden;}
-.progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,#3b82f6,#1d4ed8);border-radius:999px;transition:width 0.4s ease;}
 .leaflet-popup-content-wrapper{border-radius:14px;padding:0;box-shadow:0 10px 30px rgba(0,0,0,0.18);}
 .leaflet-popup-content{margin:0;width:240px !important;}
 .vm-card{position:relative;padding:14px 14px 12px;background:#fff;border-radius:14px;}
@@ -165,15 +161,6 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
     <div class="drawer-section">
       <div class="drawer-stat-label">掲載中の自販機</div>
       <div class="drawer-stat-value"><span id="totalCount">0</span> 台</div>
-      <div class="progress-wrap"><div class="progress-bar-fill" id="globalProgressBar"></div></div>
-      <div class="drawer-stat-sub" id="remainText">松山制覇まであと 1500 台</div>
-    </div>
-    <div class="drawer-section">
-      <div class="drawer-stat-label">価格目安</div>
-      <div class="legend-row"><span class="legend-dot" style="background:#dc2626;"></span>赤：100〜130円</div>
-      <div class="legend-row"><span class="legend-dot" style="background:#d97706;"></span>黄：80〜160円</div>
-      <div class="legend-row"><span class="legend-dot" style="background:#9ca3af;"></span>白：50円〜</div>
-      <div style="font-size:11px;color:#9ca3af;margin-top:6px;">※価格は目安です</div>
     </div>
     <div class="drawer-section" style="padding:0;">
       <div class="drawer-row" id="menuPolicy"><span class="label">使い方・運営方針</span><span class="chev">›</span></div>
@@ -181,12 +168,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
       <div class="drawer-row" id="menuFeedback"><span class="label">ご意見・お問い合わせ</span><span class="chev">›</span></div>
     </div>
     <div class="drawer-section" style="padding:0;">
-      <div style="padding:10px 16px 4px;font-size:11px;color:#9ca3af;letter-spacing:0.04em;text-transform:uppercase;">その他</div>
-      <div class="drawer-row" id="menuMyRecord"><span class="label">自分の発見記録</span><span class="value"><span id="foundCountMini">0</span> 台 ›</span></div>
-      <div class="drawer-row" id="menuMiniGame"><span class="label">ミニゲーム</span><span class="chev">›</span></div>
-      <div class="drawer-row" id="menuShop"><span class="label">ポイント・ショップ</span><span class="value"><span id="miniGameScore">0</span>P ›</span></div>
-      <div class="drawer-row" id="menuNameEdit"><span class="label">ユーザー名</span><span class="value" id="userNameText">未設定 ›</span></div>
-      <div class="drawer-row" id="menuTheme" style="display:none;">
+      <div class="drawer-row" id="menuTheme">
         <span class="label">マップテーマ</span>
         <span class="value">
           <button class="chip" id="btnThemeLight" style="padding:4px 8px;font-size:11px;">昼</button>
@@ -201,7 +183,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
   <h2>使い方・運営方針</h2>
   <p>わんわんコインは、松山市周辺のワンコイン（100円前後）自販機を共有するマップです。安全に楽しく使えるよう、以下の方針で運営しています。</p>
   <h3>使い方</h3>
-  <p>・マップ上のピンが自販機です。色は価格目安を示します。<br>・ピンをタップすると、価格目安・距離・ナビ開始ボタンが出ます。<br>・未掲載の自販機を見つけたら「＋報告」ボタンから報告できます。</p>
+  <p>・マップ上の赤いピンが掲載中の自販機です。<br>・ピンをタップすると、距離・ナビ開始ボタンが出ます。<br>・未掲載の自販機を見つけたら「＋報告」ボタンから報告できます。</p>
   <h3>安全について</h3>
   <p>・歩きスマホは危険です。周囲の安全を確認してください。<br>・交通ルールを守って行動してください。<br>・私有地への無断侵入は禁止です。</p>
   <h3>報告について</h3>
@@ -213,43 +195,8 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoMfhVzdXUniR13oypjhfi0SNWGtKU0nFsy5I6x-08s34Lkw/viewform" target="_blank">お問い合わせフォーム</a>
   </div>
 </div>
-<div id="recordPage" class="subpage hidden">
-  <button class="back-btn" onclick="closeRecordPage()">← 戻る</button>
-  <h2>自分の発見記録</h2>
-  <div class="drawer-section" style="border:none;padding:0;">
-    <div class="drawer-stat-label">これまでに発見</div>
-    <div class="drawer-stat-value"><span id="foundCountCard">0</span> 台</div>
-    <div class="drawer-stat-sub">全 <span id="totalCountCard">0</span> 台中（<span id="foundPercentCard">0.0</span>%）</div>
-  </div>
-  <div class="drawer-section" style="border:none;padding:14px 0 0;">
-    <div class="drawer-stat-label">今日の発見</div>
-    <div class="drawer-stat-value"><span id="todayCountCard">0</span> 台</div>
-  </div>
-  <div class="drawer-section" style="border:none;padding:14px 0 0;">
-    <div class="drawer-stat-label">レベル</div>
-    <div class="drawer-stat-value" id="levelTextCard" onclick="location.href='titles.html'" style="cursor:pointer;">Lv0 ›</div>
-  </div>
-</div>
-<div id="shopPage" class="subpage hidden">
-  <button class="back-btn" onclick="closeShop()">← 戻る</button>
-  <h2>ポイント・ショップ</h2>
-  <div class="drawer-section" style="border:none;padding:0;">
-    <div class="drawer-stat-label">所持ポイント</div>
-    <div class="drawer-stat-value"><span id="shopPointDisplay">0</span> P</div>
-  </div>
-  <div class="drawer-section" style="border:none;padding:14px 0 0;">
-    <div class="drawer-stat-label">特別アイテム</div>
-    <div class="drawer-row" id="shopNightMap" style="background:#f9fafb;border-radius:10px;margin-top:8px;">
-      <span class="label">ナイトマップ</span><span class="value">500P ›</span>
-    </div>
-    <div class="drawer-row" onclick="buyNaming()" style="background:#f9fafb;border-radius:10px;margin-top:8px;">
-      <span class="label">自販機 命名権</span><span class="value">5000P ›</span>
-    </div>
-  </div>
-</div>
 <script>
 var isDev = location.search.includes("dev=1");
-var ESTIMATED_TOTAL = 1500;
 var reportMode = false;
 var spotsRaw = [];
 var markers = [];
@@ -295,7 +242,7 @@ var map = L.map('map',{tapHold:true,tapTolerance:25,zoomControl:true}).setView([
 var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OSM &copy; CARTO'});
 var darkLayer  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OSM &copy; CARTO'});
 var savedTheme = localStorage.getItem("map_theme") || "light";
-if(localStorage.getItem("night_unlocked") && savedTheme === "dark"){ darkLayer.addTo(map); } else { lightLayer.addTo(map); }
+if(savedTheme === "dark"){ darkLayer.addTo(map); } else { lightLayer.addTo(map); }
 function vmSvg(_type, _isFound, _isGold) {
   return '<svg width="46" height="60" viewBox="0 0 46 60" xmlns="http://www.w3.org/2000/svg">' +
     '<path d="M23,58 C10,42 5,32 5,20 A18,18 0 1,1 41,20 C41,32 36,42 23,58 Z" fill="#991B1B" stroke="#5B0A0A" stroke-width="2.6"/>' +
@@ -346,19 +293,7 @@ function addMiniGamePlay(amount){ var c=Number(localStorage.getItem("wanwan_play
 function updateFoundUI(){
   foundCount = discovered.size;
   var total = spotsRaw.length;
-  var percent = total ? ((foundCount/total)*100).toFixed(1) : "0.0";
-  var globalPercent = ((total/ESTIMATED_TOTAL)*100).toFixed(1);
-  setText("totalCount",total); setText("foundCountMini",foundCount);
-  setText("foundCountCard",foundCount); setText("totalCountCard",total);
-  setText("foundPercentCard",percent); setText("todayCountCard",todayFound);
-  var bar=document.getElementById("globalProgressBar"); if(bar) bar.style.width=globalPercent+"%";
-  var remain=Math.max(ESTIMATED_TOTAL-total,0);
-  setText("remainText","松山制覇まであと "+remain+" 台");
-  var lvl=getLevel(foundCount);
-  var lvlEl=document.getElementById("levelTextCard"); if(lvlEl) lvlEl.textContent=lvl+" ›";
-  var nameEl=document.getElementById("userNameText"); if(nameEl) nameEl.textContent=(userName||"未設定")+" ›";
-  var mg=Number(localStorage.getItem("wanwan_score")||0);
-  setText("miniGameScore",mg); setText("shopPointDisplay",mg);
+  setText("totalCount",total);
 }
 function setText(id,val){ var el=document.getElementById(id); if(el) el.textContent=val; }
 function recordFind(lat,lng,type){
@@ -551,41 +486,11 @@ scrim.addEventListener("click", closeDrawer);
 document.getElementById("menuPolicy").addEventListener("click", function(){ closeDrawer(); document.getElementById("policyPage").classList.remove("hidden"); });
 document.getElementById("menuOfficial").addEventListener("click", function(){ window.open("https://xinjiaantian83-prog.github.io/wanwancoin-hp/","_blank"); });
 document.getElementById("menuFeedback").addEventListener("click", function(){ window.open("https://docs.google.com/forms/d/e/1FAIpQLSdFiI9UqPJ0VXvoEtj0ipPx1cH_-m9YKPwm8ESBFqHFTYkBWQ/viewform","_blank"); });
-document.getElementById("menuMyRecord").addEventListener("click", function(){ closeDrawer(); document.getElementById("recordPage").classList.remove("hidden"); });
-document.getElementById("menuMiniGame").addEventListener("click", function(){ location.href="game.html"+location.search; });
-document.getElementById("menuShop").addEventListener("click", function(){ closeDrawer(); document.getElementById("shopPage").classList.remove("hidden"); });
-document.getElementById("menuNameEdit").addEventListener("click", function(){
-  var nv=prompt("ユーザー名を入力",userName||"");
-  if(nv && nv.trim()){ userName=nv.trim(); localStorage.setItem(userNameKey,userName); localStorage.setItem("wanwan_user_name",userName); updateFoundUI(); }
-});
 var btnThemeLight=document.getElementById("btnThemeLight");
 var btnThemeDark=document.getElementById("btnThemeDark");
 if(btnThemeLight){ btnThemeLight.addEventListener("click",function(){ localStorage.setItem("map_theme","light"); if(map.hasLayer(darkLayer)) map.removeLayer(darkLayer); if(!map.hasLayer(lightLayer)) lightLayer.addTo(map); }); }
-if(btnThemeDark){ btnThemeDark.addEventListener("click",function(){ if(!localStorage.getItem("night_unlocked")){ showToast("ナイトマップは未解放です"); return; } localStorage.setItem("map_theme","dark"); if(map.hasLayer(lightLayer)) map.removeLayer(lightLayer); if(!map.hasLayer(darkLayer)) darkLayer.addTo(map); }); }
-if(localStorage.getItem("night_unlocked")){ var tr=document.getElementById("menuTheme"); if(tr) tr.style.display="flex"; }
-document.addEventListener("click", function(e){
-  if(e.target && e.target.id==="shopNightMap"){
-    var score=Number(localStorage.getItem("wanwan_score")||0);
-    if(score<500){ showToast("ポイントが足りません"); return; }
-    if(localStorage.getItem("night_unlocked")){ showToast("すでに解放済み"); return; }
-    if(!confirm("500P使ってナイトマップを解放しますか？")) return;
-    var ns=score-500; localStorage.setItem("wanwan_score",ns); localStorage.setItem("night_unlocked","1");
-    if(map.hasLayer(lightLayer)) map.removeLayer(lightLayer);
-    if(!map.hasLayer(darkLayer)) darkLayer.addTo(map);
-    var t=document.getElementById("menuTheme"); if(t) t.style.display="flex";
-    updateFoundUI(); showToast("ナイトマップを解放しました",{duration:2200});
-  }
-});
-function buyNaming(){
-  var score=Number(localStorage.getItem("wanwan_score")||0);
-  if(score<5000){ showToast("ポイントが足りません"); return; }
-  if(!confirm("5000P使って命名権を購入しますか？")) return;
-  localStorage.setItem("wanwan_score",score-5000); localStorage.setItem("naming_ticket","1");
-  showToast("命名権を獲得しました"); updateFoundUI();
-}
+if(btnThemeDark){ btnThemeDark.addEventListener("click",function(){ localStorage.setItem("map_theme","dark"); if(map.hasLayer(lightLayer)) map.removeLayer(lightLayer); if(!map.hasLayer(darkLayer)) darkLayer.addTo(map); }); }
 function closePolicy(){ document.getElementById("policyPage").classList.add("hidden"); }
-function closeShop(){ document.getElementById("shopPage").classList.add("hidden"); }
-function closeRecordPage(){ document.getElementById("recordPage").classList.add("hidden"); }
 var isFirstLaunch=!localStorage.getItem("wanwan_first_loaded");
 if(!isFirstLaunch){ var ol=document.getElementById("loadingOverlay"); if(ol) ol.style.display="none"; }
 loadSponsors().then(async function(){
@@ -596,9 +501,6 @@ loadSponsors().then(async function(){
   setTimeout(function(){ map.invalidateSize(); },300);
   if(isFirstLaunch){ var ol2=document.getElementById("loadingOverlay"); if(ol2) ol2.style.display="none"; localStorage.setItem("wanwan_first_loaded","1"); }
 });
-if(localStorage.getItem("open_record_on_return")==="1"){
-  setTimeout(function(){ document.getElementById("recordPage").classList.remove("hidden"); localStorage.removeItem("open_record_on_return"); },600);
-}
 </script>
 <audio id="seTriple" src="triple.mp3" preload="auto"></audio>
 </body>
