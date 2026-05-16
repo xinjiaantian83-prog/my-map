@@ -296,28 +296,31 @@ var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x
 var darkLayer  = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,attribution:'&copy; OSM &copy; CARTO'});
 var savedTheme = localStorage.getItem("map_theme") || "light";
 if(localStorage.getItem("night_unlocked") && savedTheme === "dark"){ darkLayer.addTo(map); } else { lightLayer.addTo(map); }
-function vmSvg(type, isFound, isGold){
-  var palette = { nky:{body:'#dc2626',accent:'#7f1d1d',price:'¥100'}, bul:{body:'#d97706',accent:'#78350f',price:'¥80'}, pom:{body:'#9ca3af',accent:'#374151',price:'¥50'} };
-  var c = palette[type] || palette.nky;
-  var body = isGold?'#fbbf24':(isFound?'#cbd5e1':c.body);
-  var accent = isGold?'#92400e':(isFound?'#64748b':c.accent);
-  var screen = isGold?'#fffbeb':'#f8fafc';
-  var priceColor = isGold?'#92400e':(isFound?'#475569':c.body);
-  var shimmer = isGold?'<animate attributeName="opacity" values="0.55;1;0.55" dur="1.6s" repeatCount="indefinite"/>':'';
-  return '<svg width="34" height="46" viewBox="0 0 34 46" xmlns="http://www.w3.org/2000/svg"><g>'+
-    '<rect x="3" y="2" width="28" height="38" rx="3" fill="'+body+'" stroke="'+accent+'" stroke-width="1.5">'+shimmer+'</rect>'+
-    '<rect x="6" y="5" width="22" height="11" rx="1.5" fill="'+screen+'" opacity="0.95"/>'+
-    '<text x="17" y="13.5" font-size="8" font-weight="800" fill="'+priceColor+'" text-anchor="middle" font-family="-apple-system,Helvetica Neue,sans-serif">'+c.price+'</text>'+
-    '<rect x="6" y="18" width="22" height="1.4" fill="'+accent+'" opacity="0.5"/>'+
-    '<rect x="6" y="21" width="10" height="4" rx="0.8" fill="#1f2937" opacity="0.85"/>'+
-    '<rect x="18" y="21" width="10" height="4" rx="0.8" fill="#1f2937" opacity="0.85"/>'+
-    '<rect x="6" y="27" width="10" height="4" rx="0.8" fill="#1f2937" opacity="0.85"/>'+
-    '<rect x="18" y="27" width="10" height="4" rx="0.8" fill="#1f2937" opacity="0.85"/>'+
-    '<rect x="9" y="33" width="16" height="3" rx="0.6" fill="'+accent+'" opacity="0.65"/>'+
-    '<path d="M17 40 L13 44 L21 44 Z" fill="'+accent+'"/>'+
-    '</g></svg>';
+function vmSvg(_type, _isFound, _isGold) {
+  return '<svg width="46" height="60" viewBox="0 0 46 60" xmlns="http://www.w3.org/2000/svg">' +
+    '<path d="M23,58 C10,42 5,32 5,20 A18,18 0 1,1 41,20 C41,32 36,42 23,58 Z" fill="#991B1B" stroke="#5B0A0A" stroke-width="2.6"/>' +
+    '<circle cx="23" cy="19" r="14" fill="#FFFFFF"/>' +
+    '<rect x="13.5" y="5" width="19" height="26" rx="2" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.7"/>' +
+    '<rect x="15.5" y="6.5" width="15" height="5" rx="0.6" fill="#1F2937"/>' +
+    '<circle cx="28.5" cy="8" r="1.1" fill="#22C55E"/>' +
+    '<rect x="15.5" y="13" width="6.5" height="4.2" rx="0.5" fill="#374151"/>' +
+    '<rect x="24" y="13" width="6.5" height="4.2" rx="0.5" fill="#374151"/>' +
+    '<rect x="15.5" y="18.5" width="6.5" height="4.2" rx="0.5" fill="#374151"/>' +
+    '<rect x="24" y="18.5" width="6.5" height="4.2" rx="0.5" fill="#374151"/>' +
+    '<rect x="15.5" y="24" width="15" height="1.5" rx="0.4" fill="#6B7280"/>' +
+    '<rect x="15.5" y="26.5" width="15" height="3.5" rx="0.6" fill="#1F2937"/>' +
+    '</svg>';
 }
-function makeVmIcon(type, isFound, isGold){ return L.divIcon({ html:vmSvg(type,isFound,isGold), className:'vm-pin', iconSize:[34,46], iconAnchor:[17,44], popupAnchor:[0,-42] }); }
+
+function makeVmIcon(_type, _isFound, _isGold) {
+  return L.divIcon({
+    html: vmSvg(),
+    className: 'vm-pin',
+    iconSize: [46, 60],
+    iconAnchor: [23, 58],
+    popupAnchor: [0, -56]
+  });
+}
 function makeClusterIcon(colorClass){ return function(cluster){ var count=cluster.getChildCount(); return L.divIcon({ html:'<div class="cluster-pin '+colorClass+'">'+count+'</div>', className:'coin-cluster', iconSize:L.point(44,44) }); }; }
 var shibaCluster = L.markerClusterGroup({maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,iconCreateFunction:makeClusterIcon('red')});
 var bulldogCluster = L.markerClusterGroup({maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,iconCreateFunction:makeClusterIcon('yellow')});
