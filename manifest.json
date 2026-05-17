@@ -1,7 +1,8 @@
 {
   "name": "わんわんコインマップ",
   "short_name": "わんコイン",
-  "start_url": "/my-map/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
