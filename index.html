@@ -392,10 +392,10 @@ function buildPopup(s,isFound,goldActive){
   else if(near){
     if(goldActive){ recordPart='<button class="vm-btn vm-btn-gold" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')">★ 発見を記録（+3P）</button>'; }
     else { recordPart='<button class="vm-btn vm-btn-record" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')">発見を記録</button>'; }
-  } else { recordPart='<div class="vm-note">30m以内に近づくと記録できます</div>'; }
+  } else { recordPart=''; }
   var sponsor=getSponsorForSpot(s);
-  var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:11px;color:#9ca3af;text-align:center;">サポーター：<a href="'+sponsor.url+'" target="_blank" style="color:#6b7280;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
-  var localLinkPart='<div style="margin-top:8px;padding-top:6px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;line-height:1.5;color:#6b7280;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#6b7280;text-decoration:underline;text-decoration-color:#cbd5e1;text-underline-offset:2px;">EXたくみ ↗</a></div>';
+  var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:12px;font-weight:600;color:#4b5563;text-align:center;">サポーター：<a href="'+sponsor.url+'" target="_blank" style="color:#334155;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
+  var localLinkPart='<div style="margin-top:8px;padding:7px 8px 0;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;line-height:1.45;color:#4b5563;font-weight:600;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#334155;font-size:12.5px;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">EXたくみ ↗</a></div>';
   var cardClass=goldActive?'vm-card gold':'vm-card';
   return '<div class="'+cardClass+'">'
     +'<div class="vm-card-id">'+escapeHtml(idText)+'</div>'
