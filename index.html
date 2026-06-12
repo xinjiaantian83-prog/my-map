@@ -89,6 +89,13 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
 .vm-meta{font-size:12px;color:#6b7280;margin-top:6px;display:flex;align-items:center;justify-content:space-between;}
 .vm-copy{cursor:pointer;color:#6b7280;font-size:12px;padding:2px 6px;border:1px solid #e5e7eb;border-radius:6px;background:#fff;}
 .vm-copy:active{background:#f3f4f6;}
+.fieldcalc-promo{margin-top:9px;padding:9px 8px 1px;border-top:1px solid #e5e7eb;text-align:center;color:#4b5563;}
+.fieldcalc-title{font-size:13px;font-weight:800;color:#111827;line-height:1.25;}
+.fieldcalc-copy{margin-top:3px;font-size:11px;font-weight:600;color:#6b7280;line-height:1.35;}
+.fieldcalc-badges{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;flex-wrap:wrap;}
+.fieldcalc-badges a{display:inline-flex;line-height:0;}
+.fieldcalc-badges img{display:block;width:auto;height:30px;}
+@media (max-width:260px){.fieldcalc-badges{flex-direction:column;align-items:center;}.fieldcalc-badges img{height:29px;}}
 .gold-banner{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:2px 8px;margin-top:6px;}
 .gold-first{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:linear-gradient(135deg,#fde68a,#fbbf24);border-radius:6px;padding:2px 8px;margin-top:4px;}
 .coin-cluster{background:transparent !important;border:none !important;}
@@ -396,6 +403,14 @@ function buildPopup(s,isFound,goldActive){
   var sponsor=getSponsorForSpot(s);
   var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:12px;font-weight:600;color:#4b5563;text-align:center;">サポーター：<a href="'+sponsor.url+'" target="_blank" style="color:#334155;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
   var localLinkPart='<div style="margin-top:8px;padding:7px 8px 0;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;line-height:1.45;color:#4b5563;font-weight:600;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#334155;font-size:12.5px;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">EXたくみ ↗</a></div>';
+  var fieldCalcPart='<div class="fieldcalc-promo">'
+    +'<div class="fieldcalc-title">📱 現場電卓</div>'
+    +'<div class="fieldcalc-copy">現場で欲しい数字を最短で</div>'
+    +'<div class="fieldcalc-badges">'
+    +  '<a href="https://apps.apple.com/jp/app/%E7%8F%BE%E5%A0%B4%E9%9B%BB%E5%8D%93/id6776547872" target="_blank" rel="noopener noreferrer" aria-label="現場電卓をApp Storeで開く"><img src="assets/store-badges/app-store-badge.svg" alt="Download on the App Store"></a>'
+    +  '<a href="https://play.google.com/store/apps/details?id=com.genbatoolbox.genbacalcnew" target="_blank" rel="noopener noreferrer" aria-label="現場電卓をGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>'
+    +'</div>'
+    +'</div>';
   var cardClass=goldActive?'vm-card gold':'vm-card';
   return '<div class="'+cardClass+'">'
     +'<div class="vm-card-id">'+escapeHtml(idText)+'</div>'
@@ -410,6 +425,7 @@ function buildPopup(s,isFound,goldActive){
     +  '<button class="vm-copy" onclick="copySpotId(\''+escapeHtml(s.id||"")+'\')">番号コピー</button></div>'
     +sponsorPart
     +localLinkPart
+    +fieldCalcPart
     +'</div>';
 }
 function updateUserMarker(lat,lng){
