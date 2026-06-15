@@ -219,7 +219,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
   <p>・本サービスはユーザー共有データです。<br>・価格・在庫の正確性は保証しません。</p>
   <div style="font-size:12px;color:#6b7280;text-align:center;margin-top:24px;">
     掲載・広告のご相談は<br>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoMfhVzdXUniR13oypjhfi0SNWGtKU0nFsy5I6x-08s34Lkw/viewform" target="_blank">お問い合わせフォーム</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoMfhVzdXUniR13oypjhfi0SNWGtKU0nFsy5I6x-08s34Lkw/viewform" onclick="openExternal(this.href);return false;">お問い合わせフォーム</a>
   </div>
 </div>
 <script>
@@ -307,7 +307,14 @@ var bulldogCluster = L.markerClusterGroup({maxClusterRadius:28,disableClustering
 var pomeCluster = L.markerClusterGroup({maxClusterRadius:28,disableClusteringAtZoom:17,spiderfyOnMaxZoom:false,showCoverageOnHover:false,zoomToBoundsOnClick:true,removeOutsideVisibleBounds:true,chunkedLoading:true,iconCreateFunction:makeClusterIcon('gray')});
 map.addLayer(shibaCluster); map.addLayer(bulldogCluster); map.addLayer(pomeCluster);
 function keyOf(s){ return Number(s.lat).toFixed(6)+","+Number(s.lng).toFixed(6)+","+s.type; }
-function goNav(lat,lng){ location.href = "https://www.google.com/maps/search/?api=1&query="+lat+","+lng; }
+function openExternal(url){
+  if(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser){
+    window.Capacitor.Plugins.Browser.open({ url: url });
+    return;
+  }
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+function goNav(lat,lng){ openExternal("https://www.google.com/maps/search/?api=1&query="+lat+","+lng); }
 function shortId(id){ if(!id) return ''; var m=String(id).match(/(\d+)/); return m?"No."+m[1]:id; }
 function priceLabel(type){ if(type==="bul") return {tag:'¥80',range:'80〜160円',cls:'bul'}; if(type==="pom") return {tag:'¥50〜',range:'50円〜',cls:'pom'}; return {tag:'¥100',range:'100〜130円',cls:''}; }
 function distanceText(lat,lng){ if(!userLatLng) return null; var d=userLatLng.distanceTo([lat,lng]); if(d<1000) return Math.round(d)+"m先"; return (d/1000).toFixed(1)+"km先"; }
@@ -418,14 +425,14 @@ function buildPopup(s,isFound,goldActive){
     else { recordPart='<button class="vm-btn vm-btn-record" onclick="recordFind('+s.lat+','+s.lng+',\''+s.type+'\')">発見を記録</button>'; }
   } else { recordPart=''; }
   var sponsor=getSponsorForSpot(s);
-  var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:12px;font-weight:600;color:#4b5563;text-align:center;">サポーター：<a href="'+sponsor.url+'" target="_blank" style="color:#334155;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
-  var localLinkPart='<div style="margin-top:8px;padding:7px 8px 0;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;line-height:1.45;color:#4b5563;font-weight:600;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" target="_blank" rel="noopener" style="display:inline-block;margin-top:2px;color:#334155;font-size:12.5px;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">EXたくみ ↗</a></div>';
+  var sponsorPart=sponsor ? '<div style="margin-top:10px;font-size:12px;font-weight:600;color:#4b5563;text-align:center;">サポーター：<a href="'+sponsor.url+'" onclick="openExternal(this.href);return false;" style="color:#334155;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">'+escapeHtml(sponsor.name)+'</a></div>' : '';
+  var localLinkPart='<div style="margin-top:8px;padding:7px 8px 0;border-top:1px solid #e5e7eb;text-align:center;font-size:12px;line-height:1.45;color:#4b5563;font-weight:600;"><div>松山市のカーポート</div><a href="https://ex-takumi.net/" onclick="openExternal(this.href);return false;" style="display:inline-block;margin-top:2px;color:#334155;font-size:12.5px;font-weight:700;text-decoration:underline;text-decoration-color:#94a3b8;text-underline-offset:2px;">EXたくみ ↗</a></div>';
   var fieldCalcPart='<div class="fieldcalc-promo">'
     +'<div class="fieldcalc-title">📱 現場電卓</div>'
     +'<div class="fieldcalc-copy">現場で欲しい数字を最短で</div>'
     +'<div class="fieldcalc-badges">'
-    +  '<a href="https://apps.apple.com/jp/app/%E7%8F%BE%E5%A0%B4%E9%9B%BB%E5%8D%93/id6776547872" target="_blank" rel="noopener noreferrer" aria-label="現場電卓をApp Storeで開く"><img src="assets/store-badges/app-store-badge.svg" alt="Download on the App Store"></a>'
-    +  '<a href="https://play.google.com/store/apps/details?id=com.genbatoolbox.genbacalcnew" target="_blank" rel="noopener noreferrer" aria-label="現場電卓をGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>'
+    +  '<a href="https://apps.apple.com/jp/app/%E7%8F%BE%E5%A0%B4%E9%9B%BB%E5%8D%93/id6776547872" onclick="openExternal(this.href);return false;" aria-label="現場電卓をApp Storeで開く"><img src="assets/store-badges/app-store-badge.svg" alt="Download on the App Store"></a>'
+    +  '<a href="https://play.google.com/store/apps/details?id=com.genbatoolbox.genbacalcnew" onclick="openExternal(this.href);return false;" aria-label="現場電卓をGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>'
     +'</div>'
     +'</div>';
   var cardClass=goldActive?'vm-card gold':'vm-card';
@@ -539,8 +546,8 @@ document.getElementById("menuBtn").addEventListener("click", openDrawer);
 document.getElementById("drawerClose").addEventListener("click", closeDrawer);
 scrim.addEventListener("click", closeDrawer);
 document.getElementById("menuPolicy").addEventListener("click", function(){ closeDrawer(); document.getElementById("policyPage").classList.remove("hidden"); });
-document.getElementById("menuPrivacy").addEventListener("click", function(){ window.open("privacy.html","_blank"); });
-document.getElementById("menuFeedback").addEventListener("click", function(){ window.open("https://docs.google.com/forms/d/e/1FAIpQLSdFiI9UqPJ0VXvoEtj0ipPx1cH_-m9YKPwm8ESBFqHFTYkBWQ/viewform","_blank"); });
+document.getElementById("menuPrivacy").addEventListener("click", function(){ location.href = "privacy.html"; });
+document.getElementById("menuFeedback").addEventListener("click", function(){ openExternal("https://docs.google.com/forms/d/e/1FAIpQLSdFiI9UqPJ0VXvoEtj0ipPx1cH_-m9YKPwm8ESBFqHFTYkBWQ/viewform"); });
 var btnThemeLight=document.getElementById("btnThemeLight");
 var btnThemeDark=document.getElementById("btnThemeDark");
 if(btnThemeLight){ btnThemeLight.addEventListener("click",function(){ localStorage.setItem("map_theme","light"); if(map.hasLayer(darkLayer)) map.removeLayer(darkLayer); if(!map.hasLayer(lightLayer)) lightLayer.addTo(map); }); }

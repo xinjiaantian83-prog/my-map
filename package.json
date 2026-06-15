@@ -1,0 +1,22 @@
+{
+  "name": "wanwancoin-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "松山ワンコイン自販機マップ",
+  "scripts": {
+    "build": "node scripts/prepare-capacitor.mjs",
+    "sync": "npm run build && npx cap sync",
+    "sync:ios": "npm run build && npx cap sync ios",
+    "sync:android": "npm run build && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.6",
+    "@capacitor/browser": "^7.0.5",
+    "@capacitor/core": "^7.6.6",
+    "@capacitor/ios": "^7.6.6"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.6.6"
+  }
+}

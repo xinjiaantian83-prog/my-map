@@ -1,6 +1,7 @@
 {
-  "name": "わんわんコインマップ",
-  "short_name": "わんコイン",
+  "name": "わんわんコイン",
+  "short_name": "わんわんコイン",
+  "description": "松山ワンコイン自販機マップ",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
