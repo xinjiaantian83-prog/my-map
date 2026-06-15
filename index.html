@@ -37,6 +37,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
 .chip:active{transform:scale(0.96);}
 .chip.active{background:#111827;color:#fff;border-color:#111827;}
 .chip.icon-chip{padding:7px 10px;}
+.location-note{flex:0 0 auto;padding:6px 12px;background:#fff;color:#6b7280;font-size:11px;line-height:1.5;border-top:1px solid #f1f5f9;}
 #searchBox{flex:0 0 auto;display:none;align-items:center;gap:6px;padding:8px 10px;background:#fff;border-top:1px solid #f1f5f9;}
 #searchBox.show{display:flex;}
 #spotSearch{flex:1;min-width:0;padding:8px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:14px;}
@@ -152,6 +153,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
   <button class="chip icon-chip" id="searchToggleBtn" title="番号検索">🔍</button>
   <button class="chip icon-chip active" id="btnCluster" title="ピン整理">⊞</button>
 </div>
+<div class="location-note">現在地機能は、近くのワンコイン自販機を探すために利用します。📍ボタンを押した時のみ開始します。</div>
 <div id="searchBox">
   <input id="spotSearch" type="text" placeholder="番号で検索（例 0655）">
   <button id="btnClearSearch" title="クリア">✕</button>
@@ -548,7 +550,6 @@ var isFirstLaunch=!localStorage.getItem("wanwan_first_loaded");
 if(!isFirstLaunch){ var ol=document.getElementById("loadingOverlay"); if(ol) ol.style.display="none"; }
 loadSponsors().then(async function(){
   await loadSpots(); updateFoundUI(); showFirstGuide();
-  document.getElementById("btnLocate").click();
   var btn1k=document.querySelector(".range-btn[data-r='1000']");
   if(btn1k) btn1k.click();
   setTimeout(function(){ map.invalidateSize(); },300);
