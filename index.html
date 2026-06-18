@@ -101,6 +101,7 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
 .app-promo-badges{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;flex-wrap:nowrap;}
 .app-promo-badges a{display:inline-flex;line-height:0;min-width:0;}
 .app-promo-badges img{display:block;width:auto;height:32px;max-width:112px;object-fit:contain;}
+.app-promo-pending{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 10px;border:1px solid #d1d5db;border-radius:7px;background:#f3f4f6;color:#6b7280;font-size:11px;font-weight:800;white-space:nowrap;}
 @media (max-width:260px){.app-promo-badges{gap:5px;}.app-promo-badges img{height:30px;max-width:104px;}}
 .gold-banner{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:2px 8px;margin-top:6px;}
 .gold-first{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:linear-gradient(135deg,#fde68a,#fbbf24);border-radius:6px;padding:2px 8px;margin-top:4px;}
@@ -322,10 +323,9 @@ function distanceText(lat,lng){ if(!userLatLng) return null; var d=userLatLng.di
 function isNear(lat,lng){ if(!userLatLng) return false; return userLatLng.distanceTo([lat,lng])<=30; }
 function escapeHtml(str){ return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
 var WANWAN_APP_STORE_URL = "https://apps.apple.com/app/%E3%82%8F%E3%82%93%E3%82%8F%E3%82%93%E3%82%B3%E3%82%A4%E3%83%B3/id6780428018";
-var WANWAN_GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=jp.wanwancoin.app";
 function buildWanwanAppBadges(){
   return '<a href="'+WANWAN_APP_STORE_URL+'" onclick="openExternal(this.href);return false;" aria-label="わんわんコインをApp Storeで開く"><img src="assets/store-badges/app-store-badge.svg" alt="Download on the App Store"></a>'
-    + '<a href="'+WANWAN_GOOGLE_PLAY_URL+'" onclick="openExternal(this.href);return false;" aria-label="わんわんコインをGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>';
+    + '<span class="app-promo-pending">Android版 準備中</span>';
 }
 function buildWanwanAppPromo(){
   return '<div class="app-promo">'
