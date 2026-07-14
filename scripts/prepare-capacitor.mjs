@@ -54,7 +54,7 @@ const wanwanGooglePlayUrl = "https://play.google.com/store/apps/details?id=jp.wa
 const wanwanAppStoreBadge =
   `<a href="${wanwanAppStoreUrl}" onclick="openExternal(this.href);return false;" aria-label="わんわんコインをApp Storeで開く"><img src="assets/store-badges/app-store-badge.svg" alt="Download on the App Store"></a>`;
 const wanwanGooglePlayBadge =
-  `<a href="${wanwanGooglePlayUrl}" onclick="openExternal(this.href);return false;" aria-label="わんわんコインをGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>`;
+  `<a href="${wanwanGooglePlayUrl}" onclick="openExternal(this.href);return false;" target="_blank" rel="noopener noreferrer" aria-label="わんわんコインをGoogle Playで開く"><img src="assets/store-badges/google-play-badge.png" alt="Google Play で手に入れよう"></a>`;
 
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
