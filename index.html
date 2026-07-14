@@ -98,10 +98,10 @@ body{height:100dvh;display:flex;flex-direction:column;overflow:hidden;background
 .app-promo{margin-top:9px;padding:9px 8px 1px;border-top:1px solid #e5e7eb;text-align:center;color:#4b5563;}
 .app-promo-title{font-size:13px;font-weight:800;color:#111827;line-height:1.25;}
 .app-promo-copy{margin-top:3px;font-size:11px;font-weight:600;color:#6b7280;line-height:1.35;}
-.app-promo-badges{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;flex-wrap:wrap;}
-.app-promo-badges a{display:inline-flex;line-height:0;min-width:0;}
-.app-promo-badges img{display:block;width:auto;height:32px;max-width:112px;object-fit:contain;}
-@media (max-width:260px){.app-promo-badges{gap:5px;}.app-promo-badges img{height:30px;max-width:104px;}}
+.app-promo-badges{--store-badge-height:32px;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:8px;flex-wrap:wrap;}
+.app-promo-badges a{display:flex;align-items:center;justify-content:center;height:var(--store-badge-height);line-height:0;min-width:0;}
+.app-promo-badges img{display:block;width:auto;height:100%;max-height:var(--store-badge-height);max-width:112px;object-fit:contain;}
+@media (max-width:260px){.app-promo-badges{--store-badge-height:30px;gap:5px;}.app-promo-badges img{max-width:104px;}}
 .gold-banner{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:#fef3c7;border:1px solid #fbbf24;border-radius:6px;padding:2px 8px;margin-top:6px;}
 .gold-first{display:inline-block;font-size:11px;font-weight:800;color:#92400e;background:linear-gradient(135deg,#fde68a,#fbbf24);border-radius:6px;padding:2px 8px;margin-top:4px;}
 .coin-cluster{background:transparent !important;border:none !important;}
